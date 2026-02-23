@@ -163,12 +163,13 @@
   .print-only{display:none}
 
   @media print{
-    .topbar,.tab-bar,.btn,.orf-controls,.no-print,.word-card,.prosody-row .p-opt,
+    .topbar,.tab-bar,.btn,.orf-controls,.no-print,.prosody-row .p-opt,
     .notes-area,.score-summary,.benchmark-bar,.tab,.passage-area .word-num{display:none!important}
     body{background:#fff;font-size:12pt}
     .panel{display:none!important;max-width:100%;padding:0 0.5in}
     .panel.printing{display:block!important}
     .card{box-shadow:none;border:none;padding:0;page-break-inside:avoid;margin-bottom:24pt}
+    /* ORF passage */
     .passage-area{
       border:none;background:#fff;padding:0;
       font-family:'Libre Baskerville',Georgia,serif;
@@ -178,6 +179,21 @@
     .passage-area .word.error,.passage-area .word.sc,.passage-area .word.stop-marker{
       background:none;color:inherit;text-decoration:none;border:none;font-style:normal;font-weight:normal;
     }
+    /* Word list cards — show cleanly for student */
+    .word-grid{display:grid!important;grid-template-columns:repeat(4,1fr);gap:10pt;margin-bottom:16pt}
+    .word-card{
+      display:block!important;
+      border:1.5pt solid #999!important;border-radius:6pt;
+      padding:10pt 8pt;text-align:center;
+      font-size:14pt;font-weight:600;
+      background:#fff!important;color:#000!important;
+      cursor:default;text-decoration:none!important;
+    }
+    .word-card.correct,.word-card.incorrect{
+      border-color:#999!important;background:#fff!important;color:#000!important;
+      text-decoration:none!important;
+    }
+    .word-card .word-detail{font-size:9pt;color:#666;margin-top:3pt}
     .print-only{display:block!important}
     .print-title{font-size:18pt;font-weight:bold;text-align:center;margin-bottom:12pt}
     .print-line{border-bottom:1px solid #ccc;margin-bottom:8pt;padding-bottom:4pt;font-size:10pt;color:#666}
@@ -1077,14 +1093,15 @@ function downloadResults() {
 // ======== PRINT ========
 
 function printSection(sectionId) {
-  // Mark the panel for printing
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('printing'));
   document.getElementById('panel-' + sectionId).classList.add('printing');
-  window.print();
-  // Clean up after print
+  // Small delay so the browser applies the class before the print dialog opens
   setTimeout(() => {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('printing'));
-  }, 1000);
+    window.print();
+    setTimeout(() => {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('printing'));
+    }, 1000);
+  }, 80);
 }
 
 
