@@ -521,6 +521,7 @@
 <div class="score-bar">
   <div class="score-pill">⭐ <span class="num" id="totalScore">0</span> points</div>
   <div class="score-pill">✅ <span class="num" id="totalCorrect">0</span> correct</div>
+  <button id="saveTrackerBtn" onclick="saveToTracker()" style="padding:8px 16px;border:none;border-radius:24px;background:#7B1FA2;color:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">📊 Save to Tracker</button>
 </div>
 
 <div class="tab-bar">
@@ -794,6 +795,8 @@ const state = {
 let totalScore   = 0;
 let totalCorrect = 0;
 let currentTab   = 'odd';
+const activityScores = { odd: 0, which: 0, build: 0 };
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
 
 // ============================================================
 //  UTILS
@@ -810,9 +813,42 @@ function switchTab(tab) {
 
 function addPoints(pts, correct) {
   totalScore += pts;
+  activityScores[currentTab] += pts;
   if (correct) totalCorrect++;
   document.getElementById('totalScore').textContent   = totalScore;
   document.getElementById('totalCorrect').textContent = totalCorrect;
+}
+
+function saveToTracker() {
+  var today = new Date().toISOString().slice(0, 10);
+  var actNames = { odd: 'Find the Odd One Out', which: 'Which Fits Better', build: 'Build a Paragraph' };
+  var actMax   = { odd: DATA.odd.length * 10, which: DATA.which.length * 10, build: DATA.build.length * 15 };
+  var sends = [];
+  ['odd','which','build'].forEach(function(a) {
+    if (activityScores[a] === 0 && !state[a].done) return;
+    var pct = actMax[a] > 0 ? Math.round(activityScores[a] / actMax[a] * 100) + '%' : '0%';
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({sheet:'Writing',
+        row:[today,'Paragraph Skills',actNames[a],activityScores[a],actMax[a],pct,'','','']})}));
+  });
+  var totalMax = DATA.odd.length*10 + DATA.which.length*10 + DATA.build.length*15;
+  var totalPct = totalMax > 0 ? Math.round(totalScore / totalMax * 100) + '%' : '0%';
+  sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({sheet:'Activity Log',
+      row:[today,'Marcello','Paragraph Skills','All Activities',totalScore,totalMax,totalPct,'']})}));
+
+  var btn = document.getElementById('saveTrackerBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+  Promise.all(sends).then(function() {
+    btn.textContent = 'Saved! ✓';
+    btn.style.background = '#4CAF50';
+    setTimeout(function() {
+      btn.textContent = '📊 Save to Tracker';
+      btn.style.background = '#7B1FA2';
+      btn.disabled = false;
+    }, 3000);
+  });
 }
 
 function toast(msg, isWrong) {

@@ -399,6 +399,7 @@
     <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-blue no-print" onclick="copyResults()">Copy to Clipboard</button>
       <button class="btn btn-green no-print" onclick="downloadResults()">⬇ Download as Text File</button>
+      <button class="btn no-print" id="saveTrackerBtn" onclick="saveToTracker()" style="background:#7B1FA2;color:white;">📊 Save to Tracker</button>
     </div>
   </div>
 </div>
@@ -1104,6 +1105,73 @@ function printSection(sectionId) {
   }, 80);
 }
 
+
+// ======== TRACKER ========
+
+var TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+
+function saveToTracker() {
+  var today = new Date().toISOString().slice(0, 10);
+  var sends = [];
+
+  PASSAGES.forEach(function(p) {
+    var st = orfState[p.id];
+    if (!st.done) return;
+    var stop = st.stopWord >= 0 ? st.stopWord + 1 : st.words.length;
+    var errs = Array.from(st.errors).filter(function(x){return x < stop;}).length;
+    var sc = Array.from(st.selfCorrections).filter(function(x){return x < stop;}).length;
+    var wcpm = stop - errs;
+    var acc = stop > 0 ? (wcpm / stop * 100).toFixed(1) + '%' : '0%';
+    var hasP = st.prosody.filter(function(v){return v > 0;}).length;
+    var pAvg = hasP > 0 ? (st.prosody.reduce(function(a,b){return a+b;},0) / hasP).toFixed(1) : '';
+    var noteEl = document.getElementById(p.id + '-notes');
+    var notes = noteEl ? noteEl.value : '';
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({sheet:'Reading - ORF',
+        row:[today,p.title,wcpm,stop,errs,sc,acc,st.prosody[0]||'',st.prosody[1]||'',st.prosody[2]||'',st.prosody[3]||'',pAvg,notes]})}));
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({sheet:'Activity Log',
+        row:[today,'Marcello','Reading Diagnostic','ORF: '+p.title,wcpm,120,acc,notes]})}));
+  });
+
+  var phonicsSections = [
+    {key:'ms',    name:'Multisyllabic Words', std:'RF.3.3.c', words:MULTISYLLABIC_WORDS, notesId:'msNotes'},
+    {key:'prefix',name:'Prefixes',            std:'RF.3.3.a', words:PREFIX_WORDS,        notesId:'affixNotes'},
+    {key:'suffix',name:'Suffixes',            std:'RF.3.3.b', words:SUFFIX_WORDS,        notesId:'affixNotes'},
+    {key:'irreg', name:'Irregular Words',     std:'RF.3.3.d', words:IRREGULAR_WORDS,     notesId:'irregNotes'}
+  ];
+  phonicsSections.forEach(function(s) {
+    var states = (window.wordStates && window.wordStates[s.key]) || {};
+    var correct = 0, incorrect = 0;
+    Object.values(states).forEach(function(v){ if(v==='correct') correct++; else if(v==='incorrect') incorrect++; });
+    var total = correct + incorrect;
+    if (total === 0) return;
+    var pct = (correct / total * 100).toFixed(0) + '%';
+    var missed = s.words.filter(function(item, i){ return states[i] === 'incorrect'; })
+      .map(function(item){ return typeof item === 'string' ? item : item.word; }).join(', ');
+    var noteEl = document.getElementById(s.notesId);
+    var notes = noteEl ? noteEl.value : '';
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({sheet:'Reading - Phonics',
+        row:[today,s.name,s.std,correct,total,pct,missed,notes]})}));
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({sheet:'Activity Log',
+        row:[today,'Marcello','Reading Diagnostic',s.name,correct,total,pct,missed]})}));
+  });
+
+  var btn = document.getElementById('saveTrackerBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+  Promise.all(sends).then(function() {
+    btn.textContent = 'Saved! ✓';
+    btn.style.background = '#4CAF50';
+    setTimeout(function() {
+      btn.textContent = '📊 Save to Tracker';
+      btn.style.background = '#7B1FA2';
+      btn.disabled = false;
+    }, 3000);
+  });
+}
 
 // ======== INIT ========
 

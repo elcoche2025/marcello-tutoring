@@ -1122,8 +1122,9 @@
 
     <div class="btn-row no-print">
       <button class="btn btn-secondary" onclick="goToStep(5)">&larr; Edit</button>
-      <div style="display:flex;gap:10px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn btn-orange" onclick="window.print()">Print Essay</button>
+        <button class="btn" id="saveTrackerBtn" onclick="saveToTracker()" style="background:#7B1FA2;color:white;">📊 Save to Tracker</button>
         <button class="btn btn-success" onclick="goToStep(1)">Start Over</button>
       </div>
     </div>
@@ -1394,6 +1395,48 @@
 
   setInterval(saveProgress, 5000);
   window.addEventListener('beforeunload', saveProgress);
+
+  // ======== TRACKER ========
+  var TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+
+  function saveToTracker() {
+    var today = new Date().toISOString().slice(0, 10);
+    var fields = ['intro1','intro2','body1','body2','body3','conc1','conc2'];
+    var wordCount = 0, cwCount = 0, filled = 0;
+    var cwWords = ['after','because','when','before','although','since','until','if'];
+    fields.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el || !el.value.trim()) return;
+      filled++;
+      var text = (starters[id] || '') + el.value;
+      wordCount += text.split(/\s+/).length;
+      cwWords.forEach(function(cw) {
+        var r = new RegExp('\b' + cw + '\b', 'gi');
+        var m = text.match(r);
+        if (m) cwCount += m.length;
+      });
+    });
+    var pct = Math.round(filled / fields.length * 100) + '%';
+    var btn = document.getElementById('saveTrackerBtn');
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+    Promise.all([
+      fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({sheet:'Writing',
+          row:[today,'Essay Builder','Opinion Essay - Apollo 11',filled,fields.length,pct,wordCount,cwCount,'']})}),
+      fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({sheet:'Activity Log',
+          row:[today,'Marcello','Essay Builder','Opinion Essay',filled,fields.length,pct,wordCount+' words, '+cwCount+' connecting words']})})
+    ]).then(function() {
+      btn.textContent = 'Saved! ✓';
+      btn.style.background = '#4CAF50';
+      setTimeout(function() {
+        btn.textContent = '📊 Save to Tracker';
+        btn.style.background = '#7B1FA2';
+        btn.disabled = false;
+      }, 3000);
+    });
+  }
 
   // Init
   loadProgress();
