@@ -380,8 +380,9 @@
       <label style="font-weight:700;font-size:0.9rem">Additional Observations:</label>
       <textarea class="notes-area" id="finalNotes" placeholder="Overall observations, recommended focus areas, next steps for tutoring..."></textarea>
     </div>
-    <div style="margin-top:16px">
-      <button class="btn btn-blue no-print" onclick="copyResults()">Copy Results to Clipboard</button>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-blue no-print" onclick="copyResults()">Copy to Clipboard</button>
+      <button class="btn btn-green no-print" onclick="downloadResults()">⬇ Download as Text File</button>
     </div>
   </div>
 </div>
@@ -946,6 +947,130 @@ function copyResults() {
   navigator.clipboard.writeText(text + '\n\nNotes:\n' + notes).then(() => {
     alert('Results copied to clipboard!');
   });
+}
+
+function downloadResults() {
+  const today = new Date();
+  const dateStr = today.toISOString().slice(0,10); // YYYY-MM-DD
+
+  function getWordScore(key) {
+    const states = window.wordStates && window.wordStates[key] || {};
+    let c = 0, ic = 0;
+    for (const v of Object.values(states)) { if (v==='correct') c++; else if (v==='incorrect') ic++; }
+    return { correct: c, total: c + ic, pct: (c+ic) > 0 ? (c/(c+ic)*100).toFixed(0)+'%' : 'N/A' };
+  }
+
+  let lines = [];
+  lines.push('================================================');
+  lines.push('  FOUNDATIONAL READING SKILLS DIAGNOSTIC');
+  lines.push('  Student: Marcello   |   Grade: 3');
+  lines.push('  Date: ' + dateStr);
+  lines.push('================================================');
+  lines.push('');
+
+  // ORF
+  lines.push('ORAL READING FLUENCY (RF.3.4)');
+  lines.push('-------------------------------');
+  const wcpms = [];
+  PASSAGES.forEach((p, i) => {
+    const st = orfState[p.id];
+    lines.push('Passage ' + (i+1) + ': ' + p.title + ' (' + p.genre + ', ' + p.lexile + ')');
+    if (st.done) {
+      const stop = st.stopWord >= 0 ? st.stopWord + 1 : st.words.length;
+      const errors = [...st.errors].filter(x => x < stop).length;
+      const sc = [...st.selfCorrections].filter(x => x < stop).length;
+      const wcpm = stop - errors;
+      const acc = stop > 0 ? (wcpm / stop * 100).toFixed(1) : '0.0';
+      wcpms.push(wcpm);
+      lines.push('  Words Read:       ' + stop);
+      lines.push('  Errors:           ' + errors);
+      lines.push('  Self-Corrections: ' + sc);
+      lines.push('  WCPM:             ' + wcpm);
+      lines.push('  Accuracy:         ' + acc + '%');
+      const prosodyLabels = ['Expression/Volume','Phrasing','Pace','Smoothness'];
+      st.prosody.forEach((v, pi) => {
+        if (v > 0) lines.push('  Prosody – ' + prosodyLabels[pi] + ': ' + v + '/4');
+      });
+      const noteVal = (document.getElementById(p.id + '-notes') || {}).value || '';
+      if (noteVal.trim()) lines.push('  Notes: ' + noteVal.trim());
+    } else {
+      lines.push('  (Not completed)');
+    }
+    lines.push('');
+  });
+
+  const sortedWCPMs = [...wcpms].sort((a,b) => a-b);
+  const median = sortedWCPMs.length === 3 ? sortedWCPMs[1] :
+                 sortedWCPMs.length === 2 ? Math.round((sortedWCPMs[0]+sortedWCPMs[1])/2) :
+                 sortedWCPMs.length === 1 ? sortedWCPMs[0] : null;
+  lines.push('MEDIAN WCPM (Official Score): ' + (median !== null ? median : 'N/A'));
+  if (median !== null) {
+    if (median >= 92)      lines.push('Benchmark Status: AT OR ABOVE (50th %ile = 92 WCPM)');
+    else if (median >= 62) lines.push('Benchmark Status: BELOW (Between 25th–50th %ile)');
+    else                   lines.push('Benchmark Status: WELL BELOW (Below 25th %ile, 62 WCPM)');
+  }
+  lines.push('');
+
+  // Word lists
+  lines.push('PHONICS & WORD RECOGNITION (RF.3.3)');
+  lines.push('--------------------------------------');
+  const ms     = getWordScore('ms');
+  const prefix = getWordScore('prefix');
+  const suffix = getWordScore('suffix');
+  const irreg  = getWordScore('irreg');
+  lines.push('Multisyllabic Words (RF.3.3.c):  ' + ms.correct + '/' + ms.total + '  (' + ms.pct + ')');
+  lines.push('Prefixes (RF.3.3.a):              ' + prefix.correct + '/' + prefix.total + '  (' + prefix.pct + ')');
+  lines.push('Suffixes (RF.3.3.b):              ' + suffix.correct + '/' + suffix.total + '  (' + suffix.pct + ')');
+  lines.push('Irregular Words (RF.3.3.d):       ' + irreg.correct + '/' + irreg.total + '  (' + irreg.pct + ')');
+
+  // Per-word breakdowns
+  function wordBreakdown(stateKey, wordList) {
+    const states = window.wordStates && window.wordStates[stateKey] || {};
+    const missed = [];
+    wordList.forEach((item, i) => {
+      const word = typeof item === 'string' ? item : item.word;
+      if (states[i] === 'incorrect') missed.push(word);
+    });
+    return missed;
+  }
+  const msMissed     = wordBreakdown('ms',     MULTISYLLABIC_WORDS);
+  const prefMissed   = wordBreakdown('prefix', PREFIX_WORDS);
+  const sufMissed    = wordBreakdown('suffix', SUFFIX_WORDS);
+  const irregMissed  = wordBreakdown('irreg',  IRREGULAR_WORDS);
+  if (msMissed.length)    lines.push('  Multisyllabic errors: ' + msMissed.join(', '));
+  if (prefMissed.length)  lines.push('  Prefix errors: ' + prefMissed.join(', '));
+  if (sufMissed.length)   lines.push('  Suffix errors: ' + sufMissed.join(', '));
+  if (irregMissed.length) lines.push('  Irregular word errors: ' + irregMissed.join(', '));
+
+  const msNotes     = (document.getElementById('msNotes')    || {}).value || '';
+  const affixNotes  = (document.getElementById('affixNotes') || {}).value || '';
+  const irregNotes  = (document.getElementById('irregNotes') || {}).value || '';
+  if (msNotes.trim())    lines.push('  Multisyllabic notes: ' + msNotes.trim());
+  if (affixNotes.trim()) lines.push('  Affix notes: ' + affixNotes.trim());
+  if (irregNotes.trim()) lines.push('  Irregular word notes: ' + irregNotes.trim());
+  lines.push('');
+
+  // Final notes & interpretation
+  const finalNotes = (document.getElementById('finalNotes') || {}).value || '';
+  if (finalNotes.trim()) {
+    lines.push('ADDITIONAL OBSERVATIONS');
+    lines.push('-----------------------');
+    lines.push(finalNotes.trim());
+    lines.push('');
+  }
+
+  lines.push('================================================');
+  lines.push('  Generated by Marcello Reading Diagnostic App');
+  lines.push('  ' + today.toLocaleString());
+  lines.push('================================================');
+
+  const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'marcello_reading_diagnostic_' + dateStr + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 
