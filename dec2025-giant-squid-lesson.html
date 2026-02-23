@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giant Squid Reading Adventure - Marcello</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c2461 0%, #1e3799 50%, #0a3d62 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .app-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar-container {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            height: 25px;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .activity-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+        }
+
+        .activity-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .activity-subtitle {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .instructions {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .text-passage {
+            background: #fffbeb;
+            border: 2px solid #f1c40f;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .text-passage .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .question-block {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .multiple-choice {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .choice-option:hover {
+            border-color: #3498db;
+            background: #f0f8ff;
+        }
+
+        .choice-option.selected {
+            border-color: #27ae60;
+            background: #e8f8f0;
+        }
+
+        .choice-option input {
+            margin-right: 15px;
+            transform: scale(1.3);
+        }
+
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .word-chip {
+            background: #e8f4f8;
+            border: 2px solid #3498db;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .word-chip:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .word-chip.used {
+            background: #95a5a6;
+            border-color: #95a5a6;
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .size-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .scale-slot {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            border-radius: 10px;
+            min-height: 60px;
+        }
+
+        .scale-label {
+            width: 120px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+
+        .scale-dropzone {
+            flex: 1;
+            min-height: 40px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .scale-dropzone.filled {
+            background: #e8f8f0;
+            border-color: #27ae60;
+        }
+
+        .draggable-word {
+            background: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        .matching-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .matching-column h4 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .matching-item {
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .matching-item.selected {
+            border-color: #3498db;
+            background: #e8f4f8;
+        }
+
+        .matching-item.matched {
+            border-color: #27ae60;
+            background: #e8f8f0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #219a52);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            border: 2px solid #e74c3c;
+            color: #721c24;
+            display: block;
+        }
+
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+            background: #f1c40f;
+            transform: scale(1.2);
+        }
+
+        .nav-dot.completed {
+            background: #27ae60;
+        }
+
+        .squid-mascot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            font-size: 4rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .completion-celebration {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .completion-celebration h2 {
+            font-size: 2rem;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        .trophy {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .pdf-download-notice {
+            background: #d4edda;
+            border: 2px solid #27ae60;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .text-evidence-reminder {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .text-evidence-reminder strong {
+            color: #856404;
+        }
+
+        .sorting-activity {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .category-box {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 200px;
+        }
+
+        .category-title {
+            background: #3498db;
+            color: white;
+            padding: 10px;
+            margin: -15px -15px 15px -15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .fact-chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .fact-chip {
+            background: #e8f4f8;
+            border: 2px solid #3498db;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .fact-chip:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .fact-chip.placed {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .dropped-fact {
+            background: white;
+            border: 1px solid #27ae60;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-fact {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .activity-card {
+                padding: 20px;
+            }
+            
+            .sorting-activity {
+                grid-template-columns: 1fr;
+            }
+            
+            .matching-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>🦑 Giant Squid Reading Adventure</h1>
+            <p class="subtitle">Marcello's ELA Learning Journey</p>
+        </header>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%">0%</div>
+        </div>
+
+        <!-- Activity Pages Container -->
+        <div id="activityContainer">
+            <!-- Page 1: Welcome & Vocabulary - Shades of Meaning -->
+            <div class="activity-card activity-page" id="page1">
+                <div class="activity-header">
+                    <span class="activity-icon">📚</span>
+                    <div>
+                        <h2 class="activity-title">Activity 1: Size Words - Shades of Meaning</h2>
+                        <p class="activity-subtitle">Learning Standard: L.3.5.c</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <strong>Instructions:</strong> The book "Giant Squid" uses many words to describe how BIG things are. These words have different "shades of meaning" - some mean a little big, and some mean REALLY big! Arrange these words from smallest to largest.
+                </div>
+
+                <div class="word-bank" id="wordBank1">
+                    <span class="word-chip" data-word="colossal" onclick="selectWord(this, 'page1')">colossal</span>
+                    <span class="word-chip" data-word="big" onclick="selectWord(this, 'page1')">big</span>
+                    <span class="word-chip" data-word="huge" onclick="selectWord(this, 'page1')">huge</span>
+                    <span class="word-chip" data-word="giant" onclick="selectWord(this, 'page1')">giant</span>
+                    <span class="word-chip" data-word="large" onclick="selectWord(this, 'page1')">large</span>
+                </div>
+
+                <div class="size-scale" id="sizeScale1">
+                    <div class="scale-slot">
+                        <span class="scale-label">1. Smallest:</span>
+                        <div class="scale-dropzone" data-position="1" onclick="placeWord(this, 'page1')">
+                            <span class="placeholder-text">Click to place word</span>
+                        </div>
+                    </div>
+                    <div class="scale-slot">
+                        <span class="scale-label">2. ↓</span>
+                        <div class="scale-dropzone" data-position="2" onclick="placeWord(this, 'page1')">
+                            <span class="placeholder-text">Click to place word</span>
+                        </div>
+                    </div>
+                    <div class="scale-slot">
+                        <span class="scale-label">3. Middle:</span>
+                        <div class="scale-dropzone" data-position="3" onclick="placeWord(this, 'page1')">
+                            <span class="placeholder-text">Click to place word</span>
+                        </div>
+                    </div>
+                    <div class="scale-slot">
+                        <span class="scale-label">4. ↓</span>
+                        <div class="scale-dropzone" data-position="4" onclick="placeWord(this, 'page1')">
+                            <span class="placeholder-text">Click to place word</span>
+                        </div>
+                    </div>
+                    <div class="scale-slot">
+                        <span class="scale-label">5. Biggest:</span>
+                        <div class="scale-dropzone" data-position="5" onclick="placeWord(this, 'page1')">
+                            <span class="placeholder-text">Click to place word</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">★</span> Why do you think the author uses different "size words" instead of just saying "big" every time?</p>
+                    <textarea id="answer1_explain" placeholder="Write your answer here..." rows="3"></textarea>
+                </div>
+
+                <div id="feedback1" class="feedback"></div>
+
+                <div class="button-row">
+                    <span></span>
+                    <button class="btn btn-success" onclick="completePage(1)">Complete & Download PDF →</button>
+                </div>
+            </div>
+
+            <!-- Page 2: Reading Comprehension - Text Evidence -->
+            <div class="activity-card activity-page hidden" id="page2">
+                <div class="activity-header">
+                    <span class="activity-icon">🔍</span>
+                    <div>
+                        <h2 class="activity-title">Activity 2: Finding Text Evidence</h2>
+                        <p class="activity-subtitle">Learning Standard: RI.3.1</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <strong>Instructions:</strong> Read the passage below carefully. Then answer the questions using evidence (exact words or ideas) from the text.
+                </div>
+
+                <div class="text-passage">
+                    <strong>From "Giant Squid: Searching for a Sea Monster":</strong><br><br>
+                    "Long, long ago, sailors told scary stories about the ocean. They said a huge monster lived deep in the water. The monster had long, twisting arms. It could grab sailors right off their ships! The sailors called this creature the <span class="highlight">kraken</span>. They said it was as big as an island. Its long arms could wrap around a whole ship and pull it down into the water."
+                </div>
+
+                <div class="text-evidence-reminder">
+                    <strong>💡 Remember:</strong> When you answer, use words from the text to prove your answer! Start with phrases like "The text says..." or "According to the passage..."
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">1</span> What did sailors call the sea monster they talked about?</p>
+                    <textarea id="answer2_1" placeholder="Use evidence from the text..." rows="2"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">2</span> According to the text, how big did sailors say the kraken was?</p>
+                    <textarea id="answer2_2" placeholder="Use evidence from the text..." rows="2"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">3</span> What could the monster's arms do, according to the sailors' stories?</p>
+                    <textarea id="answer2_3" placeholder="Use evidence from the text..." rows="3"></textarea>
+                </div>
+
+                <div id="feedback2" class="feedback"></div>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" onclick="showPage(1)">← Back</button>
+                    <button class="btn btn-success" onclick="completePage(2)">Complete & Download PDF →</button>
+                </div>
+            </div>
+
+            <!-- Page 3: Main Idea -->
+            <div class="activity-card activity-page hidden" id="page3">
+                <div class="activity-header">
+                    <span class="activity-icon">💡</span>
+                    <div>
+                        <h2 class="activity-title">Activity 3: Finding the Main Idea</h2>
+                        <p class="activity-subtitle">Learning Standards: RI.3.1, RI.3.2</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <strong>Instructions:</strong> Read the passage about "Early Clues" and identify the main idea and key details.
+                </div>
+
+                <div class="text-passage">
+                    <strong>Early Clues:</strong><br><br>
+                    "In the 1700s and 1800s, ship captains hunted big whales called sperm whales. When they caught the whales, they noticed something strange. The whales had <span class="highlight">round scars</span> all over their heads. Something had been fighting with these huge whales! But what?<br><br>
+                    Inside the whales' bellies, the captains found something else strange. They found big, sharp beaks. The beaks looked like bird beaks, but they were as big as a man's fist!<br><br>
+                    Did sperm whales eat birds? No! The captains figured it out. The beaks came from squids—GIANT squids!"
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">1</span> What is the MAIN IDEA of this section?</p>
+                    <div class="multiple-choice">
+                        <label class="choice-option">
+                            <input type="radio" name="mainIdea" value="a">
+                            Sperm whales are very large animals that live in the ocean.
+                        </label>
+                        <label class="choice-option">
+                            <input type="radio" name="mainIdea" value="b">
+                            Ship captains found clues that giant squids exist by looking at sperm whales.
+                        </label>
+                        <label class="choice-option">
+                            <input type="radio" name="mainIdea" value="c">
+                            Giant squid beaks look like bird beaks.
+                        </label>
+                        <label class="choice-option">
+                            <input type="radio" name="mainIdea" value="d">
+                            Sailors hunted whales in the 1700s and 1800s.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">2</span> List TWO key details that support the main idea:</p>
+                    <p><strong>Detail 1:</strong></p>
+                    <textarea id="answer3_detail1" placeholder="Write a key detail from the text..." rows="2"></textarea>
+                    <br><br>
+                    <p><strong>Detail 2:</strong></p>
+                    <textarea id="answer3_detail2" placeholder="Write another key detail from the text..." rows="2"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">3</span> How did the round scars on whales help prove giant squids were real?</p>
+                    <textarea id="answer3_scars" placeholder="Explain using information from the text..." rows="3"></textarea>
+                </div>
+
+                <div id="feedback3" class="feedback"></div>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" onclick="showPage(2)">← Back</button>
+                    <button class="btn btn-success" onclick="completePage(3)">Complete & Download PDF →</button>
+                </div>
+            </div>
+
+            <!-- Page 4: Note-Taking - Sorting Evidence -->
+            <div class="activity-card activity-page hidden" id="page4">
+                <div class="activity-header">
+                    <span class="activity-icon">📝</span>
+                    <div>
+                        <h2 class="activity-title">Activity 4: Sorting Facts Into Categories</h2>
+                        <p class="activity-subtitle">Learning Standard: W.3.8</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <strong>Instructions:</strong> Good readers take notes by sorting information into categories. Click on a fact, then click on the category where it belongs.
+                </div>
+
+                <p style="margin-bottom: 15px;"><strong>Facts to sort:</strong></p>
+                <div class="fact-chips-container" id="factChips">
+                    <span class="fact-chip" data-fact="They have 8 arms and 2 tentacles" onclick="selectFact(this)">They have 8 arms and 2 tentacles</span>
+                    <span class="fact-chip" data-fact="They live about half a mile deep in the ocean" onclick="selectFact(this)">They live about half a mile deep in the ocean</span>
+                    <span class="fact-chip" data-fact="Their eyes are as big as car headlights" onclick="selectFact(this)">Their eyes are as big as car headlights</span>
+                    <span class="fact-chip" data-fact="Sperm whales eat them" onclick="selectFact(this)">Sperm whales eat them</span>
+                    <span class="fact-chip" data-fact="They can grow 25 to 33 feet long" onclick="selectFact(this)">They can grow 25 to 33 feet long</span>
+                    <span class="fact-chip" data-fact="They only live 1-2 years" onclick="selectFact(this)">They only live 1-2 years</span>
+                    <span class="fact-chip" data-fact="They eat fish like orange roughy" onclick="selectFact(this)">They eat fish like orange roughy</span>
+                    <span class="fact-chip" data-fact="Their beak can bite through steel cable" onclick="selectFact(this)">Their beak can bite through steel cable</span>
+                </div>
+
+                <div class="sorting-activity">
+                    <div class="category-box" id="categoryBody" onclick="placeFact('categoryBody')">
+                        <div class="category-title">🦑 Body Parts & Features</div>
+                        <div class="dropped-facts"></div>
+                    </div>
+                    <div class="category-box" id="categoryHabitat" onclick="placeFact('categoryHabitat')">
+                        <div class="category-title">🌊 Where They Live</div>
+                        <div class="dropped-facts"></div>
+                    </div>
+                    <div class="category-box" id="categoryFood" onclick="placeFact('categoryFood')">
+                        <div class="category-title">🍽️ Food & Eating</div>
+                        <div class="dropped-facts"></div>
+                    </div>
+                    <div class="category-box" id="categoryLife" onclick="placeFact('categoryLife')">
+                        <div class="category-title">📏 Size & Life</div>
+                        <div class="dropped-facts"></div>
+                    </div>
+                </div>
+
+                <div id="feedback4" class="feedback"></div>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" onclick="showPage(3)">← Back</button>
+                    <button class="btn btn-success" onclick="completePage(4)">Complete & Download PDF →</button>
+                </div>
+            </div>
+
+            <!-- Page 5: Clyde Roper - Comprehension -->
+            <div class="activity-card activity-page hidden" id="page5">
+                <div class="activity-header">
+                    <span class="activity-icon">🔬</span>
+                    <div>
+                        <h2 class="activity-title">Activity 5: Meet the Squid Hunter</h2>
+                        <p class="activity-subtitle">Learning Standards: RI.3.1, RI.3.2</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <strong>Instructions:</strong> Read about Clyde Roper, then answer the questions using text evidence.
+                </div>
+
+                <div class="text-passage">
+                    <strong>Meet the Squid Hunter:</strong><br><br>
+                    "A boy named Clyde Roper loved the ocean. When he was little, he would follow tiny snails along the beach. He watched them make trails in the sand.<br><br>
+                    Clyde didn't know it yet, but those snails were his first clue. Snails and squids are related! They're both soft-bodied animals called <span class="highlight">mollusks</span>.<br><br>
+                    When Clyde grew up, he went to college. He studied all kinds of squids and their relatives. There are octopuses, cuttlefishes, and even a creature called the chambered nautilus."
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">1</span> What did Clyde Roper do as a child that showed his love for ocean life?</p>
+                    <textarea id="answer5_1" placeholder="Use evidence from the text..." rows="2"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">2</span> How are snails and squids related, according to the text?</p>
+                    <textarea id="answer5_2" placeholder="Use evidence from the text..." rows="2"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">3</span> What are THREE animals that are related to squids?</p>
+                    <textarea id="answer5_3" placeholder="List three animals mentioned in the text..." rows="2"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">4</span> What does this section tell us about how scientists become interested in their work?</p>
+                    <textarea id="answer5_4" placeholder="Think about how Clyde's childhood connected to his career..." rows="3"></textarea>
+                </div>
+
+                <div id="feedback5" class="feedback"></div>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" onclick="showPage(4)">← Back</button>
+                    <button class="btn btn-success" onclick="completePage(5)">Complete & Download PDF →</button>
+                </div>
+            </div>
+
+            <!-- Page 6: Math Connection (Brief) -->
+            <div class="activity-card activity-page hidden" id="page6">
+                <div class="activity-header">
+                    <span class="activity-icon">🔢</span>
+                    <div>
+                        <h2 class="activity-title">Activity 6: Giant Squid Math Challenge</h2>
+                        <p class="activity-subtitle">Connecting Reading to Math</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <strong>Instructions:</strong> Use facts from the Giant Squid text to solve these math problems!
+                </div>
+
+                <div class="text-passage">
+                    <strong>Facts from the book:</strong><br>
+                    • Giant squids can be 25 to 33 feet long<br>
+                    • One sperm whale might eat 20,000 squids in one week<br>
+                    • Only about 3 of those are giant squids<br>
+                    • The tentacle Dr. Kubodera found was 18 feet long
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">1</span> If the biggest giant squid is 33 feet and the smallest adult is 25 feet, what is the difference in length?</p>
+                    <p><em>Show your work:</em></p>
+                    <textarea id="answer6_1work" placeholder="Write your subtraction here..." rows="2"></textarea>
+                    <p><strong>Answer:</strong></p>
+                    <textarea id="answer6_1" placeholder="____ feet" rows="1"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">2</span> If a whale eats 3 giant squids per week, how many giant squids would it eat in 4 weeks?</p>
+                    <p><em>Show your work:</em></p>
+                    <textarea id="answer6_2work" placeholder="Write your multiplication here..." rows="2"></textarea>
+                    <p><strong>Answer:</strong></p>
+                    <textarea id="answer6_2" placeholder="____ giant squids" rows="1"></textarea>
+                </div>
+
+                <div class="question-block">
+                    <p class="question-text"><span class="question-number">3</span> Dr. Kubodera's tentacle was 18 feet long. If you put 2 tentacles end to end, how long would that be? Use addition to solve.</p>
+                    <p><em>Show your work:</em></p>
+                    <textarea id="answer6_3work" placeholder="Write your addition here..." rows="2"></textarea>
+                    <p><strong>Answer:</strong></p>
+                    <textarea id="answer6_3" placeholder="____ feet" rows="1"></textarea>
+                </div>
+
+                <div id="feedback6" class="feedback"></div>
+
+                <div class="button-row">
+                    <button class="btn btn-primary" onclick="showPage(5)">← Back</button>
+                    <button class="btn btn-success" onclick="completePage(6)">Complete & Download PDF →</button>
+                </div>
+            </div>
+
+            <!-- Completion Page -->
+            <div class="activity-card activity-page hidden" id="completionPage">
+                <div class="completion-celebration">
+                    <div class="trophy">🏆</div>
+                    <h2>Amazing Work, Marcello!</h2>
+                    <p style="font-size: 1.2rem; margin-bottom: 20px;">You've completed all the Giant Squid activities!</p>
+                    
+                    <div style="background: #e8f4f8; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3 style="color: #2c3e50; margin-bottom: 15px;">📄 Downloaded PDFs:</h3>
+                        <p>✅ Activity 1: Size Words - Shades of Meaning</p>
+                        <p>✅ Activity 2: Finding Text Evidence</p>
+                        <p>✅ Activity 3: Finding the Main Idea</p>
+                        <p>✅ Activity 4: Sorting Facts Into Categories</p>
+                        <p>✅ Activity 5: Meet the Squid Hunter</p>
+                        <p>✅ Activity 6: Giant Squid Math Challenge</p>
+                    </div>
+
+                    <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3 style="color: #856404; margin-bottom: 10px;">🦑 Fun Giant Squid Facts You Learned:</h3>
+                        <p>• Giant squids have the largest eyes in the animal kingdom!</p>
+                        <p>• Scientists call them "Architeuthis" - meaning "chief squid"</p>
+                        <p>• They can grow longer than a school bus!</p>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="restartLesson()" style="margin-top: 20px;">
+                        🔄 Start Over
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-dots" id="navDots">
+            <span class="nav-dot active" onclick="showPage(1)"></span>
+            <span class="nav-dot" onclick="showPage(2)"></span>
+            <span class="nav-dot" onclick="showPage(3)"></span>
+            <span class="nav-dot" onclick="showPage(4)"></span>
+            <span class="nav-dot" onclick="showPage(5)"></span>
+            <span class="nav-dot" onclick="showPage(6)"></span>
+        </div>
+    </div>
+
+    <div class="squid-mascot">🦑</div>
+
+    <script>
+        // State management
+        let currentPage = 1;
+        let totalPages = 6;
+        let completedPages = new Set();
+        let selectedWord = null;
+        let selectedFact = null;
+        let page1Answers = {};
+        
+        // Initialize jsPDF
+        const { jsPDF } = window.jspdf;
+
+        // Page navigation
+        function showPage(pageNum) {
+            document.querySelectorAll('.activity-page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById('page' + pageNum).classList.remove('hidden');
+            currentPage = pageNum;
+            updateNavDots();
+        }
+
+        function updateNavDots() {
+            document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                dot.classList.remove('active');
+                if (index + 1 === currentPage) {
+                    dot.classList.add('active');
+                }
+                if (completedPages.has(index + 1)) {
+                    dot.classList.add('completed');
+                }
+            });
+        }
+
+        function updateProgressBar() {
+            let progress = (completedPages.size / totalPages) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').textContent = Math.round(progress) + '%';
+        }
+
+        // Page 1: Size Words Activity
+        function selectWord(element, page) {
+            if (element.classList.contains('used')) return;
+            
+            document.querySelectorAll('#wordBank1 .word-chip').forEach(chip => {
+                chip.style.boxShadow = 'none';
+            });
+            
+            element.style.boxShadow = '0 0 10px #3498db';
+            selectedWord = element.dataset.word;
+        }
+
+        function placeWord(dropzone, page) {
+            if (!selectedWord) return;
+            
+            // Remove existing word if any
+            if (dropzone.dataset.word) {
+                const oldWord = dropzone.dataset.word;
+                document.querySelectorAll('#wordBank1 .word-chip').forEach(chip => {
+                    if (chip.dataset.word === oldWord) {
+                        chip.classList.remove('used');
+                    }
+                });
+            }
+            
+            dropzone.innerHTML = `<span class="draggable-word">${selectedWord}</span>`;
+            dropzone.dataset.word = selectedWord;
+            dropzone.classList.add('filled');
+            
+            // Mark word as used
+            document.querySelectorAll('#wordBank1 .word-chip').forEach(chip => {
+                if (chip.dataset.word === selectedWord) {
+                    chip.classList.add('used');
+                    chip.style.boxShadow = 'none';
+                }
+            });
+            
+            page1Answers[dropzone.dataset.position] = selectedWord;
+            selectedWord = null;
+        }
+
+        // Page 4: Fact Sorting Activity
+        function selectFact(element) {
+            if (element.classList.contains('placed')) return;
+            
+            document.querySelectorAll('.fact-chip').forEach(chip => {
+                chip.style.boxShadow = 'none';
+            });
+            
+            element.style.boxShadow = '0 0 10px #3498db';
+            selectedFact = element.dataset.fact;
+        }
+
+        function placeFact(categoryId) {
+            if (!selectedFact) return;
+            
+            const category = document.getElementById(categoryId);
+            const factsContainer = category.querySelector('.dropped-facts');
+            
+            const factElement = document.createElement('div');
+            factElement.className = 'dropped-fact';
+            factElement.innerHTML = `
+                ${selectedFact}
+                <button class="remove-fact" onclick="removeFact(this, '${selectedFact}')">×</button>
+            `;
+            factsContainer.appendChild(factElement);
+            
+            // Mark fact as placed
+            document.querySelectorAll('.fact-chip').forEach(chip => {
+                if (chip.dataset.fact === selectedFact) {
+                    chip.classList.add('placed');
+                    chip.style.boxShadow = 'none';
+                }
+            });
+            
+            selectedFact = null;
+        }
+
+        function removeFact(button, factText) {
+            button.parentElement.remove();
+            document.querySelectorAll('.fact-chip').forEach(chip => {
+                if (chip.dataset.fact === factText) {
+                    chip.classList.remove('placed');
+                }
+            });
+        }
+
+        // Multiple choice selection
+        document.querySelectorAll('.choice-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const name = this.querySelector('input').name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                    input.closest('.choice-option').classList.remove('selected');
+                });
+                this.classList.add('selected');
+                this.querySelector('input').checked = true;
+            });
+        });
+
+        // PDF Generation
+        function generatePDF(pageNum) {
+            const doc = new jsPDF();
+            const date = new Date().toLocaleDateString();
+            
+            // Header
+            doc.setFontSize(18);
+            doc.setTextColor(44, 62, 80);
+            doc.text('Giant Squid Reading Adventure', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setTextColor(127, 140, 141);
+            doc.text(`Student: Marcello | Date: ${date}`, 105, 30, { align: 'center' });
+            
+            doc.setDrawColor(52, 152, 219);
+            doc.setLineWidth(0.5);
+            doc.line(20, 35, 190, 35);
+            
+            let yPos = 45;
+            
+            switch(pageNum) {
+                case 1:
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Activity 1: Size Words - Shades of Meaning (L.3.5.c)', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    doc.text('Words arranged from smallest to largest:', 20, yPos);
+                    yPos += 10;
+                    
+                    for (let i = 1; i <= 5; i++) {
+                        const word = page1Answers[i] || '(not answered)';
+                        doc.text(`${i}. ${word}`, 30, yPos);
+                        yPos += 8;
+                    }
+                    
+                    yPos += 10;
+                    doc.text('Why does the author use different size words?', 20, yPos);
+                    yPos += 8;
+                    const explain = document.getElementById('answer1_explain').value || '(not answered)';
+                    const explainLines = doc.splitTextToSize(explain, 160);
+                    doc.text(explainLines, 25, yPos);
+                    break;
+                    
+                case 2:
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Activity 2: Finding Text Evidence (RI.3.1)', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    
+                    doc.text('1. What did sailors call the sea monster?', 20, yPos);
+                    yPos += 8;
+                    const ans2_1 = document.getElementById('answer2_1').value || '(not answered)';
+                    const lines2_1 = doc.splitTextToSize(ans2_1, 160);
+                    doc.text(lines2_1, 25, yPos);
+                    yPos += lines2_1.length * 6 + 10;
+                    
+                    doc.text('2. How big did sailors say the kraken was?', 20, yPos);
+                    yPos += 8;
+                    const ans2_2 = document.getElementById('answer2_2').value || '(not answered)';
+                    const lines2_2 = doc.splitTextToSize(ans2_2, 160);
+                    doc.text(lines2_2, 25, yPos);
+                    yPos += lines2_2.length * 6 + 10;
+                    
+                    doc.text("3. What could the monster's arms do?", 20, yPos);
+                    yPos += 8;
+                    const ans2_3 = document.getElementById('answer2_3').value || '(not answered)';
+                    const lines2_3 = doc.splitTextToSize(ans2_3, 160);
+                    doc.text(lines2_3, 25, yPos);
+                    break;
+                    
+                case 3:
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Activity 3: Finding the Main Idea (RI.3.1, RI.3.2)', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    
+                    const mainIdeaSelected = document.querySelector('input[name="mainIdea"]:checked');
+                    const mainIdeaAnswer = mainIdeaSelected ? mainIdeaSelected.value : '(not selected)';
+                    const mainIdeaOptions = {
+                        'a': 'Sperm whales are very large animals that live in the ocean.',
+                        'b': 'Ship captains found clues that giant squids exist by looking at sperm whales.',
+                        'c': 'Giant squid beaks look like bird beaks.',
+                        'd': 'Sailors hunted whales in the 1700s and 1800s.'
+                    };
+                    
+                    doc.text('1. Main Idea Selected:', 20, yPos);
+                    yPos += 8;
+                    doc.text(mainIdeaOptions[mainIdeaAnswer] || '(not selected)', 25, yPos);
+                    yPos += 15;
+                    
+                    doc.text('2. Key Details:', 20, yPos);
+                    yPos += 8;
+                    doc.text('Detail 1:', 25, yPos);
+                    yPos += 6;
+                    const detail1 = document.getElementById('answer3_detail1').value || '(not answered)';
+                    const detailLines1 = doc.splitTextToSize(detail1, 150);
+                    doc.text(detailLines1, 30, yPos);
+                    yPos += detailLines1.length * 6 + 8;
+                    
+                    doc.text('Detail 2:', 25, yPos);
+                    yPos += 6;
+                    const detail2 = document.getElementById('answer3_detail2').value || '(not answered)';
+                    const detailLines2 = doc.splitTextToSize(detail2, 150);
+                    doc.text(detailLines2, 30, yPos);
+                    yPos += detailLines2.length * 6 + 10;
+                    
+                    doc.text('3. How did round scars help prove giant squids were real?', 20, yPos);
+                    yPos += 8;
+                    const scars = document.getElementById('answer3_scars').value || '(not answered)';
+                    const scarsLines = doc.splitTextToSize(scars, 160);
+                    doc.text(scarsLines, 25, yPos);
+                    break;
+                    
+                case 4:
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Activity 4: Sorting Facts Into Categories (W.3.8)', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    
+                    const categories = [
+                        { id: 'categoryBody', title: 'Body Parts & Features' },
+                        { id: 'categoryHabitat', title: 'Where They Live' },
+                        { id: 'categoryFood', title: 'Food & Eating' },
+                        { id: 'categoryLife', title: 'Size & Life' }
+                    ];
+                    
+                    categories.forEach(cat => {
+                        doc.setFont(undefined, 'bold');
+                        doc.text(cat.title + ':', 20, yPos);
+                        doc.setFont(undefined, 'normal');
+                        yPos += 8;
+                        
+                        const facts = document.querySelectorAll(`#${cat.id} .dropped-fact`);
+                        if (facts.length > 0) {
+                            facts.forEach(fact => {
+                                const text = fact.textContent.replace('×', '').trim();
+                                const factLines = doc.splitTextToSize('• ' + text, 155);
+                                doc.text(factLines, 25, yPos);
+                                yPos += factLines.length * 6;
+                            });
+                        } else {
+                            doc.text('(no facts sorted)', 25, yPos);
+                            yPos += 6;
+                        }
+                        yPos += 8;
+                    });
+                    break;
+                    
+                case 5:
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Activity 5: Meet the Squid Hunter (RI.3.1, RI.3.2)', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    
+                    const questions5 = [
+                        { q: '1. What did Clyde do as a child that showed his love for ocean life?', id: 'answer5_1' },
+                        { q: '2. How are snails and squids related?', id: 'answer5_2' },
+                        { q: '3. Three animals related to squids:', id: 'answer5_3' },
+                        { q: '4. What does this tell us about how scientists become interested?', id: 'answer5_4' }
+                    ];
+                    
+                    questions5.forEach(item => {
+                        const qLines = doc.splitTextToSize(item.q, 170);
+                        doc.text(qLines, 20, yPos);
+                        yPos += qLines.length * 6 + 4;
+                        
+                        const answer = document.getElementById(item.id).value || '(not answered)';
+                        const aLines = doc.splitTextToSize(answer, 160);
+                        doc.text(aLines, 25, yPos);
+                        yPos += aLines.length * 6 + 10;
+                    });
+                    break;
+                    
+                case 6:
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Activity 6: Giant Squid Math Challenge', 20, yPos);
+                    yPos += 15;
+                    
+                    doc.setFontSize(11);
+                    
+                    doc.text('1. Difference between 33 feet and 25 feet:', 20, yPos);
+                    yPos += 8;
+                    doc.text('Work: ' + (document.getElementById('answer6_1work').value || '(not shown)'), 25, yPos);
+                    yPos += 6;
+                    doc.text('Answer: ' + (document.getElementById('answer6_1').value || '(not answered)'), 25, yPos);
+                    yPos += 12;
+                    
+                    doc.text('2. Giant squids eaten in 4 weeks (3 per week):', 20, yPos);
+                    yPos += 8;
+                    doc.text('Work: ' + (document.getElementById('answer6_2work').value || '(not shown)'), 25, yPos);
+                    yPos += 6;
+                    doc.text('Answer: ' + (document.getElementById('answer6_2').value || '(not answered)'), 25, yPos);
+                    yPos += 12;
+                    
+                    doc.text('3. Two 18-foot tentacles end to end:', 20, yPos);
+                    yPos += 8;
+                    doc.text('Work: ' + (document.getElementById('answer6_3work').value || '(not shown)'), 25, yPos);
+                    yPos += 6;
+                    doc.text('Answer: ' + (document.getElementById('answer6_3').value || '(not answered)'), 25, yPos);
+                    break;
+            }
+            
+            // Footer
+            doc.setFontSize(9);
+            doc.setTextColor(149, 165, 166);
+            doc.text('Giant Squid Reading Adventure - Generated for Marcello', 105, 285, { align: 'center' });
+            
+            // Save PDF
+            doc.save(`Marcello_GiantSquid_Activity${pageNum}_${date.replace(/\//g, '-')}.pdf`);
+        }
+
+        // Complete page and download PDF
+        function completePage(pageNum) {
+            completedPages.add(pageNum);
+            updateProgressBar();
+            updateNavDots();
+            
+            // Generate and download PDF
+            generatePDF(pageNum);
+            
+            // Show feedback
+            const feedback = document.getElementById('feedback' + pageNum);
+            if (feedback) {
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = '✅ Great work! Your PDF has been downloaded. Click the button below to continue.';
+            }
+            
+            // Move to next page or completion after a short delay
+            setTimeout(() => {
+                if (pageNum < totalPages) {
+                    showPage(pageNum + 1);
+                } else {
+                    showCompletionPage();
+                }
+            }, 1500);
+        }
+
+        function showCompletionPage() {
+            document.querySelectorAll('.activity-page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            document.getElementById('completionPage').classList.remove('hidden');
+            document.getElementById('navDots').classList.add('hidden');
+        }
+
+        function restartLesson() {
+            completedPages.clear();
+            currentPage = 1;
+            updateProgressBar();
+            
+            // Reset all inputs
+            document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+                radio.closest('.choice-option').classList.remove('selected');
+            });
+            
+            // Reset word bank
+            document.querySelectorAll('.word-chip').forEach(chip => {
+                chip.classList.remove('used');
+                chip.style.boxShadow = 'none';
+            });
+            document.querySelectorAll('.scale-dropzone').forEach(dz => {
+                dz.innerHTML = '<span class="placeholder-text">Click to place word</span>';
+                dz.classList.remove('filled');
+                delete dz.dataset.word;
+            });
+            page1Answers = {};
+            
+            // Reset fact sorting
+            document.querySelectorAll('.fact-chip').forEach(chip => {
+                chip.classList.remove('placed');
+                chip.style.boxShadow = 'none';
+            });
+            document.querySelectorAll('.dropped-facts').forEach(container => {
+                container.innerHTML = '';
+            });
+            
+            // Reset feedback
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.className = 'feedback';
+                fb.innerHTML = '';
+            });
+            
+            // Reset nav
+            document.getElementById('navDots').classList.remove('hidden');
+            document.querySelectorAll('.nav-dot').forEach(dot => {
+                dot.classList.remove('completed');
+            });
+            
+            showPage(1);
+        }
+
+        // Initialize
+        showPage(1);
+    </script>
+</body>
+</html>

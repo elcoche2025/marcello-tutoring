@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundational Reading Skills Diagnostic — Marcello</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Libre+Baskerville&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --blue:#4472C4;--blue-light:#D9E2F3;--green:#4CAF50;--green-light:#E8F5E9;
+    --red:#E53935;--red-light:#FFEBEE;--orange:#FF9800;--orange-light:#FFF3E0;
+    --purple:#7B1FA2;--purple-light:#F3E5F5;
+    --bg:#F4F6FB;--card:#FFF;--text:#2D3748;--muted:#718096;
+    --radius:14px;--shadow:0 4px 20px rgba(0,0,0,0.08);
+  }
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+  /* --- NAV --- */
+  .topbar{background:#1a237e;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .topbar h1{font-size:1.1rem;font-weight:800}
+  .topbar .meta{font-size:0.85rem;opacity:0.8}
+  .tab-bar{display:flex;background:#fff;border-bottom:2px solid #E0E0E0;overflow-x:auto;position:sticky;top:0;z-index:50}
+  .tab{padding:12px 20px;font-weight:700;font-size:0.9rem;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all 0.2s;color:var(--muted)}
+  .tab:hover{color:var(--text);background:#F5F5F5}
+  .tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+  /* --- PANELS --- */
+  .panel{display:none;max-width:900px;margin:0 auto;padding:24px 20px 80px}
+  .panel.active{display:block}
+
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+  .card h2{font-size:1.25rem;font-weight:800;margin-bottom:6px}
+  .card h3{font-size:1.05rem;font-weight:700;margin-bottom:6px;color:var(--blue)}
+  .card .desc{font-size:0.9rem;color:var(--muted);margin-bottom:16px;line-height:1.5}
+
+  /* --- ORF SCORING --- */
+  .orf-controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+  .timer-display{
+    font-family:'Nunito',sans-serif;font-size:2.2rem;font-weight:800;
+    min-width:100px;text-align:center;padding:8px 16px;
+    border-radius:12px;background:#1a237e;color:#FFD54F;
+    letter-spacing:2px;
+  }
+  .timer-display.running{animation:timerPulse 1s ease infinite}
+  .timer-display.done{background:var(--red);color:#fff}
+  @keyframes timerPulse{0%,100%{opacity:1}50%{opacity:0.7}}
+
+  .btn{
+    padding:10px 22px;border:none;border-radius:10px;font-family:'Nunito',sans-serif;
+    font-size:0.95rem;font-weight:700;cursor:pointer;transition:all 0.2s;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 3px 12px rgba(0,0,0,0.15)}
+  .btn-blue{background:var(--blue);color:#fff}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-red{background:var(--red);color:#fff}
+  .btn-orange{background:var(--orange);color:#fff}
+  .btn-gray{background:#E0E0E0;color:var(--text)}
+  .btn-sm{padding:6px 14px;font-size:0.8rem}
+  .btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+  .passage-area{
+    line-height:2.2;font-size:1.15rem;padding:16px;
+    border:2px solid #E0E0E0;border-radius:12px;
+    background:#FAFAFA;margin-bottom:16px;
+    user-select:none;-webkit-user-select:none;
+  }
+  .passage-area .word{
+    display:inline;cursor:pointer;padding:2px 1px;border-radius:4px;
+    transition:background 0.15s,color 0.15s;
+  }
+  .passage-area .word:hover{background:#E3F2FD}
+  .passage-area .word.error{background:#FFCDD2;color:var(--red);text-decoration:line-through;font-weight:700}
+  .passage-area .word.sc{background:#FFF9C4;color:#F57F17;text-decoration:none;font-style:italic}
+  .passage-area .word.stop-marker{border-right:4px solid var(--red);padding-right:4px}
+  .passage-area .word-num{
+    display:inline-block;width:28px;text-align:right;margin-right:6px;
+    font-size:0.7rem;color:#B0BEC5;font-weight:600;user-select:none;vertical-align:baseline;
+  }
+
+  .score-summary{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+    gap:12px;margin-top:16px;
+  }
+  .score-box{
+    text-align:center;padding:14px 10px;border-radius:12px;background:#F5F5F5;
+  }
+  .score-box .num{font-size:1.8rem;font-weight:800}
+  .score-box .lbl{font-size:0.75rem;color:var(--muted);font-weight:600;margin-top:2px}
+  .score-box.good .num{color:var(--green)}
+  .score-box.warn .num{color:var(--orange)}
+  .score-box.bad .num{color:var(--red)}
+
+  .benchmark-bar{
+    height:24px;border-radius:12px;background:#E0E0E0;position:relative;overflow:hidden;margin:8px 0;
+  }
+  .benchmark-bar .fill{height:100%;border-radius:12px;transition:width 0.5s}
+  .benchmark-bar .marker{
+    position:absolute;top:0;bottom:0;width:3px;background:#333;
+  }
+  .benchmark-bar .marker-label{
+    position:absolute;top:-18px;font-size:0.65rem;font-weight:700;color:#333;
+    transform:translateX(-50%);white-space:nowrap;
+  }
+
+  /* --- WORD LIST SCORING --- */
+  .word-grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;
+    margin-bottom:16px;
+  }
+  .word-card{
+    padding:12px 16px;border:2px solid #E0E0E0;border-radius:10px;
+    font-size:1.1rem;font-weight:600;cursor:pointer;text-align:center;
+    transition:all 0.15s;background:#fff;user-select:none;
+  }
+  .word-card:hover{border-color:var(--blue);background:#F5F8FF}
+  .word-card.correct{border-color:var(--green);background:var(--green-light);color:#2E7D32}
+  .word-card.incorrect{border-color:var(--red);background:var(--red-light);color:var(--red);text-decoration:line-through}
+  .word-card .word-detail{font-size:0.7rem;color:var(--muted);margin-top:4px;font-weight:400;text-decoration:none!important}
+
+  /* --- PROSODY --- */
+  .prosody-grid{display:grid;grid-template-columns:1fr;gap:12px}
+  .prosody-row{
+    display:flex;align-items:center;gap:12px;padding:12px 16px;
+    border:2px solid #E0E0E0;border-radius:10px;background:#fff;
+  }
+  .prosody-row .p-label{flex:1;font-weight:600;font-size:0.95rem}
+  .prosody-row .p-options{display:flex;gap:6px}
+  .prosody-row .p-opt{
+    width:36px;height:36px;border-radius:50%;border:2px solid #E0E0E0;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:0.9rem;cursor:pointer;transition:all 0.15s;
+    background:#fff;color:var(--muted);
+  }
+  .prosody-row .p-opt:hover{border-color:var(--blue);color:var(--blue)}
+  .prosody-row .p-opt.selected{border-color:var(--blue);background:var(--blue);color:#fff}
+
+  /* --- NOTES --- */
+  .notes-area{
+    width:100%;min-height:80px;border:2px solid #E0E0E0;border-radius:10px;
+    padding:12px;font-family:'Nunito',sans-serif;font-size:0.95rem;resize:vertical;
+  }
+  .notes-area:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(68,114,196,0.15)}
+
+  /* --- RESULTS --- */
+  .results-section{margin-top:24px}
+  .result-row{
+    display:flex;align-items:center;gap:12px;padding:10px 16px;
+    border-bottom:1px solid #EEE;
+  }
+  .result-row:last-child{border-bottom:none}
+  .result-label{flex:1;font-weight:600}
+  .result-value{font-weight:800;font-size:1.1rem}
+  .badge{
+    display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;
+  }
+  .badge-green{background:var(--green-light);color:#2E7D32}
+  .badge-orange{background:var(--orange-light);color:#E65100}
+  .badge-red{background:var(--red-light);color:var(--red)}
+
+  /* --- PRINT --- */
+  .print-only{display:none}
+
+  @media print{
+    .topbar,.tab-bar,.btn,.orf-controls,.no-print,.word-card,.prosody-row .p-opt,
+    .notes-area,.score-summary,.benchmark-bar,.tab,.passage-area .word-num{display:none!important}
+    body{background:#fff;font-size:12pt}
+    .panel{display:none!important;max-width:100%;padding:0 0.5in}
+    .panel.printing{display:block!important}
+    .card{box-shadow:none;border:none;padding:0;page-break-inside:avoid;margin-bottom:24pt}
+    .passage-area{
+      border:none;background:#fff;padding:0;
+      font-family:'Libre Baskerville',Georgia,serif;
+      font-size:14pt;line-height:2.6;
+    }
+    .passage-area .word{cursor:default}
+    .passage-area .word.error,.passage-area .word.sc,.passage-area .word.stop-marker{
+      background:none;color:inherit;text-decoration:none;border:none;font-style:normal;font-weight:normal;
+    }
+    .print-only{display:block!important}
+    .print-title{font-size:18pt;font-weight:bold;text-align:center;margin-bottom:12pt}
+    .print-line{border-bottom:1px solid #ccc;margin-bottom:8pt;padding-bottom:4pt;font-size:10pt;color:#666}
+    h2,h3{page-break-after:avoid}
+  }
+
+  /* --- RESPONSIVE --- */
+  @media(max-width:600px){
+    .orf-controls{flex-direction:column;align-items:stretch}
+    .timer-display{font-size:1.8rem}
+    .word-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+    .score-summary{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>Foundational Reading Diagnostic</h1>
+  <div class="meta">Student: Marcello &nbsp;|&nbsp; Grade 3 &nbsp;|&nbsp; Date: ___________</div>
+</div>
+
+<div class="tab-bar" id="tabBar">
+  <div class="tab active" data-tab="overview" onclick="switchTab('overview')">Overview</div>
+  <div class="tab" data-tab="orf1" onclick="switchTab('orf1')">ORF Passage 1</div>
+  <div class="tab" data-tab="orf2" onclick="switchTab('orf2')">ORF Passage 2</div>
+  <div class="tab" data-tab="orf3" onclick="switchTab('orf3')">ORF Passage 3</div>
+  <div class="tab" data-tab="multisyllabic" onclick="switchTab('multisyllabic')">Multisyllabic Words</div>
+  <div class="tab" data-tab="affixes" onclick="switchTab('affixes')">Prefixes &amp; Suffixes</div>
+  <div class="tab" data-tab="irregular" onclick="switchTab('irregular')">Irregular Words</div>
+  <div class="tab" data-tab="results" onclick="switchTab('results')">Results Summary</div>
+</div>
+
+<!-- ==================== OVERVIEW ==================== -->
+<div class="panel active" id="panel-overview">
+  <div class="card">
+    <h2>Diagnostic Assessment Overview</h2>
+    <p class="desc">This assessment mirrors Amplify mCLASS / DIBELS-style screening. It evaluates foundational reading skills across four areas aligned to CCSS RF.3.3 and RF.3.4. Administer sections in order. Each section has a printable student copy.</p>
+
+    <table style="width:100%;border-collapse:collapse;margin-top:12px">
+      <thead>
+        <tr style="background:var(--blue-light)">
+          <th style="padding:10px 12px;text-align:left;font-size:0.85rem">Section</th>
+          <th style="padding:10px 12px;text-align:left;font-size:0.85rem">Standard</th>
+          <th style="padding:10px 12px;text-align:left;font-size:0.85rem">What It Measures</th>
+          <th style="padding:10px 12px;text-align:center;font-size:0.85rem">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #eee">
+          <td style="padding:10px 12px;font-weight:700">ORF Passages (x3)</td>
+          <td style="padding:10px 12px">RF.3.4.a/b/c</td>
+          <td style="padding:10px 12px">Fluency rate (WCPM), accuracy, prosody, self-correction</td>
+          <td style="padding:10px 12px;text-align:center">1 min each</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee">
+          <td style="padding:10px 12px;font-weight:700">Multisyllabic Words</td>
+          <td style="padding:10px 12px">RF.3.3.c</td>
+          <td style="padding:10px 12px">Decoding 2-4 syllable words in isolation</td>
+          <td style="padding:10px 12px;text-align:center">~2 min</td>
+        </tr>
+        <tr style="border-bottom:1px solid #eee">
+          <td style="padding:10px 12px;font-weight:700">Prefixes &amp; Suffixes</td>
+          <td style="padding:10px 12px">RF.3.3.a/b</td>
+          <td style="padding:10px 12px">Recognizing and reading words with affixes</td>
+          <td style="padding:10px 12px;text-align:center">~2 min</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;font-weight:700">Irregular Words</td>
+          <td style="padding:10px 12px">RF.3.3.d</td>
+          <td style="padding:10px 12px">Reading irregularly spelled grade-level words</td>
+          <td style="padding:10px 12px;text-align:center">~1 min</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:20px">
+      <h3>How to Administer</h3>
+      <ol style="margin-left:20px;line-height:1.8;font-size:0.9rem;color:#555">
+        <li><strong>Print the student copies</strong> — click "Print Student Copy" on each section. These are clean, large-font versions for Marcello to read from.</li>
+        <li><strong>ORF Passages:</strong> Have Marcello read aloud for 1 minute. On your screen, click words he misreads (errors) or self-corrects. When the timer beeps, click the last word he read.</li>
+        <li><strong>Word Lists:</strong> Show him the printed word list. Click each word as correct or incorrect on your screen as he reads.</li>
+        <li><strong>Use median ORF score</strong> — administer all 3 passages, take the middle score as his WCPM.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Winter Benchmarks (Grade 3)</h3>
+    <p class="desc">Where Marcello should be mid-year:</p>
+    <div class="score-summary">
+      <div class="score-box"><div class="num" style="color:var(--green)">92+</div><div class="lbl">WCPM (On Track)</div></div>
+      <div class="score-box"><div class="num" style="color:var(--green)">95%+</div><div class="lbl">Accuracy</div></div>
+      <div class="score-box"><div class="num" style="color:var(--green)">3-4</div><div class="lbl">Prosody Score</div></div>
+      <div class="score-box"><div class="num" style="color:var(--orange)">62</div><div class="lbl">WCPM (25th %ile)</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ORF PASSAGES ==================== -->
+<!-- Passages are ~250 words, Lexile ~550-750, grade 3 appropriate topics -->
+
+<div class="panel" id="panel-orf1"></div>
+<div class="panel" id="panel-orf2"></div>
+<div class="panel" id="panel-orf3"></div>
+
+<!-- ==================== MULTISYLLABIC ==================== -->
+<div class="panel" id="panel-multisyllabic">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <h2>Multisyllabic Word Decoding</h2>
+        <p class="desc">Standard: RF.3.3.c — Decode multisyllable words. Have Marcello read each word aloud. Click to mark correct (green) or incorrect (red). Click again to toggle.</p>
+      </div>
+      <button class="btn btn-gray btn-sm no-print" onclick="printSection('multisyllabic')">Print Student Copy</button>
+    </div>
+
+    <div class="word-grid" id="msWords"></div>
+
+    <div class="score-summary" id="msScore"></div>
+    <div style="margin-top:16px">
+      <label style="font-weight:700;font-size:0.9rem">Error Patterns / Notes:</label>
+      <textarea class="notes-area" id="msNotes" placeholder="Note any patterns: struggles with 3+ syllables, specific syllable types, guessing vs. sounding out..."></textarea>
+    </div>
+  </div>
+
+  <div class="print-only">
+    <div class="print-title">Read These Words Aloud</div>
+    <div class="print-line">Name: _________________________ &nbsp;&nbsp; Date: _____________</div>
+  </div>
+</div>
+
+<!-- ==================== AFFIXES ==================== -->
+<div class="panel" id="panel-affixes">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <h2>Prefix &amp; Suffix Recognition</h2>
+        <p class="desc">Standards: RF.3.3.a/b — Identify and read words with common prefixes and suffixes. Have Marcello read each word aloud. Click to mark correct or incorrect.</p>
+      </div>
+      <button class="btn btn-gray btn-sm no-print" onclick="printSection('affixes')">Print Student Copy</button>
+    </div>
+
+    <h3 style="margin-top:8px">Prefixed Words</h3>
+    <div class="word-grid" id="prefixWords"></div>
+    <h3>Suffixed Words</h3>
+    <div class="word-grid" id="suffixWords"></div>
+
+    <div class="score-summary" id="affixScore"></div>
+    <div style="margin-top:16px">
+      <label style="font-weight:700;font-size:0.9rem">Error Patterns / Notes:</label>
+      <textarea class="notes-area" id="affixNotes" placeholder="Note specific affixes that cause trouble, whether he recognizes the base word..."></textarea>
+    </div>
+  </div>
+
+  <div class="print-only">
+    <div class="print-title">Read These Words Aloud</div>
+    <div class="print-line">Name: _________________________ &nbsp;&nbsp; Date: _____________</div>
+  </div>
+</div>
+
+<!-- ==================== IRREGULAR ==================== -->
+<div class="panel" id="panel-irregular">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <div>
+        <h2>Irregular Words</h2>
+        <p class="desc">Standard: RF.3.3.d — Read grade-appropriate irregularly spelled words. These words don't follow standard phonics rules. Click to mark correct or incorrect.</p>
+      </div>
+      <button class="btn btn-gray btn-sm no-print" onclick="printSection('irregular')">Print Student Copy</button>
+    </div>
+
+    <div class="word-grid" id="irregWords"></div>
+
+    <div class="score-summary" id="irregScore"></div>
+    <div style="margin-top:16px">
+      <label style="font-weight:700;font-size:0.9rem">Error Patterns / Notes:</label>
+      <textarea class="notes-area" id="irregNotes" placeholder="Note which words he struggles with, common substitutions..."></textarea>
+    </div>
+  </div>
+
+  <div class="print-only">
+    <div class="print-title">Read These Words Aloud</div>
+    <div class="print-line">Name: _________________________ &nbsp;&nbsp; Date: _____________</div>
+  </div>
+</div>
+
+<!-- ==================== RESULTS ==================== -->
+<div class="panel" id="panel-results">
+  <div class="card">
+    <h2>Diagnostic Results Summary</h2>
+    <p class="desc">Scores are compiled from all sections. Use the median ORF score (middle of the three passages) as the official WCPM.</p>
+    <div id="resultsSummary"></div>
+  </div>
+
+  <div class="card">
+    <h3>Interpretation &amp; Next Steps</h3>
+    <div id="interpretation"></div>
+    <div style="margin-top:16px">
+      <label style="font-weight:700;font-size:0.9rem">Additional Observations:</label>
+      <textarea class="notes-area" id="finalNotes" placeholder="Overall observations, recommended focus areas, next steps for tutoring..."></textarea>
+    </div>
+    <div style="margin-top:16px">
+      <button class="btn btn-blue no-print" onclick="copyResults()">Copy Results to Clipboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== AUDIO for timer beep ==================== -->
+
+<script>
+// ======== DATA ========
+
+const PASSAGES = [
+  {
+    id: 'orf1',
+    title: 'The Secret Life of Honeybees',
+    genre: 'Informational',
+    lexile: '~620L',
+    text: `Have you ever watched a honeybee fly from flower to flower? Bees may be small, but they are some of the hardest workers in the animal kingdom. A single honeybee can visit thousands of flowers in just one day.
+
+Honeybees live together in large groups called colonies. Each colony has one queen bee, many worker bees, and a few drones. The queen's only job is to lay eggs. The workers do everything else. They build the honeycomb, take care of the baby bees, and collect nectar from flowers.
+
+When a worker bee finds a good patch of flowers, it flies back to the hive and does a special dance. This dance tells the other bees exactly where to find the flowers. Scientists call it the waggle dance because the bee wiggles its body back and forth. The direction the bee faces shows which way to fly. The length of the dance tells how far away the flowers are.
+
+Bees are also important for growing our food. When bees land on flowers to collect nectar, tiny grains of pollen stick to their fuzzy bodies. As they move from plant to plant, the pollen spreads around. This process is called pollination, and it helps fruits and vegetables grow.
+
+Without bees, many of the foods we eat every day would disappear. That is why scientists are working hard to protect bee populations around the world. Every small bee makes a big difference.`
+  },
+  {
+    id: 'orf2',
+    title: 'The First Day at Ocean Camp',
+    genre: 'Narrative',
+    lexile: '~580L',
+    text: `Maya stepped off the bus and looked around. The air smelled like salt, and she could hear the waves crashing somewhere nearby. This was her first time at Ocean Camp, and she did not know anyone here.
+
+A tall woman wearing a blue shirt walked over and smiled. "Welcome to camp! I'm Ms. Torres. You must be Maya." She handed Maya a name tag and pointed toward a group of kids standing near a big wooden sign.
+
+Maya walked over slowly. The other kids were already laughing and talking like old friends. She felt her stomach twist into a knot. What if nobody wanted to be her friend?
+
+A girl with curly red hair turned around and noticed Maya. "Hey! Are you new? I'm Sophia. Want to be partners for the tide pool walk?"
+
+Maya felt a wave of relief wash over her. "Sure! I love tide pools," she said, even though she had never actually seen one before.
+
+The group followed Ms. Torres down a sandy path until they reached the rocky shore. Maya looked into the first pool of still water and gasped. A bright orange starfish was clinging to the side of a rock. Tiny crabs scurried across the bottom, and green sea plants swayed gently in the water.
+
+"This is amazing!" Maya whispered to Sophia.
+
+Sophia grinned. "Just wait until tomorrow. We get to go snorkeling!"
+
+That night, as Maya lay in her bunk, she smiled. Maybe Ocean Camp was going to be the best week of her whole summer.`
+  },
+  {
+    id: 'orf3',
+    title: 'How Bridges Are Built',
+    genre: 'Informational',
+    lexile: '~680L',
+    text: `Bridges are all around us. They help people cross over rivers, valleys, highways, and even railroad tracks. But have you ever wondered how a bridge is built?
+
+Before construction begins, engineers must study the land carefully. They test the soil and measure the distance the bridge needs to span. Then they create detailed plans showing every part of the structure. Building a bridge without a good plan would be very dangerous.
+
+The first step in construction is building the foundation. Workers dig deep into the ground or into the riverbed to create strong supports called piers. These piers hold up the entire weight of the bridge, so they must be extremely solid. Sometimes workers have to dig through mud, rock, and even underwater to set them in place.
+
+Next, builders construct the main structure of the bridge. There are several different types of bridges. A beam bridge is the simplest design. It uses flat beams supported by piers at each end. An arch bridge curves upward and pushes weight outward and downward into the ground. A suspension bridge hangs from thick cables attached to tall towers. This type of bridge can stretch across very long distances.
+
+After the structure is complete, workers add the road surface, guardrails, and lights. Engineers test the bridge many times before anyone is allowed to drive or walk across it. They want to make sure it is completely safe.
+
+The next time you cross a bridge, think about all the planning and hard work that went into building it.`
+  }
+];
+
+const MULTISYLLABIC_WORDS = [
+  { word: 'basket', syllables: 'bas·ket', level: 2 },
+  { word: 'rabbit', syllables: 'rab·bit', level: 2 },
+  { word: 'sunset', syllables: 'sun·set', level: 2 },
+  { word: 'adventure', syllables: 'ad·ven·ture', level: 3 },
+  { word: 'remember', syllables: 're·mem·ber', level: 3 },
+  { word: 'important', syllables: 'im·por·tant', level: 3 },
+  { word: 'beautiful', syllables: 'beau·ti·ful', level: 3 },
+  { word: 'different', syllables: 'dif·fer·ent', level: 3 },
+  { word: 'dangerous', syllables: 'dan·ger·ous', level: 3 },
+  { word: 'direction', syllables: 'di·rec·tion', level: 3 },
+  { word: 'umbrella', syllables: 'um·brel·la', level: 3 },
+  { word: 'hospital', syllables: 'hos·pi·tal', level: 3 },
+  { word: 'butterfly', syllables: 'but·ter·fly', level: 3 },
+  { word: 'conversation', syllables: 'con·ver·sa·tion', level: 4 },
+  { word: 'temperature', syllables: 'tem·per·a·ture', level: 4 },
+  { word: 'information', syllables: 'in·for·ma·tion', level: 4 },
+  { word: 'uncomfortable', syllables: 'un·com·for·ta·ble', level: 4 },
+  { word: 'celebration', syllables: 'cel·e·bra·tion', level: 4 },
+  { word: 'electricity', syllables: 'e·lec·tric·i·ty', level: 5 },
+  { word: 'imagination', syllables: 'i·mag·i·na·tion', level: 5 },
+];
+
+const PREFIX_WORDS = [
+  { word: 'unhappy', parts: 'un + happy' },
+  { word: 'rewrite', parts: 're + write' },
+  { word: 'disagree', parts: 'dis + agree' },
+  { word: 'preview', parts: 'pre + view' },
+  { word: 'misplace', parts: 'mis + place' },
+  { word: 'nonfiction', parts: 'non + fiction' },
+  { word: 'impossible', parts: 'im + possible' },
+  { word: 'overcook', parts: 'over + cook' },
+];
+
+const SUFFIX_WORDS = [
+  { word: 'cheerful', parts: 'cheer + ful' },
+  { word: 'careless', parts: 'care + less' },
+  { word: 'kindness', parts: 'kind + ness' },
+  { word: 'movement', parts: 'move + ment' },
+  { word: 'comfortable', parts: 'comfort + able' },
+  { word: 'direction', parts: 'direct + tion' },
+  { word: 'adventure', parts: 'advent + ure' },
+];
+
+const IRREGULAR_WORDS = [
+  'enough', 'through', 'thought', 'although', 'brought',
+  'caught', 'daughter', 'weight', 'straight', 'island',
+  'ocean', 'building', 'special', 'beautiful', 'country',
+  'machine', 'league', 'knowledge', 'foreign', 'guardian',
+];
+
+
+// ======== TAB SWITCHING ========
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + tabId));
+  // Build results if switching to results tab
+  if (tabId === 'results') buildResults();
+}
+
+
+// ======== ORF ENGINE ========
+
+const orfState = {};
+
+function buildORFPanel(passage, idx) {
+  const panel = document.getElementById('panel-' + passage.id);
+  const stateKey = passage.id;
+  orfState[stateKey] = {
+    timer: 60, running: false, interval: null, done: false,
+    errors: new Set(), selfCorrections: new Set(), stopWord: -1,
+    words: passage.text.replace(/\n+/g, ' ').split(/\s+/).filter(w => w.length > 0),
+    prosody: [0,0,0,0], // expression, phrasing, pace, smoothness
+  };
+
+  const st = orfState[stateKey];
+
+  // Build word spans with numbers every 10 words
+  let wordsHTML = '';
+  st.words.forEach((w, i) => {
+    if (i % 10 === 0) {
+      wordsHTML += `<span class="word-num">${i > 0 ? i : ''}</span>`;
+    }
+    wordsHTML += `<span class="word" data-idx="${i}" id="${stateKey}-w${i}" onclick="toggleWordORF('${stateKey}',${i})">${w}</span> `;
+    // Line break hints at paragraph boundaries
+    if (w.endsWith('.') || w.endsWith('!') || w.endsWith('?') || w.endsWith('"')) {
+      // check if next word starts a new paragraph - approximation
+    }
+  });
+
+  panel.innerHTML = `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <div>
+          <h2>ORF Passage ${idx + 1}: ${passage.title}</h2>
+          <p class="desc">${passage.genre} &nbsp;|&nbsp; ${passage.lexile} &nbsp;|&nbsp; ${st.words.length} words &nbsp;|&nbsp; Standard: RF.3.4</p>
+        </div>
+        <button class="btn btn-gray btn-sm no-print" onclick="printSection('${passage.id}')">Print Student Copy</button>
+      </div>
+
+      <div class="orf-controls no-print">
+        <div class="timer-display" id="${stateKey}-timer">1:00</div>
+        <button class="btn btn-green" id="${stateKey}-startBtn" onclick="startTimer('${stateKey}')">Start Timer</button>
+        <button class="btn btn-red" id="${stateKey}-stopBtn" onclick="stopTimer('${stateKey}')" disabled>Stop</button>
+        <button class="btn btn-gray" id="${stateKey}-resetBtn" onclick="resetORF('${stateKey}')">Reset</button>
+        <div style="margin-left:auto;font-size:0.8rem;color:var(--muted)" class="no-print">
+          <strong>Click:</strong> error &nbsp; <strong>Shift+Click:</strong> self-correction &nbsp; <strong>After timer:</strong> click last word read
+        </div>
+      </div>
+
+      <div class="passage-area" id="${stateKey}-passage">${wordsHTML}</div>
+
+      <div class="no-print" style="margin-top:8px;font-size:0.8rem;color:var(--muted)">
+        <span style="display:inline-block;width:14px;height:14px;background:#FFCDD2;border-radius:3px;vertical-align:middle"></span> Error &nbsp;
+        <span style="display:inline-block;width:14px;height:14px;background:#FFF9C4;border-radius:3px;vertical-align:middle"></span> Self-correction &nbsp;
+        <span style="display:inline-block;width:14px;height:4px;background:var(--red);border-radius:2px;vertical-align:middle"></span> Stop point
+      </div>
+
+      <div class="score-summary no-print" id="${stateKey}-scores" style="margin-top:16px"></div>
+
+      <div style="margin-top:16px" class="no-print">
+        <h3>Prosody Rating (RF.3.4.b)</h3>
+        <p class="desc">Rate each dimension 1-4 after listening to the reading.</p>
+        <div class="prosody-grid">
+          ${['Expression & Volume|Does the reader use expression? Does volume match the text?',
+             'Phrasing|Does the reader group words in meaningful phrases?',
+             'Pace|Is the reading speed appropriate — not too fast or too slow?',
+             'Smoothness|Is the reading smooth, or does the reader frequently hesitate or sound out words?'
+          ].map((item, pi) => {
+            const [label, desc] = item.split('|');
+            return `<div class="prosody-row">
+              <div class="p-label">${label}<div style="font-size:0.75rem;color:var(--muted);font-weight:400">${desc}</div></div>
+              <div class="p-options">
+                ${[1,2,3,4].map(v => `<div class="p-opt" onclick="setProsody('${stateKey}',${pi},${v},this)">${v}</div>`).join('')}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div style="margin-top:16px" class="no-print">
+        <label style="font-weight:700;font-size:0.9rem">Notes:</label>
+        <textarea class="notes-area" id="${stateKey}-notes" placeholder="Error patterns, behaviors, self-correction habits, expression quality..."></textarea>
+      </div>
+    </div>
+
+    <div class="print-only">
+      <div class="print-title">${passage.title}</div>
+      <div class="print-line">Name: _________________________ &nbsp;&nbsp; Date: _____________</div>
+    </div>
+  `;
+}
+
+function toggleWordORF(key, idx) {
+  const st = orfState[key];
+  const el = document.getElementById(`${key}-w${idx}`);
+
+  if (st.done) {
+    // After timer done: clicking sets stop point
+    // Clear previous stop marker
+    if (st.stopWord >= 0) {
+      document.getElementById(`${key}-w${st.stopWord}`).classList.remove('stop-marker');
+    }
+    st.stopWord = idx;
+    el.classList.add('stop-marker');
+    calcORFScores(key);
+    return;
+  }
+
+  // During reading: shift+click = self-correction, click = error toggle
+  if (window.event && window.event.shiftKey) {
+    if (st.selfCorrections.has(idx)) {
+      st.selfCorrections.delete(idx);
+      el.classList.remove('sc');
+    } else {
+      st.selfCorrections.add(idx);
+      st.errors.delete(idx);
+      el.classList.remove('error');
+      el.classList.add('sc');
+    }
+  } else {
+    if (st.errors.has(idx)) {
+      st.errors.delete(idx);
+      el.classList.remove('error');
+    } else {
+      st.errors.add(idx);
+      st.selfCorrections.delete(idx);
+      el.classList.remove('sc');
+      el.classList.add('error');
+    }
+  }
+  calcORFScores(key);
+}
+
+function startTimer(key) {
+  const st = orfState[key];
+  if (st.running) return;
+  st.running = true;
+  st.timer = 60;
+  document.getElementById(`${key}-startBtn`).disabled = true;
+  document.getElementById(`${key}-stopBtn`).disabled = false;
+  const timerEl = document.getElementById(`${key}-timer`);
+  timerEl.classList.add('running');
+  timerEl.classList.remove('done');
+
+  st.interval = setInterval(() => {
+    st.timer--;
+    const m = Math.floor(st.timer / 60);
+    const s = st.timer % 60;
+    timerEl.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    if (st.timer <= 0) {
+      stopTimer(key);
+      // Beep
+      try {
+        const ac = new (window.AudioContext||window.webkitAudioContext)();
+        [0,200,400].forEach(d => {
+          setTimeout(() => {
+            const o = ac.createOscillator(); const g = ac.createGain();
+            o.frequency.value = 880; o.type = 'sine';
+            g.gain.value = 0.15; g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime+0.3);
+            o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.3);
+          }, d);
+        });
+      } catch(e){}
+    }
+  }, 1000);
+}
+
+function stopTimer(key) {
+  const st = orfState[key];
+  clearInterval(st.interval);
+  st.running = false;
+  st.done = true;
+  const timerEl = document.getElementById(`${key}-timer`);
+  timerEl.classList.remove('running');
+  timerEl.classList.add('done');
+  timerEl.textContent = 'DONE';
+  document.getElementById(`${key}-startBtn`).disabled = true;
+  document.getElementById(`${key}-stopBtn`).disabled = true;
+}
+
+function resetORF(key) {
+  const st = orfState[key];
+  clearInterval(st.interval);
+  st.timer = 60; st.running = false; st.done = false;
+  st.errors.clear(); st.selfCorrections.clear(); st.stopWord = -1;
+  st.prosody = [0,0,0,0];
+  document.getElementById(`${key}-timer`).textContent = '1:00';
+  document.getElementById(`${key}-timer`).className = 'timer-display';
+  document.getElementById(`${key}-startBtn`).disabled = false;
+  document.getElementById(`${key}-stopBtn`).disabled = true;
+  st.words.forEach((_, i) => {
+    const el = document.getElementById(`${key}-w${i}`);
+    el.className = 'word';
+  });
+  document.getElementById(`${key}-scores`).innerHTML = '';
+  document.querySelectorAll(`#panel-${key} .p-opt`).forEach(o => o.classList.remove('selected'));
+}
+
+function calcORFScores(key) {
+  const st = orfState[key];
+  const stop = st.stopWord >= 0 ? st.stopWord + 1 : st.words.length;
+  const wordsRead = stop;
+  const errors = [...st.errors].filter(i => i < stop).length;
+  const sc = [...st.selfCorrections].filter(i => i < stop).length;
+  const wcpm = wordsRead - errors;
+  const accuracy = wordsRead > 0 ? ((wordsRead - errors) / wordsRead * 100) : 0;
+  const scRatio = errors + sc > 0 ? `1:${Math.round((errors + sc) / Math.max(sc, 1))}` : 'N/A';
+
+  // Determine benchmark level
+  let wcpmClass = 'good', accClass = 'good';
+  if (wcpm < 62) wcpmClass = 'bad';
+  else if (wcpm < 92) wcpmClass = 'warn';
+  if (accuracy < 90) accClass = 'bad';
+  else if (accuracy < 95) accClass = 'warn';
+
+  const container = document.getElementById(`${key}-scores`);
+  container.innerHTML = `
+    <div class="score-box ${wcpmClass}"><div class="num">${wcpm}</div><div class="lbl">WCPM</div></div>
+    <div class="score-box"><div class="num">${wordsRead}</div><div class="lbl">Words Read</div></div>
+    <div class="score-box"><div class="num" style="color:var(--red)">${errors}</div><div class="lbl">Errors</div></div>
+    <div class="score-box ${accClass}"><div class="num">${accuracy.toFixed(1)}%</div><div class="lbl">Accuracy</div></div>
+    <div class="score-box"><div class="num" style="color:var(--orange)">${sc}</div><div class="lbl">Self-Corrections</div></div>
+    <div class="score-box"><div class="num" style="font-size:1.2rem">${scRatio}</div><div class="lbl">SC Ratio</div></div>
+  `;
+
+  // Store for results
+  st.wcpm = wcpm;
+  st.accuracy = accuracy;
+  st.errorCount = errors;
+  st.scCount = sc;
+  st.wordsRead = wordsRead;
+}
+
+function setProsody(key, dimension, value, el) {
+  orfState[key].prosody[dimension] = value;
+  // Update UI
+  el.parentElement.querySelectorAll('.p-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+
+// ======== WORD LIST ENGINE ========
+
+function buildWordGrid(containerId, words, stateKey) {
+  const container = document.getElementById(containerId);
+  if (!window.wordStates) window.wordStates = {};
+  if (!window.wordStates[stateKey]) window.wordStates[stateKey] = {};
+
+  container.innerHTML = words.map((item, i) => {
+    const word = typeof item === 'string' ? item : item.word;
+    const detail = typeof item === 'object' && item.syllables ? item.syllables :
+                   typeof item === 'object' && item.parts ? item.parts : '';
+    return `<div class="word-card" id="${stateKey}-${i}" onclick="toggleWordCard('${stateKey}',${i},${words.length},'${containerId}')">
+      ${word}
+      ${detail ? `<div class="word-detail">${detail}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function toggleWordCard(stateKey, idx, total, containerId) {
+  const el = document.getElementById(`${stateKey}-${idx}`);
+  const states = window.wordStates[stateKey];
+
+  if (!states[idx]) {
+    states[idx] = 'correct';
+    el.className = 'word-card correct';
+  } else if (states[idx] === 'correct') {
+    states[idx] = 'incorrect';
+    el.className = 'word-card incorrect';
+  } else {
+    delete states[idx];
+    el.className = 'word-card';
+  }
+
+  updateWordScore(stateKey, total);
+}
+
+function updateWordScore(stateKey, total) {
+  const states = window.wordStates[stateKey] || {};
+  let correct = 0, incorrect = 0;
+  for (const v of Object.values(states)) {
+    if (v === 'correct') correct++;
+    else if (v === 'incorrect') incorrect++;
+  }
+  const scored = correct + incorrect;
+  const scoreContainer = document.getElementById(stateKey + 'Score') ||
+                         document.getElementById(stateKey.replace('Words','') + 'Score');
+  // Find the right score container
+  let sc;
+  if (stateKey === 'ms') sc = document.getElementById('msScore');
+  else if (stateKey === 'prefix' || stateKey === 'suffix') sc = document.getElementById('affixScore');
+  else if (stateKey === 'irreg') sc = document.getElementById('irregScore');
+
+  if (sc) {
+    const pct = scored > 0 ? (correct / scored * 100) : 0;
+    let cls = 'good';
+    if (pct < 70) cls = 'bad';
+    else if (pct < 90) cls = 'warn';
+    sc.innerHTML = `
+      <div class="score-box ${cls}"><div class="num">${correct}/${scored}</div><div class="lbl">Correct</div></div>
+      <div class="score-box"><div class="num">${pct.toFixed(0)}%</div><div class="lbl">Accuracy</div></div>
+      <div class="score-box"><div class="num" style="color:var(--muted)">${total - scored}</div><div class="lbl">Not Scored</div></div>
+    `;
+  }
+}
+
+
+// ======== RESULTS ========
+
+function buildResults() {
+  const container = document.getElementById('resultsSummary');
+
+  // Collect ORF data
+  const orfScores = PASSAGES.map(p => {
+    const st = orfState[p.id];
+    return {
+      title: p.title,
+      wcpm: st.wcpm || 0,
+      accuracy: st.accuracy || 0,
+      errors: st.errorCount || 0,
+      sc: st.scCount || 0,
+      prosody: st.prosody.reduce((a,b) => a+b, 0),
+      prosodyAvg: st.prosody.filter(v=>v>0).length > 0 ?
+        (st.prosody.reduce((a,b)=>a+b,0) / st.prosody.filter(v=>v>0).length).toFixed(1) : 'N/A',
+      done: st.done
+    };
+  });
+
+  const wcpms = orfScores.filter(s => s.done).map(s => s.wcpm).sort((a,b) => a-b);
+  const medianWCPM = wcpms.length === 3 ? wcpms[1] :
+                     wcpms.length === 2 ? Math.round((wcpms[0]+wcpms[1])/2) :
+                     wcpms.length === 1 ? wcpms[0] : '—';
+
+  // Word list scores
+  function getWordScore(key) {
+    const states = window.wordStates && window.wordStates[key] || {};
+    let c = 0, ic = 0;
+    for (const v of Object.values(states)) { if (v==='correct') c++; else if (v==='incorrect') ic++; }
+    return { correct: c, total: c + ic, pct: (c+ic) > 0 ? (c/(c+ic)*100).toFixed(0) : '—' };
+  }
+  const msScore = getWordScore('ms');
+  const prefScore = getWordScore('prefix');
+  const sufScore = getWordScore('suffix');
+  const irregScore = getWordScore('irreg');
+  const affixTotal = prefScore.correct + sufScore.correct;
+  const affixScored = prefScore.total + sufScore.total;
+  const affixPct = affixScored > 0 ? (affixTotal/affixScored*100).toFixed(0) : '—';
+
+  // Determine benchmark status
+  let wcpmStatus, wcpmBadge;
+  if (medianWCPM === '—') { wcpmStatus = 'Not completed'; wcpmBadge = ''; }
+  else if (medianWCPM >= 92) { wcpmStatus = 'At or Above Benchmark'; wcpmBadge = '<span class="badge badge-green">On Track</span>'; }
+  else if (medianWCPM >= 62) { wcpmStatus = 'Below Benchmark (Approaching)'; wcpmBadge = '<span class="badge badge-orange">Strategic</span>'; }
+  else { wcpmStatus = 'Well Below Benchmark'; wcpmBadge = '<span class="badge badge-red">Intensive</span>'; }
+
+  container.innerHTML = `
+    <h3 style="margin-top:16px">Oral Reading Fluency (RF.3.4)</h3>
+    <table style="width:100%;border-collapse:collapse;margin:12px 0">
+      <thead><tr style="background:var(--blue-light)">
+        <th style="padding:8px 12px;text-align:left;font-size:0.85rem">Passage</th>
+        <th style="padding:8px 12px;text-align:center;font-size:0.85rem">WCPM</th>
+        <th style="padding:8px 12px;text-align:center;font-size:0.85rem">Accuracy</th>
+        <th style="padding:8px 12px;text-align:center;font-size:0.85rem">Errors</th>
+        <th style="padding:8px 12px;text-align:center;font-size:0.85rem">Self-Corr</th>
+        <th style="padding:8px 12px;text-align:center;font-size:0.85rem">Prosody</th>
+      </tr></thead>
+      <tbody>
+        ${orfScores.map(s => `<tr style="border-bottom:1px solid #eee">
+          <td style="padding:8px 12px;font-weight:600">${s.title}</td>
+          <td style="padding:8px 12px;text-align:center;font-weight:800;font-size:1.1rem;color:${s.wcpm >= 92 ? 'var(--green)' : s.wcpm >= 62 ? 'var(--orange)' : 'var(--red)'}">${s.done ? s.wcpm : '—'}</td>
+          <td style="padding:8px 12px;text-align:center">${s.done ? s.accuracy.toFixed(1)+'%' : '—'}</td>
+          <td style="padding:8px 12px;text-align:center">${s.done ? s.errors : '—'}</td>
+          <td style="padding:8px 12px;text-align:center">${s.done ? s.sc : '—'}</td>
+          <td style="padding:8px 12px;text-align:center">${s.prosodyAvg}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+
+    <div class="result-row" style="background:var(--blue-light);border-radius:10px;padding:14px 16px;margin:12px 0">
+      <div class="result-label" style="font-size:1.05rem">Median WCPM (Official Score)</div>
+      <div class="result-value" style="font-size:1.4rem">${medianWCPM}</div>
+      <div>${wcpmBadge}</div>
+    </div>
+
+    ${medianWCPM !== '—' ? `
+    <div style="margin:16px 0">
+      <div style="font-size:0.8rem;font-weight:600;color:var(--muted);margin-bottom:4px">Winter Benchmark Comparison</div>
+      <div class="benchmark-bar">
+        <div class="fill" style="width:${Math.min(medianWCPM / 140 * 100, 100)}%;background:${medianWCPM >= 92 ? 'var(--green)' : medianWCPM >= 62 ? 'var(--orange)' : 'var(--red)'}"></div>
+        <div class="marker" style="left:${62/140*100}%"><span class="marker-label">25th (62)</span></div>
+        <div class="marker" style="left:${92/140*100}%"><span class="marker-label">50th (92)</span></div>
+        <div class="marker" style="left:${120/140*100}%"><span class="marker-label">75th (120)</span></div>
+      </div>
+    </div>` : ''}
+
+    <h3 style="margin-top:24px">Phonics &amp; Word Recognition (RF.3.3)</h3>
+    <div class="score-summary" style="margin:12px 0">
+      <div class="score-box ${Number(msScore.pct) >= 90 ? 'good' : Number(msScore.pct) >= 70 ? 'warn' : 'bad'}">
+        <div class="num">${msScore.correct}/${msScore.total}</div>
+        <div class="lbl">Multisyllabic (RF.3.3.c)</div>
+      </div>
+      <div class="score-box ${Number(affixPct) >= 90 ? 'good' : Number(affixPct) >= 70 ? 'warn' : 'bad'}">
+        <div class="num">${affixTotal}/${affixScored}</div>
+        <div class="lbl">Affixes (RF.3.3.a/b)</div>
+      </div>
+      <div class="score-box ${Number(irregScore.pct) >= 90 ? 'good' : Number(irregScore.pct) >= 70 ? 'warn' : 'bad'}">
+        <div class="num">${irregScore.correct}/${irregScore.total}</div>
+        <div class="lbl">Irregular Words (RF.3.3.d)</div>
+      </div>
+    </div>
+  `;
+
+  // Interpretation
+  const interp = document.getElementById('interpretation');
+  let tips = [];
+  if (medianWCPM !== '—') {
+    if (medianWCPM < 62) tips.push('<strong style="color:var(--red)">Fluency is well below benchmark.</strong> Priority intervention: repeated reading, decodable text practice, daily fluency drills.');
+    else if (medianWCPM < 92) tips.push('<strong style="color:var(--orange)">Fluency is below the 50th percentile.</strong> Recommend: repeated reading of grade-level passages, partner reading, timed practice to build rate.');
+    else tips.push('<strong style="color:var(--green)">Fluency rate is at or above benchmark.</strong> If the grade dropped, the issue may be accuracy, prosody, or decoding rather than rate.');
+  }
+  if (msScore.total > 0 && Number(msScore.pct) < 80) tips.push('<strong style="color:var(--orange)">Multisyllabic decoding needs support (RF.3.3.c).</strong> Focus on syllable types, syllable division strategies, and practice breaking apart 3-4 syllable words.');
+  if (affixScored > 0 && Number(affixPct) < 80) tips.push('<strong style="color:var(--orange)">Prefix/suffix recognition needs support (RF.3.3.a/b).</strong> Teach common affixes explicitly, practice identifying base words + affixes.');
+  if (irregScore.total > 0 && Number(irregScore.pct) < 80) tips.push('<strong style="color:var(--orange)">Irregular word reading needs support (RF.3.3.d).</strong> Create flashcard practice for missed words, use in context sentences.');
+  if (tips.length === 0) tips.push('Complete all assessment sections to see interpretation and recommendations.');
+
+  interp.innerHTML = `<ul style="margin:12px 0 0 20px;line-height:1.8">${tips.map(t => `<li style="margin-bottom:8px">${t}</li>`).join('')}</ul>`;
+}
+
+function copyResults() {
+  const el = document.getElementById('resultsSummary');
+  const text = el.innerText;
+  const notes = document.getElementById('finalNotes').value;
+  navigator.clipboard.writeText(text + '\n\nNotes:\n' + notes).then(() => {
+    alert('Results copied to clipboard!');
+  });
+}
+
+
+// ======== PRINT ========
+
+function printSection(sectionId) {
+  // Mark the panel for printing
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('printing'));
+  document.getElementById('panel-' + sectionId).classList.add('printing');
+  window.print();
+  // Clean up after print
+  setTimeout(() => {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('printing'));
+  }, 1000);
+}
+
+
+// ======== INIT ========
+
+// Build ORF panels
+PASSAGES.forEach((p, i) => buildORFPanel(p, i));
+
+// Build word lists
+buildWordGrid('msWords', MULTISYLLABIC_WORDS, 'ms');
+buildWordGrid('prefixWords', PREFIX_WORDS, 'prefix');
+buildWordGrid('suffixWords', SUFFIX_WORDS, 'suffix');
+buildWordGrid('irregWords', IRREGULAR_WORDS, 'irreg');
+
+</script>
+</body>
+</html>

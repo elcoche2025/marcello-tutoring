@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcello's Tutoring Worksheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial Rounded MT Bold', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            border-radius: 15px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #555;
+            font-size: 1.2em;
+        }
+        
+        .date {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 3px solid #ddd;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #4a5568;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .math-section {
+            border-color: #3b82f6;
+        }
+        
+        .ela-section {
+            border-color: #10b981;
+        }
+        
+        .problem {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .problem-title {
+            font-size: 1.5em;
+            color: #1e40af;
+            margin-bottom: 15px;
+        }
+        
+        .equation {
+            font-size: 2em;
+            color: #7c3aed;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .drawing-area {
+            min-height: 200px;
+            border: 3px dashed #cbd5e1;
+            border-radius: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .circle {
+            width: 120px;
+            height: 120px;
+            border: 4px solid #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: #3b82f6;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .circle:hover {
+            background: #dbeafe;
+            transform: scale(1.05);
+        }
+        
+        .dot {
+            width: 20px;
+            height: 20px;
+            background: #f59e0b;
+            border-radius: 50%;
+            margin: 3px;
+        }
+        
+        .dots-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            max-width: 100px;
+        }
+        
+        .sentence-frames {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border: 2px solid #fbbf24;
+        }
+        
+        .sentence-frames p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #78350f;
+        }
+        
+        .fill-blank {
+            display: inline-block;
+            min-width: 60px;
+            border-bottom: 2px solid #3b82f6;
+            padding: 0 10px;
+            color: #1e40af;
+            font-weight: bold;
+        }
+        
+        .note-chart {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .note-box {
+            background: white;
+            border: 3px solid #10b981;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 100px;
+        }
+        
+        .note-box-title {
+            font-size: 1.3em;
+            color: #065f46;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .note-input {
+            width: 100%;
+            min-height: 60px;
+            border: 2px dashed #a7f3d0;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1.1em;
+            font-family: inherit;
+            resize: vertical;
+        }
+        
+        .writing-prompt {
+            background: #e0e7ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 2px solid #6366f1;
+        }
+        
+        .writing-prompt textarea {
+            width: 100%;
+            min-height: 150px;
+            border: 2px solid #c7d2fe;
+            border-radius: 5px;
+            padding: 15px;
+            font-size: 1.1em;
+            font-family: inherit;
+            margin-top: 10px;
+            line-height: 1.8;
+        }
+        
+        .instruction {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #f59e0b;
+            font-size: 1.1em;
+            color: #78350f;
+        }
+        
+        .encouragement {
+            text-align: center;
+            font-size: 1.5em;
+            color: #059669;
+            margin-top: 30px;
+            padding: 20px;
+            background: #d1fae5;
+            border-radius: 10px;
+        }
+        
+        .counter-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 5px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        .counter-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+        
+        .counter-display {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .groups-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 200px;
+            padding: 20px;
+        }
+        
+        .group {
+            border: 3px solid #3b82f6;
+            border-radius: 10px;
+            padding: 15px;
+            background: white;
+            min-width: 80px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .counter-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Marcello's Tutoring Worksheet 🌟</h1>
+            <p>You're going to do great today!</p>
+        </div>
+        
+        <div class="date">
+            📅 Week of October 6, 2025
+        </div>
+        
+        <!-- MATH SECTION -->
+        <div class="section math-section">
+            <div class="section-title">
+                🔢 Division: Two Ways to Think About It!
+            </div>
+            
+            <!-- Problem 1: Share Into Groups -->
+            <div class="problem">
+                <div class="problem-title">Problem 1: Share Into Groups</div>
+                <div class="instruction">
+                    📌 Draw dots to share 15 items equally into 3 groups. How many in each group?
+                </div>
+                
+                <div class="equation">15 ÷ 3 = ?</div>
+                
+                <div class="counter-display">
+                    <button class="counter-btn" onclick="resetProblem1()">Reset</button>
+                    <button class="counter-btn" onclick="addDotToProblem1()">Add Dot to Next Group</button>
+                </div>
+                
+                <div class="drawing-area" id="problem1-area">
+                    <div class="circle" id="group1-1">
+                        <div class="dots-container"></div>
+                    </div>
+                    <div class="circle" id="group1-2">
+                        <div class="dots-container"></div>
+                    </div>
+                    <div class="circle" id="group1-3">
+                        <div class="dots-container"></div>
+                    </div>
+                </div>
+                
+                <div class="sentence-frames">
+                    <p>✏️ I started with <span class="fill-blank">15</span> things.</p>
+                    <p>✏️ I put <span class="fill-blank" contenteditable="true">___</span> in each group.</p>
+                    <p>✏️ Now I have <span class="fill-blank">3</span> groups.</p>
+                </div>
+            </div>
+            
+            <!-- Problem 2: Make Groups Of -->
+            <div class="problem">
+                <div class="problem-title">Problem 2: Make Groups Of</div>
+                <div class="instruction">
+                    📌 Make groups of 5 dots until you reach 20. How many groups do you make?
+                </div>
+                
+                <div class="equation">20 ÷ 5 = ?</div>
+                
+                <div class="counter-display">
+                    <button class="counter-btn" onclick="resetProblem2()">Reset</button>
+                    <button class="counter-btn" onclick="addGroupToProblem2()">Add Group of 5</button>
+                </div>
+                
+                <div class="groups-container" id="problem2-area">
+                </div>
+                
+                <div class="sentence-frames">
+                    <p>✏️ I started with <span class="fill-blank">20</span> things.</p>
+                    <p>✏️ I made groups of <span class="fill-blank">5</span>.</p>
+                    <p>✏️ Now I have <span class="fill-blank" contenteditable="true">___</span> groups.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ELA SECTION -->
+        <div class="section ela-section">
+            <div class="section-title">
+                📖 Ocean Sunlight: Taking Notes
+            </div>
+            
+            <div class="instruction">
+                🌊 Listen to the story and fill in the chart with the main idea and important details!
+            </div>
+            
+            <div class="note-chart">
+                <div class="note-box">
+                    <div class="note-box-title">🎯 Main Idea</div>
+                    <textarea class="note-input" placeholder="What is the story mostly about?"></textarea>
+                </div>
+                
+                <div class="note-box">
+                    <div class="note-box-title">⭐ Detail 1</div>
+                    <textarea class="note-input" placeholder="What's one important detail?"></textarea>
+                </div>
+                
+                <div class="note-box">
+                    <div class="note-box-title">⭐ Detail 2</div>
+                    <textarea class="note-input" placeholder="What's another important detail?"></textarea>
+                </div>
+                
+                <div class="note-box">
+                    <div class="note-box-title">⭐ Detail 3</div>
+                    <textarea class="note-input" placeholder="What's one more important detail?"></textarea>
+                </div>
+            </div>
+            
+            <div class="writing-prompt">
+                <div class="note-box-title">✍️ Write About What You Learned</div>
+                <textarea placeholder="The main idea of Ocean Sunlight is that _______________. One detail that shows this is _______________. Another detail is _______________. This shows that _______________."
+                ></textarea>
+            </div>
+        </div>
+        
+        <div class="encouragement">
+            🎉 Great job, Marcello! You worked like a scientist and a mathematician today! 🎉
+        </div>
+    </div>
+    
+    <script>
+        let problem1Current = 0;
+        let problem2Groups = 0;
+        
+        function addDotToProblem1() {
+            if (problem1Current >= 15) {
+                alert("You've added all 15 dots! 🎉");
+                return;
+            }
+            
+            const groupIndex = problem1Current % 3;
+            const groupId = `group1-${groupIndex + 1}`;
+            const group = document.getElementById(groupId);
+            const container = group.querySelector('.dots-container');
+            
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            container.appendChild(dot);
+            
+            problem1Current++;
+        }
+        
+        function resetProblem1() {
+            problem1Current = 0;
+            for (let i = 1; i <= 3; i++) {
+                const group = document.getElementById(`group1-${i}`);
+                const container = group.querySelector('.dots-container');
+                container.innerHTML = '';
+            }
+        }
+        
+        function addGroupToProblem2() {
+            if (problem2Groups >= 4) {
+                alert("You've made all 4 groups! 🎉");
+                return;
+            }
+            
+            const area = document.getElementById('problem2-area');
+            const group = document.createElement('div');
+            group.className = 'group';
+            
+            const dotsContainer = document.createElement('div');
+            dotsContainer.className = 'dots-container';
+            
+            for (let i = 0; i < 5; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                dotsContainer.appendChild(dot);
+            }
+            
+            group.appendChild(dotsContainer);
+            area.appendChild(group);
+            problem2Groups++;
+        }
+        
+        function resetProblem2() {
+            problem2Groups = 0;
+            document.getElementById('problem2-area').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

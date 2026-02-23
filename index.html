@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Tutoring Apps</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --purple: #9C27B0;
+    --purple-light: #F3E5F5;
+    --bg: #F4F6FB;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1a237e 0%, var(--blue) 100%);
+    color: white;
+    text-align: center;
+    padding: 36px 20px 60px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0;
+    height: 40px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 6px; }
+  header p  { font-size: 1rem; opacity: 0.88; }
+
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    margin: 28px 0 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: #E0E0E0;
+    border-radius: 2px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+
+  .app-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    transition: all 0.22s;
+    border: 2px solid transparent;
+  }
+  .app-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    border-color: var(--blue);
+  }
+
+  .app-card-accent {
+    width: 8px;
+    flex-shrink: 0;
+  }
+  .accent-blue   { background: var(--blue); }
+  .accent-green  { background: var(--green); }
+  .accent-orange { background: var(--orange); }
+  .accent-purple { background: var(--purple); }
+  .accent-gold   { background: var(--gold); }
+
+  .app-card-body {
+    flex: 1;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .app-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    line-height: 1;
+    width: 44px;
+    text-align: center;
+  }
+
+  .app-info { flex: 1; }
+  .app-title {
+    font-weight: 800;
+    font-size: 0.98rem;
+    margin-bottom: 3px;
+    line-height: 1.3;
+  }
+  .app-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .app-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  .tag-new    { background: #E8F5E9; color: #2E7D32; }
+  .tag-game   { background: var(--orange-light, #FFF3E0); color: #E65100; }
+  .tag-read   { background: var(--blue-light); color: var(--blue); }
+  .tag-write  { background: var(--purple-light); color: var(--purple); }
+  .tag-tool   { background: var(--gold-light); color: #B8860B; }
+
+  .arrow {
+    color: #CBD5E0;
+    font-size: 1.1rem;
+    padding-right: 14px;
+    align-self: center;
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .app-card:hover .arrow { color: var(--blue); transform: translateX(3px); }
+
+  @media (max-width: 500px) {
+    header h1 { font-size: 1.6rem; }
+    .grid { grid-template-columns: 1fr; }
+    .app-card-body { padding: 13px 14px; gap: 10px; }
+    .app-icon { font-size: 1.6rem; width: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Tutoring Apps 🚀</h1>
+  <p>Tap any activity to open it!</p>
+</header>
+
+<div class="container">
+
+  <div class="section-label">✏️ Writing Activities</div>
+  <div class="grid">
+
+    <a class="app-card" href="paragraph-skills.html">
+      <div class="app-card-accent accent-blue"></div>
+      <div class="app-card-body">
+        <div class="app-icon">💪</div>
+        <div class="app-info">
+          <div class="app-title">Paragraph Power!</div>
+          <div class="app-desc">Find the odd sentence, pick the better paragraph, and build your own — 3 activities in one!</div>
+        </div>
+        <span class="app-tag tag-new">New!</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="essay-builder.html">
+      <div class="app-card-accent accent-purple"></div>
+      <div class="app-card-body">
+        <div class="app-icon">📝</div>
+        <div class="app-info">
+          <div class="app-title">Opinion Essay Builder</div>
+          <div class="app-desc">Step-by-step tool for writing an opinion essay about Apollo 11, with "I need help!" scaffolding.</div>
+        </div>
+        <span class="app-tag tag-write">Writing</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="oct2025-worksheet.html">
+      <div class="app-card-accent accent-green"></div>
+      <div class="app-card-body">
+        <div class="app-icon">🌊</div>
+        <div class="app-info">
+          <div class="app-title">Ocean Sunlight Worksheet</div>
+          <div class="app-desc">Interactive worksheet from October 2025 — division with dot counters, main idea, and writing.</div>
+        </div>
+        <span class="app-tag tag-tool">Oct 2025</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">📚 Reading Activities</div>
+  <div class="grid">
+
+    <a class="app-card" href="dec2025-giant-squid-lesson.html">
+      <div class="app-card-accent accent-blue"></div>
+      <div class="app-card-body">
+        <div class="app-icon">🦑</div>
+        <div class="app-info">
+          <div class="app-title">Giant Squid Reading Adventure</div>
+          <div class="app-desc">Interactive reading lesson — key details, evidence, and informative writing about giant squids.</div>
+        </div>
+        <span class="app-tag tag-read">Reading</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="giant-squid-story.html">
+      <div class="app-card-accent accent-blue"></div>
+      <div class="app-card-body">
+        <div class="app-icon">🌊</div>
+        <div class="app-info">
+          <div class="app-title">Giant Squid Story</div>
+          <div class="app-desc">The full simplified story text for "Giant Squid: Searching for a Sea Monster."</div>
+        </div>
+        <span class="app-tag tag-read">Reading</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="oct2025-jacques-cousteau.html">
+      <div class="app-card-accent accent-green"></div>
+      <div class="app-card-body">
+        <div class="app-icon">🤿</div>
+        <div class="app-info">
+          <div class="app-title">Jacques Cousteau — Easy Summary</div>
+          <div class="app-desc">Simplified summary of the Jacques Cousteau text for reading comprehension practice.</div>
+        </div>
+        <span class="app-tag tag-read">Reading</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="main-idea-visual-guide.html">
+      <div class="app-card-accent accent-orange"></div>
+      <div class="app-card-body">
+        <div class="app-icon">🔍</div>
+        <div class="app-info">
+          <div class="app-title">How to Find the Main Idea</div>
+          <div class="app-desc">Visual guide with images — teaching the difference between main idea and details.</div>
+        </div>
+        <span class="app-tag tag-read">Reading</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="reading-diagnostic.html">
+      <div class="app-card-accent accent-purple"></div>
+      <div class="app-card-body">
+        <div class="app-icon">📊</div>
+        <div class="app-info">
+          <div class="app-title">Reading Skills Diagnostic</div>
+          <div class="app-desc">Foundational reading assessment covering fluency, phonics, and decoding skills.</div>
+        </div>
+        <span class="app-tag tag-tool">Assessment</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+  </div>
+
+  <div class="section-label">🎮 Games & More</div>
+  <div class="grid">
+
+    <a class="app-card" href="apollo-runner.html">
+      <div class="app-card-accent accent-orange"></div>
+      <div class="app-card-body">
+        <div class="app-icon">🕹️</div>
+        <div class="app-info">
+          <div class="app-title">Apollo Essay Runner</div>
+          <div class="app-desc">Moon mission platformer game — practice connecting words while running through space!</div>
+        </div>
+        <span class="app-tag tag-game">Game</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+    <a class="app-card" href="oct2025-checklist.html">
+      <div class="app-card-accent accent-gold"></div>
+      <div class="app-card-body">
+        <div class="app-icon">✅</div>
+        <div class="app-info">
+          <div class="app-title">Session Checklist — Oct 2025</div>
+          <div class="app-desc">Printable checklist for tracking session activities and goals.</div>
+        </div>
+        <span class="app-tag tag-tool">Tool</span>
+      </div>
+      <div class="arrow">›</div>
+    </a>
+
+  </div>
+
+</div>
+
+</body>
+</html>

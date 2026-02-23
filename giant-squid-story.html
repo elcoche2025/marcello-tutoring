@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giant Squid: Searching for a Sea Monster</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #001f3f 0%, #003366 50%, #000428 100%);
+            color: #fff;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .title-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        .title-page h1 {
+            font-size: 3.5em;
+            color: #00d4ff;
+            text-shadow: 0 0 20px #00d4ff, 0 0 40px #0080ff;
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00d4ff, 0 0 40px #0080ff; }
+            to { text-shadow: 0 0 30px #00d4ff, 0 0 60px #0080ff, 0 0 80px #0080ff; }
+        }
+
+        .title-page h2 {
+            font-size: 2em;
+            color: #66d9ff;
+            margin-bottom: 30px;
+        }
+
+        .title-page p {
+            font-size: 1.3em;
+            color: #b3e6ff;
+            margin-bottom: 10px;
+        }
+
+        .start-button {
+            margin-top: 40px;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            background: linear-gradient(45deg, #00d4ff, #0080ff);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .start-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.6);
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: none;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page h2 {
+            font-size: 2.5em;
+            color: #00d4ff;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .page h3 {
+            font-size: 1.8em;
+            color: #66d9ff;
+            margin: 30px 0 20px 0;
+        }
+
+        .page p {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            line-height: 1.9;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            transition: transform 0.3s;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+        }
+
+        .image-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #b3e6ff;
+            font-size: 1.1em;
+        }
+
+        .fun-fact {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 5px solid #00d4ff;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .fun-fact h4 {
+            color: #00d4ff;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .nav-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #0080ff, #00d4ff);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .nav-button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #0080ff);
+            transition: width 0.3s;
+            box-shadow: 0 0 10px #00d4ff;
+        }
+
+        .floating-squid {
+            position: fixed;
+            font-size: 3em;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(5deg); }
+            50% { transform: translateY(-10px) rotate(-5deg); }
+            75% { transform: translateY(-30px) rotate(3deg); }
+        }
+
+        .bubble {
+            position: fixed;
+            bottom: -100px;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(0, 212, 255, 0.4));
+            border-radius: 50%;
+            animation: rise 8s infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @keyframes rise {
+            to {
+                bottom: 110vh;
+                transform: translateX(100px);
+            }
+        }
+
+        .interactive-question {
+            background: rgba(102, 217, 255, 0.2);
+            border: 3px solid #66d9ff;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .interactive-question h4 {
+            color: #66d9ff;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+        }
+
+        .answer-button {
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 1.1em;
+            background: rgba(0, 212, 255, 0.3);
+            border: 2px solid #00d4ff;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .answer-button:hover {
+            background: rgba(0, 212, 255, 0.6);
+            transform: scale(1.05);
+        }
+
+        .answer-button.correct {
+            background: rgba(0, 255, 0, 0.4);
+            border-color: #00ff00;
+        }
+
+        .answer-button.incorrect {
+            background: rgba(255, 0, 0, 0.4);
+            border-color: #ff0000;
+        }
+
+        .page-number {
+            text-align: center;
+            color: #66d9ff;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+
+        .squid-svg {
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .title-page h1 {
+                font-size: 2.2em;
+            }
+            
+            .title-page h2 {
+                font-size: 1.5em;
+            }
+            
+            .page h2 {
+                font-size: 1.8em;
+            }
+            
+            .page p {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Floating decorations -->
+    <div class="floating-squid" style="left: 10%; top: 20%;">🦑</div>
+    <div class="floating-squid" style="right: 10%; top: 60%; animation-delay: 2s;">🐙</div>
+    <div class="floating-squid" style="left: 80%; top: 40%; animation-delay: 4s;">🦑</div>
+
+    <!-- Bubbles -->
+    <div class="bubble" style="left: 10%; animation-duration: 6s;"></div>
+    <div class="bubble" style="left: 30%; animation-duration: 8s; animation-delay: 2s;"></div>
+    <div class="bubble" style="left: 50%; animation-duration: 7s; animation-delay: 4s;"></div>
+    <div class="bubble" style="left: 70%; animation-duration: 9s; animation-delay: 1s;"></div>
+    <div class="bubble" style="left: 90%; animation-duration: 8s; animation-delay: 3s;"></div>
+
+    <!-- Title Page -->
+    <div class="title-page" id="titlePage">
+        <h1>🦑 GIANT SQUID 🦑</h1>
+        <h2>Searching for a Sea Monster</h2>
+        <p>By Mary M. Cerullo with Clyde F. E. Roper</p>
+        <p style="margin-top: 20px;">A Simplified Interactive Story for Young Readers</p>
+        <button class="start-button" onclick="startStory()">🌊 Begin the Adventure! 🌊</button>
+    </div>
+
+    <div class="container">
+        <!-- Page 1 -->
+        <div class="page" id="page1">
+            <h2>🚢 A Creature of Giant Size 🚢</h2>
+            
+            <div class="image-container">
+                <svg class="squid-svg" viewBox="0 0 200 200">
+                    <defs>
+                        <linearGradient id="squidGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b0000;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Squid body -->
+                    <ellipse cx="100" cy="80" rx="40" ry="60" fill="url(#squidGradient)"/>
+                    <!-- Eyes -->
+                    <circle cx="85" cy="70" r="8" fill="white"/>
+                    <circle cx="115" cy="70" r="8" fill="white"/>
+                    <circle cx="85" cy="70" r="4" fill="black"/>
+                    <circle cx="115" cy="70" r="4" fill="black"/>
+                    <!-- Tentacles -->
+                    <path d="M 70 120 Q 50 150 45 180" stroke="url(#squidGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 80 125 Q 65 160 60 190" stroke="url(#squidGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 90 130 Q 80 170 75 200" stroke="url(#squidGradient)" stroke-width="7" fill="none"/>
+                    <path d="M 100 130 Q 100 180 95 210" stroke="url(#squidGradient)" stroke-width="7" fill="none"/>
+                    <path d="M 110 130 Q 120 170 125 200" stroke="url(#squidGradient)" stroke-width="7" fill="none"/>
+                    <path d="M 120 125 Q 135 160 140 190" stroke="url(#squidGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 130 120 Q 150 150 155 180" stroke="url(#squidGradient)" stroke-width="8" fill="none"/>
+                    <!-- Two longer feeding tentacles -->
+                    <path d="M 95 135 Q 60 180 40 220" stroke="url(#squidGradient)" stroke-width="6" fill="none" stroke-dasharray="5,5"/>
+                    <path d="M 105 135 Q 140 180 160 220" stroke="url(#squidGradient)" stroke-width="6" fill="none" stroke-dasharray="5,5"/>
+                </svg>
+                <p class="image-caption">The mysterious giant squid!</p>
+            </div>
+
+            <p>Long, long ago, sailors told scary stories about the ocean. They said a huge monster lived deep in the water. The monster had long, twisting arms. It could grab sailors right off their ships!</p>
+
+            <p>The sailors called this creature the <strong>kraken</strong>. They said it was as big as an island. Its long arms could wrap around a whole ship and pull it down into the water.</p>
+
+            <p>Were these stories real? Or were they just made up?</p>
+
+            <div class="fun-fact">
+                <h4>🤔 Were the Stories Real?</h4>
+                <p>Yes! The kraken was a real animal—the giant squid!</p>
+            </div>
+
+            <p>In 1874, a ship captain said he saw a giant sea monster. It tried to climb onto his ship! The captain told his men to shoot at it. Finally, the monster sank back into the ocean.</p>
+
+            <p>A writer named Jules Verne heard this story. He put it in his famous book. The book had a scary scene with a "squid of colossal size."</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()" disabled>⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 1 of 15</p>
+        </div>
+
+        <!-- Page 2 -->
+        <div class="page" id="page2">
+            <h2>🔍 Early Clues 🔍</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="300" viewBox="0 0 400 300">
+                    <!-- Whale -->
+                    <ellipse cx="200" cy="150" rx="150" ry="70" fill="#4a5568"/>
+                    <ellipse cx="160" cy="140" rx="20" ry="25" fill="#4a5568"/>
+                    <path d="M 80 150 L 50 130 L 60 150 Z" fill="#4a5568"/>
+                    <circle cx="120" cy="130" r="8" fill="white"/>
+                    <circle cx="120" cy="130" r="4" fill="black"/>
+                    <!-- Scars on whale -->
+                    <circle cx="180" cy="130" r="12" fill="none" stroke="#ff6b6b" stroke-width="3"/>
+                    <circle cx="220" cy="140" r="12" fill="none" stroke="#ff6b6b" stroke-width="3"/>
+                    <circle cx="260" cy="135" r="12" fill="none" stroke="#ff6b6b" stroke-width="3"/>
+                    <circle cx="200" cy="165" r="12" fill="none" stroke="#ff6b6b" stroke-width="3"/>
+                </svg>
+                <p class="image-caption">Sperm whale with mysterious round scars</p>
+            </div>
+
+            <p>After a while, people started finding real clues about these mysterious creatures.</p>
+
+            <p>In the 1700s and 1800s, ship captains hunted big whales called <strong>sperm whales</strong>. When they caught the whales, they noticed something strange. The whales had round scars all over their heads. Something had been fighting with these huge whales! But what?</p>
+
+            <p>Inside the whales' bellies, the captains found something else strange. They found big, sharp beaks. The beaks looked like bird beaks, but they were as big as a man's fist!</p>
+
+            <div class="interactive-question">
+                <h4>❓ What Do You Think?</h4>
+                <p>Did sperm whales eat birds?</p>
+                <button class="answer-button" onclick="checkAnswer(this, false)">Yes, they ate birds! 🐦</button>
+                <button class="answer-button" onclick="checkAnswer(this, true)">No, something else! 🤔</button>
+            </div>
+
+            <p>The captains figured it out. The beaks came from <strong>squids</strong>—GIANT squids!</p>
+
+            <p>Sailors knew about small squids. They had eaten them many times. Squids have suckers on their arms and a sharp beak in their mouth. But these beaks were HUGE. They could only come from a giant squid.</p>
+
+            <div class="fun-fact">
+                <h4>🎯 Battle Scars!</h4>
+                <p>The round scars on the whales were as big as hockey pucks. They came from the giant squid's suckers fighting back against the whale!</p>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 2 of 15</p>
+        </div>
+
+        <!-- Page 3 -->
+        <div class="page" id="page3">
+            <h2>🏠 Where Do Giant Squids Live? 🏠</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="400" viewBox="0 0 400 400">
+                    <!-- Ocean layers -->
+                    <rect x="0" y="0" width="400" height="100" fill="#4db8ff"/>
+                    <text x="200" y="50" text-anchor="middle" fill="white" font-size="20">Surface - Sunny! ☀️</text>
+                    
+                    <rect x="0" y="100" width="400" height="100" fill="#0099cc"/>
+                    <text x="200" y="150" text-anchor="middle" fill="white" font-size="18">Getting darker...</text>
+                    
+                    <rect x="0" y="200" width="400" height="100" fill="#006699"/>
+                    <text x="200" y="250" text-anchor="middle" fill="white" font-size="18">Very dark 🌑</text>
+                    
+                    <rect x="0" y="300" width="400" height="100" fill="#003d5c"/>
+                    <text x="200" y="340" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Giant Squid Zone! 🦑</text>
+                    <text x="200" y="370" text-anchor="middle" fill="#66d9ff" font-size="16">Half a mile deep!</text>
+                </svg>
+            </div>
+
+            <p>Sometimes fishermen would catch a dead giant squid in their nets. Sometimes pieces of giant squid would wash up on the beach.</p>
+
+            <p>In 1873, fishermen in Canada caught what they called "a sea monster." They showed it to a church minister named Reverend Moses Harvey. He put the giant squid in his bathtub to show people! It was the first complete giant squid that scientists got to study.</p>
+
+            <h3>Where Giant Squids Live</h3>
+
+            <p>Giant squids live very, very deep in the ocean. They live about <strong>half a mile down</strong>—much deeper than people can swim or dive.</p>
+
+            <p>That's where they meet sperm whales. The whales dive down deep to find their favorite food—giant squid!</p>
+
+            <div class="fun-fact">
+                <h4>🌊 Why Do They Wash Up on Beaches?</h4>
+                <p>Sometimes ocean currents change. The currents can bring deep-sea animals up closer to the surface. The water is warmer and different there. Sometimes this kills the deep-sea animals. That's why dead giant squids sometimes wash up on beaches.</p>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 3 of 15</p>
+        </div>
+
+        <!-- Page 4 -->
+        <div class="page" id="page4">
+            <h2>👦 Meet the Squid Hunter 👦</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="300" viewBox="0 0 400 300">
+                    <!-- Beach -->
+                    <rect x="0" y="200" width="400" height="100" fill="#f4e4c1"/>
+                    <!-- Water -->
+                    <path d="M 0 200 Q 100 190 200 200 T 400 200" fill="#4db8ff"/>
+                    <!-- Snail trail -->
+                    <path d="M 50 250 Q 100 240 150 250 Q 200 260 250 250" stroke="#8b7355" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                    <!-- Snail -->
+                    <circle cx="260" cy="250" r="15" fill="#d2691e"/>
+                    <ellipse cx="265" cy="245" rx="8" ry="12" fill="#f4a460"/>
+                    <circle cx="270" cy="240" r="2" fill="black"/>
+                    <line x1="268" y1="238" x2="265" y2="233" stroke="black" stroke-width="1"/>
+                    <line x1="272" y1="238" x2="275" y2="233" stroke="black" stroke-width="1"/>
+                    <!-- Boy -->
+                    <circle cx="220" cy="230" r="20" fill="#ffdbac"/>
+                    <rect x="205" y="250" width="30" height="40" fill="#4a90e2" rx="5"/>
+                    <circle cx="215" cy="225" r="3" fill="black"/>
+                    <circle cx="225" cy="225" r="3" fill="black"/>
+                    <path d="M 215 235 Q 220 238 225 235" stroke="black" stroke-width="2" fill="none"/>
+                </svg>
+                <p class="image-caption">Young Clyde following snail trails at the beach</p>
+            </div>
+
+            <p>A boy named <strong>Clyde Roper</strong> loved the ocean. When he was little, he would follow tiny snails along the beach. He watched them make trails in the sand.</p>
+
+            <p>Clyde didn't know it yet, but those snails were his first clue. Snails and squids are related! They're both soft-bodied animals called <strong>mollusks</strong>.</p>
+
+            <p>Some mollusks, like snails, have shells. Others, like squids, don't have shells. But squids have cool ways to protect themselves!</p>
+
+            <div class="fun-fact">
+                <h4>🚀 Squid Super Powers!</h4>
+                <p>A squid can shoot water out of its body to zoom backward—like a rocket! 💨</p>
+            </div>
+
+            <p>A squid has <strong>8 arms</strong> and <strong>2 extra-long feeding tentacles</strong>. When it's hungry, the squid shoots out its tentacles to grab food. Then it pulls the food to its sharp beak.</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 4 of 15</p>
+        </div>
+
+        <!-- Page 5 -->
+        <div class="page" id="page5">
+            <h2>🧠 Learning About Squids 🧠</h2>
+            
+            <div class="image-container">
+                <svg width="500" height="350" viewBox="0 0 500 350">
+                    <!-- Octopus -->
+                    <g transform="translate(80, 100)">
+                        <ellipse cx="0" cy="0" rx="40" ry="35" fill="#ff6b9d"/>
+                        <circle cx="-12" cy="-8" r="8" fill="white"/>
+                        <circle cx="12" cy="-8" r="8" fill="white"/>
+                        <circle cx="-12" cy="-8" r="4" fill="black"/>
+                        <circle cx="12" cy="-8" r="4" fill="black"/>
+                        <!-- 8 arms -->
+                        <path d="M -30 20 Q -50 50 -45 80" stroke="#ff6b9d" stroke-width="8" fill="none"/>
+                        <path d="M -20 25 Q -35 60 -30 90" stroke="#ff6b9d" stroke-width="7" fill="none"/>
+                        <path d="M -10 30 Q -15 65 -10 95" stroke="#ff6b9d" stroke-width="6" fill="none"/>
+                        <path d="M 0 30 Q 0 70 0 100" stroke="#ff6b9d" stroke-width="6" fill="none"/>
+                        <path d="M 10 30 Q 15 65 10 95" stroke="#ff6b9d" stroke-width="6" fill="none"/>
+                        <path d="M 20 25 Q 35 60 30 90" stroke="#ff6b9d" stroke-width="7" fill="none"/>
+                        <path d="M 30 20 Q 50 50 45 80" stroke="#ff6b9d" stroke-width="8" fill="none"/>
+                        <path d="M -5 32 Q -25 70 -20 100" stroke="#ff6b9d" stroke-width="6" fill="none"/>
+                        <text x="0" y="130" text-anchor="middle" fill="white" font-size="16">Octopus: 8 arms</text>
+                    </g>
+                    
+                    <!-- Squid -->
+                    <g transform="translate(280, 100)">
+                        <ellipse cx="0" cy="0" rx="35" ry="45" fill="#6b9dff"/>
+                        <circle cx="-10" cy="-5" r="10" fill="white"/>
+                        <circle cx="10" cy="-5" r="10" fill="white"/>
+                        <circle cx="-10" cy="-5" r="5" fill="black"/>
+                        <circle cx="10" cy="-5" r="5" fill="black"/>
+                        <!-- 8 arms -->
+                        <path d="M -25 30 Q -40 60 -35 85" stroke="#6b9dff" stroke-width="6" fill="none"/>
+                        <path d="M -15 35 Q -25 65 -20 90" stroke="#6b9dff" stroke-width="5" fill="none"/>
+                        <path d="M -5 38 Q -10 68 -5 93" stroke="#6b9dff" stroke-width="5" fill="none"/>
+                        <path d="M 5 38 Q 10 68 5 93" stroke="#6b9dff" stroke-width="5" fill="none"/>
+                        <path d="M 15 35 Q 25 65 20 90" stroke="#6b9dff" stroke-width="5" fill="none"/>
+                        <path d="M 25 30 Q 40 60 35 85" stroke="#6b9dff" stroke-width="6" fill="none"/>
+                        <!-- 2 long tentacles -->
+                        <path d="M -10 40 Q -30 80 -25 120" stroke="#6b9dff" stroke-width="5" fill="none" stroke-dasharray="3,3"/>
+                        <path d="M 10 40 Q 30 80 25 120" stroke="#6b9dff" stroke-width="5" fill="none" stroke-dasharray="3,3"/>
+                        <text x="0" y="145" text-anchor="middle" fill="white" font-size="16">Squid: 8 arms</text>
+                        <text x="0" y="163" text-anchor="middle" fill="white" font-size="16">+ 2 tentacles</text>
+                    </g>
+                </svg>
+            </div>
+
+            <p>When Clyde grew up, he went to college. He studied all kinds of squids and their relatives. There are <strong>octopuses</strong>, <strong>cuttlefishes</strong>, and even a creature called the <strong>chambered nautilus</strong>.</p>
+
+            <div class="interactive-question">
+                <h4>🐙 How Many Arms?</h4>
+                <p>How many arms does an octopus have?</p>
+                <button class="answer-button" onclick="checkAnswer(this, false)">6 arms</button>
+                <button class="answer-button" onclick="checkAnswer(this, true)">8 arms ✓</button>
+                <button class="answer-button" onclick="checkAnswer(this, false)">10 arms</button>
+            </div>
+
+            <p>Octopuses have 8 arms. Squids have 8 arms plus 2 tentacles. But the chambered nautilus holds the record, with <strong>80 to 100 arms!</strong></p>
+
+            <p>All of these animals have big brains and big eyes. Their bodies hold their organs—hearts, stomach, and gills. (Most squids have <strong>THREE hearts!</strong>)</p>
+
+            <div class="fun-fact">
+                <h4>💪 Super Strong Beak!</h4>
+                <p>The giant squid has suckers with small, sharp teeth that dig into its food. Its sharp beak is so strong, it can bite through steel cable!</p>
+            </div>
+
+            <h3>Why Does the Whale Always Win?</h3>
+
+            <p>The sperm whale's mouth is perfect for catching soft animals like squids. It has big teeth only on the bottom. Those huge teeth fit snugly into sockets on the top. This way the whale can hold on tight. A giant squid doesn't stand a chance!</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 5 of 15</p>
+        </div>
+
+        <!-- Page 6 -->
+        <div class="page" id="page6">
+            <h2>🔬 Ocean Detective on the Chase 🔬</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="300" viewBox="0 0 400 300">
+                    <!-- Detective magnifying glass -->
+                    <circle cx="200" cy="150" r="70" fill="none" stroke="#00d4ff" stroke-width="8"/>
+                    <circle cx="200" cy="150" r="65" fill="rgba(0, 212, 255, 0.2)"/>
+                    <rect x="250" y="200" width="80" height="15" fill="#8b7355" rx="5" transform="rotate(45 250 207)"/>
+                    <!-- Squid in magnifying glass -->
+                    <g transform="translate(200, 140) scale(0.3)">
+                        <ellipse cx="0" cy="0" rx="30" ry="40" fill="#ff6b6b"/>
+                        <circle cx="-8" cy="-5" r="5" fill="white"/>
+                        <circle cx="8" cy="-5" r="5" fill="white"/>
+                        <path d="M -15 30 L -20 60" stroke="#ff6b6b" stroke-width="4"/>
+                        <path d="M -5 35 L -8 65" stroke="#ff6b6b" stroke-width="4"/>
+                        <path d="M 5 35 L 8 65" stroke="#ff6b6b" stroke-width="4"/>
+                        <path d="M 15 30 L 20 60" stroke="#ff6b6b" stroke-width="4"/>
+                    </g>
+                    <text x="200" y="260" text-anchor="middle" fill="white" font-size="24">🕵️ Detective Clyde 🕵️</text>
+                </svg>
+            </div>
+
+            <p>There are more than 500 kinds of squids in the ocean. Scientists named the giant squid <strong>"Architeuthis"</strong> (ark-i-TOOTH-iss). It means "the chief squid."</p>
+
+            <p>Clyde Roper decided he wanted to learn everything about giant squids. But how could he study an animal that no one could find? It was like being a detective looking for someone who had been hiding for hundreds of years!</p>
+
+            <div class="fun-fact">
+                <h4>🔍 How Scientists Solve Mysteries</h4>
+                <p><strong>1.</strong> They watch nature carefully and get ideas to test</p>
+                <p><strong>2.</strong> They collect information and clues</p>
+                <p><strong>3.</strong> Like detectives, they figure out what the clues mean</p>
+                <p><strong>4.</strong> They never give up, even if it takes a long time!</p>
+            </div>
+
+            <p>Unlike TV detectives who can solve a case in an hour, it sometimes takes a <strong>lifetime</strong>—or longer—to solve a scientific mystery.</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 6 of 15</p>
+        </div>
+
+        <!-- Page 7 -->
+        <div class="page" id="page7">
+            <h2>🐋 Looking for Clues in a Whale 🐋</h2>
+            
+            <div class="image-container">
+                <svg width="450" height="300" viewBox="0 0 450 300">
+                    <!-- Beach -->
+                    <rect x="0" y="200" width="450" height="100" fill="#f4e4c1"/>
+                    <!-- Whale -->
+                    <ellipse cx="225" cy="180" rx="180" ry="60" fill="#5a6c7d"/>
+                    <path d="M 70 180 L 30 160 L 50 180 Z" fill="#5a6c7d"/>
+                    <circle cx="140" cy="165" r="8" fill="white"/>
+                    <circle cx="140" cy="165" r="4" fill="black"/>
+                    <!-- Scientists -->
+                    <g transform="translate(180, 140)">
+                        <circle cx="0" cy="0" r="15" fill="#ffdbac"/>
+                        <rect x="-10" y="15" width="20" height="25" fill="#4a90e2"/>
+                    </g>
+                    <g transform="translate(240, 140)">
+                        <circle cx="0" cy="0" r="15" fill="#ffdbac"/>
+                        <rect x="-10" y="15" width="20" height="25" fill="#e24a4a"/>
+                    </g>
+                    <g transform="translate(280, 145)">
+                        <circle cx="0" cy="0" r="15" fill="#ffdbac"/>
+                        <rect x="-10" y="15" width="20" height="25" fill="#4ae24a"/>
+                    </g>
+                    <!-- Beaks -->
+                    <text x="225" y="220" text-anchor="middle" fill="#ff6b6b" font-size="24">🦑 🦑 🦑</text>
+                </svg>
+                <p class="image-caption">Scientists examining a beached whale</p>
+            </div>
+
+            <p>One day when Clyde was in college, someone called about a dead sperm whale on the beach. Did anyone want to look at it? Yes! Clyde and his friends raced to the beach.</p>
+
+            <p>They jumped into a big hole that had been dug for the whale. They used knives and saws to cut into the whale's stomachs. (Sperm whales have THREE stomachs!) They reached deep inside, all the way up to their shoulders. It was a very messy, smelly job!</p>
+
+            <p>Hours later, they had found almost <strong>1,000 squid beaks!</strong> That's how many squids one whale can eat! But none of the beaks were from giant squids.</p>
+
+            <p>However, the whale DID have big round scars around its mouth. This proved the whale had fought and eaten giant squids during its life.</p>
+
+            <div class="fun-fact">
+                <h4>🦈 Shark Alert!</h4>
+                <p>Clyde and his friends were covered in blood from the whale. They wanted to wash off in the ocean. But then they saw something scary—dozens of shark fins in the water! The sharks smelled the whale blood. So the men had to drive home in their dirty, bloody clothes!</p>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 7 of 15</p>
+        </div>
+
+        <!-- Page 8 -->
+        <div class="page" id="page8">
+            <h2>🎓 Becoming Dr. Roper 🎓</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="300" viewBox="0 0 400 300">
+                    <!-- Museum building -->
+                    <rect x="50" y="120" width="300" height="150" fill="#8b8b8b"/>
+                    <polygon points="200,50 50,120 350,120" fill="#5a6c7d"/>
+                    <!-- Columns -->
+                    <rect x="80" y="150" width="30" height="120" fill="#a0a0a0"/>
+                    <rect x="160" y="150" width="30" height="120" fill="#a0a0a0"/>
+                    <rect x="240" y="150" width="30" height="120" fill="#a0a0a0"/>
+                    <rect x="320" y="150" width="30" height="120" fill="#a0a0a0"/>
+                    <!-- Door -->
+                    <rect x="175" y="200" width="50" height="70" fill="#4a4a4a"/>
+                    <!-- Windows -->
+                    <rect x="100" y="160" width="40" height="30" fill="#66d9ff"/>
+                    <rect x="260" y="160" width="40" height="30" fill="#66d9ff"/>
+                    <!-- Sign -->
+                    <text x="200" y="100" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Smithsonian</text>
+                </svg>
+                <p class="image-caption">The Smithsonian Museum in Washington, D.C.</p>
+            </div>
+
+            <p>After many years of studying, Clyde became a doctor of science. People called him <strong>Dr. Roper</strong>. He got a job at a big museum in Washington, D.C. called the <strong>Smithsonian Institution</strong>.</p>
+
+            <p>At the museum, Dr. Roper studied all kinds of squids. Some were as small as his thumb. Others were almost as tall as he was!</p>
+
+            <p>People sent him squids from all over to study—including giant squids. But looking at dead squids only made Clyde more curious. He really, really wanted to see a LIVE giant squid swimming in the ocean.</p>
+
+            <div class="fun-fact">
+                <h4>🔢 How Many Giant Squids Are There?</h4>
+                <p>Scientists have tried to count! They counted beaks in whale stomachs.</p>
+                <p>One sperm whale might eat <strong>20,000 squids in one week!</strong> Only about 3 of those are giant squids.</p>
+                <p>There are at least 400,000 sperm whales in all the oceans. If you do the math, that means whales eat about <strong>60 MILLION giant squids every year!</strong></p>
+                <p>And not all giant squids get eaten by whales. So there might be many, many more millions hiding in the deep ocean! 🌊</p>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 8 of 15</p>
+        </div>
+
+        <!-- Page 9 -->
+        <div class="page" id="page9">
+            <h2>👀 Amazing Eyes 👀</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="300" viewBox="0 0 400 300">
+                    <!-- Giant eye -->
+                    <ellipse cx="200" cy="150" rx="100" ry="90" fill="white" stroke="#00d4ff" stroke-width="5"/>
+                    <circle cx="200" cy="150" r="50" fill="black"/>
+                    <circle cx="185" cy="135" r="15" fill="rgba(255, 255, 255, 0.8)"/>
+                    <!-- Size comparison - car headlight -->
+                    <g transform="translate(80, 250)">
+                        <rect x="0" y="0" width="60" height="30" rx="15" fill="#ffcc00" stroke="#333" stroke-width="2"/>
+                        <text x="70" y="20" fill="white" font-size="14">Car Headlight</text>
+                    </g>
+                    <text x="200" y="270" text-anchor="middle" fill="#00d4ff" font-size="20" font-weight="bold">Same Size!</text>
+                </svg>
+                <p class="image-caption">The giant squid's eye is as big as a car headlight!</p>
+            </div>
+
+            <p>The giant squid has the most amazing eyes. They are <strong>as big as car headlights</strong>—almost as big as Clyde's whole head! They're the biggest eyes in the whole world!</p>
+
+            <div class="interactive-question">
+                <h4>💡 Think About It!</h4>
+                <p>Why would a giant squid need such HUGE eyes?</p>
+                <button class="answer-button" onclick="checkAnswer(this, false)">To look scary 👻</button>
+                <button class="answer-button" onclick="checkAnswer(this, true)">To see in the dark ocean! 🌑</button>
+                <button class="answer-button" onclick="checkAnswer(this, false)">Just for fun 🎉</button>
+            </div>
+
+            <p>How do these eyes help the squid see in the dark, deep ocean? How far can they see? Clyde wanted to find out.</p>
+
+            <p>He talked to fishermen who had caught giant squids in their nets. He looked at squids that had washed up on shore. But dead squids couldn't answer his biggest question: <strong>How does a giant squid act when it's alive in the ocean?</strong></p>
+
+            <p>Clyde decided he HAD to find out.</p>
+
+            <div class="fun-fact">
+                <h4>✨ Seeing in the Dark</h4>
+                <p>Deep in the ocean, it's always dark. Below about 1,000 feet down, there's no sunlight at all.</p>
+                <p>But many ocean animals glow in the dark! They make their own light, like fireflies. 🔦</p>
+                <p>More than three-quarters of deep-sea animals can make light. Clyde wondered: Can giant squids glow in the dark too?</p>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 9 of 15</p>
+        </div>
+
+        <!-- Page 10 -->
+        <div class="page" id="page10">
+            <h2>👹 Meeting the Red Devil 👹</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="350" viewBox="0 0 400 350">
+                    <!-- Angry red squid -->
+                    <defs>
+                        <linearGradient id="redGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ff0000;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b0000;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <ellipse cx="200" cy="120" rx="60" ry="80" fill="url(#redGradient)"/>
+                    <!-- Angry eyes -->
+                    <ellipse cx="180" cy="100" rx="15" ry="20" fill="white"/>
+                    <ellipse cx="220" cy="100" rx="15" ry="20" fill="white"/>
+                    <circle cx="180" cy="105" r="8" fill="black"/>
+                    <circle cx="220" cy="105" r="8" fill="black"/>
+                    <!-- Angry eyebrows -->
+                    <line x1="165" y1="85" x2="190" y2="90" stroke="black" stroke-width="4"/>
+                    <line x1="235" y1="85" x2="210" y2="90" stroke="black" stroke-width="4"/>
+                    <!-- Sharp beak -->
+                    <path d="M 195 130 L 200 145 L 205 130" fill="#333" stroke="black" stroke-width="2"/>
+                    <!-- Aggressive tentacles -->
+                    <path d="M 160 180 Q 120 220 100 270" stroke="url(#redGradient)" stroke-width="10" fill="none"/>
+                    <path d="M 170 190 Q 140 240 125 290" stroke="url(#redGradient)" stroke-width="9" fill="none"/>
+                    <path d="M 180 195 Q 160 250 150 300" stroke="url(#redGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 190 200 Q 180 260 175 310" stroke="url(#redGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 210 200 Q 220 260 225 310" stroke="url(#redGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 220 195 Q 240 250 250 300" stroke="url(#redGradient)" stroke-width="8" fill="none"/>
+                    <path d="M 230 190 Q 260 240 275 290" stroke="url(#redGradient)" stroke-width="9" fill="none"/>
+                    <path d="M 240 180 Q 280 220 300 270" stroke="url(#redGradient)" stroke-width="10" fill="none"/>
+                    <!-- Text -->
+                    <text x="200" y="340" text-anchor="middle" fill="#ff6b6b" font-size="24" font-weight="bold">Diablo Rojo!</text>
+                </svg>
+                <p class="image-caption">The fierce Humboldt squid - "Red Devil"</p>
+            </div>
+
+            <p>Clyde couldn't swim with a giant squid yet. So he decided to meet the next best thing—a close relative of the giant squid.</p>
+
+            <p>He went to Mexico to see <strong>Humboldt squids</strong>. These squids can weigh 100 pounds and grow to be 8 feet long. That's not as big as giant squids, but they're still pretty big!</p>
+
+            <p>Humboldt squids have a scary reputation. At night, hundreds—even thousands—of them come up to hunt for fish and shrimp. Fishermen call them <strong>"diablo rojo"</strong>—red devil! The squid's body flashes bright red when it's caught. And it fights back hard! It will even attack people sometimes.</p>
+
+            <h3>Clyde Gets Bitten!</h3>
+
+            <p>One night, Clyde went out with fishermen and a film crew. They caught a big female Humboldt squid. Clyde put on his wetsuit and diving tank and jumped in the water to see her up close.</p>
+
+            <p>He was staring right into her open mouth when—<strong>SNAP!</strong> The squid bit him with her big beak and zoomed away!</p>
+
+            <p>After watching the squids for several hours, Clyde climbed back into the boat. He was very tired. When he took off his wetsuit, he saw blood! The squid had bitten him deep in his leg. He still has the scar today.</p>
+
+            <div class="fun-fact">
+                <h4>🤔 What Did Clyde Learn?</h4>
+                <p>Watching the Humboldt squid helped Clyde imagine how a giant squid might hunt. It also made him wonder: Would a giant squid be as fierce as the red devil?</p>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 10 of 15</p>
+        </div>
+
+        <!-- Page 11 -->
+        <div class="page" id="page11">
+            <h2>📹 Following the Whales 📹</h2>
+            
+            <div class="image-container">
+                <svg width="450" height="300" viewBox="0 0 450 300">
+                    <!-- Whale -->
+                    <ellipse cx="225" cy="150" rx="120" ry="50" fill="#4a5568"/>
+                    <path d="M 130 150 L 90 130 L 105 150 Z" fill="#4a5568"/>
+                    <circle cx="165" cy="135" r="8" fill="white"/>
+                    <circle cx="165" cy="135" r="4" fill="black"/>
+                    <!-- Camera on whale's head -->
+                    <rect x="200" y="120" width="40" height="25" fill="#333" rx="5"/>
+                    <circle cx="220" cy="130" r="8" fill="#00d4ff" stroke="white" stroke-width="2"/>
+                    <text x="220" y="110" text-anchor="middle" fill="#00d4ff" font-size="14" font-weight="bold">Crittercam!</text>
+                    <!-- Depth lines -->
+                    <text x="350" y="50" fill="#66d9ff" font-size="16">Surface</text>
+                    <line x1="340" y1="55" x2="340" y2="250" stroke="#66d9ff" stroke-width="2" stroke-dasharray="5,5"/>
+                    <text x="355" y="250" fill="#66d9ff" font-size="16">2,600 feet deep!</text>
+                </svg>
+                <p class="image-caption">A special camera attached to a whale!</p>
+            </div>
+
+            <p>Clyde learned a lot from studying the giant squid's cousins. Now he was even MORE determined to find a real, live giant squid!</p>
+
+            <p>He went on an expedition to islands in the middle of the Atlantic Ocean where sperm whales come to eat. <strong>The whales would show him the way!</strong></p>
+
+            <p>Clyde knew he couldn't dive deep enough to follow the whales. Giant squids live much deeper than a scuba diver can go. So he needed a different plan.</p>
+
+            <p>He asked a photographer named Greg Marshall to help. Greg invented something called a <strong>"Crittercam"</strong>—a special video camera that can be attached to sea animals like dolphins, seals, and turtles. It records everything they see underwater!</p>
+
+            <h3>Camera on a Whale</h3>
+
+            <p>How do you put a camera on a 100,000-pound wild whale? <strong>Very carefully!</strong></p>
+
+            <p>The researchers quietly paddled a small boat toward a whale resting just under the water. The whale stayed surprisingly calm. They stuck the camera to its head with a big suction cup. The camera also had recorders to measure how deep the whale went and what sounds it made.</p>
+
+            <p>An hour later, the camera fell off the whale. It floated in the water, making a beeping sound. The scientists found it and pulled it onto their boat.</p>
+
+            <p>They were so excited! They played the video right away. <strong>Would they finally see a giant squid?</strong></p>
+
+            <div class="fun-fact">
+                <h4>🎤 What They Heard</h4>
+                <p>The whale had gone down 2,600 feet—that's deeper than 8 football fields stacked up! The camera lights could only shine a few feet in that darkness.</p>
+                <p>But the sound recorder picked up something cool! They could hear other whales calling to each other. Maybe they were saying, "Hey! I found a great place to get squid!"</p>
+            </div>
+
+            <p>Clyde's team put the camera on whales seven more times. He learned a lot about where giant squids live and what eats them. But he still hadn't seen a giant squid.</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 11 of 15</p>
+        </div>
+
+        <!-- Page 12 -->
+        <div class="page" id="page12">
+            <h2>🤖 Robot Submarines 🤖</h2>
+            
+            <div class="image-container">
+                <svg width="400" height="350" viewBox="0 0 400 350">
+                    <!-- Deep sea background -->
+                    <rect x="0" y="0" width="400" height="350" fill="#001a33"/>
+                    <!-- Submarine -->
+                    <ellipse cx="200" cy="150" rx="80" ry="40" fill="#ffcc00" stroke="#ff9900" stroke-width="3"/>
+                    <circle cx="160" cy="150" r="20" fill="rgba(255, 255, 255, 0.8)" stroke="#333" stroke-width="2"/>
+                    <circle cx="240" cy="150" r="15" fill="rgba(255, 255, 255, 0.6)" stroke="#333" stroke-width="2"/>
+                    <!-- Propeller -->
+                    <rect x="270" y="145" width="20" height="10" fill="#ff9900"/>
+                    <!-- Light beams -->
+                    <path d="M 140 150 L 50 100" stroke="#ffff00" stroke-width="4" opacity="0.6"/>
+                    <path d="M 140 150 L 50 150" stroke="#ffff00" stroke-width="6" opacity="0.6"/>
+                    <path d="M 140 150 L 50 200" stroke="#ffff00" stroke-width="4" opacity="0.6"/>
+                    <!-- Glow sticks on sub -->
+                    <circle cx="180" cy="135" r="4" fill="#00ff00"/>
+                    <circle cx="195" cy="135" r="4" fill="#00ff00"/>
+                    <circle cx="210" cy="135" r="4" fill="#00ff00"/>
+                    <circle cx="225" cy="135" r="4" fill="#00ff00"/>
+                    <!-- Glowing sea creatures -->
+                    <circle cx="100" cy="100" r="3" fill="#00ffff"/>
+                    <circle cx="280" cy="120" r="4" fill="#00ff00"/>
+                    <circle cx="150" cy="250" r="3" fill="#66d9ff"/>
+                    <circle cx="320" cy="200" r="3" fill="#00ffff"/>
+                    <circle cx="90" cy="280" r="4" fill="#00ff00"/>
+                    <text x="200" y="320" text-anchor="middle" fill="#66d9ff" font-size="18">Deep Rover Submarine</text>
+                </svg>
+                <p class="image-caption">Exploring the deep ocean with glowing lights</p>
+            </div>
+
+            <p>Another scientist told Clyde that he found a certain kind of fish called orange roughy inside dead giant squids. So Clyde went to an underwater canyon where fishermen catch these fish. Sperm whales go there too.</p>
+
+            <p>Clyde used a special underwater robot controlled by computer. It was like he was swimming with the fish as he watched from the control room!</p>
+
+            <h3>The Deep Rover</h3>
+
+            <p>On Clyde's next trip, he used a small submarine called the <strong>Deep Rover</strong>. It explored an underwater canyon near New Zealand where another favorite food of giant squids lives—hoki fish. Young sperm whales go there to eat giant squids!</p>
+
+            <p>Clyde thought that giant squids might be attracted to glowing light, like the light that many deep-sea animals make. So he covered the submarine with <strong>glow sticks</strong>—like the ones kids carry on Halloween!</p>
+
+            <p>A pilot sat inside the tiny submarine and drove it around. Cameras sent pictures back to Clyde in the ship's control room. He watched very carefully.</p>
+
+            <p>The team saw an amazing light show from many deep-sea creatures glowing blue and green. But the giant squid stayed hidden.</p>
+
+            <div class="fun-fact">
+                <h4>🍽️ Would You Eat Giant Squid?</h4>
+                <p>Clyde LOVES to eat squid! (When it's cooked, squid is called calamari.) No one had ever tasted giant squid before. So Clyde, who's always curious, decided to try some.</p>
+                <p>"It was very, very bitter," he said. Scientists found out that giant squid meat has a chemical in it that's like something in our pee! <strong>Yuck!</strong> 🤢</p>
+            </div>
+
+            <p>However, with each trip, Clyde learned new things about the animals that eat giant squids and the animals that giant squids eat. All of these discoveries gave him more and more clues!</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 12 of 15</p>
+        </div>
+
+        <!-- Page 13 -->
+        <div class="page" id="page13">
+            <h2>📸 Taking the Bait! 📸</h2>
+            
+            <div class="image-container">
+                <svg width="450" height="400" viewBox="0 0 450 400">
+                    <!-- Fishing line -->
+                    <line x1="225" y1="0" x2="225" y2="350" stroke="#666" stroke-width="3" stroke-dasharray="10,5"/>
+                    <!-- Camera -->
+                    <rect x="190" y="100" width="70" height="50" fill="#333" rx="5"/>
+                    <circle cx="225" cy="125" r="18" fill="#00d4ff" stroke="white" stroke-width="3"/>
+                    <text x="225" y="90" text-anchor="middle" fill="white" font-size="14">📷 Camera!</text>
+                    <!-- Hooks with bait -->
+                    <g transform="translate(180, 200)">
+                        <path d="M 0 0 Q 10 20 0 40" stroke="#999" stroke-width="3" fill="none"/>
+                        <ellipse cx="0" cy="45" rx="12" ry="8" fill="#ff6b9d"/>
+                        <text x="25" y="25" fill="#b3e6ff" font-size="12">Bait: shrimp</text>
+                    </g>
+                    <g transform="translate(270, 230)">
+                        <path d="M 0 0 Q 10 20 0 40" stroke="#999" stroke-width="3" fill="none"/>
+                        <ellipse cx="0" cy="45" rx="12" ry="8" fill="#ff6b9d"/>
+                        <text x="-80" y="25" fill="#b3e6ff" font-size="12">& squid</text>
+                    </g>
+                    <!-- Giant squid approaching -->
+                    <g transform="translate(225, 320)">
+                        <ellipse cx="0" cy="0" rx="50" ry="35" fill="#ff6b6b" opacity="0.8"/>
+                        <circle cx="-15" cy="-8" r="10" fill="white"/>
+                        <circle cx="15" cy="-8" r="10" fill="white"/>
+                        <circle cx="-15" cy="-8" r="5" fill="black"/>
+                        <circle cx="15" cy="-8" r="5" fill="black"/>
+                        <!-- Tentacles reaching for bait -->
+                        <path d="M -20 25 Q -30 -20 -5 -60" stroke="#ff6b6b" stroke-width="7" fill="none"/>
+                        <path d="M 20 25 Q 30 -20 5 -60" stroke="#ff6b6b" stroke-width="7" fill="none"/>
+                    </g>
+                </svg>
+                <p class="image-caption">Dr. Kubodera's brilliant idea!</p>
+            </div>
+
+            <p>A Japanese scientist named <strong>Dr. Tsunemi Kubodera</strong> kept searching. He used Clyde's research that showed sperm whales lead to giant squids.</p>
+
+            <p>Dr. Kubodera studied an area near Japan where sperm whales come to eat every year from September to December. He attached a camera to a long fishing line. The camera was programmed to take a picture every 30 seconds. He put chopped shrimp and squid on hooks to attract a giant squid. Then they lowered the line deep into the ocean and waited... and waited.</p>
+
+            <p>Dr. Kubodera went on <strong>23 trips over three years</strong>. Finally, a giant squid grabbed the bait!</p>
+
+            <div class="interactive-question">
+                <h4>⏰ How Long Did It Fight?</h4>
+                <p>The giant squid was caught on the line. How long do you think it fought before breaking free?</p>
+                <button class="answer-button" onclick="checkAnswer(this, false)">30 minutes</button>
+                <button class="answer-button" onclick="checkAnswer(this, false)">1 hour</button>
+                <button class="answer-button" onclick="checkAnswer(this, true)">4 hours! ✓</button>
+            </div>
+
+            <p>For <strong>four hours</strong>, the squid twisted and turned on the line. Sometimes it attacked the bait. Other times it tried to escape.</p>
+
+            <p>The camera took <strong>556 pictures!</strong> Finally, the squid broke free. But it left behind one of its tentacles stuck on the hook. The tentacle was 18 feet long!</p>
+
+            <p>When the team brought the tentacle onto the boat, the big suckers grabbed onto the deck. Then they grabbed onto Dr. Kubodera's fingers!</p>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 13 of 15</p>
+        </div>
+
+        <!-- Page 14 -->
+        <div class="page" id="page14">
+            <h2>🎉 First Photos and Video! 🎉</h2>
+            
+            <div class="image-container">
+                <svg width="450" height="350" viewBox="0 0 450 350">
+                    <!-- Camera frame -->
+                    <rect x="25" y="25" width="400" height="300" fill="#1a1a1a" rx="10"/>
+                    <rect x="50" y="50" width="350" height="250" fill="#003d5c" rx="5"/>
+                    <!-- Giant squid in photo -->
+                    <g transform="translate(225, 150)">
+                        <ellipse cx="0" cy="0" rx="70" ry="50" fill="#ff6b6b"/>
+                        <circle cx="-20" cy="-10" r="12" fill="white"/>
+                        <circle cx="20" cy="-10" r="12" fill="white"/>
+                        <circle cx="-20" cy="-10" r="6" fill="black"/>
+                        <circle cx="20" cy="-10" r="6" fill="black"/>
+                        <!-- Active tentacles -->
+                        <path d="M -40 35 Q -70 70 -80 110" stroke="#ff6b6b" stroke-width="10" fill="none"/>
+                        <path d="M -25 40 Q -45 80 -50 120" stroke="#ff6b6b" stroke-width="9" fill="none"/>
+                        <path d="M -10 45 Q -20 85 -20 125" stroke="#ff6b6b" stroke-width="8" fill="none"/>
+                        <path d="M 10 45 Q 20 85 20 125" stroke="#ff6b6b" stroke-width="8" fill="none"/>
+                        <path d="M 25 40 Q 45 80 50 120" stroke="#ff6b6b" stroke-width="9" fill="none"/>
+                        <path d="M 40 35 Q 70 70 80 110" stroke="#ff6b6b" stroke-width="10" fill="none"/>
+                    </g>
+                    <!-- Flash -->
+                    <circle cx="380" cy="60" r="15" fill="#ffff00" opacity="0.7"/>
+                    <text x="225" y="340" text-anchor="middle" fill="#00d4ff" font-size="24" font-weight="bold">First Photo: 2005!</text>
+                </svg>
+                <p class="image-caption">The first photos of a living giant squid!</p>
+            </div>
+
+            <p>These were the <strong>first photographs ever taken of a living giant squid!</strong> They were shown to the world in 2005. Clyde celebrated along with all the other scientists who loved squids!</p>
+
+            <p>Looking at the photos, Clyde saw something surprising. The giant squid was much more active than anyone expected! Despite its huge size, it wasn't slow and lazy. It was <strong>fast and strong!</strong> It made Clyde remember his encounter with the aggressive Humboldt squid.</p>
+
+            <div class="fun-fact">
+                <h4>🎥 And Then... VIDEO!</h4>
+                <p>Two years later, in 2007, Dr. Kubodera's team did something even more amazing. They recorded the <strong>first VIDEO of a live giant squid!</strong></p>
+                <p>They caught the squid at a depth of 2,133 feet and pulled it up to the surface. As they worked to bring it onto the boat, the squid fought hard! It thrashed around and shot powerful jets of water.</p>
+            </div>
+
+            <p>These observations proved that the giant squid is:</p>
+            <ul style="margin-left: 40px; font-size: 1.2em; line-height: 2;">
+                <li>⚡ A strong swimmer</li>
+                <li>🎯 An active hunter</li>
+                <li>💪 A fierce fighter</li>
+            </ul>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" onclick="nextPage()">Next ➡️</button>
+            </div>
+            <p class="page-number">Page 14 of 15</p>
+        </div>
+
+        <!-- Page 15 - Final Page -->
+        <div class="page" id="page15">
+            <h2>🔬 The Hunt Continues 🔬</h2>
+            
+            <div class="image-container">
+                <svg width="450" height="300" viewBox="0 0 450 300">
+                    <!-- Museum display case -->
+                    <rect x="75" y="80" width="300" height="180" fill="rgba(0, 212, 255, 0.2)" stroke="#00d4ff" stroke-width="4" rx="10"/>
+                    <!-- Giant squid in display -->
+                    <g transform="translate(225, 150)">
+                        <ellipse cx="0" cy="0" rx="80" ry="60" fill="#ff9999" opacity="0.8"/>
+                        <circle cx="-25" cy="-15" r="15" fill="white"/>
+                        <circle cx="25" cy="-15" r="15" fill="white"/>
+                        <circle cx="-25" cy="-15" r="8" fill="black"/>
+                        <circle cx="25" cy="-15" r="8" fill="black"/>
+                        <path d="M -50 40 Q -70 80 -75 120" stroke="#ff9999" stroke-width="8" fill="none" opacity="0.8"/>
+                        <path d="M -30 45 Q -45 85 -45 125" stroke="#ff9999" stroke-width="7" fill="none" opacity="0.8"/>
+                        <path d="M -10 50 Q -15 90 -10 130" stroke="#ff9999" stroke-width="6" fill="none" opacity="0.8"/>
+                        <path d="M 10 50 Q 15 90 10 130" stroke="#ff9999" stroke-width="6" fill="none" opacity="0.8"/>
+                        <path d="M 30 45 Q 45 85 45 125" stroke="#ff9999" stroke-width="7" fill="none" opacity="0.8"/>
+                        <path d="M 50 40 Q 70 80 75 120" stroke="#ff9999" stroke-width="8" fill="none" opacity="0.8"/>
+                    </g>
+                    <!-- Dr. Roper -->
+                    <g transform="translate(100, 200)">
+                        <circle cx="0" cy="0" r="18" fill="#ffdbac"/>
+                        <rect x="-12" y="18" width="24" height="35" fill="#4a90e2"/>
+                        <circle cx="-5" cy="-3" r="2" fill="black"/>
+                        <circle cx="5" cy="-3" r="2" fill="black"/>
+                        <path d="M -5 5 Q 0 8 5 5" stroke="black" stroke-width="2" fill="none"/>
+                    </g>
+                </svg>
+                <p class="image-caption">Dr. Roper visiting the giant squid display</p>
+            </div>
+
+            <p>We have learned so much about ocean life since Clyde was a little boy tracking snails on the beach. He and other scientists have discovered a lot about giant squids and other ocean mysteries.</p>
+
+            <div class="fun-fact">
+                <h4>📚 What We Know Now:</h4>
+                <p>✓ What giant squids eat</p>
+                <p>✓ What eats them</p>
+                <p>✓ More about how to find them</p>
+                <p>✓ More about their home in the deep ocean</p>
+                <p>✓ What they look like when they're alive and active</p>
+            </div>
+
+            <p>But there is SO much more we need to learn about this legendary creature! We still know very little about how it acts and how its body works.</p>
+
+            <h3>Questions Still to Answer:</h3>
+            <ul style="margin-left: 40px; font-size: 1.2em; line-height: 2; margin-bottom: 30px;">
+                <li>Do giant squids gather in big groups to find mates?</li>
+                <li>Do mother giant squids protect their eggs?</li>
+                <li>Do they squirt ink? Does the ink glow?</li>
+                <li>How strong are their arms and tentacles?</li>
+            </ul>
+
+            <p>Scientists hope that someday they'll see one of the millions of giant squids swimming, eating, and just living its life in the dark, deep ocean.</p>
+
+            <h3>Sea Monsters Are Real</h3>
+
+            <p>Clyde Roper often visits the ocean hall in the Museum of Natural History. Two giant squids—a male and a female—are on display there. They float in special liquid inside clear cases so everyone can see them.</p>
+
+            <p style="font-size: 1.4em; color: #00d4ff; font-weight: bold; text-align: center; margin: 30px 0;">"Sea monsters are real," Clyde says, "and I have seen them." 🦑</p>
+
+            <div class="fun-fact">
+                <h4>🌊 Maybe YOU Will Help!</h4>
+                <p>Scientists will keep learning about giant squids. And maybe someday, <strong>YOU</strong> will help discover the secrets of the giant squid!</p>
+                <p>Who knows? Maybe you'll be the one to finally see a giant squid swimming freely in its home, deep in the ocean! 🔬✨</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <h2 style="color: #00d4ff;">🎉 THE END 🎉</h2>
+                <button class="start-button" onclick="restartStory()" style="margin-top: 30px;">🔄 Read Again</button>
+            </div>
+
+            <div class="navigation">
+                <button class="nav-button" onclick="prevPage()">⬅️ Previous</button>
+                <button class="nav-button" disabled>Finished! 🎉</button>
+            </div>
+            <p class="page-number">Page 15 of 15</p>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 0;
+        const totalPages = 15;
+
+        function startStory() {
+            document.getElementById('titlePage').style.display = 'none';
+            currentPage = 1;
+            showPage(1);
+            updateProgressBar();
+        }
+
+        function showPage(pageNum) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show current page
+            const currentPageElement = document.getElementById(`page${pageNum}`);
+            if (currentPageElement) {
+                currentPageElement.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showPage(currentPage);
+                updateProgressBar();
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+                updateProgressBar();
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function checkAnswer(button, isCorrect) {
+            const buttons = button.parentElement.querySelectorAll('.answer-button');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            if (isCorrect) {
+                button.classList.add('correct');
+                button.textContent = button.textContent + ' ✓ Correct!';
+            } else {
+                button.classList.add('incorrect');
+                button.textContent = button.textContent + ' ✗ Try again!';
+            }
+        }
+
+        function restartStory() {
+            currentPage = 0;
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById('titlePage').style.display = 'flex';
+            updateProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (currentPage > 0) {
+                if (event.key === 'ArrowRight' || event.key === ' ') {
+                    nextPage();
+                } else if (event.key === 'ArrowLeft') {
+                    prevPage();
+                }
+            }
+        });
+
+        // Create more bubbles dynamically
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            bubble.style.left = Math.random() * 100 + '%';
+            bubble.style.animationDuration = (6 + Math.random() * 4) + 's';
+            bubble.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(bubble);
+            
+            setTimeout(() => bubble.remove(), 12000);
+        }
+
+        // Add bubbles periodically
+        setInterval(createBubble, 2000);
+    </script>
+</body>
+</html>

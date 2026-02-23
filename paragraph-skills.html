@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paragraph Power! — Marcello's Writing Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --orange-light: #FFF3E0;
+    --red: #E53935;
+    --red-light: #FFEBEE;
+    --purple: #9C27B0;
+    --purple-light: #F3E5F5;
+    --bg: #F4F6FB;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    background: linear-gradient(135deg, #1a237e 0%, var(--blue) 100%);
+    color: white;
+    text-align: center;
+    padding: 28px 20px 52px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 40px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+  header p { font-size: 1rem; opacity: 0.9; }
+
+  /* ---- SCORE BAR ---- */
+  .score-bar {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px 20px 4px;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .score-pill {
+    background: white;
+    border-radius: 24px;
+    padding: 8px 20px;
+    box-shadow: var(--shadow);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text);
+  }
+  .score-pill .num {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--blue);
+  }
+
+  /* ---- TABS ---- */
+  .tab-bar {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px 0;
+    max-width: 700px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+  .tab {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid #D0D5DD;
+    background: white;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .tab:hover { border-color: var(--blue); color: var(--blue); }
+  .tab.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+    box-shadow: 0 3px 12px rgba(68,114,196,0.35);
+    transform: translateY(-2px);
+  }
+  .tab.done { border-color: var(--green); color: var(--green); }
+  .tab.active.done { background: var(--green); border-color: var(--green); color: white; box-shadow: 0 3px 12px rgba(76,175,80,0.35); }
+
+  /* ---- CONTAINER ---- */
+  .container {
+    max-width: 700px;
+    margin: 16px auto;
+    padding: 0 16px;
+  }
+
+  /* ---- ACTIVITY PANELS ---- */
+  .activity-panel { display: none; }
+  .activity-panel.active { display: block; }
+
+  /* ---- CARD ---- */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- ACTIVITY LABEL ---- */
+  .act-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .act-odd   { background: var(--purple-light); color: var(--purple); }
+  .act-which { background: var(--gold-light); color: #B8860B; }
+  .act-build { background: var(--green-light); color: #2E7D32; }
+
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 5px; }
+  .card .directions {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.55;
+  }
+
+  /* ---- Q DOTS ---- */
+  .q-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; }
+  .q-dot.done    { background: var(--green); }
+  .q-dot.current { background: var(--blue); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  /* ---- CONTEXT / TOPIC BOXES ---- */
+  .context-box {
+    background: var(--blue-light);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    color: #1a237e;
+    font-weight: 600;
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .topic-sentence {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 14px;
+    color: #4A3800;
+    line-height: 1.45;
+  }
+  .topic-sentence .ts-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #B8860B;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .opinion-box {
+    background: var(--purple-light);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #6A1B9A;
+    line-height: 1.4;
+  }
+  .opinion-box .oq-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9C27B0;
+    font-weight: 800;
+    margin-bottom: 3px;
+  }
+
+  /* ---- ACTIVITY 1: SENTENCE CARDS ---- */
+  .sentence-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .sentence-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 14px;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    user-select: none;
+  }
+  .sentence-card:hover:not(.answered) {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    transform: translateX(3px);
+  }
+  .sentence-card.answered { cursor: default; }
+  .sentence-card.s-correct    { border-color: var(--green); background: var(--green-light); }
+  .sentence-card.s-wrong      { border-color: var(--red);   background: var(--red-light); }
+  .sentence-card.s-neutral    { border-color: #B0BEC5; background: #F5F5F5; opacity: 0.82; }
+  .sentence-card.s-missed     { border-color: var(--orange); background: var(--orange-light); }
+
+  .s-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #E0E0E0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .sentence-card.s-correct .s-num { background: var(--green); color: white; }
+  .sentence-card.s-wrong .s-num   { background: var(--red);   color: white; }
+  .sentence-card.s-neutral .s-num { background: #90A4AE;      color: white; }
+  .sentence-card.s-missed .s-num  { background: var(--orange); color: white; }
+
+  .s-body { flex: 1; }
+  .s-text { font-size: 0.95rem; line-height: 1.5; }
+  .s-note {
+    display: none;
+    margin-top: 6px;
+    font-size: 0.82rem;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .sentence-card.s-correct .s-note { display: block; color: #2E7D32; }
+  .sentence-card.s-wrong   .s-note { display: block; color: #C62828; }
+  .sentence-card.s-neutral .s-note { display: block; color: #546E7A; }
+  .sentence-card.s-missed  .s-note { display: block; color: #E65100; }
+
+  .s-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* ---- ACTIVITY 2: PARAGRAPH CHOICE ---- */
+  .para-choices { display: flex; flex-direction: column; gap: 14px; margin-bottom: 14px; }
+  .para-choice {
+    padding: 16px 18px;
+    border: 3px solid #E0E0E0;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: white;
+    user-select: none;
+  }
+  .para-choice:hover:not(.answered) {
+    border-color: var(--blue);
+    box-shadow: 0 3px 14px rgba(68,114,196,0.2);
+    transform: translateY(-2px);
+  }
+  .para-choice.answered { cursor: default; }
+  .para-choice.p-good-selected  { border-color: var(--green); background: var(--green-light); }
+  .para-choice.p-bad-selected   { border-color: var(--red);   background: var(--red-light); }
+  .para-choice.p-good-revealed  { border-color: var(--green); background: #FAFFF9; }
+
+  .para-choice-lbl {
+    font-weight: 800;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .para-choice-text { font-size: 0.95rem; line-height: 1.7; }
+  .para-choice-fb {
+    display: none;
+    margin-top: 10px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .para-choice-fb.fb-good { background: var(--green-light); color: #2E7D32; display: block; }
+  .para-choice-fb.fb-bad  { background: var(--red-light);   color: #C62828; display: block; }
+  .para-choice-fb.fb-reveal { background: var(--orange-light); color: #BF360C; display: block; }
+
+  /* ---- ACTIVITY 3: BUILD PARAGRAPH ---- */
+  .build-hint {
+    background: var(--gold-light);
+    border-radius: 10px;
+    padding: 9px 13px;
+    font-size: 0.85rem;
+    color: #5D4037;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.45;
+  }
+  .sentence-pool { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .pool-sentence {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 14px;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.22s;
+    background: white;
+    user-select: none;
+  }
+  .pool-sentence:hover:not(.answered) { border-color: var(--blue); background: var(--blue-light); }
+  .pool-sentence.ps-selected:not(.answered) {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    box-shadow: 0 2px 10px rgba(68,114,196,0.2);
+  }
+  .pool-sentence.answered { cursor: default; }
+  .pool-sentence.ps-correct-yes { border-color: var(--green); background: var(--green-light); }
+  .pool-sentence.ps-wrong-yes   { border-color: var(--red);   background: var(--red-light); }
+  .pool-sentence.ps-missed      { border-color: var(--orange); background: var(--orange-light); }
+  .pool-sentence.ps-correct-no  { border-color: #B0BEC5; background: #F5F5F5; opacity: 0.78; }
+
+  .pool-cb {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    border: 2px solid #D0D5DD;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    transition: all 0.2s;
+    margin-top: 1px;
+    background: white;
+  }
+  .pool-sentence.ps-selected:not(.answered) .pool-cb { background: var(--blue); border-color: var(--blue); color: white; }
+  .pool-sentence.ps-correct-yes .pool-cb { background: var(--green); border-color: var(--green); color: white; }
+  .pool-sentence.ps-wrong-yes   .pool-cb { background: var(--red);   border-color: var(--red);   color: white; }
+  .pool-sentence.ps-missed      .pool-cb { background: var(--orange); border-color: var(--orange); color: white; }
+  .pool-sentence.ps-correct-no  .pool-cb { background: #90A4AE; border-color: #90A4AE; color: white; }
+
+  .pool-body { flex: 1; }
+  .pool-text { font-size: 0.95rem; line-height: 1.5; }
+  .pool-note {
+    display: none;
+    margin-top: 6px;
+    font-size: 0.82rem;
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .pool-sentence.ps-wrong-yes  .pool-note { display: block; color: #C62828; }
+  .pool-sentence.ps-missed     .pool-note { display: block; color: #E65100; }
+  .pool-sentence.ps-correct-no .pool-note { display: block; color: #546E7A; }
+
+  /* ---- FEEDBACK BANNER ---- */
+  .feedback-banner {
+    display: none;
+    border-radius: 12px;
+    padding: 13px 16px;
+    margin-top: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    animation: fadeUp 0.3s ease;
+  }
+  .fb-correct { display: block; background: var(--green-light); border: 2px solid var(--green); color: #2E7D32; }
+  .fb-wrong   { display: block; background: var(--red-light);   border: 2px solid #EF9A9A;    color: #C62828; }
+  .feedback-banner .fb-detail {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    opacity: 0.9;
+  }
+
+  /* ---- BUTTONS ---- */
+  .btn {
+    padding: 11px 22px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+  .btn:active:not(:disabled) { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-primary   { background: var(--blue);   color: white; }
+  .btn-success   { background: var(--green);  color: white; }
+  .btn-secondary { background: #E0E0E0;       color: var(--text); }
+  .btn-purple    { background: var(--purple); color: white; }
+
+  .btn-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+    gap: 10px;
+  }
+
+  /* ---- ACTIVITY COMPLETE ---- */
+  .act-complete {
+    text-align: center;
+    padding: 28px 20px 20px;
+  }
+  .act-complete .big-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 8px;
+    animation: bounce 0.7s ease infinite alternate;
+  }
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-10px); }
+  }
+  .act-complete h2 { font-size: 1.7rem; color: var(--green); margin-bottom: 6px; }
+  .act-complete p  { color: var(--muted); font-size: 0.95rem; margin-bottom: 18px; }
+  .act-complete .big-score {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1;
+  }
+  .act-complete .score-lbl { font-size: 0.85rem; color: var(--muted); font-weight: 600; margin-bottom: 20px; }
+
+  /* ---- TOAST ---- */
+  .toast {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--green);
+    color: white;
+    padding: 11px 22px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 5px 20px rgba(76,175,80,0.45);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1000;
+    pointer-events: none;
+    text-align: center;
+    max-width: 300px;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.t-wrong { background: var(--orange); box-shadow: 0 5px 20px rgba(255,152,0,0.4); }
+
+  @media (max-width: 500px) {
+    header h1 { font-size: 1.5rem; }
+    .card { padding: 18px 14px; }
+    .btn { padding: 10px 16px; font-size: 0.88rem; }
+    .tab { padding: 8px 11px; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Paragraph Power! 💪</h1>
+  <p>Three activities to make your paragraphs stronger!</p>
+</header>
+
+<div class="score-bar">
+  <div class="score-pill">⭐ <span class="num" id="totalScore">0</span> points</div>
+  <div class="score-pill">✅ <span class="num" id="totalCorrect">0</span> correct</div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('odd')"   id="tab-odd">🔍 Find the Odd One</button>
+  <button class="tab"        onclick="switchTab('which')" id="tab-which">🤔 Which Fits Better?</button>
+  <button class="tab"        onclick="switchTab('build')" id="tab-build">🏗️ Build a Paragraph</button>
+</div>
+
+<div class="container">
+  <div class="activity-panel active" id="panel-odd">
+    <div class="card" id="card-odd"></div>
+  </div>
+  <div class="activity-panel" id="panel-which">
+    <div class="card" id="card-which"></div>
+  </div>
+  <div class="activity-panel" id="panel-build">
+    <div class="card" id="card-build"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+
+const DATA = {
+
+  // --- ACTIVITY 1: ODD ONE OUT ---
+  odd: [
+    {
+      context: '📝 Opinion essay: "The Apollo 11 Moon mission was the most important event in history."',
+      topicSentence: "First, the Apollo 11 astronauts showed incredible bravery.",
+      sentences: [
+        { text: "They trained for years to prepare for the dangerous mission.",
+          fits: true, note: "Yes! This supports the topic — training shows how seriously they took the brave mission." },
+        { text: "The equipment on their rocket was fragile and could easily break.",
+          fits: true, note: "Yes! This shows a real danger they faced — brave people act even when things are risky!" },
+        { text: "Neil Armstrong enjoyed eating vanilla ice cream for dessert.",
+          fits: false, note: "Ice cream preferences have nothing to do with bravery or the mission! This sentence is totally off-topic." },
+        { text: "Although the mission was scary, they went because they wanted to explore space.",
+          fits: true, note: "Yes! Using 'although' shows contrast — it was scary, but they did it anyway. That IS bravery!" },
+      ]
+    },
+    {
+      context: '📝 Opinion essay: "School is the most important place for kids."',
+      topicSentence: "Also, school helps you make friends and learn how to work with others.",
+      sentences: [
+        { text: "My favorite pizza topping is extra cheese and pepperoni.",
+          fits: false, note: "Pizza toppings have absolutely nothing to do with school, friends, or working together!" },
+        { text: "When you work with classmates on projects, you learn how to be a good teammate.",
+          fits: true, note: "Yes! This gives a specific example of how school teaches you to work with others." },
+        { text: "Because you see the same people every day, you can build real, strong friendships.",
+          fits: true, note: "Yes! This explains HOW school helps you make friends — you see the same people every day." },
+        { text: "Friends can help you when you feel sad, confused, or need support.",
+          fits: true, note: "Yes! This explains WHY making friends at school is so valuable." },
+      ]
+    },
+    {
+      context: '📝 Opinion essay: "Reading books is one of the best things you can do."',
+      topicSentence: "First, reading takes you to amazing places without ever leaving your room.",
+      sentences: [
+        { text: "When you open a book, you can visit jungles, castles, and even outer space.",
+          fits: true, note: "Yes! This gives great examples of the amazing places books take you." },
+        { text: "Books help you learn about history, science, and incredible adventures.",
+          fits: true, note: "Yes! More amazing places and topics books can take you to!" },
+        { text: "My dog Biscuit loves to chase squirrels at the park every afternoon.",
+          fits: false, note: "A dog chasing squirrels has nothing to do with reading or books. Completely off-topic!" },
+        { text: "Because stories use descriptive words, you can picture everything in your mind.",
+          fits: true, note: "Yes! This explains HOW reading takes you places — through vivid, descriptive language." },
+      ]
+    },
+    {
+      context: '📝 Opinion essay: "Wild animals should live in the wild, not in zoos."',
+      topicSentence: "Also, wild animals need enormous amounts of space to hunt and live naturally.",
+      sentences: [
+        { text: "In the wild, animals can run, swim, and fly as far as they want.",
+          fits: true, note: "Yes! This shows what wild animals actually need — unlimited freedom and space." },
+        { text: "When lions hunt, they need to chase prey across wide open grasslands.",
+          fits: true, note: "Yes! A specific example showing exactly how much space a wild animal truly needs." },
+        { text: "My absolute favorite color has always been bright, dark green.",
+          fits: false, note: "Someone's favorite color has absolutely nothing to do with wild animals or space!" },
+        { text: "Because zoo enclosures are small, they make wide-ranging animals very unhappy.",
+          fits: true, note: "Yes! This compares wild freedom to zoo life, which supports the whole opinion perfectly." },
+      ]
+    },
+    {
+      context: '📝 Opinion essay: "Students should have more recess time at school."',
+      topicSentence: "In conclusion, recess is not just fun — it actually helps students learn better.",
+      sentences: [
+        { text: "Although some people think recess is just playtime, it actually helps students focus in class.",
+          fits: true, note: "Yes! 'Although' shows contrast — this is a powerful way to write a conclusion sentence." },
+        { text: "When students exercise their bodies during recess, their brains get more energy.",
+          fits: true, note: "Yes! This explains the science of WHY recess helps with learning." },
+        { text: "The school cafeteria serves pizza every Tuesday and Friday for lunch.",
+          fits: false, note: "Cafeteria food has nothing to do with recess or how students learn. Totally off-topic!" },
+        { text: "I think every school should give students at least 30 minutes of recess each day.",
+          fits: true, note: "Yes! This restates the opinion with a specific idea — a perfect conclusion sentence." },
+      ]
+    },
+  ],
+
+  // --- ACTIVITY 2: WHICH FITS BETTER ---
+  which: [
+    {
+      opinion: '"Recess is important for students."',
+      directions: "Which paragraph works better as a body paragraph that SUPPORTS this opinion?",
+      paragraphs: [
+        {
+          label: "Paragraph A",
+          text: "One day at recess I played tag with my friends. We ran all around the playground and laughed a lot. Then the bell rang and we had to go back inside. It was a really, really fun day.",
+          isBetter: false,
+          goodFeedback: null,
+          badFeedback: "This paragraph tells a story about ONE day at recess, but it doesn't give any REASONS why recess is important. A body paragraph in an opinion essay needs to give reasons and evidence — not just tell a story!"
+        },
+        {
+          label: "Paragraph B",
+          text: "First, recess gives students a chance to exercise their bodies and their brains. When kids run and play, their brains actually get more energy. Because of this, students are able to focus better and learn more when they go back to class.",
+          isBetter: true,
+          goodFeedback: "This paragraph gives REASONS why recess is important! It uses connecting words (when, because) and explains exactly how exercise helps students learn. That's what a great opinion body paragraph looks like!",
+          badFeedback: null
+        },
+      ]
+    },
+    {
+      opinion: '"Astronauts are very brave people."',
+      directions: "Which paragraph works better as a body paragraph that SUPPORTS this opinion?",
+      paragraphs: [
+        {
+          label: "Paragraph A",
+          text: "First, astronauts spend years training for dangerous missions before they ever go to space. When they finally launch, they leave their families behind because they want to help everyone learn about the universe. Although the trip is scary and dangerous, they go anyway — and that is what makes them so brave.",
+          isBetter: true,
+          goodFeedback: "Strong body paragraph! It gives real reasons why astronauts are brave — the years of training, leaving family, and going despite danger. It uses connecting words (when, because, although) and every sentence supports the opinion!",
+          badFeedback: null
+        },
+        {
+          label: "Paragraph B",
+          text: "I watched a movie about space last weekend with my family. There were a lot of cool special effects. My favorite part was when the rocket launched. The popcorn at the movie theater was a little too salty.",
+          isBetter: false,
+          goodFeedback: null,
+          badFeedback: "This paragraph is about watching a movie — that has nothing to do with the opinion that astronauts are brave! A body paragraph must give reasons that DIRECTLY support the opinion, not switch to a different topic entirely."
+        },
+      ]
+    },
+    {
+      opinion: '"Having a pet makes your life better."',
+      directions: "Which paragraph works better as a body paragraph that SUPPORTS this opinion?",
+      paragraphs: [
+        {
+          label: "Paragraph A",
+          text: "I have a cat named Whiskers. She has orange fur and bright green eyes. She likes to sleep on my pillow every single night. One time she knocked a whole glass of water off the table and made a big mess.",
+          isBetter: false,
+          goodFeedback: null,
+          badFeedback: "This paragraph describes one specific cat, but it never explains WHY having a pet makes life better. Telling a cute story is not the same as giving reasons! An opinion paragraph needs to support the opinion with evidence."
+        },
+        {
+          label: "Paragraph B",
+          text: "First, pets are always happy to see you when you come home after a long day. When you are feeling sad, a pet will sit beside you because they care about you. Also, having a pet teaches you how to be responsible and kind to other living things.",
+          isBetter: true,
+          goodFeedback: "Great body paragraph! It gives three reasons why pets make life better — they're happy to see you, they comfort you, and they teach responsibility. The connecting words (when, because, also) make it flow smoothly from one reason to the next.",
+          badFeedback: null
+        },
+      ]
+    },
+    {
+      opinion: '"Libraries are important for communities."',
+      directions: "Which paragraph works better as a body paragraph that SUPPORTS this opinion?",
+      paragraphs: [
+        {
+          label: "Paragraph A",
+          text: "First, libraries give everyone access to books and information for free. When kids can borrow books, they can learn and grow even if their family cannot afford to buy books. Because libraries are free and open to everyone, they help make sure all people get a fair chance to learn.",
+          isBetter: true,
+          goodFeedback: "Excellent body paragraph! It gives a strong reason (free access to books), explains who benefits (kids whose families can't afford books), and connects to a bigger idea (fairness). The connecting words (when, because) build a powerful argument!",
+          badFeedback: null
+        },
+        {
+          label: "Paragraph B",
+          text: "I visited the library last Tuesday after school. I checked out three books and sat at a big table by the window. A man nearby was reading a newspaper. Then I had to leave because we needed to get home for dinner.",
+          isBetter: false,
+          goodFeedback: null,
+          badFeedback: "This paragraph describes one visit to one library — but it doesn't explain WHY libraries are important for communities. It's a narrative (story) paragraph. Opinion essays need body paragraphs with reasons and evidence, not just stories about what happened."
+        },
+      ]
+    },
+  ],
+
+  // --- ACTIVITY 3: BUILD A PARAGRAPH ---
+  build: [
+    {
+      topicSentence: "Dogs make great pets.",
+      directions: "Tap the sentences that BELONG in this paragraph. Leave out any that don't fit!",
+      sentences: [
+        { text: "When you have a dog, you always have a loyal friend who is happy to see you.",
+          keep: true, note: "" },
+        { text: "Because dogs love to walk and run, they help their owners stay active and healthy.",
+          keep: true, note: "" },
+        { text: "Dogs can even be trained to help people who need special care, like guide dogs for people who can't see.",
+          keep: true, note: "" },
+        { text: "Cats are also very good pets for many people who live in small apartments.",
+          keep: false, note: "This is about cats, not dogs. It changes the whole topic and doesn't support the opinion about dogs!" },
+        { text: "Some dogs have very short fur and some dogs have long, fluffy fur.",
+          keep: false, note: "This is just a fact about what dogs look like. It doesn't give a reason why dogs make great pets." },
+      ]
+    },
+    {
+      topicSentence: "The Moon landing was one of the most important events in history.",
+      directions: "Tap the sentences that BELONG in this paragraph. Leave out any that don't fit!",
+      sentences: [
+        { text: "When Neil Armstrong took his first step on the Moon, the whole world was watching.",
+          keep: true, note: "" },
+        { text: "Because no human had ever visited the Moon before, it was an incredible achievement.",
+          keep: true, note: "" },
+        { text: "The astronauts brought back Moon rocks so scientists could learn more about space.",
+          keep: true, note: "" },
+        { text: "Although the mission was very dangerous, the brave astronauts succeeded anyway.",
+          keep: true, note: "" },
+        { text: "The Moon rises in the east and sets in the west, just like the Sun does.",
+          keep: false, note: "This is just a basic fact about how the Moon moves. It doesn't help explain why the Moon landing was so historically important." },
+        { text: "Being in space for a long time can make astronauts feel dizzy and tired.",
+          keep: false, note: "Interesting space fact, but it doesn't explain why the Moon landing was one of the most important events in history." },
+      ]
+    },
+    {
+      topicSentence: "Exercise is very important for your health.",
+      directions: "Tap the sentences that BELONG in this paragraph. Leave out any that don't fit!",
+      sentences: [
+        { text: "When you exercise, your heart gets stronger and pumps blood more efficiently.",
+          keep: true, note: "" },
+        { text: "Because exercise gives you energy, you can focus much better in school.",
+          keep: true, note: "" },
+        { text: "Running and playing outside also helps you sleep better at night.",
+          keep: true, note: "" },
+        { text: "Even a short walk every day can help your body stay strong and healthy over time.",
+          keep: true, note: "" },
+        { text: "My favorite sport to play is basketball with my friends after school.",
+          keep: false, note: "This is a personal detail about a favorite sport. It doesn't explain WHY exercise is important for your health." },
+        { text: "Basketball was invented in Massachusetts by a gym teacher in the year 1891.",
+          keep: false, note: "Interesting history fact about basketball — but it doesn't support the opinion about exercise and health at all!" },
+      ]
+    },
+    {
+      topicSentence: "Reading books is one of the best things you can do for your brain.",
+      directions: "Tap the sentences that BELONG in this paragraph. Leave out any that don't fit!",
+      sentences: [
+        { text: "When you read, you learn new words and ideas that help you think and communicate better.",
+          keep: true, note: "" },
+        { text: "Because books describe amazing places and people, they stretch your imagination.",
+          keep: true, note: "" },
+        { text: "Reading also makes you a better writer because you see how great authors build their sentences.",
+          keep: true, note: "" },
+        { text: "My favorite book has a blue cover and more than two hundred pages in it.",
+          keep: false, note: "This describes one specific book, but it doesn't explain WHY reading is good for your brain." },
+        { text: "Some books are very short and can be finished in just one afternoon.",
+          keep: false, note: "This is a fact about book length. It doesn't help support the opinion that reading is great for your brain." },
+      ]
+    },
+  ],
+};
+
+// ============================================================
+//  STATE
+// ============================================================
+
+const state = {
+  odd:   { q: 0, answered: false, done: false },
+  which: { q: 0, answered: false, done: false },
+  build: { q: 0, answered: false, done: false, selected: new Set() },
+};
+
+let totalScore   = 0;
+let totalCorrect = 0;
+let currentTab   = 'odd';
+
+// ============================================================
+//  UTILS
+// ============================================================
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.activity-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('tab-'   + tab).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function addPoints(pts, correct) {
+  totalScore += pts;
+  if (correct) totalCorrect++;
+  document.getElementById('totalScore').textContent   = totalScore;
+  document.getElementById('totalCorrect').textContent = totalCorrect;
+}
+
+function toast(msg, isWrong) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast' + (isWrong ? ' t-wrong' : '') + ' show';
+  setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+function dots(activity) {
+  const data = DATA[activity];
+  const st   = state[activity];
+  let h = '<div class="q-dots">';
+  for (let i = 0; i < data.length; i++) {
+    let c = 'q-dot';
+    if (i < st.q) c += ' done';
+    else if (i === st.q) c += ' current';
+    h += `<div class="${c}"></div>`;
+  }
+  h += `</div><span class="q-label">Question ${st.q + 1} of ${data.length}</span>`;
+  return h;
+}
+
+// ============================================================
+//  ACTIVITY 1 — ODD ONE OUT
+// ============================================================
+
+function renderOdd() {
+  const st = state.odd;
+  const el = document.getElementById('card-odd');
+  if (st.done) { renderComplete('odd', el); return; }
+
+  const q = DATA.odd[st.q];
+  st.answered = false;
+
+  let cards = '';
+  q.sentences.forEach((s, i) => {
+    cards += `
+      <div class="sentence-card" id="os${i}" onclick="pickOdd(${i})">
+        <div class="s-num">${i + 1}</div>
+        <div class="s-body">
+          <div class="s-text">${s.text}</div>
+          <div class="s-note" id="on${i}"></div>
+        </div>
+        <div class="s-icon" id="oi${i}"></div>
+      </div>`;
+  });
+
+  el.innerHTML = `
+    <div class="act-label act-odd">🔍 Find the Odd One Out</div>
+    <h2>Which sentence doesn't belong?</h2>
+    <p class="directions">Read all the sentences. <strong>One doesn't fit</strong> with the topic sentence — it changes the subject completely. Tap the sentence that <strong>doesn't belong!</strong></p>
+    <div class="q-progress">${dots('odd')}</div>
+    <div class="context-box">${q.context}</div>
+    <div class="topic-sentence"><div class="ts-label">Topic Sentence</div>${q.topicSentence}</div>
+    <div class="sentence-cards">${cards}</div>
+    <div class="feedback-banner" id="of"></div>
+    <div class="btn-row" id="onr" style="display:none;"></div>`;
+}
+
+function pickOdd(idx) {
+  const st = state.odd;
+  if (st.answered) return;
+  st.answered = true;
+
+  const q = DATA.odd[st.q];
+  const correct = !q.sentences[idx].fits;
+
+  q.sentences.forEach((s, i) => {
+    const card = document.getElementById('os' + i);
+    const note = document.getElementById('on' + i);
+    const icon = document.getElementById('oi' + i);
+    card.classList.add('answered');
+    icon.style.display = 'block';
+
+    if (i === idx) {
+      if (correct) {
+        card.classList.add('s-correct');
+        icon.textContent = '✅';
+        note.textContent  = 'You found it! ' + s.note;
+      } else {
+        card.classList.add('s-wrong');
+        icon.textContent = '❌';
+        note.textContent  = "This sentence actually fits — it supports the topic sentence!";
+      }
+    } else if (!s.fits) {
+      // The real odd one out — wasn't selected
+      if (!correct) {
+        card.classList.add('s-missed');
+        icon.textContent = '👆';
+        note.textContent  = 'This was the one! ' + s.note;
+      }
+    } else {
+      card.classList.add('s-neutral');
+      icon.textContent = '✓';
+      if (correct && s.note) note.textContent = s.note;
+    }
+  });
+
+  const fb = document.getElementById('of');
+  if (correct) {
+    fb.className = 'feedback-banner fb-correct';
+    fb.innerHTML = '🎉 Excellent! You spotted the sentence that doesn\'t belong!<div class="fb-detail">A good paragraph stays on one topic — every sentence should support the topic sentence.</div>';
+    addPoints(10, true);
+    toast('Correct! +10 points! 🌟');
+  } else {
+    fb.className = 'feedback-banner fb-wrong';
+    fb.innerHTML = '🤔 Not quite — look for the sentence that talks about something totally different from the topic.<div class="fb-detail">The odd-one-out sentence will suddenly change the subject. Which one doesn\'t match the others?</div>';
+    addPoints(0, false);
+    toast('Look for the sentence that changes the subject!', true);
+  }
+
+  const isLast = st.q === DATA.odd.length - 1;
+  const nrow = document.getElementById('onr');
+  nrow.style.display = 'flex';
+  nrow.innerHTML = isLast
+    ? '<button class="btn btn-success" onclick="advanceOdd()">See My Score! ⭐</button>'
+    : '<button class="btn btn-primary" onclick="advanceOdd()">Next Question →</button>';
+}
+
+function advanceOdd() {
+  const st = state.odd;
+  st.q++;
+  if (st.q >= DATA.odd.length) { st.done = true; document.getElementById('tab-odd').classList.add('done'); }
+  renderOdd();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  ACTIVITY 2 — WHICH FITS BETTER
+// ============================================================
+
+function renderWhich() {
+  const st = state.which;
+  const el = document.getElementById('card-which');
+  if (st.done) { renderComplete('which', el); return; }
+
+  const q = DATA.which[st.q];
+  st.answered = false;
+
+  let paras = '';
+  q.paragraphs.forEach((p, i) => {
+    paras += `
+      <div class="para-choice" id="wp${i}" onclick="pickWhich(${i})">
+        <div class="para-choice-lbl">${p.label}</div>
+        <div class="para-choice-text">${p.text}</div>
+        <div class="para-choice-fb" id="wf${i}"></div>
+      </div>`;
+  });
+
+  el.innerHTML = `
+    <div class="act-label act-which">🤔 Which Fits Better?</div>
+    <h2>Pick the better paragraph!</h2>
+    <p class="directions">One paragraph works well in an <strong>opinion essay</strong>. The other has a problem. Tap the paragraph that does a better job of supporting the opinion!</p>
+    <div class="q-progress">${dots('which')}</div>
+    <div class="opinion-box"><div class="oq-label">The Essay Opinion</div>${q.opinion}</div>
+    <p class="directions" style="margin-bottom:10px;">${q.directions}</p>
+    <div class="para-choices">${paras}</div>
+    <div class="feedback-banner" id="wfb"></div>
+    <div class="btn-row" id="wnr" style="display:none;"></div>`;
+}
+
+function pickWhich(idx) {
+  const st = state.which;
+  if (st.answered) return;
+  st.answered = true;
+
+  const q = DATA.which[st.q];
+  const correct = q.paragraphs[idx].isBetter;
+
+  q.paragraphs.forEach((p, i) => {
+    const card = document.getElementById('wp' + i);
+    const fb   = document.getElementById('wf' + i);
+    card.classList.add('answered');
+
+    if (i === idx) {
+      if (correct) {
+        card.classList.add('p-good-selected');
+        fb.textContent = '✅ ' + p.goodFeedback;
+        fb.className   = 'para-choice-fb fb-good';
+      } else {
+        card.classList.add('p-bad-selected');
+        fb.textContent = '❌ ' + p.badFeedback;
+        fb.className   = 'para-choice-fb fb-bad';
+      }
+    } else {
+      if (p.isBetter) {
+        card.classList.add('p-good-revealed');
+        const prefix = correct ? '' : '👆 This was the better one! ';
+        fb.textContent = prefix + p.goodFeedback;
+        fb.className   = 'para-choice-fb ' + (correct ? 'fb-good' : 'fb-reveal');
+      } else {
+        fb.textContent = p.badFeedback;
+        fb.className   = 'para-choice-fb fb-bad';
+        fb.style.display = 'none'; // hide the "bad" note on the unselected bad one to reduce clutter
+      }
+    }
+  });
+
+  const main = document.getElementById('wfb');
+  if (correct) {
+    main.className = 'feedback-banner fb-correct';
+    main.innerHTML = '🎉 You picked the right paragraph!<div class="fb-detail">A strong opinion body paragraph gives reasons, uses connecting words (because, when, although), and stays focused on the opinion.</div>';
+    addPoints(10, true);
+    toast('Great choice! +10 points! 🌟');
+  } else {
+    main.className = 'feedback-banner fb-wrong';
+    main.innerHTML = '🤔 The other paragraph is the better one.<div class="fb-detail">Look for a paragraph that gives REASONS, uses connecting words, and stays on topic. Stories and unrelated details don\'t belong in an opinion body paragraph!</div>';
+    addPoints(0, false);
+    toast('Check the other paragraph — does it give reasons?', true);
+  }
+
+  const isLast = st.q === DATA.which.length - 1;
+  const nrow = document.getElementById('wnr');
+  nrow.style.display = 'flex';
+  nrow.innerHTML = isLast
+    ? '<button class="btn btn-success" onclick="advanceWhich()">See My Score! ⭐</button>'
+    : '<button class="btn btn-primary" onclick="advanceWhich()">Next Question →</button>';
+}
+
+function advanceWhich() {
+  const st = state.which;
+  st.q++;
+  if (st.q >= DATA.which.length) { st.done = true; document.getElementById('tab-which').classList.add('done'); }
+  renderWhich();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  ACTIVITY 3 — BUILD A PARAGRAPH
+// ============================================================
+
+function renderBuild() {
+  const st = state.build;
+  const el = document.getElementById('card-build');
+  if (st.done) { renderComplete('build', el); return; }
+
+  const q = DATA.build[st.q];
+  st.answered = false;
+  st.selected = new Set();
+
+  let pool = '';
+  q.sentences.forEach((s, i) => {
+    pool += `
+      <div class="pool-sentence" id="bs${i}" onclick="toggleBuild(${i})">
+        <div class="pool-cb" id="bc${i}">☐</div>
+        <div class="pool-body">
+          <div class="pool-text">${s.text}</div>
+          <div class="pool-note" id="bn${i}"></div>
+        </div>
+      </div>`;
+  });
+
+  el.innerHTML = `
+    <div class="act-label act-build">🏗️ Build a Paragraph</div>
+    <h2>Build the perfect paragraph!</h2>
+    <p class="directions">Read the topic sentence. Then <strong>tap the sentences that fit</strong> in this paragraph — they should support (give reasons for) the topic sentence. Leave out any that don't belong!</p>
+    <div class="q-progress">${dots('build')}</div>
+    <div class="topic-sentence"><div class="ts-label">Topic Sentence</div>${q.topicSentence}</div>
+    <div class="build-hint">💡 <span>Tap a sentence to select it (it turns blue). Tap again to unselect it. When you're ready, click <strong>Check My Paragraph!</strong></span></div>
+    <div class="sentence-pool">${pool}</div>
+    <div class="feedback-banner" id="bf"></div>
+    <div class="btn-row">
+      <button class="btn btn-purple" id="bcheck" onclick="checkBuild()">Check My Paragraph! ✓</button>
+    </div>
+    <div class="btn-row" id="bnr" style="display:none;"></div>`;
+}
+
+function toggleBuild(idx) {
+  const st = state.build;
+  if (st.answered) return;
+  const card = document.getElementById('bs' + idx);
+  const cb   = document.getElementById('bc' + idx);
+  if (st.selected.has(idx)) {
+    st.selected.delete(idx);
+    card.classList.remove('ps-selected');
+    cb.textContent = '☐';
+  } else {
+    st.selected.add(idx);
+    card.classList.add('ps-selected');
+    cb.textContent = '☑';
+  }
+}
+
+function checkBuild() {
+  const st = state.build;
+  if (st.answered) return;
+  st.answered = true;
+
+  const q = DATA.build[st.q];
+  document.getElementById('bcheck').style.display = 'none';
+
+  let correctDecisions = 0;
+  const total = q.sentences.length;
+
+  q.sentences.forEach((s, i) => {
+    const card = document.getElementById('bs' + i);
+    const cb   = document.getElementById('bc' + i);
+    const note = document.getElementById('bn' + i);
+    const sel  = st.selected.has(i);
+
+    card.classList.remove('ps-selected');
+    card.classList.add('answered');
+
+    if (s.keep && sel) {
+      card.classList.add('ps-correct-yes');
+      cb.textContent = '✅';
+      correctDecisions++;
+    } else if (s.keep && !sel) {
+      card.classList.add('ps-missed');
+      cb.textContent = '👆';
+      note.textContent = "You missed this one! It supports the topic sentence and belongs in the paragraph.";
+    } else if (!s.keep && sel) {
+      card.classList.add('ps-wrong-yes');
+      cb.textContent = '❌';
+      note.textContent = s.note;
+    } else {
+      // !s.keep && !sel — correctly left out
+      card.classList.add('ps-correct-no');
+      cb.textContent = '⛔';
+      note.textContent = s.note;
+      correctDecisions++;
+    }
+  });
+
+  const pct = Math.round(correctDecisions / total * 100);
+  const fb  = document.getElementById('bf');
+
+  if (pct === 100) {
+    fb.className = 'feedback-banner fb-correct';
+    fb.innerHTML = '🎉 Perfect! You chose exactly the right sentences!<div class="fb-detail">Every sentence you picked supports the topic sentence. That\'s what makes a paragraph strong and focused!</div>';
+    addPoints(15, true);
+    toast('PERFECT! +15 points! 🌟🌟');
+  } else if (pct >= 70) {
+    fb.className = 'feedback-banner fb-correct';
+    fb.innerHTML = '⭐ Great job! You got most of them right!<div class="fb-detail">The orange sentences are ones you missed, and the red ones didn\'t quite belong. Read the hints on each one!</div>';
+    addPoints(8, true);
+    toast('Nice work! +8 points! ✨');
+  } else {
+    fb.className = 'feedback-banner fb-wrong';
+    fb.innerHTML = '🤔 Good effort — check the hints on each sentence to see what to change.<div class="fb-detail">Every sentence in a paragraph should give a reason or detail that supports the topic sentence.</div>';
+    addPoints(3, false);
+    toast('Read the hints on each sentence for clues!', true);
+  }
+
+  const isLast = st.q === DATA.build.length - 1;
+  const nrow = document.getElementById('bnr');
+  nrow.style.display = 'flex';
+  nrow.innerHTML = isLast
+    ? '<button class="btn btn-success" onclick="advanceBuild()">See My Score! ⭐</button>'
+    : '<button class="btn btn-primary" onclick="advanceBuild()">Next Question →</button>';
+}
+
+function advanceBuild() {
+  const st = state.build;
+  st.q++;
+  if (st.q >= DATA.build.length) { st.done = true; document.getElementById('tab-build').classList.add('done'); }
+  renderBuild();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  ACTIVITY COMPLETE SCREEN
+// ============================================================
+
+function renderComplete(activity, el) {
+  const next = { odd: 'which', which: 'build', build: null }[activity];
+  const nextLabel = { odd: 'Which Fits Better? 🤔', which: 'Build a Paragraph 🏗️', build: null }[activity];
+  const allDone = state.odd.done && state.which.done && state.build.done;
+
+  const nextBtn = next
+    ? `<button class="btn btn-primary" onclick="switchTab('${next}')" style="margin-top:8px;">Try: ${nextLabel} →</button>`
+    : '';
+  const allDoneMsg = allDone
+    ? `<p style="font-weight:800;color:var(--green);font-size:1.1rem;margin-top:14px;">🎊 You finished ALL THREE activities! Amazing work, Marcello!</p>`
+    : '';
+
+  el.innerHTML = `
+    <div class="act-complete">
+      <span class="big-icon">🏆</span>
+      <h2>Activity Complete!</h2>
+      <p>You finished this activity. Here's your total score so far:</p>
+      <div class="big-score">${totalScore}</div>
+      <div class="score-lbl">total points</div>
+      ${allDoneMsg}
+      ${nextBtn}
+      <br>
+      <button class="btn btn-secondary" onclick="restartActivity('${activity}')" style="margin-top:12px;">Try This One Again</button>
+    </div>`;
+}
+
+function restartActivity(activity) {
+  state[activity] = { q: 0, answered: false, done: false, selected: new Set() };
+  document.getElementById('tab-' + activity).classList.remove('done');
+  if (activity === 'odd')   renderOdd();
+  if (activity === 'which') renderWhich();
+  if (activity === 'build') renderBuild();
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+
+renderOdd();
+renderWhich();
+renderBuild();
+</script>
+</body>
+</html>

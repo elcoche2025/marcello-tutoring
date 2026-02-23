@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Opinion Essay Builder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --red: #E53935;
+    --bg: #F4F6FB;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --help-bg: #FFF3E0;
+    --help-border: #FFB74D;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    background: linear-gradient(135deg, #1a237e 0%, var(--blue) 100%);
+    color: white;
+    text-align: center;
+    padding: 28px 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: 0; right: 0;
+    height: 60px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+  header p { font-size: 1rem; opacity: 0.9; }
+
+  /* ---- PROGRESS BAR ---- */
+  .progress-wrap {
+    max-width: 700px;
+    margin: 24px auto 0;
+    padding: 0 20px;
+  }
+  .progress-bar-bg {
+    height: 14px;
+    background: #E0E0E0;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--green));
+    border-radius: 7px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-label {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* ---- STEPS NAV ---- */
+  .steps-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px auto 0;
+    max-width: 700px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+  }
+  .step-dot {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    border: 3px solid #CBD5E0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+    color: #CBD5E0;
+  }
+  .step-dot.active {
+    border-color: var(--blue);
+    background: var(--blue);
+    color: white;
+    transform: scale(1.15);
+    box-shadow: 0 2px 12px rgba(68,114,196,0.4);
+  }
+  .step-dot.complete {
+    border-color: var(--green);
+    background: var(--green);
+    color: white;
+  }
+
+  /* ---- MAIN CONTAINER ---- */
+  .container {
+    max-width: 700px;
+    margin: 24px auto;
+    padding: 0 20px;
+  }
+
+  /* ---- CARD ---- */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    display: none;
+    animation: fadeUp 0.4s ease;
+  }
+  .card.visible { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-label {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .label-intro { background: var(--gold-light); color: #B8860B; }
+  .label-body { background: var(--blue-light); color: var(--blue); }
+  .label-conclusion { background: var(--gold-light); color: #B8860B; }
+  .label-connect { background: var(--blue-light); color: var(--blue); }
+  .label-review { background: var(--green-light); color: #2E7D32; }
+
+  .card h2 {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .card .subtitle {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  /* ---- SENTENCE BUILDER ROWS ---- */
+  .sentence-row {
+    margin-bottom: 22px;
+  }
+  .sentence-row label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+  .sentence-row .starter {
+    display: inline-block;
+    background: var(--gold-light);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 6px;
+    color: #5D4037;
+  }
+  .sentence-row .starter.connector {
+    background: var(--blue-light);
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+  .sentence-row textarea {
+    width: 100%;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 60px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    color: var(--text);
+  }
+  .sentence-row textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(68,114,196,0.2);
+  }
+  .sentence-row textarea.filled {
+    border-color: var(--green);
+    background: #FAFFF9;
+  }
+  .sentence-row .hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  /* ---- HELP SYSTEM ---- */
+  .help-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 8px 16px;
+    border: 2px solid var(--help-border);
+    border-radius: 24px;
+    background: var(--help-bg);
+    color: #E65100;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .help-btn:hover {
+    background: #FFE0B2;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255,152,0,0.25);
+  }
+  .help-btn:active { transform: scale(0.97); }
+  .help-btn .help-icon {
+    font-size: 1.1rem;
+  }
+
+  .help-panel {
+    display: none;
+    margin-top: 10px;
+    border: 2px solid var(--help-border);
+    border-radius: 14px;
+    overflow: hidden;
+    animation: fadeUp 0.3s ease;
+  }
+  .help-panel.open { display: block; }
+
+  .help-think {
+    background: var(--help-bg);
+    padding: 14px 16px;
+    border-bottom: 2px solid var(--help-border);
+  }
+  .help-think .think-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #E65100;
+    margin-bottom: 6px;
+  }
+  .help-think p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #4E342E;
+  }
+  .help-think .think-questions {
+    list-style: none;
+    padding: 0;
+    margin-top: 8px;
+  }
+  .help-think .think-questions li {
+    padding: 4px 0 4px 20px;
+    position: relative;
+    font-size: 0.9rem;
+    color: #5D4037;
+  }
+  .help-think .think-questions li::before {
+    content: '?';
+    position: absolute;
+    left: 0;
+    font-weight: 800;
+    color: var(--orange);
+  }
+
+  .help-examples-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #FFF8E1;
+    color: #E65100;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-bottom: 2px solid var(--help-border);
+    transition: background 0.2s;
+  }
+  .help-examples-btn:hover { background: #FFE0B2; }
+  .help-examples-btn.hidden { display: none; }
+
+  .help-examples {
+    display: none;
+    padding: 0;
+  }
+  .help-examples.open { display: block; }
+
+  .example-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #FFE0B2;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .example-option:last-child { border-bottom: none; }
+  .example-option:hover { background: #FFF8E1; }
+
+  .example-number {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-top: 2px;
+  }
+
+  .example-content {
+    flex: 1;
+  }
+  .example-content .example-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .example-content .example-text .ex-starter {
+    font-weight: 800;
+    color: var(--blue);
+  }
+  .example-content .example-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .use-btn {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border: 2px solid var(--green);
+    border-radius: 20px;
+    background: var(--green-light);
+    color: #2E7D32;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    align-self: center;
+    white-space: nowrap;
+  }
+  .use-btn:hover {
+    background: var(--green);
+    color: white;
+    transform: scale(1.05);
+  }
+
+  .help-close {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border: none;
+    background: #EFEBE9;
+    color: var(--muted);
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .help-close:hover { background: #D7CCC8; }
+
+  /* ---- CONNECTING WORDS TRAY ---- */
+  .word-tray {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+    justify-content: center;
+  }
+  .word-chip {
+    padding: 8px 18px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    border: 2px solid;
+  }
+  .word-chip.connector {
+    background: var(--blue-light);
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+  .word-chip.vocab {
+    background: #F3E5F5;
+    border-color: #9C27B0;
+    color: #7B1FA2;
+  }
+  .word-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .word-chip:active { transform: scale(0.95); }
+  .word-chip.used {
+    opacity: 0.45;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .tray-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* ---- BUTTONS ---- */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    gap: 12px;
+  }
+  .btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ---- ENCOURAGEMENT TOAST ---- */
+  .toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-80px);
+    background: var(--green);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 24px rgba(76,175,80,0.4);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1000;
+    text-align: center;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ---- REVIEW / FINAL ESSAY ---- */
+  .essay-preview {
+    background: #FFFDE7;
+    border: 2px dashed var(--gold);
+    border-radius: var(--radius);
+    padding: 24px;
+    line-height: 2;
+    font-size: 1.1rem;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+  .essay-preview .cw {
+    font-weight: 800;
+    color: var(--blue);
+  }
+  .essay-preview .vw {
+    font-weight: 800;
+    color: #7B1FA2;
+  }
+
+  /* ---- CELEBRATION ---- */
+  .celebration {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .celebration .big-star {
+    font-size: 5rem;
+    animation: pulse 1s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  .celebration h2 {
+    font-size: 1.8rem;
+    color: var(--green);
+    margin: 12px 0 6px;
+  }
+  .celebration p {
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    background: white;
+    border-radius: 12px;
+    padding: 14px 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-width: 100px;
+  }
+  .stat-box .num {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--blue);
+  }
+  .stat-box .lbl {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* ---- PRINT ---- */
+  @media print {
+    body { background: white; padding: 0; }
+    header, .steps-nav, .progress-wrap, .btn-row, .word-tray,
+    .toast, .tray-label, .step-dot, .no-print, .help-btn,
+    .help-panel { display: none !important; }
+    .container { max-width: 100%; padding: 0 20px; }
+    .card { box-shadow: none; border: 1px solid #ccc; display: block !important; page-break-inside: avoid; }
+    .card:not(.print-show) { display: none !important; }
+    .card.print-show { display: block !important; }
+    .essay-preview { border: 2px solid #333; }
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 500px) {
+    header h1 { font-size: 1.5rem; }
+    .card { padding: 20px 16px; }
+    .btn { padding: 10px 18px; font-size: 0.9rem; }
+    .step-dot { width: 36px; height: 36px; font-size: 0.85rem; }
+    .example-option { flex-wrap: wrap; }
+    .use-btn { margin-top: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Essay Builder</h1>
+  <p>Build your opinion essay step by step!</p>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-label" id="progressLabel">Step 1 of 6</div>
+</div>
+
+<div class="steps-nav" id="stepsNav"></div>
+
+<div class="container" id="mainContainer">
+
+  <!-- ==================== STEP 1: INTRO / PROMPT ==================== -->
+  <div class="card visible" data-step="1">
+    <span class="card-label label-connect">Let's Get Started</span>
+    <h2>Your Essay Question</h2>
+    <p class="subtitle">
+      <strong>Do you think the Apollo 11 Moon mission was one of the most important events in history? Why or why not?</strong>
+    </p>
+    <p class="subtitle">
+      Today you'll build your opinion essay right here! You'll plan each part, and when you're done, you can see your whole essay put together. Then you'll write it on paper.
+    </p>
+
+    <div style="background:var(--blue-light);border-radius:12px;padding:16px;margin-top:10px;">
+      <p style="font-weight:700;font-size:0.95rem;color:var(--blue);margin-bottom:8px;">Your Connecting Words (Subordinating Conjunctions)</p>
+      <p style="font-size:0.95rem;">These special words join two ideas into one super sentence:</p>
+      <div class="word-tray" style="margin-top:10px;margin-bottom:0;">
+        <span class="word-chip connector" style="cursor:default;">because</span>
+        <span class="word-chip connector" style="cursor:default;">when</span>
+        <span class="word-chip connector" style="cursor:default;">after</span>
+        <span class="word-chip connector" style="cursor:default;">before</span>
+        <span class="word-chip connector" style="cursor:default;">although</span>
+      </div>
+    </div>
+
+    <div style="background:var(--gold-light);border-radius:12px;padding:16px;margin-top:12px;">
+      <p style="font-weight:700;font-size:0.95rem;color:#B8860B;margin-bottom:4px;">How to Use This Builder</p>
+      <p style="font-size:0.9rem;color:#5D4037;line-height:1.5;">
+        Each step has a writing box. Type your ideas, or tap the <strong style="color:#E65100;">I Need Help</strong> button if you get stuck. The helper will give you questions to think about and show you example sentences you can use!
+      </p>
+    </div>
+
+    <div class="btn-row">
+      <div></div>
+      <button class="btn btn-primary" onclick="goToStep(2)">Let's Go! &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 2: INTRODUCTION ==================== -->
+  <div class="card" data-step="2">
+    <span class="card-label label-intro">Introduction</span>
+    <h2>Tell the reader your opinion!</h2>
+    <p class="subtitle">The introduction is the first paragraph. Tell the reader what you think about the Apollo 11 mission.</p>
+
+    <p class="tray-label">Tap a word to insert it into any box</p>
+    <div class="word-tray" id="tray2">
+      <span class="word-chip connector" data-word="After" onclick="insertWord(this)">After</span>
+      <span class="word-chip connector" data-word="because" onclick="insertWord(this)">because</span>
+      <span class="word-chip vocab" data-word="permanent" onclick="insertWord(this)">permanent</span>
+      <span class="word-chip vocab" data-word="fragile" onclick="insertWord(this)">fragile</span>
+    </div>
+
+    <!-- SENTENCE 1 -->
+    <div class="sentence-row" id="row-intro1">
+      <label>Sentence 1: State what you read about</label>
+      <div class="starter connector">After</div>
+      <span class="hint">reading about Apollo 11, I think...</span>
+      <textarea id="intro1" placeholder="reading about Apollo 11, I think the Moon mission was..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('intro1')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-intro1">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>This sentence starts your whole essay! You need to tell the reader what you learned about and what you think about it.</p>
+          <ul class="think-questions">
+            <li>What was Apollo 11? (A mission to the Moon!)</li>
+            <li>What is your opinion about it? Was it important? Amazing? Exciting?</li>
+            <li>Remember: start with what you read, then share what you think!</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('intro1')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-intro1">
+          <div class="example-option" onclick="useExample('intro1', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">After</span> reading about Apollo 11, I think the Moon mission was very important.</div>
+              <div class="example-note">Simple and clear - a great start!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('intro1', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('intro1', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">After</span> reading about Apollo 11, I think it was one of the most amazing things that ever happened.</div>
+              <div class="example-note">Shows a strong opinion!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('intro1', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('intro1', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">After</span> learning about the Apollo 11 Moon mission, I think it was one of the most important events in history.</div>
+              <div class="example-note">Directly answers the essay question!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('intro1', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('intro1')">Close help</button>
+      </div>
+    </div>
+
+    <!-- SENTENCE 2 -->
+    <div class="sentence-row" id="row-intro2">
+      <label>Sentence 2: Give your opinion</label>
+      <div class="starter connector">I believe this because</div>
+      <span class="hint">Tell the reader WHY you think this</span>
+      <textarea id="intro2" placeholder="nobody had ever walked on the Moon before..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('intro2')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-intro2">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>Now you need to explain WHY you have that opinion. Give a quick reason - you'll explain more in the body!</p>
+          <ul class="think-questions">
+            <li>Why was the Moon mission so important or amazing?</li>
+            <li>Had anyone ever done this before?</li>
+            <li>What makes it special compared to other things that happened?</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('intro2')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-intro2">
+          <div class="example-option" onclick="useExample('intro2', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">I believe this because</span> no one had ever walked on the Moon before.</div>
+              <div class="example-note">Simple and true - it was the first time ever!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('intro2', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('intro2', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">I believe this because</span> the astronauts did something really brave and amazing that changed the world.</div>
+              <div class="example-note">Shows how big of a deal it was!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('intro2', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('intro2', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">I believe this because</span> it showed that people can do incredible things when they work together.</div>
+              <div class="example-note">Connects to a bigger idea - teamwork!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('intro2', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('intro2')">Close help</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToStep(3)">Next: Body &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 3: BODY - REASON 1 ==================== -->
+  <div class="card" data-step="3">
+    <span class="card-label label-body">Body - Reason 1</span>
+    <h2>Give your first reason!</h2>
+    <p class="subtitle">The body paragraph gives reasons that support your opinion. Start with your strongest reason!</p>
+
+    <p class="tray-label">Tap a word to insert it</p>
+    <div class="word-tray" id="tray3">
+      <span class="word-chip connector" data-word="because" onclick="insertWord(this)">because</span>
+      <span class="word-chip connector" data-word="when" onclick="insertWord(this)">when</span>
+      <span class="word-chip vocab" data-word="bravely" onclick="insertWord(this)">bravely</span>
+      <span class="word-chip vocab" data-word="fragile" onclick="insertWord(this)">fragile</span>
+    </div>
+
+    <div class="sentence-row" id="row-body1">
+      <label>Reason 1</label>
+      <div class="starter">First,</div>
+      <span class="hint">What is your first reason? Think about what the astronauts did.</span>
+      <textarea id="body1" placeholder="the astronauts bravely traveled to the Moon even though it was dangerous..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('body1')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-body1">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>This is your FIRST reason why you think Apollo 11 was important. Think about the astronauts and what they did!</p>
+          <ul class="think-questions">
+            <li>What did the astronauts have to do? (Fly through space for 3 days!)</li>
+            <li>Was it dangerous? Why? (Their equipment was fragile!)</li>
+            <li>How would you describe the astronauts? (Brave? Courageous? Amazing?)</li>
+            <li>Try using the word "bravely" - it tells HOW they did something!</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('body1')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-body1">
+          <div class="example-option" onclick="useExample('body1', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">First,</span> the astronauts bravely traveled all the way to the Moon, even though the trip was very dangerous.</div>
+              <div class="example-note">Uses the adverb "bravely" - nice!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body1', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('body1', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">First,</span> three brave astronauts flew through space for three days to reach the Moon because they wanted to explore it.</div>
+              <div class="example-note">Uses the connecting word "because"!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body1', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('body1', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">First,</span> the astronauts were very brave because their equipment was fragile and the mission was dangerous.</div>
+              <div class="example-note">Uses "because" AND the vocabulary word "fragile"!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body1', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('body1')">Close help</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(2)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToStep(4)">Next: Reason 2 &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 4: BODY - REASON 2 + DETAIL ==================== -->
+  <div class="card" data-step="4">
+    <span class="card-label label-body">Body - Reason 2 &amp; Detail</span>
+    <h2>Give another reason!</h2>
+    <p class="subtitle">Use a connecting word to make this sentence extra strong!</p>
+
+    <p class="tray-label">Tap a word to insert it</p>
+    <div class="word-tray" id="tray4">
+      <span class="word-chip connector" data-word="When" onclick="insertWord(this)">When</span>
+      <span class="word-chip connector" data-word="After" onclick="insertWord(this)">After</span>
+      <span class="word-chip vocab" data-word="permanent" onclick="insertWord(this)">permanent</span>
+      <span class="word-chip vocab" data-word="carefully" onclick="insertWord(this)">carefully</span>
+    </div>
+
+    <!-- REASON 2 -->
+    <div class="sentence-row" id="row-body2">
+      <label>Reason 2 (Use a connecting word!)</label>
+      <div class="starter connector">When</div>
+      <span class="hint">Think about what happened and what it meant for people.</span>
+      <textarea id="body2" placeholder="Neil Armstrong stepped on the Moon, the whole world watched and cheered..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('body2')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-body2">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>This sentence starts with "When" - that means you'll describe a MOMENT and what happened because of it. Think about the most exciting moments of the mission!</p>
+          <ul class="think-questions">
+            <li>What happened when Neil Armstrong stepped on the Moon?</li>
+            <li>How did people on Earth feel when they watched on TV?</li>
+            <li>What happened when the rocket launched?</li>
+            <li>Remember: "When [something happened], [something else happened]."</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('body2')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-body2">
+          <div class="example-option" onclick="useExample('body2', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">When</span> Neil Armstrong took his first step on the Moon, the whole world watched and cheered.</div>
+              <div class="example-note">Describes an amazing moment!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body2', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('body2', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">When</span> the astronauts landed on the Moon, it showed that people can do incredible things.</div>
+              <div class="example-note">Connects the event to a bigger meaning!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body2', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('body2', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">When</span> the rocket launched into space, millions of people around the world held their breath.</div>
+              <div class="example-note">Paints a picture of how exciting it was!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body2', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('body2')">Close help</button>
+      </div>
+    </div>
+
+    <!-- EXTRA DETAIL -->
+    <div class="sentence-row" id="row-body3">
+      <label>Add one more detail</label>
+      <div class="starter">Also,</div>
+      <span class="hint">What else makes this important?</span>
+      <textarea id="body3" placeholder="the astronauts' footprints are still on the Moon today because they are permanent..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('body3')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-body3">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>This is your chance to add one more cool fact or reason! Think about what lasted AFTER the mission ended.</p>
+          <ul class="think-questions">
+            <li>Did you know the astronauts' footprints are STILL on the Moon? (There's no wind to blow them away!)</li>
+            <li>What did scientists learn from the Moon rocks they brought back?</li>
+            <li>Why do people still talk about Apollo 11 today?</li>
+            <li>Try using the vocabulary word "permanent"!</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('body3')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-body3">
+          <div class="example-option" onclick="useExample('body3', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">Also,</span> the astronauts' footprints are still on the Moon today because they are permanent.</div>
+              <div class="example-note">Uses "because" AND the vocabulary word "permanent"!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body3', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('body3', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">Also,</span> the astronauts brought back Moon rocks so scientists could learn new things about space.</div>
+              <div class="example-note">Shows another reason the mission mattered!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body3', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('body3', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">Also,</span> people still remember Apollo 11 today because it was such an amazing achievement.</div>
+              <div class="example-note">Uses "because" and the word "achievement"!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('body3', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('body3')">Close help</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(3)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goToStep(5)">Next: Conclusion &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 5: CONCLUSION ==================== -->
+  <div class="card" data-step="5">
+    <span class="card-label label-conclusion">Conclusion</span>
+    <h2>Wrap it up!</h2>
+    <p class="subtitle">The conclusion reminds the reader what you think and why it matters. Try using <strong>although</strong> - it's a powerful connecting word!</p>
+
+    <p class="tray-label">Tap a word to insert it</p>
+    <div class="word-tray" id="tray5">
+      <span class="word-chip connector" data-word="Although" onclick="insertWord(this)">Although</span>
+      <span class="word-chip connector" data-word="because" onclick="insertWord(this)">because</span>
+      <span class="word-chip vocab" data-word="permanent" onclick="insertWord(this)">permanent</span>
+      <span class="word-chip vocab" data-word="achievement" onclick="insertWord(this)">achievement</span>
+    </div>
+
+    <!-- CONCLUSION 1 -->
+    <div class="sentence-row" id="row-conc1">
+      <label>Conclusion Sentence 1</label>
+      <div class="starter connector">Although</div>
+      <span class="hint">the Moon mission happened long ago...</span>
+      <textarea id="conc1" placeholder="the Moon mission happened long ago, it is still important today..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('conc1')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-conc1">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>"Although" is a special word that means "even though." It shows a contrast - two things that seem different but are both true!</p>
+          <ul class="think-questions">
+            <li>Apollo 11 happened in 1969 - that's a long time ago. BUT does it still matter today?</li>
+            <li>"Although" pattern: "Although [one thing is true], [something different is ALSO true]."</li>
+            <li>Example: "Although it's raining, I'm still happy." See how the two parts contrast?</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('conc1')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-conc1">
+          <div class="example-option" onclick="useExample('conc1', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">Although</span> the Moon mission happened a long time ago, it is still important today.</div>
+              <div class="example-note">Simple and clear contrast - great conclusion starter!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('conc1', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('conc1', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">Although</span> Apollo 11 happened in 1969, people still remember and celebrate it.</div>
+              <div class="example-note">Shows that it has lasting impact!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('conc1', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('conc1', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">Although</span> the mission was dangerous and the equipment was fragile, the astronauts succeeded and made history.</div>
+              <div class="example-note">Uses "fragile" AND shows contrast - powerful!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('conc1', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('conc1')">Close help</button>
+      </div>
+    </div>
+
+    <!-- CONCLUSION 2 -->
+    <div class="sentence-row" id="row-conc2">
+      <label>Conclusion Sentence 2</label>
+      <div class="starter connector">I think ... because</div>
+      <span class="hint">Restate your opinion one more time</span>
+      <textarea id="conc2" placeholder="Apollo 11 was one of the greatest achievements because it showed that people can do amazing things..." oninput="onType(this)" rows="2"></textarea>
+
+      <button class="help-btn" onclick="toggleHelp('conc2')">
+        <span class="help-icon">&#x1F914;</span> I need help!
+      </button>
+      <div class="help-panel" id="help-conc2">
+        <div class="help-think">
+          <div class="think-label">Think about this...</div>
+          <p>This is your LAST sentence! Restate your opinion one final time. Use "because" to remind the reader of your strongest reason.</p>
+          <ul class="think-questions">
+            <li>What is your opinion again? (Apollo 11 was important/amazing!)</li>
+            <li>What is the BIGGEST reason you feel this way?</li>
+            <li>What would you want the reader to remember most?</li>
+            <li>Try using the word "achievement" - it means something great that was accomplished!</li>
+          </ul>
+        </div>
+        <button class="help-examples-btn" onclick="showExamples('conc2')">Show me some examples &darr;</button>
+        <div class="help-examples" id="examples-conc2">
+          <div class="example-option" onclick="useExample('conc2', this)">
+            <div class="example-number">1</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">I think</span> Apollo 11 was one of the greatest achievements because it showed that people can do amazing things.</div>
+              <div class="example-note">Strong ending with "achievement" and "because"!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('conc2', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('conc2', this)">
+            <div class="example-number">2</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">I think</span> everyone should learn about Apollo 11 because it proves that anything is possible when people work together.</div>
+              <div class="example-note">Ends with an inspiring message!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('conc2', this.parentElement)">Use this</button>
+          </div>
+          <div class="example-option" onclick="useExample('conc2', this)">
+            <div class="example-number">3</div>
+            <div class="example-content">
+              <div class="example-text"><span class="ex-starter">I think</span> the Apollo 11 mission will always be remembered because it was truly one giant leap for mankind.</div>
+              <div class="example-note">Uses Neil Armstrong's famous words - great way to end!</div>
+            </div>
+            <button class="use-btn" onclick="event.stopPropagation(); useExample('conc2', this.parentElement)">Use this</button>
+          </div>
+        </div>
+        <button class="help-close" onclick="toggleHelp('conc2')">Close help</button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goToStep(4)">&larr; Back</button>
+      <button class="btn btn-success" onclick="goToStep(6)">See My Essay! &#11088;</button>
+    </div>
+  </div>
+
+  <!-- ==================== STEP 6: REVIEW ==================== -->
+  <div class="card print-show" data-step="6">
+    <div class="celebration" id="celebrationArea">
+      <div class="big-star">&#11088;</div>
+      <h2>Amazing Work, Marcello!</h2>
+      <p>You wrote a complete opinion essay with connecting words!</p>
+      <div class="stats-row" id="statsRow"></div>
+    </div>
+
+    <span class="card-label label-review">Your Complete Essay</span>
+    <h2 style="margin-bottom:16px;">My Opinion About Apollo 11</h2>
+    <div class="essay-preview" id="essayPreview"></div>
+
+    <div style="background:var(--green-light);border-radius:12px;padding:16px;margin-bottom:16px;">
+      <p style="font-weight:700;color:#2E7D32;margin-bottom:6px;">Writing Checklist</p>
+      <label style="display:block;margin:6px 0;font-size:0.95rem;cursor:pointer;">
+        <input type="checkbox" style="margin-right:8px;transform:scale(1.3);"> I stated my opinion in the introduction.
+      </label>
+      <label style="display:block;margin:6px 0;font-size:0.95rem;cursor:pointer;">
+        <input type="checkbox" style="margin-right:8px;transform:scale(1.3);"> I gave reasons to support my opinion.
+      </label>
+      <label style="display:block;margin:6px 0;font-size:0.95rem;cursor:pointer;">
+        <input type="checkbox" style="margin-right:8px;transform:scale(1.3);"> I used connecting words (because, when, after, before, although).
+      </label>
+      <label style="display:block;margin:6px 0;font-size:0.95rem;cursor:pointer;">
+        <input type="checkbox" style="margin-right:8px;transform:scale(1.3);"> I wrote a conclusion that wraps up my thinking.
+      </label>
+      <label style="display:block;margin:6px 0;font-size:0.95rem;cursor:pointer;">
+        <input type="checkbox" style="margin-right:8px;transform:scale(1.3);"> I am proud of my essay!
+      </label>
+    </div>
+
+    <div class="btn-row no-print">
+      <button class="btn btn-secondary" onclick="goToStep(5)">&larr; Edit</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-orange" onclick="window.print()">Print Essay</button>
+        <button class="btn btn-success" onclick="goToStep(1)">Start Over</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const TOTAL_STEPS = 6;
+  let currentStep = 1;
+  let lastFocusedTextarea = null;
+
+  // Track which textareas exist per step for progress
+  const stepFields = {
+    2: ['intro1', 'intro2'],
+    3: ['body1'],
+    4: ['body2', 'body3'],
+    5: ['conc1', 'conc2'],
+  };
+
+  // Sentence starters that get prepended in the final essay
+  const starters = {
+    intro1: 'After ',
+    intro2: 'I believe this because ',
+    body1: 'First, ',
+    body2: 'When ',
+    body3: 'Also, ',
+    conc1: 'Although ',
+    conc2: 'I think ',
+  };
+
+  const connectingWords = ['after', 'because', 'when', 'before', 'although', 'since', 'until', 'if'];
+  const vocabWords = ['permanent', 'fragile', 'bravely', 'carefully', 'achievement'];
+
+  // Build step dots
+  const nav = document.getElementById('stepsNav');
+  const labels = ['Start', 'Intro', 'R1', 'R2', 'End', 'Done'];
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'step-dot' + (i === 1 ? ' active' : '');
+    dot.textContent = i;
+    dot.title = labels[i - 1];
+    dot.onclick = () => goToStep(i);
+    dot.id = 'dot' + i;
+    nav.appendChild(dot);
+  }
+
+  function goToStep(step) {
+    if (step < 1 || step > TOTAL_STEPS) return;
+    currentStep = step;
+
+    // Show / hide cards
+    document.querySelectorAll('.card').forEach(c => {
+      c.classList.toggle('visible', Number(c.dataset.step) === step);
+    });
+
+    // Update dots
+    for (let i = 1; i <= TOTAL_STEPS; i++) {
+      const dot = document.getElementById('dot' + i);
+      dot.classList.remove('active', 'complete');
+      if (i === step) dot.classList.add('active');
+      else if (i < step) dot.classList.add('complete');
+    }
+
+    // If step 6 (review), build the essay preview
+    if (step === 6) buildEssayPreview();
+
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress() {
+    let total = 0, filled = 0;
+    for (const fields of Object.values(stepFields)) {
+      for (const id of fields) {
+        total++;
+        if (document.getElementById(id).value.trim().length > 0) filled++;
+      }
+    }
+    const pct = total ? Math.round((filled / total) * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent =
+      currentStep <= 5 ? `Step ${currentStep} of 6  \u2014  ${pct}% complete` : `100% \u2014 Essay complete!`;
+  }
+
+  function onType(el) {
+    lastFocusedTextarea = el;
+    el.classList.toggle('filled', el.value.trim().length > 0);
+    updateProgress();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // ---- HELP SYSTEM ----
+
+  function toggleHelp(fieldId) {
+    const panel = document.getElementById('help-' + fieldId);
+    panel.classList.toggle('open');
+    // If opening, scroll into view
+    if (panel.classList.contains('open')) {
+      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+    }
+  }
+
+  function showExamples(fieldId) {
+    const examples = document.getElementById('examples-' + fieldId);
+    const btn = examples.previousElementSibling; // the "Show me examples" button
+    examples.classList.add('open');
+    btn.classList.add('hidden');
+    setTimeout(() => examples.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
+
+  function useExample(fieldId, optionEl) {
+    const textEl = optionEl.querySelector('.example-text');
+    if (!textEl) return;
+
+    // Get the full text, then strip the starter prefix
+    let fullText = textEl.textContent;
+    const starter = starters[fieldId];
+    if (starter && fullText.startsWith(starter)) {
+      fullText = fullText.slice(starter.length);
+    }
+
+    const textarea = document.getElementById(fieldId);
+    textarea.value = fullText;
+    textarea.classList.add('filled');
+
+    // Close the help panel
+    const panel = document.getElementById('help-' + fieldId);
+    panel.classList.remove('open');
+
+    // Reset the "show examples" button for next time
+    const examples = document.getElementById('examples-' + fieldId);
+    const exBtn = examples.previousElementSibling;
+    examples.classList.remove('open');
+    exBtn.classList.remove('hidden');
+
+    updateProgress();
+    showToast('Example added! You can change it to make it yours.');
+    textarea.focus();
+  }
+
+  // ---- WORD CHIP INSERT ----
+
+  function insertWord(chip) {
+    const word = chip.dataset.word;
+    if (!lastFocusedTextarea) {
+      const card = document.querySelector(`.card[data-step="${currentStep}"]`);
+      if (card) {
+        const ta = card.querySelector('textarea');
+        if (ta) lastFocusedTextarea = ta;
+      }
+    }
+    if (lastFocusedTextarea) {
+      const start = lastFocusedTextarea.selectionStart;
+      const end = lastFocusedTextarea.selectionEnd;
+      const val = lastFocusedTextarea.value;
+      lastFocusedTextarea.value = val.slice(0, start) + word + ' ' + val.slice(end);
+      lastFocusedTextarea.focus();
+      lastFocusedTextarea.selectionStart = lastFocusedTextarea.selectionEnd = start + word.length + 1;
+      onType(lastFocusedTextarea);
+      chip.classList.add('used');
+      showToast(`"${word}" added!`);
+    }
+  }
+
+  // Track last focused textarea
+  document.addEventListener('focusin', (e) => {
+    if (e.target.tagName === 'TEXTAREA') lastFocusedTextarea = e.target;
+  });
+
+  // ---- ESSAY PREVIEW ----
+
+  function buildEssayPreview() {
+    const fields = ['intro1', 'intro2', 'body1', 'body2', 'body3', 'conc1', 'conc2'];
+    let sentences = [];
+    let wordCount = 0;
+    let cwCount = 0;
+
+    for (const id of fields) {
+      const val = document.getElementById(id).value.trim();
+      if (!val) continue;
+      let full = starters[id] + val;
+      if (!/[.!?]$/.test(full)) full += '.';
+      sentences.push({ id, text: full });
+    }
+
+    let introHTML = '', bodyHTML = '', concHTML = '';
+
+    for (const s of sentences) {
+      let html = escapeHtml(s.text);
+
+      for (const cw of connectingWords) {
+        const regex = new RegExp(`\\b(${cw})\\b`, 'gi');
+        html = html.replace(regex, (m) => {
+          cwCount++;
+          return `<span class="cw">${m}</span>`;
+        });
+      }
+      for (const vw of vocabWords) {
+        const regex = new RegExp(`\\b(${vw})\\b`, 'gi');
+        html = html.replace(regex, (m) => `<span class="vw">${m}</span>`);
+      }
+
+      wordCount += s.text.split(/\s+/).length;
+
+      if (s.id.startsWith('intro')) introHTML += html + ' ';
+      else if (s.id.startsWith('body')) bodyHTML += html + ' ';
+      else if (s.id.startsWith('conc')) concHTML += html + ' ';
+    }
+
+    let essayHTML = '';
+    if (introHTML) essayHTML += '     ' + introHTML.trim() + '\n\n';
+    if (bodyHTML) essayHTML += '     ' + bodyHTML.trim() + '\n\n';
+    if (concHTML) essayHTML += '     ' + concHTML.trim();
+
+    document.getElementById('essayPreview').innerHTML = essayHTML || '<em>(Write some sentences to see your essay here!)</em>';
+
+    document.getElementById('statsRow').innerHTML = `
+      <div class="stat-box"><div class="num">${wordCount}</div><div class="lbl">Words</div></div>
+      <div class="stat-box"><div class="num">${sentences.length}</div><div class="lbl">Sentences</div></div>
+      <div class="stat-box"><div class="num">${cwCount}</div><div class="lbl">Connecting Words</div></div>
+    `;
+
+    if (sentences.length >= 5) {
+      showToast('You wrote a complete essay! Amazing!');
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // ---- AUTO-SAVE ----
+
+  function saveProgress() {
+    const data = {};
+    document.querySelectorAll('textarea').forEach(ta => {
+      data[ta.id] = ta.value;
+    });
+    try { localStorage.setItem('marcello_feb20', JSON.stringify(data)); } catch(e) {}
+  }
+
+  function loadProgress() {
+    try {
+      const data = JSON.parse(localStorage.getItem('marcello_feb20'));
+      if (data) {
+        for (const [id, val] of Object.entries(data)) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.value = val;
+            el.classList.toggle('filled', val.trim().length > 0);
+          }
+        }
+      }
+    } catch(e) {}
+    updateProgress();
+  }
+
+  setInterval(saveProgress, 5000);
+  window.addEventListener('beforeunload', saveProgress);
+
+  // Init
+  loadProgress();
+  updateProgress();
+</script>
+</body>
+</html>

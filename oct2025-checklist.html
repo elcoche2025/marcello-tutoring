@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcello's Tutoring Checklist - October 2025 (Print Version)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Comic+Neue:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', 'Arial', sans-serif;
+            background: white;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            border: 4px solid #000;
+            border-radius: 20px;
+            padding: 30px;
+            background: white;
+        }
+        
+        h1 {
+            font-family: 'Fredoka', 'Arial Black', sans-serif;
+            font-weight: 700;
+            font-size: 2.2em;
+            text-align: center;
+            border-bottom: 3px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .goals-box {
+            border: 3px solid #000;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background: #f8f8f8;
+        }
+        
+        .goals-title {
+            font-family: 'Fredoka', 'Arial Black', sans-serif;
+            font-weight: 700;
+            font-size: 1.5em;
+            margin-bottom: 12px;
+            text-decoration: underline;
+        }
+        
+        .goals-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .goals-list li {
+            padding: 10px 10px 10px 40px;
+            margin-bottom: 8px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-size: 1.05em;
+            position: relative;
+            background: white;
+        }
+        
+        .goals-list li::before {
+            content: '★';
+            position: absolute;
+            left: 12px;
+            font-size: 1.5em;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .section {
+            border: 3px solid #000;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+            page-break-inside: avoid;
+        }
+        
+        .section-title {
+            font-family: 'Fredoka', 'Arial Black', sans-serif;
+            font-weight: 700;
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #000;
+        }
+        
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checklist li {
+            padding: 10px 10px 10px 45px;
+            margin-bottom: 8px;
+            border: 2px solid #666;
+            border-radius: 8px;
+            font-size: 1em;
+            position: relative;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border: 3px solid #000;
+            border-radius: 4px;
+            background: white;
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                padding: 20px;
+            }
+            
+            .container {
+                border: 3px solid #000;
+                page-break-inside: avoid;
+            }
+            
+            .section {
+                page-break-inside: avoid;
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+        
+        @page {
+            margin: 0.5in;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>★ Marcello's Tutoring Checklist ★</h1>
+        <div class="subtitle">October 2025</div>
+        
+        <div class="goals-box">
+            <div class="goals-title">Today's Goals:</div>
+            <ul class="goals-list">
+                <li>I can solve division word problems using drawings and equations.</li>
+                <li>I can identify the main idea and key details of a text.</li>
+                <li>I can write a paragraph using sentence frames.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Math – Division Practice</div>
+            <ul class="checklist">
+                <li><div class="checkbox"></div> Solve a division problem using drawings.</li>
+                <li><div class="checkbox"></div> Solve a division problem using equations.</li>
+                <li><div class="checkbox"></div> Explain my thinking out loud.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">ELA – Jacques Cousteau</div>
+            <ul class="checklist">
+                <li><div class="checkbox"></div> Read a short passage from "The Fantastic Undersea Life of Jacques Cousteau".</li>
+                <li><div class="checkbox"></div> Identify the main idea.</li>
+                <li><div class="checkbox"></div> Identify at least two key details.</li>
+                <li><div class="checkbox"></div> Complete the sentence frames.</li>
+                <li><div class="checkbox"></div> Write my paragraph.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Wrap Up / Extension</div>
+            <ul class="checklist">
+                <li><div class="checkbox"></div> Share one thing I learned about the ocean.</li>
+                <li><div class="checkbox"></div> Play a short learning game or read if there's extra time.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
