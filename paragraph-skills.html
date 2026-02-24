@@ -817,6 +817,7 @@ function addPoints(pts, correct) {
   if (correct) totalCorrect++;
   document.getElementById('totalScore').textContent   = totalScore;
   document.getElementById('totalCorrect').textContent = totalCorrect;
+  saveState();
 }
 
 function saveToTracker() {
@@ -1249,9 +1250,52 @@ function restartActivity(activity) {
 }
 
 // ============================================================
+//  AUTO-SAVE / RESTORE
+// ============================================================
+
+const SAVE_KEY = 'marcello_paragraph_power';
+
+function saveState() {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      totalScore, totalCorrect, activityScores,
+      odd:   { q: state.odd.q,   done: state.odd.done },
+      which: { q: state.which.q, done: state.which.done },
+      build: { q: state.build.q, done: state.build.done },
+    }));
+  } catch(e) {}
+}
+
+function restoreState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVE_KEY));
+    if (!saved) return;
+    totalScore   = saved.totalScore   || 0;
+    totalCorrect = saved.totalCorrect || 0;
+    if (saved.activityScores) {
+      activityScores.odd   = saved.activityScores.odd   || 0;
+      activityScores.which = saved.activityScores.which || 0;
+      activityScores.build = saved.activityScores.build || 0;
+    }
+    document.getElementById('totalScore').textContent   = totalScore;
+    document.getElementById('totalCorrect').textContent = totalCorrect;
+    if (saved.odd)   { state.odd.q   = saved.odd.q;   state.odd.done   = saved.odd.done;   if (saved.odd.done)   document.getElementById('tab-odd').classList.add('done'); }
+    if (saved.which) { state.which.q = saved.which.q; state.which.done = saved.which.done; if (saved.which.done) document.getElementById('tab-which').classList.add('done'); }
+    if (saved.build) { state.build.q = saved.build.q; state.build.done = saved.build.done; if (saved.build.done) document.getElementById('tab-build').classList.add('done'); }
+  } catch(e) {}
+}
+
+// Patch addPoints to auto-save after every answer
+const _addPoints = addPoints;
+// Override already defined above; just wire save into the flow via interval
+setInterval(saveState, 4000);
+window.addEventListener('beforeunload', saveState);
+
+// ============================================================
 //  INIT
 // ============================================================
 
+restoreState();
 renderOdd();
 renderWhich();
 renderBuild();
