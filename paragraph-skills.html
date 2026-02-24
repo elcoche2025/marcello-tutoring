@@ -827,13 +827,13 @@ function saveToTracker() {
   ['odd','which','build'].forEach(function(a) {
     if (activityScores[a] === 0 && !state[a].done) return;
     var pct = actMax[a] > 0 ? Math.round(activityScores[a] / actMax[a] * 100) + '%' : '0%';
-    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({sheet:'Writing',
         row:[today,'Paragraph Skills',actNames[a],activityScores[a],actMax[a],pct,'','','']})}));
   });
   var totalMax = DATA.odd.length*10 + DATA.which.length*10 + DATA.build.length*15;
   var totalPct = totalMax > 0 ? Math.round(totalScore / totalMax * 100) + '%' : '0%';
-  sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+  sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
     body: JSON.stringify({sheet:'Activity Log',
       row:[today,'Marcello','Paragraph Skills','All Activities',totalScore,totalMax,totalPct,'']})}));
 

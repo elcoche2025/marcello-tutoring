@@ -1421,10 +1421,10 @@
     btn.textContent = 'Saving...';
     btn.disabled = true;
     Promise.all([
-      fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
         body: JSON.stringify({sheet:'Writing',
           row:[today,'Essay Builder','Opinion Essay - Apollo 11',filled,fields.length,pct,wordCount,cwCount,'']})}),
-      fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
         body: JSON.stringify({sheet:'Activity Log',
           row:[today,'Marcello','Essay Builder','Opinion Essay',filled,fields.length,pct,wordCount+' words, '+cwCount+' connecting words']})})
     ]).then(function() {

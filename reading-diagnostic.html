@@ -1126,10 +1126,10 @@ function saveToTracker() {
     var pAvg = hasP > 0 ? (st.prosody.reduce(function(a,b){return a+b;},0) / hasP).toFixed(1) : '';
     var noteEl = document.getElementById(p.id + '-notes');
     var notes = noteEl ? noteEl.value : '';
-    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({sheet:'Reading - ORF',
         row:[today,p.title,wcpm,stop,errs,sc,acc,st.prosody[0]||'',st.prosody[1]||'',st.prosody[2]||'',st.prosody[3]||'',pAvg,notes]})}));
-    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({sheet:'Activity Log',
         row:[today,'Marcello','Reading Diagnostic','ORF: '+p.title,wcpm,120,acc,notes]})}));
   });
@@ -1151,10 +1151,10 @@ function saveToTracker() {
       .map(function(item){ return typeof item === 'string' ? item : item.word; }).join(', ');
     var noteEl = document.getElementById(s.notesId);
     var notes = noteEl ? noteEl.value : '';
-    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({sheet:'Reading - Phonics',
         row:[today,s.name,s.std,correct,total,pct,missed,notes]})}));
-    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    sends.push(fetch(TRACKER_URL, {method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
       body: JSON.stringify({sheet:'Activity Log',
         row:[today,'Marcello','Reading Diagnostic',s.name,correct,total,pct,missed]})}));
   });
