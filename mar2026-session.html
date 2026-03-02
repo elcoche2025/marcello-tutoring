@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Space Session — March 1, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --orange-light: #FFF3E0;
+    --red: #E53935;
+    --red-light: #FFEBEE;
+    --purple: #9C27B0;
+    --purple-light: #F3E5F5;
+    --teal: #00897B;
+    --teal-light: #E0F2F1;
+    --bg: #F4F6FB;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  /* ---- HEADER ---- */
+  header {
+    background: linear-gradient(135deg, #0d1b3e 0%, #1a237e 40%, var(--blue) 100%);
+    color: white;
+    text-align: center;
+    padding: 24px 20px 48px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 36px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.85; }
+  .save-indicator {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .save-indicator.flash { opacity: 1; }
+
+  /* ---- MAIN TABS ---- */
+  .main-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 12px 0;
+    max-width: 750px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+  .main-tab {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid #D0D5DD;
+    background: white;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Nunito', sans-serif;
+    white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--blue); color: var(--blue); }
+  .main-tab.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+    box-shadow: 0 3px 12px rgba(68,114,196,0.35);
+    transform: translateY(-2px);
+  }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  /* ---- CONTAINER ---- */
+  .container {
+    max-width: 720px;
+    margin: 16px auto;
+    padding: 0 16px;
+  }
+
+  /* ---- TAB PANELS ---- */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ---- CARD ---- */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  /* ---- ACT LABELS ---- */
+  .act-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .act-read  { background: var(--teal-light); color: var(--teal); }
+  .act-odd   { background: var(--purple-light); color: var(--purple); }
+  .act-sort  { background: var(--orange-light); color: #E65100; }
+  .act-build { background: var(--green-light); color: #2E7D32; }
+  .act-essay { background: var(--blue-light); color: var(--blue); }
+  .act-dash  { background: var(--gold-light); color: #B8860B; }
+
+  /* ---- BUTTONS ---- */
+  .btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange  { background: var(--orange); color: white; }
+  .btn-purple  { background: var(--purple); color: white; }
+  .btn-red     { background: var(--red); color: white; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  /* ---- Q DOTS ---- */
+  .q-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; transition: background 0.3s; }
+  .q-dot.done { background: var(--green); }
+  .q-dot.current { background: var(--blue); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  /* ---- TOPIC / CONTEXT BOXES ---- */
+  .topic-sentence {
+    background: var(--blue-light);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    line-height: 1.5;
+    color: #1a237e;
+  }
+  .ts-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--blue); font-weight: 800; margin-bottom: 4px; }
+
+  .opinion-box {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .oq-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; font-weight: 800; margin-bottom: 4px; }
+
+  /* ---- SENTENCE CARDS (Odd One Out) ---- */
+  .sentence-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .s-card {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .s-card:hover { border-color: var(--blue); background: white; }
+  .s-card .s-icon { display: none; position: absolute; top: 10px; right: 12px; font-size: 1.2rem; }
+  .s-card .s-note { font-size: 0.82rem; color: var(--muted); margin-top: 6px; display: none; font-style: italic; }
+  .s-card.answered { cursor: default; }
+  .s-card.answered .s-icon { display: block; }
+  .s-card.answered .s-note { display: block; }
+  .s-card.s-correct { border-color: var(--green); background: var(--green-light); }
+  .s-card.s-wrong { border-color: var(--red); background: var(--red-light); }
+  .s-card.s-missed { border-color: var(--orange); background: var(--orange-light); }
+  .s-card.s-neutral { border-color: #CCC; opacity: 0.7; }
+
+  /* ---- SORT CARDS (Reason or Description) ---- */
+  .sort-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+  .sort-card {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    transition: all 0.2s;
+  }
+  .sort-card .sort-text { font-size: 0.95rem; margin-bottom: 10px; line-height: 1.5; }
+  .sort-btns { display: flex; gap: 8px; }
+  .sort-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 2px solid #E0E0E0;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .sort-btn:hover { transform: translateY(-1px); }
+  .sort-btn.reason { border-color: var(--green); color: var(--green); }
+  .sort-btn.reason:hover { background: var(--green-light); }
+  .sort-btn.desc { border-color: var(--orange); color: #E65100; }
+  .sort-btn.desc:hover { background: var(--orange-light); }
+  .sort-btn:disabled { cursor: default; transform: none; opacity: 0.7; }
+  .sort-btn.picked { font-weight: 800; transform: scale(1.02); }
+  .sort-btn.correct-pick { background: var(--green-light); border-color: var(--green); color: #2E7D32; }
+  .sort-btn.wrong-pick { background: var(--red-light); border-color: var(--red); color: var(--red); }
+  .sort-card .sort-fb { font-size: 0.82rem; margin-top: 8px; font-weight: 600; display: none; }
+  .sort-card.answered .sort-fb { display: block; }
+
+  /* ---- BUILD PARAGRAPH (pool) ---- */
+  .sentence-pool { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .pool-sentence {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pool-sentence:hover { border-color: var(--blue); }
+  .pool-cb { font-size: 1.3rem; flex-shrink: 0; line-height: 1; }
+  .pool-text { font-size: 0.93rem; line-height: 1.5; }
+  .pool-note { font-size: 0.82rem; color: var(--muted); margin-top: 4px; font-style: italic; display: none; }
+  .pool-sentence.ps-selected { border-color: var(--blue); background: var(--blue-light); }
+  .pool-sentence.answered { cursor: default; }
+  .pool-sentence.answered .pool-note { display: block; }
+  .pool-sentence.ps-correct-yes { border-color: var(--green); background: var(--green-light); }
+  .pool-sentence.ps-missed { border-color: var(--orange); background: var(--orange-light); }
+  .pool-sentence.ps-wrong-yes { border-color: var(--red); background: var(--red-light); }
+  .pool-sentence.ps-correct-no { border-color: #CCC; opacity: 0.65; }
+  .build-hint { background: var(--gold-light); border-radius: 10px; padding: 10px 14px; font-size: 0.85rem; margin-bottom: 12px; color: #5D4037; line-height: 1.4; }
+
+  /* ---- FEEDBACK BANNER ---- */
+  .feedback-banner {
+    border-radius: 12px;
+    padding: 16px;
+    margin: 14px 0;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback-banner.show { display: block; animation: fadeUp 0.3s ease; }
+  .fb-correct { background: var(--green-light); color: #1B5E20; border: 2px solid #A5D6A7; }
+  .fb-wrong { background: var(--red-light); color: #B71C1C; border: 2px solid #EF9A9A; }
+  .fb-detail { font-weight: 400; font-size: 0.85rem; margin-top: 6px; }
+
+  /* ---- FLASHCARD ---- */
+  .flashcard {
+    background: white;
+    border: 3px solid var(--blue);
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 16px 0;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .flashcard .word { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text); }
+  .flashcard .word-parts { font-size: 2rem; font-weight: 800; margin-top: 10px; }
+  .flashcard .word-parts span { padding: 2px 8px; border-radius: 8px; margin: 0 2px; }
+  .flashcard.correct { border-color: var(--green); background: var(--green-light); }
+  .flashcard.incorrect { border-color: var(--red); background: var(--red-light); }
+
+  /* ---- COVER-WRITE-CHECK ---- */
+  .cwc-area {
+    background: var(--gold-light);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    text-align: center;
+    display: none;
+  }
+  .cwc-area.show { display: block; animation: fadeUp 0.3s; }
+  .cwc-area input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    padding: 8px 16px;
+    width: 200px;
+    margin: 8px 0;
+  }
+  .cwc-area .cwc-result { font-weight: 800; font-size: 1.1rem; margin-top: 8px; }
+
+  /* ---- PROSODY RUBRIC ---- */
+  .prosody-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .prosody-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .prosody-item .pi-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .prosody-item .pi-scores { display: flex; justify-content: center; gap: 6px; }
+  .pi-score {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border: 2px solid #D0D5DD;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .pi-score:hover { border-color: var(--blue); }
+  .pi-score.selected { background: var(--blue); color: white; border-color: var(--blue); }
+
+  /* ---- PASSAGE BOX ---- */
+  .passage-box {
+    background: white;
+    border: 2px solid #D0D5DD;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 14px 0;
+  }
+  .passage-box .target-word { background: var(--gold-light); padding: 1px 6px; border-radius: 6px; font-weight: 700; }
+
+  /* ---- ESSAY BUILDER ---- */
+  .essay-step { display: none; }
+  .essay-step.active { display: block; animation: fadeUp 0.35s; }
+
+  .interview-q {
+    background: var(--blue-light);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .interview-q .iq-num { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--blue); margin-bottom: 6px; }
+  .interview-q .iq-question { font-size: 1.05rem; font-weight: 700; color: #1a237e; margin-bottom: 12px; line-height: 1.4; }
+  .interview-q .say-first {
+    background: var(--gold-light);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #5D4037;
+    margin-bottom: 12px;
+  }
+  .iq-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .iq-option {
+    padding: 12px 16px;
+    border: 2px solid #C5CAE9;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.93rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    text-align: left;
+    line-height: 1.4;
+  }
+  .iq-option:hover { border-color: var(--blue); background: #EEF1FB; }
+  .iq-option.selected { border-color: var(--blue); background: var(--blue-light); color: #1a237e; }
+  .iq-custom {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .iq-custom input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 600;
+  }
+  .iq-custom input:focus { border-color: var(--blue); outline: none; }
+
+  /* Help system */
+  .help-btn-wrap { text-align: center; margin-top: 8px; }
+  .help-btn {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .help-btn:hover { background: #FFE0B2; }
+  .help-panel {
+    background: var(--orange-light);
+    border: 2px solid #FFB74D;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 10px;
+    display: none;
+    animation: fadeUp 0.3s;
+  }
+  .help-panel.show { display: block; }
+  .help-level { margin-bottom: 12px; }
+  .help-level-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #E65100; margin-bottom: 4px; }
+  .help-level p { font-size: 0.9rem; line-height: 1.5; }
+
+  /* Sentence building */
+  .sentence-row { margin-bottom: 18px; }
+  .sentence-row label { display: block; font-weight: 700; font-size: 0.93rem; margin-bottom: 4px; }
+  .sentence-row .starter {
+    display: inline-block;
+    background: var(--gold-light);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: #5D4037;
+  }
+  .sentence-row .starter.connector {
+    background: var(--blue-light);
+    border-color: var(--blue);
+    color: var(--blue);
+  }
+  .sentence-row .plan-note {
+    background: var(--green-light);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    color: #2E7D32;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .sentence-row textarea {
+    width: 100%;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 50px;
+    transition: border-color 0.2s;
+  }
+  .sentence-row textarea:focus { border-color: var(--blue); outline: none; }
+  .sentence-row textarea.filled { border-color: var(--green); }
+
+  /* Word chip tray */
+  .word-tray { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .word-tray-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  .word-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid;
+    font-family: 'Nunito', sans-serif;
+  }
+  .word-chip:hover { transform: translateY(-2px); }
+  .word-chip.connector { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+  .word-chip.used { opacity: 0.5; }
+
+  /* Essay preview */
+  .essay-preview {
+    background: #FFFDE7;
+    border: 2px solid #FDD835;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+  .essay-preview .cw { background: var(--blue-light); padding: 1px 4px; border-radius: 4px; font-weight: 700; color: var(--blue); }
+
+  /* Checklist */
+  .checklist { background: var(--green-light); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+  .checklist label { display: block; margin: 8px 0; font-size: 0.95rem; cursor: pointer; }
+  .checklist input[type="checkbox"] { margin-right: 8px; transform: scale(1.3); }
+
+  /* Stats row */
+  .stats-row { display: flex; justify-content: center; gap: 16px; margin: 14px 0; flex-wrap: wrap; }
+  .stat-box { text-align: center; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: var(--shadow); min-width: 80px; }
+  .stat-box .num { font-size: 1.5rem; font-weight: 800; color: var(--blue); }
+  .stat-box .lbl { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+
+  /* Celebration */
+  .celebration { text-align: center; padding: 20px 0; }
+  .celebration .big-star { font-size: 3rem; margin-bottom: 8px; }
+
+  /* Dashboard */
+  .dash-section { margin-bottom: 20px; }
+  .dash-section h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-stat {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .dash-stat .ds-val { font-size: 1.4rem; font-weight: 800; color: var(--blue); }
+  .dash-stat .ds-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+  .report-box {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+
+  /* Restore dialog */
+  .restore-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999;
+  }
+  .restore-dialog {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  .restore-dialog h2 { margin-bottom: 10px; }
+  .restore-dialog p { color: var(--muted); margin-bottom: 16px; font-size: 0.95rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Space Session</h1>
+  <p>March 1, 2026 — Essay #4!</p>
+  <div class="save-indicator" id="saveIndicator">Saved &#10003;</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">&#128214; Reading</button>
+  <button class="main-tab" id="mtab-paragraph" onclick="switchTab('paragraph')">&#9997;&#65039; Paragraphs</button>
+  <button class="main-tab" id="mtab-essay" onclick="switchTab('essay')">&#128221; Essay</button>
+  <button class="main-tab" id="mtab-dashboard" onclick="switchTab('dashboard')">&#128202; Dashboard</button>
+</div>
+
+<div class="container">
+
+  <!-- ============================================================ -->
+  <!--  TAB 1: READING SKILLS                                       -->
+  <!-- ============================================================ -->
+  <div class="tab-panel active" id="panel-reading">
+    <div class="card" id="card-reading"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  TAB 2: PARAGRAPH SKILLS                                     -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="panel-paragraph">
+    <!-- Sub-tabs for 3 activities -->
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">
+      <button class="btn btn-sm btn-purple" id="ptab-odd" onclick="switchParaSub('odd')" style="opacity:1">&#128270; Odd One Out</button>
+      <button class="btn btn-sm btn-orange" id="ptab-sort" onclick="switchParaSub('sort')" style="opacity:0.5">&#9878;&#65039; Reason or Description?</button>
+      <button class="btn btn-sm btn-success" id="ptab-build" onclick="switchParaSub('build')" style="opacity:0.5">&#127959;&#65039; Build a Paragraph</button>
+    </div>
+    <div id="card-odd" class="card"></div>
+    <div id="card-sort" class="card" style="display:none;"></div>
+    <div id="card-build" class="card" style="display:none;"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  TAB 3: ESSAY BUILDER                                        -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="panel-essay">
+    <div class="card" id="card-essay"></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  TAB 4: TUTOR DASHBOARD                                      -->
+  <!-- ============================================================ -->
+  <div class="tab-panel" id="panel-dashboard">
+    <div class="card" id="card-dashboard"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  GLOBALS & CONFIG
+// ============================================================
+const STORAGE_KEY = 'marcello_mar1_session';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-03-01';
+
+let activeTab = 'reading';
+let activeParaSub = 'odd';
+
+// ---- SESSION STATE ----
+let S = {
+  reading: {
+    words: {
+      current: 0,
+      results: [], // {word, correct, attempts}
+      done: false
+    },
+    passage: {
+      prosody: { expression: 0, phrasing: 0, pace: 0, smoothness: 0 },
+      done: false
+    }
+  },
+  paragraph: {
+    odd: { q: 0, correct: 0, total: 0, done: false },
+    sort: { q: 0, correct: 0, total: 0, done: false },
+    build: { q: 0, scores: [], done: false, selected: new Set() }
+  },
+  essay: {
+    step: 'plan', // plan, write, review
+    plan: { opinion: '', reason1: '', reason2: '', reason3: '', conclusion: '' },
+    sentences: { intro1: '', intro2: '', body1: '', body2: '', body3: '', conc1: '', conc2: '' },
+    helpUsed: {}
+  },
+  timestamps: {},
+  points: 0
+};
+
+// ============================================================
+//  DATA
+// ============================================================
+
+const IRREGULAR_WORDS = [
+  { word: 'through', parts: ['th','rough'], phonetic: 'throo' },
+  { word: 'league', parts: ['lea','gue'], phonetic: 'leeg' },
+  { word: 'foreign', parts: ['for','eign'], phonetic: 'for-in' },
+  { word: 'thought', parts: ['th','ought'], phonetic: 'thawt' },
+  { word: 'weight', parts: ['w','eigh','t'], phonetic: 'wayt' },
+  { word: 'enough', parts: ['e','nough'], phonetic: 'ee-nuf' },
+  { word: 'island', parts: ['is','land'], phonetic: 'eye-lund' },
+  { word: 'caught', parts: ['c','aught'], phonetic: 'kawt' }
+];
+
+const PASSAGE_TEXT = `Long ago, people <span class="target-word">thought</span> traveling <span class="target-word">through</span> space was impossible. But brave astronauts proved that humans could reach the Moon! The journey was <span class="target-word">enough</span> to amaze the whole world. Scientists from every <span class="target-word">foreign</span> country <span class="target-word">caught</span> a glimpse of hope. Even today, the <span class="target-word">weight</span> of that achievement inspires new explorers. No one in any <span class="target-word">league</span> of science will ever forget that giant leap. Space is like an <span class="target-word">island</span> waiting to be explored.`;
+const PASSAGE_PLAIN = `Long ago, people thought traveling through space was impossible. But brave astronauts proved that humans could reach the Moon! The journey was enough to amaze the whole world. Scientists from every foreign country caught a glimpse of hope. Even today, the weight of that achievement inspires new explorers. No one in any league of science will ever forget that giant leap. Space is like an island waiting to be explored.`;
+
+const ODD_DATA = [
+  {
+    topicSentence: "Space exploration has helped us learn many new things.",
+    sentences: [
+      { text: "Scientists discovered that the Moon has no air or wind.", fits: true },
+      { text: "Astronauts brought back Moon rocks so we could study them.", fits: true },
+      { text: "My favorite color is blue because it reminds me of the sky.", fits: false, note: "This is about a favorite color, not about learning from space exploration!" },
+      { text: "Space telescopes have helped us see faraway stars and planets.", fits: true }
+    ]
+  },
+  {
+    topicSentence: "Being an astronaut takes a lot of bravery.",
+    sentences: [
+      { text: "Astronauts have to ride in a rocket that goes thousands of miles per hour.", fits: true },
+      { text: "The food in space comes in small packages and tubes.", fits: false, note: "This describes space food, but doesn't tell us about bravery!" },
+      { text: "They leave their families behind for weeks or even months.", fits: true },
+      { text: "If something goes wrong in space, there is no easy way to get home.", fits: true }
+    ]
+  },
+  {
+    topicSentence: "The Apollo 11 mission changed the world forever.",
+    sentences: [
+      { text: "Neil Armstrong's footprints are still on the Moon today because there is no wind to blow them away.", fits: true },
+      { text: "Millions of people around the world watched the Moon landing on TV.", fits: true },
+      { text: "The rocket used a lot of fuel to get to the Moon.", fits: false, note: "This describes the rocket's fuel, but doesn't explain how the mission changed the world!" },
+      { text: "After Apollo 11, people believed that anything was possible.", fits: true }
+    ]
+  },
+  {
+    topicSentence: "We should keep exploring space in the future.",
+    sentences: [
+      { text: "There might be water on Mars, which could help future astronauts survive.", fits: true },
+      { text: "The first satellite launched into space was called Sputnik.", fits: false, note: "This is a history fact about the past, not a reason to keep exploring in the future!" },
+      { text: "New planets could have resources that Earth needs.", fits: true },
+      { text: "Space exploration helps scientists invent new technology that everyone can use.", fits: true }
+    ]
+  }
+];
+
+const SORT_DATA = [
+  {
+    opinion: "I think the Apollo 11 Moon mission was one of the most important events in history.",
+    sentences: [
+      { text: "The astronauts were incredibly brave because they risked their lives to explore the unknown.", type: 'reason', feedback: "This tells WHY the mission was important - because of the astronauts' bravery!" },
+      { text: "The rocket that carried the astronauts was called Saturn V and it was 363 feet tall.", type: 'description', feedback: "This describes the rocket, but doesn't tell us WHY the mission was important." },
+      { text: "Because of Apollo 11, people all over the world believed that anything was possible.", type: 'reason', feedback: "This tells WHY it was important - it inspired the whole world!" },
+      { text: "Neil Armstrong wore a white spacesuit when he walked on the Moon.", type: 'description', feedback: "This describes what Armstrong wore, but doesn't explain WHY the mission was important." }
+    ]
+  },
+  {
+    opinion: "I believe space exploration is important for everyone on Earth.",
+    sentences: [
+      { text: "Scientists have invented many useful things because of space research, like water filters and memory foam.", type: 'reason', feedback: "This gives a reason - space research created useful inventions for everyone!" },
+      { text: "The International Space Station orbits Earth about every 90 minutes.", type: 'description', feedback: "This is an interesting fact, but doesn't tell WHY space exploration is important for everyone." },
+      { text: "When we explore space, we learn more about our own planet and how to protect it.", type: 'reason', feedback: "This tells WHY - space exploration helps us protect Earth!" },
+      { text: "Astronauts exercise for about two hours every day while in space.", type: 'description', feedback: "This describes astronaut routines, but doesn't explain WHY space exploration matters for everyone." }
+    ]
+  },
+  {
+    opinion: "Being an astronaut is one of the hardest jobs in the world.",
+    sentences: [
+      { text: "Astronauts must train for years before they are allowed to go to space.", type: 'reason', feedback: "This tells WHY it's hard - years of training required!" },
+      { text: "The first American woman in space was Sally Ride, who flew in 1983.", type: 'description', feedback: "This is a historical fact about Sally Ride, not a reason why being an astronaut is hard." },
+      { text: "Although astronauts get to float in zero gravity, they also face dangerous situations every day.", type: 'reason', feedback: "This tells WHY it's hard - daily danger even when it seems fun!" },
+      { text: "Some astronauts have stayed on the space station for over a year, far from their families.", type: 'reason', feedback: "This tells WHY it's hard - being away from family for a long time!" }
+    ]
+  }
+];
+
+const BUILD_DATA = [
+  {
+    topicSentence: "I think space exploration is important because it helps us discover new things.",
+    sentences: [
+      { text: "When astronauts went to the Moon, they brought back rocks that taught scientists about how the Moon was formed.", keep: true, note: "Supports the topic - discovery from Moon rocks!" },
+      { text: "Space telescopes have helped us find thousands of new planets that we never knew existed.", keep: true, note: "Supports the topic - discovering new planets!" },
+      { text: "Rockets need a lot of fuel to escape Earth's gravity.", keep: false, note: "This describes rockets, but doesn't support the idea of discovering new things." },
+      { text: "Because of space exploration, doctors learned how to make better medical tools.", keep: true, note: "Supports the topic - discoveries that help medicine!" },
+      { text: "The Moon is about 238,900 miles away from Earth.", keep: false, note: "An interesting distance fact, but doesn't support the idea of discovering new things." },
+      { text: "Astronauts wear orange suits during launch and white suits for spacewalks.", keep: false, note: "Describes astronaut suits, but doesn't tell us about discoveries." }
+    ]
+  },
+  {
+    topicSentence: "The astronauts who went to the Moon were some of the bravest people ever.",
+    sentences: [
+      { text: "They flew through space for three days knowing that anything could go wrong.", keep: true, note: "Supports the topic - they faced danger bravely!" },
+      { text: "Although the mission was dangerous, the astronauts chose to go anyway because they wanted to explore.", keep: true, note: "Supports the topic - they chose danger over safety!" },
+      { text: "The Moon has no atmosphere, so there is no sound on its surface.", keep: false, note: "An interesting Moon fact, but doesn't tell us about the astronauts' bravery." },
+      { text: "The astronauts' families watched the launch and worried the whole time, but the crew stayed calm and focused.", keep: true, note: "Supports the topic - staying calm despite family worry shows bravery!" },
+      { text: "Apollo 11 launched on July 16, 1969, from Kennedy Space Center in Florida.", keep: false, note: "A launch date and location - doesn't support the idea of bravery." },
+      { text: "Neil Armstrong was born in Wapakoneta, Ohio.", keep: false, note: "A biographical fact - doesn't explain why the astronauts were brave." }
+    ]
+  }
+];
+
+// Essay planner options
+const PLAN_OPTIONS = {
+  opinion: [
+    "I think space exploration is very important.",
+    "I believe exploring space is one of the most important things humans do.",
+    "I think space exploration is important because it helps everyone.",
+    "I believe we should keep exploring space."
+  ],
+  reason1: [
+    "The astronauts were incredibly brave because they risked their lives.",
+    "Space exploration helped scientists make amazing discoveries.",
+    "Because of space missions, we learned new things about the Moon and planets.",
+    "When astronauts went to space, they inspired millions of people around the world.",
+    "Space exploration is important because it shows that anything is possible."
+  ],
+  reason2: [
+    "Also, astronauts brought back Moon rocks so scientists could learn new things.",
+    "Space research has given us useful inventions like water filters and better computers.",
+    "When we explore space, we learn how to protect our own planet Earth.",
+    "The astronauts' footprints on the Moon are permanent, reminding us of what humans can do.",
+    "After the Moon landing, people all over the world felt proud and hopeful."
+  ],
+  reason3: [
+    "Furthermore, space exploration brings countries together to work as a team.",
+    "Although space missions are expensive, the things we learn are worth it.",
+    "Space exploration also helps us prepare for the future in case Earth needs help.",
+    ""
+  ],
+  conclusion: [
+    "That is why I believe space exploration is one of the most important things humans have ever done.",
+    "Although space exploration is hard and sometimes dangerous, it is worth it because of everything we learn.",
+    "I think everyone should care about space exploration because it helps all of us.",
+    "In conclusion, exploring space makes the world a better place for everyone."
+  ]
+};
+
+const CONNECTING_WORDS = ['after','because','when','before','although','since','until','if','first','also','furthermore'];
+
+// ============================================================
+//  UTILITY FUNCTIONS
+// ============================================================
+
+function toast(msg, isWarn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isWarn ? ' warning' : '');
+  setTimeout(() => t.className = 'toast', 2400);
+}
+
+function addPoints(pts) {
+  S.points += pts;
+  if (pts > 0) toast('+' + pts + ' points!');
+}
+
+function esc(text) {
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+function saveToLocalStorage() {
+  try {
+    // Convert Set to Array for JSON
+    const data = JSON.parse(JSON.stringify(S, (key, val) => val instanceof Set ? [...val] : val));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved \u2713';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    // Restore Sets
+    if (data.paragraph && data.paragraph.build && Array.isArray(data.paragraph.build.selected)) {
+      data.paragraph.build.selected = new Set(data.paragraph.build.selected);
+    } else if (data.paragraph && data.paragraph.build) {
+      data.paragraph.build.selected = new Set();
+    }
+    S = data;
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  if (tab === 'reading') renderReading();
+  else if (tab === 'paragraph') { renderParaSub(); }
+  else if (tab === 'essay') renderEssay();
+  else if (tab === 'dashboard') renderDashboard();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+function switchParaSub(sub) {
+  activeParaSub = sub;
+  ['odd','sort','build'].forEach(s => {
+    document.getElementById('card-' + s).style.display = s === sub ? 'block' : 'none';
+    document.getElementById('ptab-' + s).style.opacity = s === sub ? '1' : '0.5';
+  });
+  renderParaSub();
+}
+
+function renderParaSub() {
+  if (activeParaSub === 'odd') renderOdd();
+  else if (activeParaSub === 'sort') renderSort();
+  else if (activeParaSub === 'build') renderBuild();
+}
+
+// ============================================================
+//  TAB 1: READING SKILLS
+// ============================================================
+
+let readingPhase = 'words'; // 'words' or 'passage'
+let wordAttempt = 0;
+let wordRevealed = false;
+let cwcPhase = false; // cover-write-check
+
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const ws = S.reading.words;
+
+  if (readingPhase === 'words') {
+    if (ws.done) {
+      renderPassage();
+      return;
+    }
+    const w = IRREGULAR_WORDS[ws.current];
+    const results = ws.results;
+    let dotsHTML = IRREGULAR_WORDS.map((_, i) => {
+      let cls = 'q-dot';
+      if (i < ws.current) cls += results[i] && results[i].correct ? ' done' : '';
+      else if (i === ws.current) cls += ' current';
+      return `<div class="${cls}"></div>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="act-label act-read">&#128214; Irregular Word Practice</div>
+      <h2>Read this word aloud!</h2>
+      <p class="directions">Look at the <strong>whole word</strong> carefully. Say it out loud, then your tutor will mark if you got it right.</p>
+      <div class="q-progress"><div class="q-dots">${dotsHTML}</div><div class="q-label">Word ${ws.current+1} of ${IRREGULAR_WORDS.length}</div></div>
+      <div class="flashcard" id="flashcard">
+        <div class="word" id="wordDisplay">${w.word}</div>
+        <div class="word-parts" id="wordParts" style="display:none;"></div>
+        <div id="wordPhonetic" style="display:none;font-size:1rem;color:var(--muted);margin-top:6px;"></div>
+      </div>
+      <div class="cwc-area" id="cwcArea">
+        <p style="font-weight:700;">Cover-Write-Check!</p>
+        <p style="font-size:0.88rem;color:var(--muted);">The word is hidden. Type it from memory:</p>
+        <input type="text" id="cwcInput" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')checkCWC()">
+        <div class="cwc-result" id="cwcResult"></div>
+        <div class="btn-row"><button class="btn btn-sm btn-primary" onclick="checkCWC()">Check!</button></div>
+      </div>
+      <div class="btn-row" id="wordBtns">
+        <button class="btn btn-success" onclick="markWord(true)">&#10003; Correct</button>
+        <button class="btn btn-red" onclick="markWord(false)">&#10007; Incorrect</button>
+      </div>
+      <div class="btn-row" id="wordNextBtn" style="display:none;">
+        <button class="btn btn-primary" onclick="nextWord()">Next Word &#8594;</button>
+      </div>`;
+  } else {
+    renderPassage();
+  }
+}
+
+function markWord(correct) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  const fc = document.getElementById('flashcard');
+  const btns = document.getElementById('wordBtns');
+
+  if (correct) {
+    fc.className = 'flashcard correct';
+    ws.results[ws.current] = { word: w.word, correct: true, attempts: 1 };
+    btns.style.display = 'none';
+    document.getElementById('wordNextBtn').style.display = 'flex';
+    addPoints(5);
+  } else {
+    fc.className = 'flashcard incorrect';
+    wordRevealed = true;
+    // Show parts
+    const partsHTML = w.parts.map((p, i) => {
+      const colors = ['#E3F2FD','#FFF3E0','#E8F5E9','#F3E5F5'];
+      return `<span style="background:${colors[i % colors.length]}">${p}</span>`;
+    }).join('');
+    document.getElementById('wordParts').innerHTML = partsHTML;
+    document.getElementById('wordParts').style.display = 'block';
+    document.getElementById('wordPhonetic').textContent = 'Says: "' + w.phonetic + '"';
+    document.getElementById('wordPhonetic').style.display = 'block';
+    btns.style.display = 'none';
+
+    // Show cover-write-check
+    setTimeout(() => {
+      document.getElementById('wordDisplay').style.display = 'none';
+      document.getElementById('wordParts').style.display = 'none';
+      document.getElementById('wordPhonetic').style.display = 'none';
+      fc.className = 'flashcard';
+      document.getElementById('cwcArea').classList.add('show');
+      document.getElementById('cwcInput').focus();
+    }, 2500);
+
+    ws.results[ws.current] = { word: w.word, correct: false, attempts: 1 };
+  }
+  debounceSave();
+}
+
+function checkCWC() {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  const input = document.getElementById('cwcInput').value.trim().toLowerCase();
+  const result = document.getElementById('cwcResult');
+
+  if (input === w.word.toLowerCase()) {
+    result.innerHTML = '<span style="color:var(--green);">&#10003; Perfect! You spelled it right!</span>';
+    addPoints(3);
+  } else {
+    result.innerHTML = `<span style="color:var(--red);">Not quite. The word is: <strong>${w.word}</strong></span>`;
+  }
+  document.getElementById('wordNextBtn').style.display = 'flex';
+  debounceSave();
+}
+
+function nextWord() {
+  const ws = S.reading.words;
+  ws.current++;
+  wordRevealed = false;
+  cwcPhase = false;
+  if (ws.current >= IRREGULAR_WORDS.length) {
+    ws.done = true;
+    S.timestamps.wordsEnd = new Date().toISOString();
+    // Log to sheets
+    const correctCount = ws.results.filter(r => r && r.correct).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Irregular Words', 'Reading', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.map(r => r.word + ':' + (r.correct ? 'Y' : 'N')).join(', ')]);
+    postToSheets('Reading - Phonics', [SESSION_DATE, 'Irregular Words', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.filter(r => !r.correct).map(r => r.word).join(', ')]);
+    readingPhase = 'passage';
+  }
+  renderReading();
+}
+
+function renderPassage() {
+  const el = document.getElementById('card-reading');
+  const ps = S.reading.passage;
+
+  const prosodyHTML = ['Expression','Phrasing','Pace','Smoothness'].map(dim => {
+    const key = dim.toLowerCase();
+    let scores = '';
+    for (let i = 1; i <= 4; i++) {
+      scores += `<div class="pi-score${ps.prosody[key]===i?' selected':''}" onclick="setProsody('${key}',${i})">${i}</div>`;
+    }
+    return `<div class="prosody-item"><div class="pi-label">${dim}</div><div class="pi-scores">${scores}</div></div>`;
+  }).join('');
+
+  const ws = S.reading.words;
+  const correctWords = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Passage Read-Aloud</div>
+    <h2>Read this passage about space!</h2>
+    <p class="directions">Read the passage aloud. Try to make it sound like you're telling an exciting story! The <strong style="background:var(--gold-light);padding:1px 4px;border-radius:4px;">highlighted words</strong> are the tricky words you just practiced.</p>
+    ${ws.done ? `<div style="background:var(--green-light);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:0.88rem;color:#2E7D32;font-weight:600;">&#10003; Irregular Words: ${correctWords}/${IRREGULAR_WORDS.length} correct</div>` : ''}
+    <div class="passage-box">${PASSAGE_TEXT}</div>
+    <h3 style="font-size:1rem;margin:14px 0 8px;">Prosody Rubric (Tutor rates 1-4)</h3>
+    <div class="prosody-grid">${prosodyHTML}</div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="finishReading()">Done with Reading &#10003;</button>
+    </div>`;
+}
+
+function setProsody(dim, val) {
+  S.reading.passage.prosody[dim] = val;
+  renderPassage();
+  debounceSave();
+}
+
+function finishReading() {
+  S.reading.passage.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  document.getElementById('mtab-reading').classList.add('done');
+
+  const p = S.reading.passage.prosody;
+  const avg = ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1);
+  postToSheets('Reading - ORF', [SESSION_DATE, 'Passage Read-Aloud', '', '', p.expression, p.phrasing, p.pace, p.smoothness, avg, 'Space-themed passage with target irregular words']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Passage Read-Aloud', 'Reading', 'Prosody avg: ' + avg, '', '', 'Exp:'+p.expression+' Phr:'+p.phrasing+' Pac:'+p.pace+' Smo:'+p.smoothness]);
+
+  toast('Reading section complete!');
+  switchTab('paragraph');
+}
+
+// ============================================================
+//  TAB 2A: ODD ONE OUT
+// ============================================================
+
+function qdots(section, data) {
+  const st = S.paragraph[section];
+  return data.map((_, i) => {
+    let cls = 'q-dot';
+    if (i < st.q) cls += ' done';
+    else if (i === st.q) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+}
+
+function renderOdd() {
+  const st = S.paragraph.odd;
+  const el = document.getElementById('card-odd');
+
+  if (st.done) {
+    const pct = st.total ? Math.round(st.correct / st.total * 100) : 0;
+    el.innerHTML = `
+      <div class="act-label act-odd">&#128270; Odd One Out</div>
+      <div class="celebration"><div class="big-star">&#11088;</div>
+        <h2>Odd One Out Complete!</h2>
+        <p>You got <strong>${st.correct} out of ${st.total}</strong> correct (${pct}%)</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="switchParaSub('sort')">Next: Reason or Description? &#8594;</button></div>`;
+    return;
+  }
+
+  const q = ODD_DATA[st.q];
+  st._answered = false;
+
+  const cards = q.sentences.map((s, i) => `
+    <div class="s-card" id="os${i}" onclick="pickOdd(${i})">
+      <span class="s-icon" id="oi${i}"></span>
+      <div style="font-size:0.95rem;line-height:1.5;">${s.text}</div>
+      <div class="s-note" id="on${i}"></div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-odd">&#128270; Odd One Out</div>
+    <h2>Which sentence doesn't belong?</h2>
+    <p class="directions">Read all the sentences. <strong>One doesn't fit</strong> with the topic sentence. Tap it!</p>
+    <div class="q-progress"><div class="q-dots">${qdots('odd', ODD_DATA)}</div><div class="q-label">Round ${st.q+1} of ${ODD_DATA.length}</div></div>
+    <div class="topic-sentence"><div class="ts-label">Topic Sentence</div>${q.topicSentence}</div>
+    <div class="sentence-cards">${cards}</div>
+    <div class="feedback-banner" id="oddFb"></div>
+    <div class="btn-row" id="oddNext" style="display:none;"></div>`;
+}
+
+function pickOdd(idx) {
+  const st = S.paragraph.odd;
+  if (st._answered) return;
+  st._answered = true;
+  st.total++;
+
+  const q = ODD_DATA[st.q];
+  const correct = !q.sentences[idx].fits;
+
+  q.sentences.forEach((s, i) => {
+    const card = document.getElementById('os' + i);
+    const icon = document.getElementById('oi' + i);
+    const note = document.getElementById('on' + i);
+    card.classList.add('answered');
+    icon.style.display = 'block';
+
+    if (i === idx) {
+      if (correct) { card.classList.add('s-correct'); icon.textContent = '\u2705'; note.textContent = 'You found it! ' + (s.note || ''); }
+      else { card.classList.add('s-wrong'); icon.textContent = '\u274C'; note.textContent = "This sentence actually fits!"; }
+    } else if (!s.fits) {
+      if (!correct) { card.classList.add('s-missed'); icon.textContent = '\uD83D\uDC46'; note.textContent = 'This was the one! ' + (s.note || ''); }
+    } else {
+      card.classList.add('s-neutral'); icon.textContent = '\u2713';
+    }
+  });
+
+  const fb = document.getElementById('oddFb');
+  if (correct) {
+    fb.className = 'feedback-banner show fb-correct';
+    fb.innerHTML = '\uD83C\uDF89 Excellent! You found the odd one out!<div class="fb-detail">Every sentence in a paragraph should support the topic sentence.</div>';
+    st.correct++;
+    addPoints(10);
+  } else {
+    fb.className = 'feedback-banner show fb-wrong';
+    fb.innerHTML = '\uD83E\uDD14 Not quite. Look for the sentence that changes the subject!';
+  }
+
+  const isLast = st.q >= ODD_DATA.length - 1;
+  document.getElementById('oddNext').style.display = 'flex';
+  document.getElementById('oddNext').innerHTML = isLast
+    ? '<button class="btn btn-success" onclick="advanceOdd()">See My Score! &#11088;</button>'
+    : '<button class="btn btn-primary" onclick="advanceOdd()">Next &#8594;</button>';
+  debounceSave();
+}
+
+function advanceOdd() {
+  const st = S.paragraph.odd;
+  st.q++;
+  if (st.q >= ODD_DATA.length) {
+    st.done = true;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Odd One Out', 'Paragraph Skills', st.correct, st.total, Math.round(st.correct/st.total*100)+'%', '']);
+  }
+  renderOdd();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  TAB 2B: REASON OR DESCRIPTION?
+// ============================================================
+
+function renderSort() {
+  const st = S.paragraph.sort;
+  const el = document.getElementById('card-sort');
+
+  if (st.done) {
+    const pct = st.total ? Math.round(st.correct / st.total * 100) : 0;
+    el.innerHTML = `
+      <div class="act-label act-sort">&#9878;&#65039; Reason or Description?</div>
+      <div class="celebration"><div class="big-star">&#11088;</div>
+        <h2>Sorting Complete!</h2>
+        <p>You sorted <strong>${st.correct} out of ${st.total}</strong> correctly (${pct}%)</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="switchParaSub('build')">Next: Build a Paragraph &#8594;</button></div>`;
+    return;
+  }
+
+  const q = SORT_DATA[st.q];
+  st._sortAnswers = new Array(q.sentences.length).fill(null);
+  st._sortChecked = false;
+
+  const cards = q.sentences.map((s, i) => `
+    <div class="sort-card" id="sc${i}">
+      <div class="sort-text">${s.text}</div>
+      <div class="sort-btns">
+        <button class="sort-btn reason" id="sr${i}" onclick="sortPick(${i},'reason')">&#128154; Reason</button>
+        <button class="sort-btn desc" id="sd${i}" onclick="sortPick(${i},'description')">&#128993; Description</button>
+      </div>
+      <div class="sort-fb" id="sf${i}"></div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-sort">&#9878;&#65039; Reason or Description?</div>
+    <h2>Sort each sentence!</h2>
+    <p class="directions">A <strong style="color:var(--green);">Reason</strong> supports the opinion (tells WHY). A <strong style="color:#E65100;">Description</strong> is interesting but doesn't support the opinion. Sort each sentence!</p>
+    <div class="q-progress"><div class="q-dots">${qdots('sort', SORT_DATA)}</div><div class="q-label">Round ${st.q+1} of ${SORT_DATA.length}</div></div>
+    <div class="opinion-box"><div class="oq-label">The Opinion</div>${q.opinion}</div>
+    <div class="sort-cards">${cards}</div>
+    <div class="feedback-banner" id="sortFb"></div>
+    <div class="btn-row">
+      <button class="btn btn-purple" id="sortCheck" onclick="checkSort()">Check My Answers! &#10003;</button>
+    </div>
+    <div class="btn-row" id="sortNext" style="display:none;"></div>`;
+}
+
+function sortPick(idx, choice) {
+  const st = S.paragraph.sort;
+  if (st._sortChecked) return;
+  st._sortAnswers[idx] = choice;
+
+  const rb = document.getElementById('sr' + idx);
+  const db = document.getElementById('sd' + idx);
+  rb.classList.toggle('picked', choice === 'reason');
+  db.classList.toggle('picked', choice === 'description');
+}
+
+function checkSort() {
+  const st = S.paragraph.sort;
+  if (st._sortChecked) return;
+
+  // Check all answered
+  const q = SORT_DATA[st.q];
+  const unanswered = st._sortAnswers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    toast('Sort all sentences first!', true);
+    return;
+  }
+
+  st._sortChecked = true;
+  document.getElementById('sortCheck').style.display = 'none';
+  let roundCorrect = 0;
+
+  q.sentences.forEach((s, i) => {
+    const card = document.getElementById('sc' + i);
+    const fb = document.getElementById('sf' + i);
+    const rb = document.getElementById('sr' + i);
+    const db = document.getElementById('sd' + i);
+    card.classList.add('answered');
+    rb.disabled = true;
+    db.disabled = true;
+
+    const picked = st._sortAnswers[i];
+    const correct = picked === s.type;
+    st.total++;
+
+    if (correct) {
+      st.correct++;
+      roundCorrect++;
+      if (picked === 'reason') rb.classList.add('correct-pick');
+      else db.classList.add('correct-pick');
+      fb.innerHTML = '\u2705 ' + s.feedback;
+      fb.style.color = '#2E7D32';
+    } else {
+      if (picked === 'reason') rb.classList.add('wrong-pick');
+      else db.classList.add('wrong-pick');
+      fb.innerHTML = '\u274C ' + s.feedback;
+      fb.style.color = '#B71C1C';
+    }
+  });
+
+  const mainFb = document.getElementById('sortFb');
+  const pct = Math.round(roundCorrect / q.sentences.length * 100);
+  if (pct === 100) {
+    mainFb.className = 'feedback-banner show fb-correct';
+    mainFb.innerHTML = '\uD83C\uDF89 Perfect sorting! You know the difference between reasons and descriptions!';
+    addPoints(15);
+  } else if (pct >= 75) {
+    mainFb.className = 'feedback-banner show fb-correct';
+    mainFb.innerHTML = '\u2B50 Great job! You got most of them right!';
+    addPoints(8);
+  } else {
+    mainFb.className = 'feedback-banner show fb-wrong';
+    mainFb.innerHTML = '\uD83E\uDD14 Remember: A reason tells WHY you think something. A description just tells an interesting fact.';
+    addPoints(3);
+  }
+
+  const isLast = st.q >= SORT_DATA.length - 1;
+  document.getElementById('sortNext').style.display = 'flex';
+  document.getElementById('sortNext').innerHTML = isLast
+    ? '<button class="btn btn-success" onclick="advanceSort()">See My Score! &#11088;</button>'
+    : '<button class="btn btn-primary" onclick="advanceSort()">Next Round &#8594;</button>';
+  debounceSave();
+}
+
+function advanceSort() {
+  const st = S.paragraph.sort;
+  st.q++;
+  if (st.q >= SORT_DATA.length) {
+    st.done = true;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Reason or Description', 'Paragraph Skills', st.correct, st.total, Math.round(st.correct/st.total*100)+'%', '']);
+  }
+  renderSort();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+//  TAB 2C: BUILD A PARAGRAPH
+// ============================================================
+
+function renderBuild() {
+  const st = S.paragraph.build;
+  const el = document.getElementById('card-build');
+
+  if (st.done) {
+    const totalCorrect = st.scores.reduce((a, b) => a + b, 0);
+    const totalPossible = BUILD_DATA.reduce((a, q) => a + q.sentences.length, 0);
+    const pct = totalPossible ? Math.round(totalCorrect / totalPossible * 100) : 0;
+    el.innerHTML = `
+      <div class="act-label act-build">&#127959;&#65039; Build a Paragraph</div>
+      <div class="celebration"><div class="big-star">&#11088;</div>
+        <h2>Build a Paragraph Complete!</h2>
+        <p>You made <strong>${totalCorrect} out of ${totalPossible}</strong> correct decisions (${pct}%)</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-primary" onclick="finishParagraphs()">Paragraph Skills Done! &#8594;</button></div>`;
+    return;
+  }
+
+  const q = BUILD_DATA[st.q];
+  st._buildAnswered = false;
+  st.selected = new Set();
+
+  const pool = q.sentences.map((s, i) => `
+    <div class="pool-sentence" id="bs${i}" onclick="toggleBuild(${i})">
+      <div class="pool-cb" id="bc${i}">\u2610</div>
+      <div>
+        <div class="pool-text">${s.text}</div>
+        <div class="pool-note" id="bn${i}"></div>
+      </div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-build">&#127959;&#65039; Build a Paragraph</div>
+    <h2>Build the perfect paragraph!</h2>
+    <p class="directions">Tap the sentences that <strong>support the topic sentence</strong> (give reasons). Leave out descriptions that don't belong!</p>
+    <div class="q-progress"><div class="q-dots">${qdots('build', BUILD_DATA)}</div><div class="q-label">Round ${st.q+1} of ${BUILD_DATA.length}</div></div>
+    <div class="topic-sentence"><div class="ts-label">Topic Sentence</div>${q.topicSentence}</div>
+    <div class="build-hint">\uD83D\uDCA1 Tap a sentence to select it (turns blue). Tap again to unselect. Then click <strong>Check My Paragraph!</strong></div>
+    <div class="sentence-pool">${pool}</div>
+    <div class="feedback-banner" id="buildFb"></div>
+    <div class="btn-row">
+      <button class="btn btn-purple" id="buildCheck" onclick="checkBuild()">Check My Paragraph! &#10003;</button>
+    </div>
+    <div class="btn-row" id="buildNext" style="display:none;"></div>`;
+}
+
+function toggleBuild(idx) {
+  const st = S.paragraph.build;
+  if (st._buildAnswered) return;
+  const card = document.getElementById('bs' + idx);
+  const cb = document.getElementById('bc' + idx);
+  if (st.selected.has(idx)) {
+    st.selected.delete(idx);
+    card.classList.remove('ps-selected');
+    cb.textContent = '\u2610';
+  } else {
+    st.selected.add(idx);
+    card.classList.add('ps-selected');
+    cb.textContent = '\u2611';
+  }
+}
+
+function checkBuild() {
+  const st = S.paragraph.build;
+  if (st._buildAnswered) return;
+  st._buildAnswered = true;
+
+  const q = BUILD_DATA[st.q];
+  document.getElementById('buildCheck').style.display = 'none';
+  let correctDecisions = 0;
+
+  q.sentences.forEach((s, i) => {
+    const card = document.getElementById('bs' + i);
+    const cb = document.getElementById('bc' + i);
+    const note = document.getElementById('bn' + i);
+    const sel = st.selected.has(i);
+    card.classList.remove('ps-selected');
+    card.classList.add('answered');
+
+    if (s.keep && sel) { card.classList.add('ps-correct-yes'); cb.textContent = '\u2705'; correctDecisions++; note.textContent = s.note; }
+    else if (s.keep && !sel) { card.classList.add('ps-missed'); cb.textContent = '\uD83D\uDC46'; note.textContent = "You missed this one! " + s.note; }
+    else if (!s.keep && sel) { card.classList.add('ps-wrong-yes'); cb.textContent = '\u274C'; note.textContent = s.note; }
+    else { card.classList.add('ps-correct-no'); cb.textContent = '\u26D4'; note.textContent = s.note; correctDecisions++; }
+  });
+
+  st.scores.push(correctDecisions);
+  const pct = Math.round(correctDecisions / q.sentences.length * 100);
+  const fb = document.getElementById('buildFb');
+
+  if (pct === 100) {
+    fb.className = 'feedback-banner show fb-correct';
+    fb.innerHTML = '\uD83C\uDF89 Perfect! Every choice was right!';
+    addPoints(15);
+  } else if (pct >= 70) {
+    fb.className = 'feedback-banner show fb-correct';
+    fb.innerHTML = '\u2B50 Great job! Read the notes on each sentence to learn more.';
+    addPoints(8);
+  } else {
+    fb.className = 'feedback-banner show fb-wrong';
+    fb.innerHTML = '\uD83E\uDD14 Check the notes — remember, only pick sentences that give REASONS!';
+    addPoints(3);
+  }
+
+  const isLast = st.q >= BUILD_DATA.length - 1;
+  document.getElementById('buildNext').style.display = 'flex';
+  document.getElementById('buildNext').innerHTML = isLast
+    ? '<button class="btn btn-success" onclick="advanceBuild()">See My Score! &#11088;</button>'
+    : '<button class="btn btn-primary" onclick="advanceBuild()">Next Round &#8594;</button>';
+  debounceSave();
+}
+
+function advanceBuild() {
+  const st = S.paragraph.build;
+  st.q++;
+  if (st.q >= BUILD_DATA.length) {
+    st.done = true;
+    const totalCorrect = st.scores.reduce((a, b) => a + b, 0);
+    const totalPossible = BUILD_DATA.reduce((a, q) => a + q.sentences.length, 0);
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Build a Paragraph', 'Paragraph Skills', totalCorrect, totalPossible, Math.round(totalCorrect/totalPossible*100)+'%', '']);
+  }
+  renderBuild();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function finishParagraphs() {
+  S.timestamps.paragraphEnd = new Date().toISOString();
+  document.getElementById('mtab-paragraph').classList.add('done');
+  toast('Paragraph skills complete! Time to write your essay!');
+  switchTab('essay');
+}
+
+// ============================================================
+//  TAB 3: ESSAY BUILDER
+// ============================================================
+
+let essayLastFocused = null;
+
+function renderEssay() {
+  const el = document.getElementById('card-essay');
+  const step = S.essay.step;
+
+  if (step === 'plan') renderEssayPlan(el);
+  else if (step === 'write') renderEssayWrite(el);
+  else if (step === 'review') renderEssayReview(el);
+}
+
+function renderEssayPlan(el) {
+  const plan = S.essay.plan;
+  const steps = ['opinion','reason1','reason2','reason3','conclusion'];
+  const labels = ['What do you think about space exploration?','What\'s one reason you think that? Think about what astronauts have done.','What\'s another reason? Think about what people learned.','One more reason? (Optional — skip if you want!)','How do you want to wrap up your essay?'];
+  const icons = ['\uD83D\uDCAD','\uD83D\uDCA1','\uD83D\uDCA1','\uD83D\uDCA1','\uD83C\uDFC1'];
+
+  let stepsHTML = '';
+  steps.forEach((key, idx) => {
+    const opts = PLAN_OPTIONS[key];
+    const current = plan[key] || '';
+
+    let optionsHTML = opts.filter(o => o).map((o, oi) => {
+      const sel = current === o ? ' selected' : '';
+      return `<div class="iq-option${sel}" onclick="planSelect('${key}',${oi})">${o}</div>`;
+    }).join('');
+
+    // Custom write-your-own
+    const isCustom = current && !opts.includes(current);
+    optionsHTML += `
+      <div class="iq-custom">
+        <input type="text" id="plan-custom-${key}" placeholder="Or write your own..." value="${isCustom ? esc(current) : ''}" oninput="planCustom('${key}',this.value)">
+      </div>`;
+
+    // Help button
+    const helpTexts = {
+      opinion: ['Think about everything you\'ve learned about space in class. Do you think it\'s cool? Important? Why?', 'Example: "I think space exploration is important because it teaches us about the universe."', 'I think space exploration is very important.'],
+      reason1: ['Think about the astronauts you\'ve read about. What did they do that was amazing or brave?', 'Example: "The astronauts were brave because they risked their lives to explore space."', 'The astronauts were incredibly brave because they risked their lives.'],
+      reason2: ['Think about what scientists learned from space missions. Did anything cool come from it?', 'Example: "Scientists learned new things by studying Moon rocks that astronauts brought back."', 'Space research has given us useful inventions like water filters and better computers.'],
+      reason3: ['Think about why space exploration matters for the future. Is there more to discover?', 'Example: "Space exploration helps countries work together as a team."', 'Although space missions are expensive, the things we learn are worth it.'],
+      conclusion: ['What\'s the big takeaway? Why should your reader care about space exploration?', 'Example: "That is why I believe space exploration is one of the most important things ever."', 'That is why I believe space exploration is one of the most important things humans have ever done.']
+    };
+
+    const ht = helpTexts[key];
+    const helpLevel = S.essay.helpUsed[key] || 0;
+
+    let helpHTML = '';
+    if (helpLevel < 3) {
+      helpHTML = `<div class="help-btn-wrap"><button class="help-btn" onclick="essayHelp('${key}')">&#129300; I need help! ${helpLevel > 0 ? '(Tap ' + (helpLevel+1) + ')' : ''}</button></div>`;
+    }
+    let helpPanelHTML = '<div class="help-panel' + (helpLevel > 0 ? ' show' : '') + '" id="help-' + key + '">';
+    if (helpLevel >= 1) helpPanelHTML += `<div class="help-level"><div class="help-level-label">Think about this...</div><p>${ht[0]}</p></div>`;
+    if (helpLevel >= 2) helpPanelHTML += `<div class="help-level"><div class="help-level-label">Example</div><p>${ht[1]}</p></div>`;
+    if (helpLevel >= 3) helpPanelHTML += `<div class="help-level"><div class="help-level-label">Ready-made option</div><p>You can use this: <strong>"${ht[2]}"</strong></p><button class="btn btn-sm btn-primary" onclick="planSelect('${key}',-1,'${esc(ht[2]).replace(/'/g, "\\'")}')">Use this</button></div>`;
+    helpPanelHTML += '</div>';
+
+    stepsHTML += `
+      <div class="interview-q">
+        <div class="iq-num">${icons[idx]} Question ${idx+1}${key === 'reason3' ? ' (Optional)' : ''}</div>
+        <div class="iq-question">${labels[idx]}</div>
+        <div class="say-first">\uD83D\uDDE3\uFE0F Say it first! Tell your tutor your answer out loud before picking.</div>
+        <div class="iq-options">${optionsHTML}</div>
+        ${helpHTML}
+        ${helpPanelHTML}
+      </div>`;
+  });
+
+  // Check if enough is filled to proceed
+  const canProceed = plan.opinion && plan.reason1;
+
+  el.innerHTML = `
+    <div class="act-label act-essay">&#128221; Step 1: Plan Your Essay</div>
+    <h2>Interview Time!</h2>
+    <p class="directions">Answer each question to plan your opinion essay about <strong>space exploration</strong>. Pick an answer OR write your own!</p>
+    <div class="opinion-box"><div class="oq-label">Essay Prompt</div>Do you think space exploration is important? Why or why not?</div>
+    ${stepsHTML}
+    <div class="btn-row">
+      <button class="btn btn-success ${canProceed ? '' : 'disabled'}" onclick="${canProceed ? "goEssayStep('write')" : ''}" ${canProceed ? '' : 'disabled'}>My plan is ready! Write my essay &#8594;</button>
+    </div>`;
+}
+
+function planSelect(key, optIdx, customText) {
+  if (customText) {
+    S.essay.plan[key] = customText;
+  } else if (optIdx >= 0) {
+    S.essay.plan[key] = PLAN_OPTIONS[key][optIdx];
+    // Clear custom input
+    const ci = document.getElementById('plan-custom-' + key);
+    if (ci) ci.value = '';
+  }
+  renderEssay();
+  debounceSave();
+}
+
+function planCustom(key, val) {
+  if (val.trim()) {
+    S.essay.plan[key] = val.trim();
+    // Deselect options
+    renderEssay();
+    // Re-focus the input
+    setTimeout(() => {
+      const ci = document.getElementById('plan-custom-' + key);
+      if (ci) { ci.focus(); ci.selectionStart = ci.selectionEnd = ci.value.length; }
+    }, 50);
+  } else {
+    S.essay.plan[key] = '';
+  }
+  debounceSave();
+}
+
+function essayHelp(key) {
+  S.essay.helpUsed[key] = (S.essay.helpUsed[key] || 0) + 1;
+  renderEssay();
+  setTimeout(() => {
+    const panel = document.getElementById('help-' + key);
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+  debounceSave();
+}
+
+function goEssayStep(step) {
+  S.essay.step = step;
+  if (step === 'write') S.timestamps.planEnd = new Date().toISOString();
+  if (step === 'review') S.timestamps.writeEnd = new Date().toISOString();
+  renderEssay();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+function renderEssayWrite(el) {
+  const plan = S.essay.plan;
+  const sent = S.essay.sentences;
+
+  const starters = {
+    intro1: { text: 'I think', type: 'normal' },
+    intro2: { text: 'I believe this because', type: 'connector' },
+    body1: { text: 'First,', type: 'normal' },
+    body2: { text: 'When', type: 'connector' },
+    body3: { text: 'Also,', type: 'normal' },
+    conc1: { text: 'Although', type: 'connector' },
+    conc2: { text: 'I think', type: 'normal' }
+  };
+
+  const planNotes = {
+    intro1: plan.opinion ? 'Your opinion: "' + plan.opinion + '"' : '',
+    intro2: plan.reason1 ? 'Your first reason: "' + plan.reason1 + '"' : '',
+    body1: plan.reason1 ? 'Reason 1: "' + plan.reason1 + '"' : '',
+    body2: plan.reason2 ? 'Reason 2: "' + plan.reason2 + '"' : '',
+    body3: plan.reason3 ? 'Extra detail from your plan: "' + plan.reason3 + '"' : 'Add one more supporting detail!',
+    conc1: plan.conclusion ? 'Your conclusion idea: "' + plan.conclusion + '"' : '',
+    conc2: 'Restate your opinion one final time!'
+  };
+
+  const sections = [
+    { label: 'Introduction', color: 'gold', fields: ['intro1','intro2'], labels: ['State your opinion','Give a preview of why'] },
+    { label: 'Body Paragraph', color: 'blue', fields: ['body1','body2','body3'], labels: ['First reason','Second reason (use a connecting word!)','One more detail'] },
+    { label: 'Conclusion', color: 'gold', fields: ['conc1','conc2'], labels: ['Wrap up with contrast','Final opinion statement'] }
+  ];
+
+  let html = `
+    <div class="act-label act-essay">&#128221; Step 2: Write Your Essay</div>
+    <h2>Turn your plan into sentences!</h2>
+    <p class="directions">Your plan ideas are shown in green. Use the sentence starters and word chips to write your essay!</p>
+    <div class="word-tray-label">Tap a connecting word to insert it:</div>
+    <div class="word-tray" id="essayTray">
+      <span class="word-chip connector" onclick="insertChip('because')">because</span>
+      <span class="word-chip connector" onclick="insertChip('when')">when</span>
+      <span class="word-chip connector" onclick="insertChip('after')">after</span>
+      <span class="word-chip connector" onclick="insertChip('before')">before</span>
+      <span class="word-chip connector" onclick="insertChip('although')">although</span>
+      <span class="word-chip connector" onclick="insertChip('also')">also</span>
+    </div>`;
+
+  sections.forEach(sec => {
+    html += `<div style="margin:18px 0 8px;"><strong style="color:var(--${sec.color === 'gold' ? 'gold' : 'blue'});">${sec.label}</strong></div>`;
+    sec.fields.forEach((fid, fi) => {
+      const st = starters[fid];
+      const val = sent[fid] || '';
+      const note = planNotes[fid];
+      html += `
+        <div class="sentence-row">
+          <label>${sec.labels[fi]}</label>
+          ${note ? `<div class="plan-note">\uD83D\uDCCB ${note}</div>` : ''}
+          <div class="starter${st.type === 'connector' ? ' connector' : ''}">${st.text}</div>
+          <textarea id="essay-${fid}" rows="2" placeholder="Continue the sentence..." oninput="onEssayType('${fid}',this)" onfocus="essayLastFocused=this">${esc(val)}</textarea>
+        </div>`;
+    });
+  });
+
+  html += `
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goEssayStep('plan')">&#8592; Back to Plan</button>
+      <button class="btn btn-success" onclick="goEssayStep('review')">See My Essay! &#11088;</button>
+    </div>`;
+
+  el.innerHTML = html;
+}
+
+function onEssayType(fid, textarea) {
+  S.essay.sentences[fid] = textarea.value;
+  textarea.classList.toggle('filled', textarea.value.trim().length > 0);
+  debounceSave();
+}
+
+function insertChip(word) {
+  if (!essayLastFocused) {
+    // Find first empty textarea
+    const tas = document.querySelectorAll('#card-essay textarea');
+    for (const ta of tas) { if (!ta.value.trim()) { essayLastFocused = ta; break; } }
+    if (!essayLastFocused && tas.length) essayLastFocused = tas[0];
+  }
+  if (essayLastFocused) {
+    const start = essayLastFocused.selectionStart;
+    const end = essayLastFocused.selectionEnd;
+    const val = essayLastFocused.value;
+    essayLastFocused.value = val.slice(0, start) + word + ' ' + val.slice(end);
+    essayLastFocused.focus();
+    essayLastFocused.selectionStart = essayLastFocused.selectionEnd = start + word.length + 1;
+    // Trigger save
+    const fid = essayLastFocused.id.replace('essay-', '');
+    S.essay.sentences[fid] = essayLastFocused.value;
+    essayLastFocused.classList.add('filled');
+    toast('"' + word + '" added!');
+    debounceSave();
+  }
+}
+
+function renderEssayReview(el) {
+  const starters = {
+    intro1: 'I think ', intro2: 'I believe this because ',
+    body1: 'First, ', body2: 'When ', body3: 'Also, ',
+    conc1: 'Although ', conc2: 'I think '
+  };
+
+  const fields = ['intro1','intro2','body1','body2','body3','conc1','conc2'];
+  let sentences = [];
+  let wordCount = 0, cwCount = 0;
+
+  for (const id of fields) {
+    const val = S.essay.sentences[id];
+    if (!val || !val.trim()) continue;
+    let full = starters[id] + val.trim();
+    if (!/[.!?]$/.test(full)) full += '.';
+    sentences.push({ id, text: full });
+  }
+
+  let introHTML = '', bodyHTML = '', concHTML = '';
+
+  for (const s of sentences) {
+    let html = esc(s.text);
+    for (const cw of CONNECTING_WORDS) {
+      const regex = new RegExp('\\b(' + cw + ')\\b', 'gi');
+      html = html.replace(regex, m => { cwCount++; return '<span class="cw">' + m + '</span>'; });
+    }
+    wordCount += s.text.split(/\s+/).length;
+
+    if (s.id.startsWith('intro')) introHTML += html + ' ';
+    else if (s.id.startsWith('body')) bodyHTML += html + ' ';
+    else if (s.id.startsWith('conc')) concHTML += html + ' ';
+  }
+
+  let essayHTML = '';
+  if (introHTML) essayHTML += '     ' + introHTML.trim() + '\n\n';
+  if (bodyHTML) essayHTML += '     ' + bodyHTML.trim() + '\n\n';
+  if (concHTML) essayHTML += '     ' + concHTML.trim();
+
+  el.innerHTML = `
+    <div class="celebration">
+      <div class="big-star">&#11088;</div>
+      <h2>Amazing Work, Marcello!</h2>
+      <p>You wrote a complete opinion essay about space exploration!</p>
+      <div class="stats-row">
+        <div class="stat-box"><div class="num">${wordCount}</div><div class="lbl">Words</div></div>
+        <div class="stat-box"><div class="num">${sentences.length}</div><div class="lbl">Sentences</div></div>
+        <div class="stat-box"><div class="num">${cwCount}</div><div class="lbl">Connecting Words</div></div>
+      </div>
+    </div>
+
+    <div class="act-label act-essay">Your Complete Essay</div>
+    <h2 style="margin-bottom:12px;">My Opinion About Space Exploration</h2>
+    <div class="essay-preview">${essayHTML || '<em>Write some sentences to see your essay here!</em>'}</div>
+
+    <div class="checklist">
+      <p style="font-weight:700;color:#2E7D32;margin-bottom:8px;">Writing Checklist</p>
+      <label><input type="checkbox"> I stated my opinion in the introduction.</label>
+      <label><input type="checkbox"> My body paragraph gives reasons (not just descriptions!).</label>
+      <label><input type="checkbox"> I used connecting words (because, when, after, before, although).</label>
+      <label><input type="checkbox"> My conclusion wraps up my thinking.</label>
+      <label><input type="checkbox"> I am proud of my essay!</label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="goEssayStep('write')">&#8592; Edit</button>
+      <button class="btn btn-success" onclick="finishEssay()">Essay Done! &#10003;</button>
+    </div>`;
+}
+
+function finishEssay() {
+  S.timestamps.essayEnd = new Date().toISOString();
+  document.getElementById('mtab-essay').classList.add('done');
+
+  // Count stats for logging
+  const starters = { intro1:'I think ', intro2:'I believe this because ', body1:'First, ', body2:'When ', body3:'Also, ', conc1:'Although ', conc2:'I think ' };
+  const fields = ['intro1','intro2','body1','body2','body3','conc1','conc2'];
+  let wordCount = 0, cwCount = 0, filled = 0;
+  fields.forEach(id => {
+    const val = S.essay.sentences[id];
+    if (!val || !val.trim()) return;
+    filled++;
+    const text = starters[id] + val;
+    wordCount += text.split(/\s+/).length;
+    CONNECTING_WORDS.forEach(cw => {
+      const r = new RegExp('\\b' + cw + '\\b', 'gi');
+      const m = text.match(r);
+      if (m) cwCount += m.length;
+    });
+  });
+
+  postToSheets('Writing', [SESSION_DATE, 'Essay Builder', 'Opinion Essay - Space Exploration', filled, fields.length, Math.round(filled/fields.length*100)+'%', wordCount, cwCount, Object.keys(S.essay.helpUsed).length + ' help uses']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay Builder', 'Opinion Essay', filled, fields.length, Math.round(filled/fields.length*100)+'%', wordCount + ' words, ' + cwCount + ' connecting words']);
+
+  toast('Essay saved! Switch to Dashboard to see your report.');
+  switchTab('dashboard');
+}
+
+// ============================================================
+//  TAB 4: TUTOR DASHBOARD
+// ============================================================
+
+function renderDashboard() {
+  const el = document.getElementById('card-dashboard');
+
+  // Reading stats
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+  const wordsTotal = ws.results ? ws.results.length : 0;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+
+  // Paragraph stats
+  const odd = S.paragraph.odd;
+  const sort = S.paragraph.sort;
+  const build = S.paragraph.build;
+  const buildTotal = build.scores ? build.scores.reduce((a, b) => a + b, 0) : 0;
+  const buildPossible = BUILD_DATA.reduce((a, q) => a + q.sentences.length, 0);
+
+  // Essay stats
+  const starters = { intro1:'I think ', intro2:'I believe this because ', body1:'First, ', body2:'When ', body3:'Also, ', conc1:'Although ', conc2:'I think ' };
+  const fields = ['intro1','intro2','body1','body2','body3','conc1','conc2'];
+  let essayWords = 0, essayCW = 0, essayFilled = 0, fullEssay = '';
+  fields.forEach(id => {
+    const val = S.essay.sentences[id];
+    if (!val || !val.trim()) return;
+    essayFilled++;
+    let text = starters[id] + val.trim();
+    if (!/[.!?]$/.test(text)) text += '.';
+    essayWords += text.split(/\s+/).length;
+    CONNECTING_WORDS.forEach(cw => {
+      const r = new RegExp('\\b' + cw + '\\b', 'gi');
+      const m = text.match(r);
+      if (m) essayCW += m.length;
+    });
+    fullEssay += text + ' ';
+  });
+
+  // Build report
+  const report = generateReport(wordsCorrect, wordsTotal, prosodyAvg, p, odd, sort, buildTotal, buildPossible, essayFilled, essayWords, essayCW);
+
+  el.innerHTML = `
+    <div class="act-label act-dash">&#128202; Tutor Dashboard</div>
+    <h2>Session Summary</h2>
+
+    <div class="dash-section">
+      <h3>&#128214; Reading Skills</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${wordsCorrect}/${wordsTotal || IRREGULAR_WORDS.length}</div><div class="ds-label">Irregular Words</div></div>
+        <div class="dash-stat"><div class="ds-val">${prosodyAvg}</div><div class="ds-label">Prosody Avg (1-4)</div></div>
+        <div class="dash-stat"><div class="ds-val">${p.expression || '--'}</div><div class="ds-label">Expression</div></div>
+        <div class="dash-stat"><div class="ds-val">${p.smoothness || '--'}</div><div class="ds-label">Smoothness</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#9997;&#65039; Paragraph Skills</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${odd.total ? Math.round(odd.correct/odd.total*100)+'%' : '--'}</div><div class="ds-label">Odd One Out</div></div>
+        <div class="dash-stat"><div class="ds-val">${sort.total ? Math.round(sort.correct/sort.total*100)+'%' : '--'}</div><div class="ds-label">Reason vs Description</div></div>
+        <div class="dash-stat" style="grid-column:span 2;"><div class="ds-val">${build.scores.length ? Math.round(buildTotal/buildPossible*100)+'%' : '--'}</div><div class="ds-label">Build a Paragraph</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128221; Essay</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${essayWords}</div><div class="ds-label">Words</div></div>
+        <div class="dash-stat"><div class="ds-val">${essayCW}</div><div class="ds-label">Connecting Words</div></div>
+        <div class="dash-stat"><div class="ds-val">${essayFilled}/7</div><div class="ds-label">Sentences</div></div>
+        <div class="dash-stat"><div class="ds-val">${Object.keys(S.essay.helpUsed).length}</div><div class="ds-label">Help Used</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128203; Parent Report</h3>
+      <div class="report-box" id="reportBox">${esc(report)}</div>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-primary" onclick="copyReport()">&#128203; Copy Report</button>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128190; Data Export</h3>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-purple" id="sheetsSaveBtn" onclick="saveAllToSheets()">&#128202; Save to Google Sheets</button>
+        <button class="btn btn-sm btn-orange" onclick="downloadJSON()">&#128229; Download JSON</button>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128736;&#65039; Session Management</h3>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-red" onclick="if(confirm('Clear all session data? This cannot be undone!')){localStorage.removeItem(STORAGE_KEY);location.reload();}">&#128465; Reset Session</button>
+      </div>
+    </div>`;
+}
+
+function generateReport(wordsCorrect, wordsTotal, prosodyAvg, p, odd, sort, buildTotal, buildPossible, essayFilled, essayWords, essayCW) {
+  const total = wordsTotal || IRREGULAR_WORDS.length;
+  return `MARCELLO'S TUTORING SESSION — March 1, 2026
+=============================================
+
+READING SKILLS:
+- Irregular Words: ${wordsCorrect}/${total} correct (${total ? Math.round(wordsCorrect/total*100) : 0}%)${S.reading.words.results.filter(r => r && !r.correct).length ? '\n  Missed: ' + S.reading.words.results.filter(r => r && !r.correct).map(r => r.word).join(', ') : ''}
+- Prosody (passage read-aloud): ${prosodyAvg}/4 average
+  Expression: ${p.expression}/4, Phrasing: ${p.phrasing}/4, Pace: ${p.pace}/4, Smoothness: ${p.smoothness}/4
+
+PARAGRAPH SKILLS:
+- Odd One Out: ${odd.total ? odd.correct + '/' + odd.total + ' (' + Math.round(odd.correct/odd.total*100) + '%)' : 'Not completed'}
+- Reason vs Description (NEW!): ${sort.total ? sort.correct + '/' + sort.total + ' (' + Math.round(sort.correct/sort.total*100) + '%)' : 'Not completed'}
+- Build a Paragraph: ${buildPossible ? buildTotal + '/' + buildPossible + ' (' + Math.round(buildTotal/buildPossible*100) + '%)' : 'Not completed'}
+
+ESSAY (Opinion — Space Exploration):
+- Sentences completed: ${essayFilled}/7
+- Word count: ${essayWords}
+- Connecting words used: ${essayCW}
+- Help button used: ${Object.keys(S.essay.helpUsed).length} times
+- This is Marcello's 4th essay! He used an interview-style planner today to practice generating his own ideas.
+
+NOTES:
+- Marcello continues to build essay writing skills. Today's focus was on planning independence using guided questions rather than blank boxes.
+- NEW skill practiced: distinguishing reasons from descriptions — important for strong essay body paragraphs.
+- Reading: targeting prosody (expression & smoothness) and irregular word decoding.`;
+}
+
+function copyReport() {
+  const box = document.getElementById('reportBox');
+  const text = box.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    toast('Report copied to clipboard!');
+  }).catch(() => {
+    // Fallback
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Report copied!');
+  });
+}
+
+function saveAllToSheets() {
+  const btn = document.getElementById('sheetsSaveBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  // Reading
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Full Session Save', 'Dashboard', S.points, '', '', 'Manual save from dashboard']);
+  postToSheets('Reading - Phonics', [SESSION_DATE, 'Irregular Words (session save)', wordsCorrect, IRREGULAR_WORDS.length, Math.round(wordsCorrect/IRREGULAR_WORDS.length*100)+'%', ws.results.filter(r => r && !r.correct).map(r => r.word).join(', ')]);
+
+  const p = S.reading.passage.prosody;
+  const avg = ((p.expression+p.phrasing+p.pace+p.smoothness)/4).toFixed(1);
+  postToSheets('Reading - ORF', [SESSION_DATE, 'Passage (session save)', '', '', p.expression, p.phrasing, p.pace, p.smoothness, avg, '']);
+
+  // Paragraph
+  const odd = S.paragraph.odd;
+  if (odd.total) postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Odd One Out (save)', 'Paragraph', odd.correct, odd.total, Math.round(odd.correct/odd.total*100)+'%', '']);
+  const sort = S.paragraph.sort;
+  if (sort.total) postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Reason or Description (save)', 'Paragraph', sort.correct, sort.total, Math.round(sort.correct/sort.total*100)+'%', '']);
+
+  // Essay
+  const starters2 = { intro1:'I think ', intro2:'I believe this because ', body1:'First, ', body2:'When ', body3:'Also, ', conc1:'Although ', conc2:'I think ' };
+  const fields2 = ['intro1','intro2','body1','body2','body3','conc1','conc2'];
+  let wc = 0, cc = 0, filled = 0;
+  fields2.forEach(id => {
+    const v = S.essay.sentences[id];
+    if (!v || !v.trim()) return;
+    filled++;
+    const t = starters2[id] + v;
+    wc += t.split(/\s+/).length;
+    CONNECTING_WORDS.forEach(cw => { const r = new RegExp('\\b'+cw+'\\b','gi'); const m = t.match(r); if (m) cc += m.length; });
+  });
+  postToSheets('Writing', [SESSION_DATE, 'Essay Builder (session save)', 'Opinion Essay - Space', filled, 7, Math.round(filled/7*100)+'%', wc, cc, '']);
+
+  setTimeout(() => {
+    btn.textContent = 'Saved! \u2713';
+    btn.style.background = 'var(--green)';
+    setTimeout(() => {
+      btn.textContent = '\uD83D\uDCCA Save to Google Sheets';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }, 1500);
+}
+
+function downloadJSON() {
+  const data = JSON.stringify(S, (key, val) => val instanceof Set ? [...val] : val, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'marcello_mar1_session_data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('JSON downloaded!');
+}
+
+// ============================================================
+//  AUTO-SAVE & RESTORE
+// ============================================================
+
+// Save every interaction
+setInterval(saveToLocalStorage, 15000);
+window.addEventListener('beforeunload', saveToLocalStorage);
+
+// Essay auto-save to sheets every 30s when on essay tab
+setInterval(() => {
+  if (activeTab === 'essay' && S.essay.step === 'write') {
+    const fields = ['intro1','intro2','body1','body2','body3','conc1','conc2'];
+    const hasContent = fields.some(id => S.essay.sentences[id] && S.essay.sentences[id].trim());
+    if (hasContent) {
+      postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay Auto-Save', 'In Progress', '', '', '', new Date().toISOString()]);
+    }
+  }
+}, 30000);
+
+// ============================================================
+//  INIT
+// ============================================================
+
+function init() {
+  const hasData = loadFromLocalStorage();
+  if (hasData && (S.reading.words.current > 0 || S.paragraph.odd.q > 0 || S.essay.plan.opinion)) {
+    // Show restore dialog
+    const overlay = document.createElement('div');
+    overlay.className = 'restore-overlay';
+    overlay.innerHTML = `
+      <div class="restore-dialog">
+        <h2>&#128190; Previous Session Found!</h2>
+        <p>Would you like to continue where you left off?</p>
+        <div class="btn-row">
+          <button class="btn btn-success" onclick="this.closest('.restore-overlay').remove(); renderAll();">Resume Session</button>
+          <button class="btn btn-secondary" onclick="localStorage.removeItem('${STORAGE_KEY}'); location.reload();">Start Fresh</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+  } else {
+    S.timestamps.sessionStart = new Date().toISOString();
+    renderAll();
+  }
+}
+
+function renderAll() {
+  // Restore tab states
+  if (S.reading.passage.done) document.getElementById('mtab-reading').classList.add('done');
+  if (S.paragraph.build.done) document.getElementById('mtab-paragraph').classList.add('done');
+  if (S.timestamps.essayEnd) document.getElementById('mtab-essay').classList.add('done');
+
+  // Determine which phase the passage is in
+  if (S.reading.words.done) readingPhase = 'passage';
+
+  renderReading();
+}
+
+init();
+</script>
+</body>
+</html>
