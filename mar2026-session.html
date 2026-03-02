@@ -697,6 +697,7 @@
 //  GLOBALS & CONFIG
 // ============================================================
 const STORAGE_KEY = 'marcello_mar1_session';
+const CLOUD_STATE_KEY = 'mar2026_session';
 const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
 const SESSION_DATE = '2026-03-01';
 
@@ -946,6 +947,57 @@ function postToSheets(sheet, row) {
       body: JSON.stringify({ sheet: sheet, row: row })
     });
   } catch(e) {}
+}
+
+// ============================================================
+//  CLOUD SAVE & RESTORE (Google Sheets "Session State" sheet)
+// ============================================================
+
+function saveStateToCloud() {
+  try {
+    const data = JSON.parse(JSON.stringify(S, (key, val) => val instanceof Set ? [...val] : val));
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: data })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved \u2601\ufe0f';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud() {
+  return new Promise((resolve) => {
+    const cbName = 'cloudCB_' + Date.now();
+    const timeout = setTimeout(() => {
+      delete window[cbName];
+      resolve(null);
+    }, 8000);
+
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) {
+        // Restore Sets
+        if (result.state.paragraph && result.state.paragraph.build && Array.isArray(result.state.paragraph.build.selected)) {
+          result.state.paragraph.build.selected = new Set(result.state.paragraph.build.selected);
+        } else if (result.state.paragraph && result.state.paragraph.build) {
+          result.state.paragraph.build.selected = new Set();
+        }
+        resolve(result.state);
+      } else {
+        resolve(null);
+      }
+    };
+
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(CLOUD_STATE_KEY) + '&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
 }
 
 // ============================================================
@@ -2078,9 +2130,10 @@ function downloadJSON() {
 //  AUTO-SAVE & RESTORE
 // ============================================================
 
-// Save every interaction
+// Save every interaction — local every 15s, cloud every 30s
 setInterval(saveToLocalStorage, 15000);
-window.addEventListener('beforeunload', saveToLocalStorage);
+setInterval(saveStateToCloud, 30000);
+window.addEventListener('beforeunload', () => { saveToLocalStorage(); saveStateToCloud(); });
 
 // Essay auto-save to sheets every 30s when on essay tab
 setInterval(() => {
@@ -2097,26 +2150,48 @@ setInterval(() => {
 //  INIT
 // ============================================================
 
-function init() {
-  const hasData = loadFromLocalStorage();
-  if (hasData && (S.reading.words.current > 0 || S.paragraph.odd.q > 0 || S.essay.plan.opinion)) {
-    // Show restore dialog
-    const overlay = document.createElement('div');
-    overlay.className = 'restore-overlay';
-    overlay.innerHTML = `
-      <div class="restore-dialog">
-        <h2>&#128190; Previous Session Found!</h2>
-        <p>Would you like to continue where you left off?</p>
-        <div class="btn-row">
-          <button class="btn btn-success" onclick="this.closest('.restore-overlay').remove(); renderAll();">Resume Session</button>
-          <button class="btn btn-secondary" onclick="localStorage.removeItem('${STORAGE_KEY}'); location.reload();">Start Fresh</button>
-        </div>
-      </div>`;
-    document.body.appendChild(overlay);
-  } else {
-    S.timestamps.sessionStart = new Date().toISOString();
-    renderAll();
+function showRestoreDialog(source) {
+  const overlay = document.createElement('div');
+  overlay.className = 'restore-overlay';
+  overlay.innerHTML = `
+    <div class="restore-dialog">
+      <h2>&#128190; Previous Session Found!</h2>
+      <p>Restored from ${source}. Continue where you left off?</p>
+      <div class="btn-row">
+        <button class="btn btn-success" onclick="this.closest('.restore-overlay').remove(); renderAll();">Resume Session</button>
+        <button class="btn btn-secondary" onclick="localStorage.removeItem('${STORAGE_KEY}'); location.reload();">Start Fresh</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+
+function hasProgress() {
+  return S.reading.words.current > 0 || S.paragraph.odd.q > 0 || S.essay.plan.opinion;
+}
+
+async function init() {
+  // 1. Try localStorage first (fastest)
+  const hasLocal = loadFromLocalStorage();
+  if (hasLocal && hasProgress()) {
+    showRestoreDialog('this device');
+    return;
   }
+
+  // 2. Try cloud restore (for iPad / different device)
+  try {
+    const cloudState = await loadStateFromCloud();
+    if (cloudState) {
+      S = cloudState;
+      if (hasProgress()) {
+        showRestoreDialog('cloud save \u2601\ufe0f');
+        return;
+      }
+    }
+  } catch(e) {}
+
+  // 3. Fresh session
+  S.timestamps.sessionStart = new Date().toISOString();
+  renderAll();
 }
 
 function renderAll() {
