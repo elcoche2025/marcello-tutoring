@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — March 8, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --orange-light: #FFF3E0;
+    --red: #E53935;
+    --red-light: #FFEBEE;
+    --purple: #9C27B0;
+    --purple-light: #F3E5F5;
+    --teal: #00897B;
+    --teal-light: #E0F2F1;
+    --bg: #F4F6FB;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, var(--green) 100%);
+    color: white;
+    text-align: center;
+    padding: 24px 20px 48px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 36px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.85; }
+  .save-indicator {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .save-indicator.flash { opacity: 1; }
+
+  .main-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 8px 0;
+    max-width: 750px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+  .main-tab {
+    padding: 9px 11px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid #D0D5DD;
+    background: white;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Nunito', sans-serif;
+    white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--blue); color: var(--blue); }
+  .main-tab.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+    box-shadow: 0 3px 12px rgba(68,114,196,0.35);
+    transform: translateY(-2px);
+  }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container {
+    max-width: 720px;
+    margin: 16px auto;
+    padding: 0 16px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .act-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .act-read  { background: var(--teal-light); color: var(--teal); }
+  .act-star  { background: var(--gold-light); color: #B8860B; }
+  .act-essay { background: var(--blue-light); color: var(--blue); }
+  .act-plan  { background: var(--purple-light); color: var(--purple); }
+  .act-write { background: var(--green-light); color: #2E7D32; }
+  .act-dash  { background: var(--orange-light); color: #E65100; }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange  { background: var(--orange); color: white; }
+  .btn-purple  { background: var(--purple); color: white; }
+  .btn-red     { background: var(--red); color: white; }
+  .btn-gold    { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  .q-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; transition: background 0.3s; }
+  .q-dot.done { background: var(--green); }
+  .q-dot.current { background: var(--blue); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  .flashcard {
+    background: white;
+    border: 3px solid var(--blue);
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 16px 0;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .flashcard .word { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text); }
+  .flashcard .word-parts { font-size: 2rem; font-weight: 800; margin-top: 10px; }
+  .flashcard .word-parts span { padding: 2px 8px; border-radius: 8px; margin: 0 2px; }
+  .flashcard.correct { border-color: var(--green); background: var(--green-light); }
+  .flashcard.incorrect { border-color: var(--red); background: var(--red-light); }
+
+  .cwc-area {
+    background: var(--gold-light);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    text-align: center;
+    display: none;
+  }
+  .cwc-area.show { display: block; animation: fadeUp 0.3s; }
+  .cwc-area input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    padding: 8px 16px;
+    width: 200px;
+    margin: 8px 0;
+  }
+  .cwc-area .cwc-result { font-weight: 800; font-size: 1.1rem; margin-top: 8px; }
+
+  .passage-box {
+    background: white;
+    border: 2px solid #D0D5DD;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 14px 0;
+  }
+  .passage-box .target-word { background: var(--gold-light); padding: 1px 6px; border-radius: 6px; font-weight: 700; }
+
+  .prosody-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .prosody-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .prosody-item .pi-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .prosody-item .pi-scores { display: flex; justify-content: center; gap: 6px; }
+  .pi-score {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border: 2px solid #D0D5DD;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .pi-score:hover { border-color: var(--blue); }
+  .pi-score.selected { background: var(--blue); color: white; border-color: var(--blue); }
+
+  /* Think/Things pair */
+  .pair-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 14px 0;
+  }
+  .pair-card {
+    border: 3px solid;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+  .pair-card .pair-word { font-size: 2rem; font-weight: 800; letter-spacing: 1px; }
+  .pair-card .pair-def { font-size: 0.9rem; color: var(--muted); margin-top: 6px; font-weight: 600; }
+  .pair-card .pair-tip { font-size: 0.82rem; margin-top: 4px; font-weight: 700; }
+
+  .pair-quiz-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .pair-quiz-item .pq-sentence { font-size: 1rem; line-height: 1.6; margin-bottom: 8px; }
+  .pair-quiz-item .pq-blank { background: var(--gold-light); padding: 2px 12px; border-radius: 6px; font-weight: 700; border-bottom: 2px dashed var(--gold); }
+  .pair-quiz-btns { display: flex; gap: 8px; justify-content: center; }
+  .pair-quiz-btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: 2px solid #D0D5DD;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .pair-quiz-btn:hover { border-color: var(--blue); background: var(--blue-light); }
+  .pair-quiz-btn.pq-correct { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .pair-quiz-btn.pq-wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+  .pair-quiz-btn:disabled { cursor: default; transform: none; }
+
+  /* Stars & Wish */
+  .star-card {
+    border: 2px solid #E0E0E0;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.4s ease;
+  }
+  .star-sentence {
+    background: var(--blue-light);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    font-weight: 600;
+    color: #1a237e;
+  }
+  .star-item {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .star-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .star-text { font-size: 0.92rem; line-height: 1.5; }
+  .star-text strong { color: #2E7D32; }
+  .wish-item {
+    background: var(--gold-light);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 14px;
+    margin-top: 12px;
+  }
+  .wish-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; margin-bottom: 6px; }
+  .wish-text { font-size: 0.92rem; line-height: 1.5; margin-bottom: 10px; }
+
+  /* Sentence frame */
+  .sentence-frame {
+    background: #FAFBFC;
+    border: 2px solid var(--blue);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 10px 0;
+    font-size: 1rem;
+    line-height: 2.2;
+  }
+  .sentence-frame .frame-text {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .sentence-frame input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-bottom: 2px solid var(--blue);
+    background: var(--blue-light);
+    padding: 4px 8px;
+    border-radius: 4px 4px 0 0;
+    min-width: 120px;
+    max-width: 100%;
+    color: var(--text);
+  }
+  .sentence-frame input:focus { outline: none; border-bottom-color: var(--green); background: var(--green-light); }
+  .sentence-frame input.filled { border-bottom-color: var(--green); }
+
+  .assembled-sentence {
+    background: var(--green-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #2E7D32;
+    font-weight: 600;
+    min-height: 40px;
+  }
+  .assembled-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #2E7D32; margin-bottom: 4px; }
+
+  /* STC Protocol */
+  .stc-steps {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+    flex-wrap: wrap;
+  }
+  .stc-step {
+    flex: 1;
+    min-width: 90px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border: 2px solid #E0E0E0;
+    background: #FAFBFC;
+    transition: all 0.3s;
+  }
+  .stc-step.stc-active { border-color: var(--blue); background: var(--blue-light); color: var(--blue); }
+  .stc-step.stc-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .stc-step .stc-icon { font-size: 1.2rem; display: block; margin-bottom: 2px; }
+
+  /* Word bank */
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .word-bank-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .wb-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--blue);
+    background: var(--blue-light);
+    color: var(--blue);
+    font-family: 'Nunito', sans-serif;
+  }
+  .wb-chip:hover { transform: translateY(-2px); background: var(--blue); color: white; }
+
+  /* Essay preview */
+  .essay-preview {
+    background: #FFFDE7;
+    border: 2px solid #FDD835;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+  .essay-preview .cw { background: var(--blue-light); padding: 1px 4px; border-radius: 4px; font-weight: 700; color: var(--blue); }
+
+  /* Interview planner */
+  .interview-q {
+    background: var(--blue-light);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .interview-q .iq-num { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--blue); margin-bottom: 6px; }
+  .interview-q .iq-question { font-size: 1.05rem; font-weight: 700; color: #1a237e; margin-bottom: 12px; line-height: 1.4; }
+  .interview-q .say-first {
+    background: var(--gold-light);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #5D4037;
+    margin-bottom: 12px;
+  }
+  .iq-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .iq-option {
+    padding: 12px 16px;
+    border: 2px solid #C5CAE9;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.93rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    text-align: left;
+    line-height: 1.4;
+  }
+  .iq-option:hover { border-color: var(--blue); background: #EEF1FB; }
+  .iq-option.selected { border-color: var(--blue); background: var(--blue-light); color: #1a237e; }
+  .iq-custom { display: flex; gap: 8px; align-items: center; }
+  .iq-custom input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 600;
+  }
+  .iq-custom input:focus { border-color: var(--blue); outline: none; }
+
+  .help-btn-wrap { text-align: center; margin-top: 8px; }
+  .help-btn {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .help-btn:hover { background: #FFE0B2; }
+  .help-panel {
+    background: var(--orange-light);
+    border: 2px solid #FFB74D;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 10px;
+    display: none;
+    animation: fadeUp 0.3s;
+  }
+  .help-panel.show { display: block; }
+  .help-level { margin-bottom: 12px; }
+  .help-level-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #E65100; margin-bottom: 4px; }
+  .help-level p { font-size: 0.9rem; line-height: 1.5; }
+
+  /* Plan preview card */
+  .plan-preview {
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .plan-preview h3 { color: #2E7D32; margin-bottom: 10px; }
+  .plan-preview .pp-item { margin-bottom: 8px; font-size: 0.95rem; line-height: 1.5; }
+  .plan-preview .pp-label { font-weight: 800; color: #2E7D32; font-size: 0.78rem; text-transform: uppercase; }
+
+  .opinion-box {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .oq-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; font-weight: 800; margin-bottom: 4px; }
+
+  .plan-note {
+    background: var(--green-light);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    color: #2E7D32;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .stats-row { display: flex; justify-content: center; gap: 16px; margin: 14px 0; flex-wrap: wrap; }
+  .stat-box { text-align: center; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: var(--shadow); min-width: 80px; }
+  .stat-box .num { font-size: 1.5rem; font-weight: 800; color: var(--blue); }
+  .stat-box .lbl { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+
+  .celebration { text-align: center; padding: 20px 0; }
+  .celebration .big-star { font-size: 3rem; margin-bottom: 8px; }
+
+  .dash-section { margin-bottom: 20px; }
+  .dash-section h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-stat {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .dash-stat .ds-val { font-size: 1.4rem; font-weight: 800; color: var(--blue); }
+  .dash-stat .ds-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+  .report-box {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+
+  .restore-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999;
+  }
+  .restore-dialog {
+    background: white;
+    border-radius: var(--radius);
+    padding: 28px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  .restore-dialog h2 { margin-bottom: 10px; }
+  .restore-dialog p { color: var(--muted); margin-bottom: 16px; font-size: 0.95rem; }
+
+  .sentence-row { margin-bottom: 18px; }
+  .sentence-row label { display: block; font-weight: 700; font-size: 0.93rem; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Writing Session</h1>
+  <p>March 8, 2026 — Revise + Essay #5!</p>
+  <div class="save-indicator" id="saveIndicator">Saved &#10003;</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">&#128214; Reading</button>
+  <button class="main-tab" id="mtab-stars" onclick="switchTab('stars')">&#11088; Stars</button>
+  <button class="main-tab" id="mtab-finish" onclick="switchTab('finish')">&#128221; Finish</button>
+  <button class="main-tab" id="mtab-plan5" onclick="switchTab('plan5')">&#128161; Plan 5</button>
+  <button class="main-tab" id="mtab-write5" onclick="switchTab('write5')">&#9997;&#65039; Write 5</button>
+  <button class="main-tab" id="mtab-dashboard" onclick="switchTab('dashboard')">&#128202; Dash</button>
+</div>
+
+<div class="container">
+
+  <div class="tab-panel active" id="panel-reading">
+    <div class="card" id="card-reading"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-stars">
+    <div class="card" id="card-stars"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-finish">
+    <div class="card" id="card-finish"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-plan5">
+    <div class="card" id="card-plan5"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-write5">
+    <div class="card" id="card-write5"></div>
+  </div>
+
+  <div class="tab-panel" id="panel-dashboard">
+    <div class="card" id="card-dashboard"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  GLOBALS & CONFIG
+// ============================================================
+const STORAGE_KEY = 'marcello_mar8_session';
+const CLOUD_STATE_KEY = 'mar2026_session_2';
+const MAR2_CLOUD_KEY = 'mar2026_session';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-03-08';
+
+let activeTab = 'reading';
+
+// ---- SESSION STATE ----
+let S = {
+  reading: {
+    words: { current: 0, results: [], done: false },
+    thinkThings: { answers: [], done: false },
+    passage: { prosody: { expression: 0, phrasing: 0, pace: 0, smoothness: 0 }, done: false }
+  },
+  stars: {
+    current: 0,
+    revisions: {},
+    done: false
+  },
+  finish: {
+    sentences: { also: '', although1: '', although2: '', although3: '', final1: '', final2: '' },
+    stcSteps: { also: 0, although: 0, final: 0 },
+    done: false
+  },
+  plan5: {
+    opinion: '',
+    reason1: '',
+    reason2: '',
+    disagree: '',
+    conclusion: '',
+    helpUsed: {},
+    done: false
+  },
+  write5: {
+    sentence1: '',
+    stcStep: 0,
+    done: false
+  },
+  mar2Essay: {
+    sentences: { intro1: '', intro2: '', body1: '', body2: '' },
+    plan: {}
+  },
+  timestamps: {},
+  points: 0
+};
+
+// Mar 2 essay starters (for rebuilding full sentences)
+const MAR2_STARTERS = {
+  intro1: 'I think ',
+  intro2: 'I believe this because ',
+  body1: 'First, ',
+  body2: 'When '
+};
+
+// ============================================================
+//  DATA
+// ============================================================
+
+const IRREGULAR_WORDS = [
+  { word: 'through', parts: ['th','rough'], phonetic: 'throo' },
+  { word: 'league', parts: ['lea','gue'], phonetic: 'leeg' },
+  { word: 'foreign', parts: ['for','eign'], phonetic: 'for-in' },
+  { word: 'brought', parts: ['br','ought'], phonetic: 'brawt' },
+  { word: 'straight', parts: ['str','aight'], phonetic: 'strayt' },
+  { word: 'knowledge', parts: ['know','ledge'], phonetic: 'nol-ij' }
+];
+
+const THINK_THINGS_QUIZ = [
+  { sentence: 'I have many _____ in my backpack.', answer: 'things', explanation: 'Stuff in your backpack = things (with G and S)!' },
+  { sentence: 'I _____ space exploration is important.', answer: 'think', explanation: 'Your brain has an opinion = think (no G, no S)!' },
+  { sentence: 'Scientists discover new _____ every year.', answer: 'things', explanation: 'New stuff discovered = things!' }
+];
+
+const PASSAGE_TEXT = `At Maple Elementary, the students <span class="target-word">thought</span> recess was the best part of the day. Every afternoon, they ran <span class="target-word">straight</span> to the playground. Some kids played basketball while others went <span class="target-word">through</span> the obstacle course. Everyone <span class="target-word">brought</span> their energy and excitement outside. The teachers had the <span class="target-word">knowledge</span> that recess helped kids focus better in class. Even students from the <span class="target-word">foreign</span> exchange program loved joining the games. Recess wasn't just fun — it was important for learning too!`;
+
+// Stars & Wish data for the 4 Mar 2 sentences
+const STARS_DATA = [
+  {
+    label: 'Introduction — Sentence 1',
+    starter: 'I think ',
+    fieldKey: 'intro1',
+    stars: [
+      'You stated your opinion clearly — the reader knows exactly what you think!',
+      'You used "one of the most important" — strong opinion words!'
+    ],
+    wish: null
+  },
+  {
+    label: 'Introduction — Sentence 2',
+    starter: 'I believe this because ',
+    fieldKey: 'intro2',
+    stars: [
+      'You used "because" to connect your reason — great connecting word!',
+      'You mentioned both Earth AND space!'
+    ],
+    wish: {
+      text: "Let's be more specific — what KINDS of things? Fill in the blanks:",
+      frame: { before: 'I believe this because scientists ', blank1: 'make discoveries', middle: ' that help astronauts ', blank2: 'explore new places', after: '.' }
+    }
+  },
+  {
+    label: 'Body — Reason 1',
+    starter: 'First, ',
+    fieldKey: 'body1',
+    stars: [
+      'You used "First" to organize your essay — nice transition word!'
+    ],
+    wish: {
+      text: "Let's be more specific about WHAT scientists discover:",
+      frame: { before: 'First, scientists can ', blank1: 'learn about other planets', middle: ' when they ', blank2: 'explore space', after: '.' }
+    }
+  },
+  {
+    label: 'Body — Reason 2',
+    starter: 'When ',
+    fieldKey: 'body2',
+    stars: [
+      "You tried using 'When' — that's brave! Subordinating conjunctions are hard!"
+    ],
+    wish: {
+      text: '"When" sentences need TWO parts: "When [something happens], [something else happens]." Let\'s use the pattern:',
+      frame: { before: 'When astronauts ', blank1: 'bring back rocks', middle: ' from space, it is ', blank2: 'exciting', after: ' because we learn new things.' }
+    }
+  }
+];
+
+// Essay 5 planner options
+const PLAN5_OPTIONS = {
+  opinion: [
+    "I think schools should have longer recess.",
+    "I believe recess should be longer because kids need more time to play.",
+    "I think longer recess would help students learn better."
+  ],
+  reason1: [
+    "Kids need more time to play and exercise.",
+    "Longer recess helps kids focus better in class.",
+    "Recess is the best part of the day and it's too short.",
+    "Playing with friends teaches us important skills."
+  ],
+  reason2: [
+    "Kids who run around at recess can sit still better in class.",
+    "Recess helps kids who feel stressed or worried feel better.",
+    "We learn teamwork and sharing during recess games.",
+    "Some kids don't get to play outside at home, so they need recess."
+  ],
+  disagree: [
+    "There isn't enough time for all the subjects we need to learn.",
+    "Some kids might get hurt if recess is too long.",
+    "Teachers need that time for lessons."
+  ],
+  conclusion: [
+    "That is why I believe schools should have longer recess.",
+    "Although some people disagree, I think longer recess would help all kids.",
+    "I think every school should give kids more recess time."
+  ]
+};
+
+const CONNECTING_WORDS = ['after','because','when','before','although','since','until','if','first','also','furthermore','so'];
+
+// ============================================================
+//  UTILITY FUNCTIONS
+// ============================================================
+
+function toast(msg, isWarn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isWarn ? ' warning' : '');
+  setTimeout(() => t.className = 'toast', 2400);
+}
+
+function addPoints(pts) {
+  S.points += pts;
+  if (pts > 0) toast('+' + pts + ' points!');
+}
+
+function esc(text) {
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+function saveToLocalStorage() {
+  try {
+    const data = JSON.parse(JSON.stringify(S));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved \u2713';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    S = data;
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+function saveStateToCloud() {
+  try {
+    const data = JSON.parse(JSON.stringify(S));
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: data })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved \u2601\ufe0f';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud(key) {
+  return new Promise((resolve) => {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(() => { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state);
+      else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available', true); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.9;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  if (tab === 'reading') renderReading();
+  else if (tab === 'stars') renderStars();
+  else if (tab === 'finish') renderFinish();
+  else if (tab === 'plan5') renderPlan5();
+  else if (tab === 'write5') renderWrite5();
+  else if (tab === 'dashboard') renderDashboard();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+// ============================================================
+//  TAB 1: READING SKILLS
+// ============================================================
+
+let readingPhase = 'words';
+
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const ws = S.reading.words;
+
+  if (readingPhase === 'words' && !ws.done) {
+    renderWords(el);
+  } else if (!S.reading.thinkThings.done) {
+    readingPhase = 'thinkThings';
+    renderThinkThings(el);
+  } else if (!S.reading.passage.done) {
+    readingPhase = 'passage';
+    renderPassage(el);
+  } else {
+    el.innerHTML = `
+      <div class="act-label act-read">&#128214; Reading Complete!</div>
+      <div class="celebration"><div class="big-star">&#11088;</div>
+        <h2>Reading Skills Done!</h2>
+        <p>Great job with tricky words, think/things, and reading aloud!</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-success" onclick="switchTab('stars')">Next: Stars and a Wish &#11088;</button></div>`;
+  }
+}
+
+function renderWords(el) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  let dotsHTML = IRREGULAR_WORDS.map((_, i) => {
+    let cls = 'q-dot';
+    if (i < ws.current) cls += ws.results[i] && ws.results[i].correct ? ' done' : '';
+    else if (i === ws.current) cls += ' current';
+    return '<div class="' + cls + '"></div>';
+  }).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Irregular Word Practice</div>
+    <h2>Read this word aloud!</h2>
+    <p class="directions">Look at the <strong>whole word</strong> carefully. Say it out loud!</p>
+    <div class="q-progress"><div class="q-dots">${dotsHTML}</div><div class="q-label">Word ${ws.current+1} of ${IRREGULAR_WORDS.length}</div></div>
+    <div class="flashcard" id="flashcard">
+      <div class="word" id="wordDisplay">${w.word}</div>
+      <div class="word-parts" id="wordParts" style="display:none;"></div>
+      <div id="wordPhonetic" style="display:none;font-size:1rem;color:var(--muted);margin-top:6px;"></div>
+    </div>
+    <div class="cwc-area" id="cwcArea">
+      <p style="font-weight:700;">Cover-Write-Check!</p>
+      <p style="font-size:0.88rem;color:var(--muted);">The word is hidden. Type it from memory:</p>
+      <input type="text" id="cwcInput" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')checkCWC()">
+      <div class="cwc-result" id="cwcResult"></div>
+      <div class="btn-row"><button class="btn btn-sm btn-primary" onclick="checkCWC()">Check!</button></div>
+    </div>
+    <div class="btn-row" id="wordBtns">
+      <button class="btn btn-success" onclick="markWord(true)">&#10003; Correct</button>
+      <button class="btn btn-red" onclick="markWord(false)">&#10007; Incorrect</button>
+    </div>
+    <div class="btn-row" id="wordNextBtn" style="display:none;">
+      <button class="btn btn-primary" onclick="nextWord()">Next Word &#8594;</button>
+    </div>`;
+}
+
+function markWord(correct) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  const fc = document.getElementById('flashcard');
+  const btns = document.getElementById('wordBtns');
+
+  if (correct) {
+    fc.className = 'flashcard correct';
+    ws.results[ws.current] = { word: w.word, correct: true, attempts: 1 };
+    btns.style.display = 'none';
+    document.getElementById('wordNextBtn').style.display = 'flex';
+    addPoints(5);
+  } else {
+    fc.className = 'flashcard incorrect';
+    const partsHTML = w.parts.map((p, i) => {
+      const colors = ['#E3F2FD','#FFF3E0','#E8F5E9','#F3E5F5'];
+      return '<span style="background:' + colors[i % colors.length] + '">' + p + '</span>';
+    }).join('');
+    document.getElementById('wordParts').innerHTML = partsHTML;
+    document.getElementById('wordParts').style.display = 'block';
+    document.getElementById('wordPhonetic').textContent = 'Says: "' + w.phonetic + '"';
+    document.getElementById('wordPhonetic').style.display = 'block';
+    btns.style.display = 'none';
+    setTimeout(() => {
+      document.getElementById('wordDisplay').style.display = 'none';
+      document.getElementById('wordParts').style.display = 'none';
+      document.getElementById('wordPhonetic').style.display = 'none';
+      fc.className = 'flashcard';
+      document.getElementById('cwcArea').classList.add('show');
+      document.getElementById('cwcInput').focus();
+    }, 2500);
+    ws.results[ws.current] = { word: w.word, correct: false, attempts: 1 };
+  }
+  debounceSave();
+}
+
+function checkCWC() {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  const input = document.getElementById('cwcInput').value.trim().toLowerCase();
+  const result = document.getElementById('cwcResult');
+  if (input === w.word.toLowerCase()) {
+    result.innerHTML = '<span style="color:var(--green);">&#10003; Perfect! You spelled it right!</span>';
+    addPoints(3);
+  } else {
+    result.innerHTML = '<span style="color:var(--red);">Not quite. The word is: <strong>' + w.word + '</strong></span>';
+  }
+  document.getElementById('wordNextBtn').style.display = 'flex';
+  debounceSave();
+}
+
+function nextWord() {
+  const ws = S.reading.words;
+  ws.current++;
+  if (ws.current >= IRREGULAR_WORDS.length) {
+    ws.done = true;
+    S.timestamps.wordsEnd = new Date().toISOString();
+    const correctCount = ws.results.filter(r => r && r.correct).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Irregular Words', 'Reading', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.map(r => r.word + ':' + (r.correct ? 'Y' : 'N')).join(', ')]);
+    postToSheets('Reading - Phonics', [SESSION_DATE, 'Irregular Words', 'RF.3.3', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.filter(r => !r.correct).map(r => r.word).join(', '), '']);
+    readingPhase = 'thinkThings';
+  }
+  renderReading();
+}
+
+// Think/Things pair exercise
+function renderThinkThings(el) {
+  const tt = S.reading.thinkThings;
+  const currentQ = tt.answers.length;
+
+  if (tt.done) {
+    renderReading();
+    return;
+  }
+
+  let quizHTML = '';
+  THINK_THINGS_QUIZ.forEach((q, i) => {
+    const answered = i < tt.answers.length;
+    const correct = answered && tt.answers[i] === q.answer;
+    let btnsHTML = '';
+    if (!answered && i === currentQ) {
+      btnsHTML = `<div class="pair-quiz-btns">
+        <button class="pair-quiz-btn" onclick="pickThinkThings(${i},'think')">THINK</button>
+        <button class="pair-quiz-btn" onclick="pickThinkThings(${i},'things')">THINGS</button>
+      </div>`;
+    } else if (answered) {
+      const userAns = tt.answers[i];
+      btnsHTML = `<div class="pair-quiz-btns">
+        <button class="pair-quiz-btn ${userAns==='think' ? (correct && q.answer==='think' ? 'pq-correct' : q.answer!=='think' ? 'pq-wrong' : '') : (q.answer==='think' ? 'pq-correct' : '')}" disabled>THINK</button>
+        <button class="pair-quiz-btn ${userAns==='things' ? (correct && q.answer==='things' ? 'pq-correct' : q.answer!=='things' ? 'pq-wrong' : '') : (q.answer==='things' ? 'pq-correct' : '')}" disabled>THINGS</button>
+      </div>
+      <div style="font-size:0.85rem;margin-top:6px;font-weight:600;color:${correct ? '#2E7D32' : 'var(--red)'}">${correct ? '&#10003; ' : '&#10007; '}${q.explanation}</div>`;
+    }
+
+    quizHTML += `<div class="pair-quiz-item" style="${!answered && i !== currentQ ? 'opacity:0.4;' : ''}">
+      <div class="pq-sentence">${q.sentence.replace('_____', '<span class="pq-blank">_____</span>')}</div>
+      ${btnsHTML}
+    </div>`;
+  });
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Think vs. Things</div>
+    <h2>Two tricky words!</h2>
+    <p class="directions">These words look similar but mean different things. Let's practice!</p>
+    <div class="pair-display">
+      <div class="pair-card" style="border-color: var(--blue);">
+        <div class="pair-word" style="color: var(--blue);">THINK</div>
+        <div class="pair-def">What your brain does</div>
+        <div class="pair-tip" style="color: var(--blue);">No G, no S</div>
+      </div>
+      <div class="pair-card" style="border-color: var(--purple);">
+        <div class="pair-word" style="color: var(--purple);">THINGS</div>
+        <div class="pair-def">Stuff, objects</div>
+        <div class="pair-tip" style="color: var(--purple);">Ends in G-S</div>
+      </div>
+    </div>
+    <h3 style="font-size:1rem;margin:14px 0 8px;">Quick Quiz: THINK or THINGS?</h3>
+    ${quizHTML}
+    ${currentQ >= THINK_THINGS_QUIZ.length ? '<div class="btn-row"><button class="btn btn-success" onclick="finishThinkThings()">Next: Read a Passage! &#8594;</button></div>' : ''}`;
+}
+
+function pickThinkThings(idx, choice) {
+  const tt = S.reading.thinkThings;
+  if (idx !== tt.answers.length) return;
+  tt.answers.push(choice);
+  const correct = choice === THINK_THINGS_QUIZ[idx].answer;
+  if (correct) addPoints(5);
+  if (tt.answers.length >= THINK_THINGS_QUIZ.length) {
+    const score = tt.answers.filter((a, i) => a === THINK_THINGS_QUIZ[i].answer).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Think vs Things', 'Reading', score, THINK_THINGS_QUIZ.length, Math.round(score/THINK_THINGS_QUIZ.length*100)+'%', 'Diagnostic: think/things pair']);
+  }
+  renderThinkThings(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function finishThinkThings() {
+  S.reading.thinkThings.done = true;
+  readingPhase = 'passage';
+  renderReading();
+}
+
+function renderPassage(el) {
+  const ps = S.reading.passage;
+  const prosodyHTML = ['Expression','Phrasing','Pace','Smoothness'].map(dim => {
+    const key = dim.toLowerCase();
+    let scores = '';
+    for (let i = 1; i <= 4; i++) {
+      scores += '<div class="pi-score' + (ps.prosody[key]===i ? ' selected' : '') + '" onclick="setProsody(\'' + key + '\',' + i + ')">' + i + '</div>';
+    }
+    return '<div class="prosody-item"><div class="pi-label">' + dim + '</div><div class="pi-scores">' + scores + '</div></div>';
+  }).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Passage Read-Aloud</div>
+    <h2>Read about recess!</h2>
+    <p class="directions">Read the passage aloud. Make it sound like you're telling your friend an exciting story! <strong style="background:var(--gold-light);padding:1px 4px;border-radius:4px;">Highlighted words</strong> are the tricky words you practiced.</p>
+    <div class="passage-box">${PASSAGE_TEXT}</div>
+    <h3 style="font-size:1rem;margin:14px 0 8px;">Prosody Rubric (Tutor rates 1-4)</h3>
+    <div class="prosody-grid">${prosodyHTML}</div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="finishReading()">Done with Reading &#10003;</button>
+    </div>`;
+}
+
+function setProsody(dim, val) {
+  S.reading.passage.prosody[dim] = val;
+  renderPassage(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function finishReading() {
+  S.reading.passage.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  document.getElementById('mtab-reading').classList.add('done');
+  const p = S.reading.passage.prosody;
+  const avg = ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1);
+  postToSheets('Reading - ORF', [SESSION_DATE, 'Recess passage', '', '', '', '', '', p.expression, p.phrasing, p.pace, p.smoothness, avg, 'Recess-themed passage with target irregular words']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Passage Read-Aloud', 'Reading', 'Prosody avg: ' + avg, '', '', 'Exp:'+p.expression+' Phr:'+p.phrasing+' Pac:'+p.pace+' Smo:'+p.smoothness]);
+  toast('Reading section complete!');
+  switchTab('stars');
+}
+
+// ============================================================
+//  TAB 2: STARS AND A WISH
+// ============================================================
+
+function renderStars() {
+  const el = document.getElementById('card-stars');
+  const st = S.stars;
+
+  if (st.done) {
+    el.innerHTML = `
+      <div class="act-label act-star">&#11088; Stars and a Wish — Complete!</div>
+      <div class="celebration"><div class="big-star">&#11088;</div>
+        <h2>Amazing Revision Work!</h2>
+        <p>You reviewed all 4 sentences like a real writer!</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-success" onclick="switchTab('finish')">Next: Finish Your Essay! &#128221;</button></div>`;
+    return;
+  }
+
+  if (st.current >= STARS_DATA.length) {
+    st.done = true;
+    S.timestamps.starsEnd = new Date().toISOString();
+    document.getElementById('mtab-stars').classList.add('done');
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Stars and a Wish', 'Writing', Object.keys(st.revisions).length, STARS_DATA.length, '', 'Revisions made: ' + Object.keys(st.revisions).filter(k => st.revisions[k]).length]);
+    addPoints(15);
+    renderStars();
+    return;
+  }
+
+  const item = STARS_DATA[st.current];
+  const mar2sent = S.mar2Essay.sentences[item.fieldKey] || '';
+  const fullSentence = item.starter + mar2sent;
+
+  let dotsHTML = STARS_DATA.map((_, i) => {
+    let cls = 'q-dot';
+    if (i < st.current) cls += ' done';
+    else if (i === st.current) cls += ' current';
+    return '<div class="' + cls + '"></div>';
+  }).join('');
+
+  let starsHTML = item.stars.map(s =>
+    '<div class="star-item"><div class="star-icon">&#11088;</div><div class="star-text"><strong>Star:</strong> ' + s + '</div></div>'
+  ).join('');
+
+  let wishHTML = '';
+  if (item.wish) {
+    const f = item.wish.frame;
+    const rev = st.revisions[item.fieldKey] || {};
+    const b1val = rev.blank1 || '';
+    const b2val = rev.blank2 || '';
+
+    // Build assembled preview
+    let assembled = f.before + (b1val || '___') + f.middle + (b2val || '___') + f.after;
+
+    wishHTML = `
+      <div class="wish-item">
+        <div class="wish-label">&#127775; A Wish — Let's make it even better!</div>
+        <div class="wish-text">${item.wish.text}</div>
+        <div class="sentence-frame">
+          <span class="frame-text">${esc(f.before)}</span><input type="text" id="wish-b1-${st.current}" value="${esc(b1val)}" placeholder="${esc(f.blank1)}" oninput="onWishType('${item.fieldKey}','blank1',this.value)" style="width:${Math.max(140, f.blank1.length*10)}px">
+          <span class="frame-text">${esc(f.middle)}</span><input type="text" id="wish-b2-${st.current}" value="${esc(b2val)}" placeholder="${esc(f.blank2)}" oninput="onWishType('${item.fieldKey}','blank2',this.value)" style="width:${Math.max(140, f.blank2.length*10)}px">
+          <span class="frame-text">${esc(f.after)}</span>
+        </div>
+        <div class="assembled-label">Your revised sentence:</div>
+        <div class="assembled-sentence" id="wish-assembled-${st.current}">${esc(assembled)}</div>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="act-label act-star">&#11088; Stars and a Wish</div>
+    <h2>Let's review your writing!</h2>
+    <p class="directions">Real writers revise their work! Let's look at each sentence from your space essay.</p>
+    <div class="q-progress"><div class="q-dots">${dotsHTML}</div><div class="q-label">Sentence ${st.current+1} of ${STARS_DATA.length}</div></div>
+
+    <div class="star-card">
+      <div style="font-size:0.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">${item.label}</div>
+      <div class="star-sentence">${esc(fullSentence) || '<em>Loading from your last session...</em>'}</div>
+      ${starsHTML}
+      ${wishHTML}
+    </div>
+
+    <div class="btn-row">
+      ${item.wish ? '<button class="btn btn-secondary" onclick="keepAsIs()">Keep as is</button>' : ''}
+      <button class="btn btn-success" onclick="nextStar()">${st.current < STARS_DATA.length - 1 ? 'Next Sentence &#8594;' : 'All Done! &#11088;'}</button>
+    </div>`;
+}
+
+function onWishType(fieldKey, blankKey, value) {
+  if (!S.stars.revisions[fieldKey]) S.stars.revisions[fieldKey] = {};
+  S.stars.revisions[fieldKey][blankKey] = value;
+
+  const item = STARS_DATA[S.stars.current];
+  const f = item.wish.frame;
+  const rev = S.stars.revisions[fieldKey];
+  const assembled = f.before + (rev.blank1 || '___') + f.middle + (rev.blank2 || '___') + f.after;
+  const aEl = document.getElementById('wish-assembled-' + S.stars.current);
+  if (aEl) aEl.textContent = assembled;
+  debounceSave();
+}
+
+function keepAsIs() {
+  nextStar();
+}
+
+function nextStar() {
+  S.stars.current++;
+  renderStars();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  debounceSave();
+}
+
+// ============================================================
+//  TAB 3: FINISH YOUR ESSAY
+// ============================================================
+
+function renderFinish() {
+  const el = document.getElementById('card-finish');
+  const fs = S.finish;
+
+  if (fs.done) {
+    renderFullEssay(el);
+    return;
+  }
+
+  // Build the essay so far (Mar 2 sentences + any revisions + new conclusion fields)
+  const sentFields = [
+    { key: 'also', label: 'Add one more detail', starter: 'Also, ',
+      frame: { before: 'Also, exploring space helps us ', blank1: '', middle: ' because ', blank2: '', after: '.' },
+      wordBank: ['learn', 'discover', 'understand', 'protect', 'build', 'create'] },
+    { key: 'although', label: 'Conclusion with "Although"', starter: 'Although ',
+      frame: { before: 'Although ', blank1: '', middle: ' is ', blank2: '', after: ', I still think space exploration is important because it helps us learn new things.' },
+      wordBank: ['it', 'space travel', 'exploring', 'going to space', 'expensive', 'dangerous', 'hard', 'scary', 'risky', 'far away'] },
+    { key: 'final', label: 'Final opinion statement', starter: 'I think ',
+      frame: { before: 'I think everyone should ', blank1: '', middle: ' because ', blank2: '', after: '.' },
+      wordBank: ['care about', 'support', 'learn about', 'explore', 'space is amazing', 'we can discover new things', 'it helps everyone'] }
+  ];
+
+  let html = `
+    <div class="act-label act-essay">&#128221; Finish Your Essay</div>
+    <h2>Write your conclusion!</h2>
+    <p class="directions">Your essay needs 3 more sentences to complete the conclusion. Use the <strong>Say-Type-Check</strong> routine for each one!</p>`;
+
+  sentFields.forEach((sf, idx) => {
+    const stcStep = fs.stcSteps[sf.key] || 0;
+    const f = sf.frame;
+    const vals = fs.sentences;
+    const b1key = sf.key === 'also' ? 'also' : (sf.key === 'although' ? 'although1' : 'final1');
+    const b2key = sf.key === 'also' ? '' : (sf.key === 'although' ? 'although2' : 'final2');
+
+    // For "also" and "final" — two blanks. For "although" — two blanks
+    let b1val, b2val;
+    if (sf.key === 'also') {
+      b1val = vals.also || '';
+      b2val = vals.also ? '' : ''; // Single combined field for simplicity
+    }
+    b1val = vals[b1key] || '';
+    b2val = b2key ? (vals[b2key] || '') : '';
+
+    let assembled = f.before + (b1val || '______') + f.middle + (b2val || '______') + f.after;
+
+    html += `
+    <div class="card" style="border-left: 4px solid ${idx === 0 ? 'var(--blue)' : idx === 1 ? 'var(--purple)' : 'var(--green)'};">
+      <div style="font-size:0.78rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Sentence ${idx + 5}: ${sf.label}</div>
+
+      <div class="stc-steps">
+        <div class="stc-step ${stcStep >= 1 ? 'stc-done' : stcStep === 0 ? 'stc-active' : ''}">
+          <span class="stc-icon">&#128483;&#65039;</span>
+          1. SAY IT
+        </div>
+        <div class="stc-step ${stcStep >= 2 ? 'stc-done' : stcStep === 1 ? 'stc-active' : ''}">
+          <span class="stc-icon">&#9997;&#65039;</span>
+          2. TYPE IT
+        </div>
+        <div class="stc-step ${stcStep >= 3 ? 'stc-done' : stcStep === 2 ? 'stc-active' : ''}">
+          <span class="stc-icon">&#128264;</span>
+          3. CHECK IT
+        </div>
+      </div>
+
+      ${stcStep === 0 ? '<div class="btn-row"><button class="btn btn-sm btn-gold" onclick="advanceSTC(\'' + sf.key + '\')">&#128483;&#65039; I said it out loud!</button></div>' : ''}
+
+      ${stcStep >= 1 ? `
+      <div class="word-bank-label">Tap a word to use it:</div>
+      <div class="word-bank" id="wb-${sf.key}">
+        ${sf.wordBank.map(w => '<span class="wb-chip" onclick="insertWB(\'' + sf.key + '\',\'' + w + '\')">' + w + '</span>').join('')}
+      </div>
+      <div class="sentence-frame">
+        <span class="frame-text">${esc(f.before)}</span><input type="text" id="frame-${b1key}" value="${esc(b1val)}" placeholder="fill in..." oninput="onFinishType('${b1key}',this.value,'${sf.key}')" style="width:180px">
+        <span class="frame-text">${esc(f.middle)}</span><input type="text" id="frame-${b2key || b1key + 'x'}" value="${esc(b2val)}" placeholder="fill in..." oninput="onFinishType('${b2key}',this.value,'${sf.key}')" style="width:180px" ${b2key ? '' : 'style="display:none"'}>
+        <span class="frame-text">${esc(f.after)}</span>
+      </div>
+      <div class="assembled-label">Your sentence:</div>
+      <div class="assembled-sentence" id="assembled-${sf.key}">${esc(assembled)}</div>
+      ` : ''}
+
+      ${stcStep >= 1 && stcStep < 3 ? '<div class="btn-row"><button class="btn btn-sm btn-primary" onclick="readBack(\'' + sf.key + '\')">&#128264; Read it Back!</button></div>' : ''}
+      ${stcStep >= 3 ? '<div style="text-align:center;color:var(--green);font-weight:700;margin-top:8px;">&#10003; Say-Type-Check complete!</div>' : ''}
+    </div>`;
+  });
+
+  const allDone = (fs.stcSteps.also >= 1 || fs.sentences.also) &&
+                  (fs.stcSteps.although >= 1 || fs.sentences.although1) &&
+                  (fs.stcSteps.final >= 1 || fs.sentences.final1);
+
+  html += `
+    <div class="btn-row">
+      <button class="btn btn-success" ${allDone ? '' : 'disabled'} onclick="finishEssay()">See My Complete Essay! &#11088;</button>
+    </div>`;
+
+  el.innerHTML = html;
+}
+
+let lastFocusedFinish = null;
+
+function onFinishType(key, value, sfKey) {
+  if (key) {
+    S.finish.sentences[key] = value;
+    lastFocusedFinish = document.getElementById('frame-' + key);
+  }
+  // Update assembled
+  updateAssembled(sfKey);
+  debounceSave();
+}
+
+function updateAssembled(sfKey) {
+  const fs = S.finish.sentences;
+  let assembled = '';
+  if (sfKey === 'also') {
+    assembled = 'Also, exploring space helps us ' + (fs.also || '______') + ' because ' + (fs[''] || '______') + '.';
+    // Simplified: use the single field
+    assembled = 'Also, exploring space helps us ' + (fs.also || '______') + ' because ' + (fs.also ? 'it is important' : '______') + '.';
+  } else if (sfKey === 'although') {
+    assembled = 'Although ' + (fs.although1 || '______') + ' is ' + (fs.although2 || '______') + ', I still think space exploration is important because it helps us learn new things.';
+  } else if (sfKey === 'final') {
+    assembled = 'I think everyone should ' + (fs.final1 || '______') + ' because ' + (fs.final2 || '______') + '.';
+  }
+  const aEl = document.getElementById('assembled-' + sfKey);
+  if (aEl) aEl.textContent = assembled;
+}
+
+function insertWB(sfKey, word) {
+  // Find the first empty input in this sentence's frame
+  let targets = [];
+  if (sfKey === 'also') targets = ['also'];
+  else if (sfKey === 'although') targets = ['although1', 'although2'];
+  else if (sfKey === 'final') targets = ['final1', 'final2'];
+
+  for (const key of targets) {
+    const input = document.getElementById('frame-' + key);
+    if (input && !input.value.trim()) {
+      input.value = word;
+      S.finish.sentences[key] = word;
+      input.classList.add('filled');
+      break;
+    } else if (input && document.activeElement === input) {
+      // Insert at cursor
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      input.value = input.value.slice(0, start) + word + input.value.slice(end);
+      S.finish.sentences[key] = input.value;
+      input.focus();
+      input.selectionStart = input.selectionEnd = start + word.length;
+      break;
+    }
+  }
+  updateAssembled(sfKey);
+  toast('"' + word + '" added!');
+  debounceSave();
+}
+
+function advanceSTC(sfKey) {
+  S.finish.stcSteps[sfKey] = (S.finish.stcSteps[sfKey] || 0) + 1;
+  renderFinish();
+  debounceSave();
+}
+
+function readBack(sfKey) {
+  const fs = S.finish.sentences;
+  let text = '';
+  if (sfKey === 'also') {
+    text = 'Also, exploring space helps us ' + (fs.also || '') + ' because ' + (fs[''] || 'it is important') + '.';
+  } else if (sfKey === 'although') {
+    text = 'Although ' + (fs.although1 || '') + ' is ' + (fs.although2 || '') + ', I still think space exploration is important because it helps us learn new things.';
+  } else if (sfKey === 'final') {
+    text = 'I think everyone should ' + (fs.final1 || '') + ' because ' + (fs.final2 || '') + '.';
+  }
+  speakText(text);
+  // Advance STC to step 3
+  S.finish.stcSteps[sfKey] = 3;
+  renderFinish();
+  debounceSave();
+}
+
+function finishEssay() {
+  S.finish.done = true;
+  S.timestamps.finishEnd = new Date().toISOString();
+  document.getElementById('mtab-finish').classList.add('done');
+  renderFinish();
+  debounceSave();
+}
+
+function renderFullEssay(el) {
+  // Build the complete 7-sentence essay
+  const mar2 = S.mar2Essay.sentences;
+  const rev = S.stars.revisions;
+  const fin = S.finish.sentences;
+
+  // Sentence 1: intro1 (possibly revised)
+  let s1 = MAR2_STARTERS.intro1 + (mar2.intro1 || '');
+  // Sentence 2: intro2 (possibly revised)
+  let s2;
+  if (rev.intro2 && (rev.intro2.blank1 || rev.intro2.blank2)) {
+    const f = STARS_DATA[1].wish.frame;
+    s2 = f.before + (rev.intro2.blank1 || f.blank1) + f.middle + (rev.intro2.blank2 || f.blank2) + f.after;
+  } else {
+    s2 = MAR2_STARTERS.intro2 + (mar2.intro2 || '');
+  }
+  // Sentence 3: body1
+  let s3;
+  if (rev.body1 && (rev.body1.blank1 || rev.body1.blank2)) {
+    const f = STARS_DATA[2].wish.frame;
+    s3 = f.before + (rev.body1.blank1 || f.blank1) + f.middle + (rev.body1.blank2 || f.blank2) + f.after;
+  } else {
+    s3 = MAR2_STARTERS.body1 + (mar2.body1 || '');
+  }
+  // Sentence 4: body2
+  let s4;
+  if (rev.body2 && (rev.body2.blank1 || rev.body2.blank2)) {
+    const f = STARS_DATA[3].wish.frame;
+    s4 = f.before + (rev.body2.blank1 || f.blank1) + f.middle + (rev.body2.blank2 || f.blank2) + f.after;
+  } else {
+    s4 = MAR2_STARTERS.body2 + (mar2.body2 || '');
+  }
+  // Sentences 5-7: conclusion
+  let s5 = 'Also, exploring space helps us ' + (fin.also || '___') + ' because it is important.';
+  let s6 = 'Although ' + (fin.although1 || '___') + ' is ' + (fin.although2 || '___') + ', I still think space exploration is important because it helps us learn new things.';
+  let s7 = 'I think everyone should ' + (fin.final1 || '___') + ' because ' + (fin.final2 || '___') + '.';
+
+  const sentences = [s1, s2, s3, s4, s5, s6, s7].map(s => {
+    if (s && !/[.!?]$/.test(s.trim())) s = s.trim() + '.';
+    return s.trim();
+  });
+
+  let wordCount = 0, cwCount = 0;
+  let essayHTML = '';
+  // Intro
+  let introText = sentences.slice(0, 2).join(' ');
+  let bodyText = sentences.slice(2, 5).join(' ');
+  let concText = sentences.slice(5).join(' ');
+
+  [introText, bodyText, concText].forEach(para => {
+    if (!para.trim()) return;
+    wordCount += para.split(/\s+/).filter(w => w).length;
+    let html = esc(para);
+    for (const cw of CONNECTING_WORDS) {
+      const regex = new RegExp('\\b(' + cw + ')\\b', 'gi');
+      html = html.replace(regex, m => { cwCount++; return '<span class="cw">' + m + '</span>'; });
+    }
+    essayHTML += '     ' + html + '\n\n';
+  });
+
+  el.innerHTML = `
+    <div class="celebration">
+      <div class="big-star">&#11088;</div>
+      <h2>Your Complete Essay!</h2>
+      <p>You finished your space exploration essay — all 7 sentences!</p>
+      <div class="stats-row">
+        <div class="stat-box"><div class="num">${wordCount}</div><div class="lbl">Words</div></div>
+        <div class="stat-box"><div class="num">7</div><div class="lbl">Sentences</div></div>
+        <div class="stat-box"><div class="num">${cwCount}</div><div class="lbl">Connecting Words</div></div>
+      </div>
+    </div>
+
+    <div class="act-label act-essay">Your Complete Essay</div>
+    <h2 style="margin-bottom:12px;">My Opinion About Space Exploration</h2>
+    <div class="essay-preview">${essayHTML || '<em>No sentences yet</em>'}</div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="speakFullEssay()">&#128264; Read My Whole Essay!</button>
+      <button class="btn btn-success" onclick="switchTab('plan5')">Next: Plan Essay 5! &#128161;</button>
+    </div>`;
+
+  // Log
+  postToSheets('Writing', [SESSION_DATE, 'Essay Builder', 'Opinion Essay - Space (completed)', 7, 7, '100%', wordCount, cwCount, 'Completed Mar 2 essay with revision + conclusion']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay Complete', 'Writing', 7, 7, '100%', wordCount + ' words, ' + cwCount + ' connecting words']);
+}
+
+function speakFullEssay() {
+  const mar2 = S.mar2Essay.sentences;
+  const rev = S.stars.revisions;
+  const fin = S.finish.sentences;
+
+  let sentences = [];
+  sentences.push(MAR2_STARTERS.intro1 + (mar2.intro1 || ''));
+  if (rev.intro2 && rev.intro2.blank1) {
+    const f = STARS_DATA[1].wish.frame;
+    sentences.push(f.before + (rev.intro2.blank1 || f.blank1) + f.middle + (rev.intro2.blank2 || f.blank2) + f.after);
+  } else { sentences.push(MAR2_STARTERS.intro2 + (mar2.intro2 || '')); }
+  if (rev.body1 && rev.body1.blank1) {
+    const f = STARS_DATA[2].wish.frame;
+    sentences.push(f.before + (rev.body1.blank1 || f.blank1) + f.middle + (rev.body1.blank2 || f.blank2) + f.after);
+  } else { sentences.push(MAR2_STARTERS.body1 + (mar2.body1 || '')); }
+  if (rev.body2 && rev.body2.blank1) {
+    const f = STARS_DATA[3].wish.frame;
+    sentences.push(f.before + (rev.body2.blank1 || f.blank1) + f.middle + (rev.body2.blank2 || f.blank2) + f.after);
+  } else { sentences.push(MAR2_STARTERS.body2 + (mar2.body2 || '')); }
+  sentences.push('Also, exploring space helps us ' + (fin.also || '') + ' because it is important.');
+  sentences.push('Although ' + (fin.although1 || '') + ' is ' + (fin.although2 || '') + ', I still think space exploration is important because it helps us learn new things.');
+  sentences.push('I think everyone should ' + (fin.final1 || '') + ' because ' + (fin.final2 || '') + '.');
+
+  const fullText = sentences.map(s => s.trim().replace(/\.?$/, '.')).join(' ');
+  speakText(fullText);
+}
+
+// ============================================================
+//  TAB 4: ESSAY 5 PLANNER
+// ============================================================
+
+function renderPlan5() {
+  const el = document.getElementById('card-plan5');
+  const plan = S.plan5;
+
+  if (plan.done) {
+    renderPlanPreview(el);
+    return;
+  }
+
+  const steps = ['opinion','reason1','reason2','disagree','conclusion'];
+  const labels = [
+    'Do you think schools should have longer recess?',
+    "What's your #1 reason?",
+    "What's another reason?",
+    'What might someone who DISAGREES say?',
+    'How do you want to end your essay?'
+  ];
+  const icons = ['\uD83D\uDCAD','\uD83D\uDCA1','\uD83D\uDCA1','\uD83E\uDD14','\uD83C\uDFC1'];
+
+  let stepsHTML = '';
+  steps.forEach((key, idx) => {
+    const opts = PLAN5_OPTIONS[key];
+    const current = plan[key] || '';
+
+    let optionsHTML = opts.map((o, oi) => {
+      const sel = current === o ? ' selected' : '';
+      return '<div class="iq-option' + sel + '" onclick="plan5Select(\'' + key + '\',' + oi + ')">' + o + '</div>';
+    }).join('');
+
+    const isCustom = current && !opts.includes(current);
+    optionsHTML += `
+      <div class="iq-custom">
+        <input type="text" id="plan5-custom-${key}" placeholder="Or write your own..." value="${isCustom ? esc(current) : ''}" oninput="plan5Custom('${key}',this.value)">
+      </div>`;
+
+    const helpTexts = {
+      opinion: ['Do you like recess? Would you want more time to play?', 'Example: "I think schools should have longer recess because kids need to play."', 'I think schools should have longer recess.'],
+      reason1: ['Think about what you do at recess. Why is that important?', 'Example: "Kids need more time to run around and exercise."', 'Kids need more time to play and exercise.'],
+      reason2: ['What ELSE is good about recess? Think about feelings, friends, or learning.', 'Example: "Recess helps kids who feel stressed feel better."', 'Recess helps kids who feel stressed or worried feel better.'],
+      disagree: ['Imagine a teacher or parent who says recess should be SHORT. Why would they say that?', 'Example: "Some people think there isn\'t enough time for all the subjects."', "There isn't enough time for all the subjects we need to learn."],
+      conclusion: ['What is the most important thing you want the reader to remember?', 'Example: "That is why I believe schools should have longer recess."', 'That is why I believe schools should have longer recess.']
+    };
+
+    const ht = helpTexts[key];
+    const helpLevel = plan.helpUsed[key] || 0;
+
+    let helpHTML = '';
+    if (helpLevel < 3) {
+      helpHTML = '<div class="help-btn-wrap"><button class="help-btn" onclick="plan5Help(\'' + key + '\')">&#129300; I need help! ' + (helpLevel > 0 ? '(Tap ' + (helpLevel+1) + ')' : '') + '</button></div>';
+    }
+    let helpPanelHTML = '<div class="help-panel' + (helpLevel > 0 ? ' show' : '') + '" id="help5-' + key + '">';
+    if (helpLevel >= 1) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Think about this...</div><p>' + ht[0] + '</p></div>';
+    if (helpLevel >= 2) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Example</div><p>' + ht[1] + '</p></div>';
+    if (helpLevel >= 3) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Ready-made option</div><p>You can use this: <strong>"' + ht[2] + '"</strong></p><button class="btn btn-sm btn-primary" onclick="plan5Select(\'' + key + '\',-1,\'' + esc(ht[2]).replace(/'/g, "\\'") + '\')">Use this</button></div>';
+    helpPanelHTML += '</div>';
+
+    stepsHTML += `
+      <div class="interview-q">
+        <div class="iq-num">${icons[idx]} Question ${idx+1}${key === 'disagree' ? ' (New!)' : ''}</div>
+        <div class="iq-question">${labels[idx]}</div>
+        ${key === 'disagree' ? '<div class="say-first" style="background:var(--purple-light);color:var(--purple);">&#129300; Think about what someone who thinks recess should NOT be longer would say!</div>' : '<div class="say-first">&#128483;&#65039; Say it first! Tell your tutor your answer out loud before picking.</div>'}
+        <div class="iq-options">${optionsHTML}</div>
+        ${helpHTML}
+        ${helpPanelHTML}
+      </div>`;
+  });
+
+  const canProceed = plan.opinion && plan.reason1;
+
+  el.innerHTML = `
+    <div class="act-label act-plan">&#128161; Essay 5: Plan Your Essay</div>
+    <h2>New Topic: Recess!</h2>
+    <p class="directions">Answer each question to plan your opinion essay. Pick an answer OR write your own!</p>
+    <div class="opinion-box"><div class="oq-label">Essay Prompt</div>Should schools have longer recess? Why or why not?</div>
+    ${stepsHTML}
+    <div class="btn-row">
+      <button class="btn btn-success ${canProceed ? '' : ''}" onclick="finishPlan5()" ${canProceed ? '' : 'disabled'}>My plan is ready! &#10003;</button>
+    </div>`;
+}
+
+function plan5Select(key, optIdx, customText) {
+  if (customText) {
+    S.plan5[key] = customText;
+  } else if (optIdx >= 0) {
+    S.plan5[key] = PLAN5_OPTIONS[key][optIdx];
+    const ci = document.getElementById('plan5-custom-' + key);
+    if (ci) ci.value = '';
+  }
+  renderPlan5();
+  debounceSave();
+}
+
+function plan5Custom(key, val) {
+  if (val.trim()) {
+    S.plan5[key] = val.trim();
+    renderPlan5();
+    setTimeout(() => {
+      const ci = document.getElementById('plan5-custom-' + key);
+      if (ci) { ci.focus(); ci.selectionStart = ci.selectionEnd = ci.value.length; }
+    }, 50);
+  } else {
+    S.plan5[key] = '';
+  }
+  debounceSave();
+}
+
+function plan5Help(key) {
+  S.plan5.helpUsed[key] = (S.plan5.helpUsed[key] || 0) + 1;
+  renderPlan5();
+  setTimeout(() => {
+    const panel = document.getElementById('help5-' + key);
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+  debounceSave();
+}
+
+function finishPlan5() {
+  S.plan5.done = true;
+  S.timestamps.plan5End = new Date().toISOString();
+  document.getElementById('mtab-plan5').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay 5 Planner', 'Writing', '', '', '', 'Topic: Recess. Help used: ' + Object.keys(S.plan5.helpUsed).length]);
+  addPoints(15);
+  renderPlan5();
+  debounceSave();
+}
+
+function renderPlanPreview(el) {
+  const plan = S.plan5;
+  el.innerHTML = `
+    <div class="act-label act-plan">&#128161; Essay 5 Plan — Complete!</div>
+    <div class="celebration"><div class="big-star">&#128161;</div>
+      <h2>Your Recess Essay Plan!</h2>
+    </div>
+    <div class="plan-preview">
+      <h3>Plan Preview</h3>
+      <div class="pp-item"><div class="pp-label">Your Opinion</div>${esc(plan.opinion || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Reason 1</div>${esc(plan.reason1 || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Reason 2</div>${esc(plan.reason2 || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Someone Might Disagree Because...</div>${esc(plan.disagree || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Your Ending</div>${esc(plan.conclusion || '(not set)')}</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="S.plan5.done=false;renderPlan5();">&#9998; Edit Plan</button>
+      <button class="btn btn-success" onclick="switchTab('write5')">Write First Sentence! &#9997;&#65039;</button>
+    </div>`;
+}
+
+// ============================================================
+//  TAB 5: START ESSAY 5 (sentence 1 only)
+// ============================================================
+
+function renderWrite5() {
+  const el = document.getElementById('card-write5');
+  const w5 = S.write5;
+  const plan = S.plan5;
+
+  if (w5.done) {
+    el.innerHTML = `
+      <div class="act-label act-write">&#9997;&#65039; Essay 5 — Sentence 1 Done!</div>
+      <div class="celebration"><div class="big-star">&#11088;</div>
+        <h2>Great Start!</h2>
+        <p>You wrote the first sentence of your recess essay!</p>
+      </div>
+      <div class="assembled-sentence" style="font-size:1.1rem;text-align:center;">${esc(w5.sentence1)}</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="speakText('${esc(w5.sentence1).replace(/'/g, "\\'")}')">&#128264; Hear It!</button>
+        <button class="btn btn-success" onclick="switchTab('dashboard')">Dashboard &#128202;</button>
+      </div>`;
+    return;
+  }
+
+  const stcStep = w5.stcStep || 0;
+
+  el.innerHTML = `
+    <div class="act-label act-write">&#9997;&#65039; Essay 5: Write Sentence 1</div>
+    <h2>Start your recess essay!</h2>
+    <p class="directions">Use Say-Type-Check to write your first sentence.</p>
+
+    ${plan.opinion ? '<div class="plan-note">&#128203; Your opinion from the plan: "' + esc(plan.opinion) + '"</div>' : ''}
+
+    <div class="stc-steps">
+      <div class="stc-step ${stcStep >= 1 ? 'stc-done' : stcStep === 0 ? 'stc-active' : ''}">
+        <span class="stc-icon">&#128483;&#65039;</span>1. SAY IT
+      </div>
+      <div class="stc-step ${stcStep >= 2 ? 'stc-done' : stcStep === 1 ? 'stc-active' : ''}">
+        <span class="stc-icon">&#9997;&#65039;</span>2. TYPE IT
+      </div>
+      <div class="stc-step ${stcStep >= 3 ? 'stc-done' : stcStep === 2 ? 'stc-active' : ''}">
+        <span class="stc-icon">&#128264;</span>3. CHECK IT
+      </div>
+    </div>
+
+    ${stcStep === 0 ? '<div class="btn-row"><button class="btn btn-gold" onclick="S.write5.stcStep=1;renderWrite5();debounceSave();">&#128483;&#65039; I said it out loud!</button></div>' : ''}
+
+    ${stcStep >= 1 ? `
+    <div class="sentence-frame">
+      <span class="frame-text">I think schools should </span>
+      <input type="text" id="w5-blank1" value="${esc(w5.b1 || '')}" placeholder="have longer recess..." oninput="onWrite5Type('b1',this.value)" style="width:200px">
+      <span class="frame-text"> because </span>
+      <input type="text" id="w5-blank2" value="${esc(w5.b2 || '')}" placeholder="reason..." oninput="onWrite5Type('b2',this.value)" style="width:200px">
+      <span class="frame-text">.</span>
+    </div>
+    <div class="assembled-label">Your sentence:</div>
+    <div class="assembled-sentence" id="w5-assembled">I think schools should ${esc(w5.b1 || '______')} because ${esc(w5.b2 || '______')}.</div>
+    ` : ''}
+
+    ${stcStep >= 1 && stcStep < 3 ? '<div class="btn-row"><button class="btn btn-primary" onclick="readBackW5()">&#128264; Read it Back!</button></div>' : ''}
+    ${stcStep >= 3 ? `
+      <div style="text-align:center;color:var(--green);font-weight:700;margin-top:8px;">&#10003; Say-Type-Check complete!</div>
+      <div class="btn-row"><button class="btn btn-success" onclick="finishWrite5()">Done! &#11088;</button></div>
+    ` : ''}`;
+}
+
+function onWrite5Type(blank, value) {
+  S.write5[blank] = value;
+  S.write5.sentence1 = 'I think schools should ' + (S.write5.b1 || '') + ' because ' + (S.write5.b2 || '') + '.';
+  const aEl = document.getElementById('w5-assembled');
+  if (aEl) aEl.textContent = S.write5.sentence1;
+  debounceSave();
+}
+
+function readBackW5() {
+  const text = 'I think schools should ' + (S.write5.b1 || '') + ' because ' + (S.write5.b2 || '') + '.';
+  speakText(text);
+  S.write5.stcStep = 3;
+  S.write5.sentence1 = text;
+  renderWrite5();
+  debounceSave();
+}
+
+function finishWrite5() {
+  S.write5.done = true;
+  S.timestamps.write5End = new Date().toISOString();
+  document.getElementById('mtab-write5').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay 5 Sentence 1', 'Writing', '', '', '', S.write5.sentence1]);
+  addPoints(10);
+  renderWrite5();
+  debounceSave();
+}
+
+// ============================================================
+//  TAB 6: DASHBOARD
+// ============================================================
+
+function renderDashboard() {
+  const el = document.getElementById('card-dashboard');
+
+  // Reading stats
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+  const wordsTotal = ws.results ? ws.results.length : 0;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+
+  // Think/Things
+  const ttCorrect = S.reading.thinkThings.answers.filter((a, i) => a === THINK_THINGS_QUIZ[i].answer).length;
+
+  // Stars
+  const revisionsUsed = Object.keys(S.stars.revisions).filter(k => {
+    const r = S.stars.revisions[k];
+    return r && (r.blank1 || r.blank2);
+  }).length;
+
+  // Finish essay
+  const finishFields = ['also', 'although1', 'final1'].filter(k => S.finish.sentences[k]).length;
+
+  // Plan 5
+  const plan5Fields = ['opinion','reason1','reason2','disagree','conclusion'].filter(k => S.plan5[k]).length;
+
+  // Report
+  const report = generateReport();
+
+  el.innerHTML = `
+    <div class="act-label act-dash">&#128202; Session Dashboard</div>
+    <h2>Session Summary — March 8</h2>
+
+    <div class="dash-section">
+      <h3>&#128214; Reading Skills</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${wordsCorrect}/${wordsTotal || IRREGULAR_WORDS.length}</div><div class="ds-label">Irregular Words</div></div>
+        <div class="dash-stat"><div class="ds-val">${prosodyAvg}</div><div class="ds-label">Prosody Avg (1-4)</div></div>
+        <div class="dash-stat"><div class="ds-val">${ttCorrect}/${THINK_THINGS_QUIZ.length}</div><div class="ds-label">Think/Things Quiz</div></div>
+        <div class="dash-stat"><div class="ds-val">${S.points}</div><div class="ds-label">Total Points</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#11088; Stars and a Wish</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${S.stars.current}/${STARS_DATA.length}</div><div class="ds-label">Sentences Reviewed</div></div>
+        <div class="dash-stat"><div class="ds-val">${revisionsUsed}</div><div class="ds-label">Revisions Made</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128221; Finish Essay</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${finishFields}/3</div><div class="ds-label">Conclusion Sentences</div></div>
+        <div class="dash-stat"><div class="ds-val">${S.finish.done ? '&#10003;' : '--'}</div><div class="ds-label">Essay Complete</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128161; Essay 5 Plan (Recess)</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${plan5Fields}/5</div><div class="ds-label">Plan Questions</div></div>
+        <div class="dash-stat"><div class="ds-val">${S.write5.done ? '&#10003;' : '--'}</div><div class="ds-label">Sentence 1</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128203; Parent Report</h3>
+      <div class="report-box" id="reportBox">${esc(report)}</div>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-primary" onclick="copyReport()">&#128203; Copy Report</button>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128190; Data Export</h3>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-purple" id="sheetsSaveBtn" onclick="saveAllToSheets()">&#128202; Save to Google Sheets</button>
+        <button class="btn btn-sm btn-orange" onclick="downloadJSON()">&#128229; Download JSON</button>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128736;&#65039; Session Management</h3>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-red" onclick="if(confirm('Clear all session data? This cannot be undone!')){localStorage.removeItem(STORAGE_KEY);location.reload();}">&#128465; Reset Session</button>
+      </div>
+    </div>`;
+}
+
+function generateReport() {
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+  const total = ws.results.length || IRREGULAR_WORDS.length;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+  const ttCorrect = S.reading.thinkThings.answers.filter((a, i) => a === THINK_THINGS_QUIZ[i].answer).length;
+  const revisionsUsed = Object.keys(S.stars.revisions).filter(k => {
+    const r = S.stars.revisions[k];
+    return r && (r.blank1 || r.blank2);
+  }).length;
+  const finishFields = ['also', 'although1', 'final1'].filter(k => S.finish.sentences[k]).length;
+  const plan5Fields = ['opinion','reason1','reason2','disagree','conclusion'].filter(k => S.plan5[k]).length;
+
+  return `MARCELLO'S TUTORING SESSION - March 8, 2026
+=============================================
+
+READING SKILLS:
+- Irregular Words: ${wordsCorrect}/${total} correct (${total ? Math.round(wordsCorrect/total*100) : 0}%)${ws.results.filter(r => r && !r.correct).length ? '\n  Missed: ' + ws.results.filter(r => r && !r.correct).map(r => r.word).join(', ') : ''}
+- Think vs Things Quiz: ${ttCorrect}/${THINK_THINGS_QUIZ.length} correct
+- Prosody (passage read-aloud): ${prosodyAvg}/4 average
+  Expression: ${p.expression}/4, Phrasing: ${p.phrasing}/4, Pace: ${p.pace}/4, Smoothness: ${p.smoothness}/4
+
+ESSAY REVISION (Stars and a Wish):
+- Sentences reviewed: ${S.stars.current}/${STARS_DATA.length}
+- Revisions made: ${revisionsUsed}
+- This was Marcello's FIRST experience with revision! Used sentence frames to fix grammar.
+
+ESSAY COMPLETION (Space Exploration):
+- Conclusion sentences written: ${finishFields}/3
+- Essay complete: ${S.finish.done ? 'YES' : 'Not yet'}
+- Used Say-Type-Check protocol for self-monitoring
+- This is Marcello's 4th essay, now complete with introduction, body, AND conclusion!
+
+ESSAY 5 PLANNING (Should schools have longer recess?):
+- Plan questions answered: ${plan5Fields}/5
+- NEW: "What might someone who disagrees say?" question introduced
+- First sentence written: ${S.write5.done ? 'YES - "' + S.write5.sentence1 + '"' : 'Not yet'}
+- Help button used: ${Object.keys(S.plan5.helpUsed).length} times
+
+NEW TECHNIQUES INTRODUCED THIS SESSION:
+1. Stars and a Wish (essay feedback/revision)
+2. Sentence frames with blanks (replacing bare sentence starters)
+3. Say-Type-Check protocol (say it aloud, type it, hear it read back)
+
+NOTES:
+- Moving to a personal-experience topic (recess) to improve plan-to-sentence transfer
+- Sentence frames provide grammatical structure so Marcello can focus on content
+- Say-Type-Check targets low self-monitoring identified in Mar 2 session`;
+}
+
+function copyReport() {
+  const box = document.getElementById('reportBox');
+  const text = box.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    toast('Report copied to clipboard!');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Report copied!');
+  });
+}
+
+function saveAllToSheets() {
+  const btn = document.getElementById('sheetsSaveBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Full Session Save', 'Dashboard', S.points, '', '', 'Manual save from dashboard']);
+
+  // Cloud state
+  saveStateToCloud();
+
+  setTimeout(() => {
+    btn.textContent = 'Saved!';
+    toast('Data saved to Google Sheets!');
+    setTimeout(() => { btn.textContent = '&#128202; Save to Google Sheets'; btn.disabled = false; }, 2000);
+  }, 1500);
+}
+
+function downloadJSON() {
+  const data = JSON.stringify(S, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'marcello_mar8_session.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('JSON downloaded!');
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+
+async function init() {
+  // Try local restore first
+  const localLoaded = loadFromLocalStorage();
+
+  if (localLoaded) {
+    renderReading();
+    // Set tab done states
+    if (S.reading.passage.done) document.getElementById('mtab-reading').classList.add('done');
+    if (S.stars.done) document.getElementById('mtab-stars').classList.add('done');
+    if (S.finish.done) document.getElementById('mtab-finish').classList.add('done');
+    if (S.plan5.done) document.getElementById('mtab-plan5').classList.add('done');
+    if (S.write5.done) document.getElementById('mtab-write5').classList.add('done');
+    // Restore reading phase
+    if (S.reading.words.done && !S.reading.thinkThings.done) readingPhase = 'thinkThings';
+    else if (S.reading.words.done && S.reading.thinkThings.done && !S.reading.passage.done) readingPhase = 'passage';
+    else if (S.reading.passage.done) readingPhase = 'done';
+    return;
+  }
+
+  // Try cloud restore for THIS session
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState) {
+    S = cloudState;
+    // Restore reading phase
+    if (S.reading.words.done && !S.reading.thinkThings.done) readingPhase = 'thinkThings';
+    else if (S.reading.words.done && S.reading.thinkThings.done && !S.reading.passage.done) readingPhase = 'passage';
+    renderReading();
+    toast('Session restored from cloud!');
+    return;
+  }
+
+  // Load Mar 2 essay sentences for Stars & Wish tab
+  const mar2State = await loadStateFromCloud(MAR2_CLOUD_KEY);
+  if (mar2State && mar2State.essay && mar2State.essay.sentences) {
+    S.mar2Essay.sentences = {
+      intro1: mar2State.essay.sentences.intro1 || '',
+      intro2: mar2State.essay.sentences.intro2 || '',
+      body1: mar2State.essay.sentences.body1 || '',
+      body2: mar2State.essay.sentences.body2 || ''
+    };
+    S.mar2Essay.plan = mar2State.essay.plan || {};
+    toast('Loaded your Mar 2 essay!');
+  } else {
+    // Fallback: pre-populate with known sentences from session notes
+    S.mar2Essay.sentences = {
+      intro1: 'that exploring space is one of the most important things to do.',
+      intro2: 'they make new amazing things that help the astronauts discover amazing things on earth and in space too.',
+      body1: 'I think that scientists love learning space. They can discover more things if they want, so they can go back to space another time, in a new year.',
+      body2: 'the astronauts got new things from space is cool because things from space are fun'
+    };
+  }
+
+  renderReading();
+  saveToLocalStorage();
+}
+
+// Auto-save
+setInterval(saveToLocalStorage, 15000);
+setInterval(saveStateToCloud, 30000);
+window.addEventListener('beforeunload', () => { saveToLocalStorage(); saveStateToCloud(); });
+
+init();
+</script>
+</body>
+</html>
