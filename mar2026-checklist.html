@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session Checklist — March 9</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f4ff;
+    color: #2d3748;
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-align: center;
+    color: #1a365d;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: #718096;
+    margin-bottom: 20px;
+  }
+
+  .progress-bar {
+    background: #e2e8f0;
+    border-radius: 12px;
+    height: 20px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    height: 100%;
+    width: 0%;
+    border-radius: 12px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #2d3748;
+  }
+
+  .phase {
+    background: white;
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-left: 5px solid #cbd5e0;
+    transition: border-color 0.3s;
+  }
+
+  .phase.active { border-left-color: #4299e1; }
+  .phase.done { border-left-color: #48bb78; opacity: 0.85; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .phase-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .phase-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2b6cb0;
+  }
+
+  .phase-time {
+    font-size: 0.8rem;
+    color: #a0aec0;
+    font-weight: 600;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .task input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
+    flex-shrink: 0;
+    accent-color: #48bb78;
+    cursor: pointer;
+  }
+
+  .task label {
+    font-size: 1rem;
+    line-height: 1.4;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .task.checked label {
+    text-decoration: line-through;
+    color: #a0aec0;
+  }
+
+  .task .hint {
+    display: block;
+    font-size: 0.85rem;
+    color: #718096;
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .celebration {
+    display: none;
+    text-align: center;
+    padding: 32px 16px;
+    background: linear-gradient(135deg, #fefcbf, #f6e05e);
+    border-radius: 16px;
+    margin-top: 16px;
+  }
+
+  .celebration.show { display: block; }
+
+  .celebration h2 {
+    font-size: 1.8rem;
+    color: #744210;
+    margin-bottom: 8px;
+  }
+
+  .celebration p {
+    font-size: 1.1rem;
+    color: #975a16;
+  }
+
+  @media print {
+    body { background: white; padding: 12px; }
+    .progress-bar { display: none; }
+    .phase { box-shadow: none; border: 1px solid #e2e8f0; page-break-inside: avoid; }
+    .task input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #718096;
+      border-radius: 3px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Marcello's Checklist</h1>
+<p class="subtitle">Session 5 &mdash; Monday, March 9, 2026</p>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill"></div>
+  <div class="progress-text" id="progressText">0 / 18</div>
+</div>
+
+<!-- Phase 1: Warm-Up -->
+<div class="phase" id="phase1">
+  <div class="phase-header">
+    <span class="phase-icon">&#x1F44B;</span>
+    <span class="phase-title">Warm-Up</span>
+    <span class="phase-time">3 min</span>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t1">
+    <label for="t1">Talk about what we did last time</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t2">
+    <label for="t2">Hear today's plan</label>
+  </div>
+</div>
+
+<!-- Phase 2: Reading -->
+<div class="phase" id="phase2">
+  <div class="phase-header">
+    <span class="phase-icon">&#x1F4D6;</span>
+    <span class="phase-title">Reading Practice</span>
+    <span class="phase-time">7 min</span>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t3">
+    <label for="t3">Read 6 tricky words
+      <span class="hint">through, league, foreign, brought, straight, knowledge</span>
+    </label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t4">
+    <label for="t4">"Think" vs "Things" quiz</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t5">
+    <label for="t5">Read the recess passage out loud
+      <span class="hint">Read it like you're telling a friend a story!</span>
+    </label>
+  </div>
+</div>
+
+<!-- Phase 3: Stars and a Wish -->
+<div class="phase" id="phase3">
+  <div class="phase-header">
+    <span class="phase-icon">&#x2B50;</span>
+    <span class="phase-title">Stars and a Wish</span>
+    <span class="phase-time">10 min</span>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t6">
+    <label for="t6">See the stars for Sentence 1
+      <span class="hint">What you did great!</span>
+    </label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t7">
+    <label for="t7">Sentence 2 &mdash; stars + make it more specific</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t8">
+    <label for="t8">Sentence 3 &mdash; stars + name what scientists discover</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t9">
+    <label for="t9">Sentence 4 &mdash; fix the "When" sentence with a frame</label>
+  </div>
+</div>
+
+<!-- Phase 4: Finish the Essay -->
+<div class="phase" id="phase4">
+  <div class="phase-header">
+    <span class="phase-icon">&#x270D;&#xFE0F;</span>
+    <span class="phase-title">Finish Your Space Essay</span>
+    <span class="phase-time">12 min</span>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t10">
+    <label for="t10">Write an "Also" sentence
+      <span class="hint">Say it, Type it, Check it!</span>
+    </label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t11">
+    <label for="t11">Write an "Although" sentence
+      <span class="hint">This is the hardest one &mdash; use the word bank!</span>
+    </label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t12">
+    <label for="t12">Write your final "I think" sentence</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t13">
+    <label for="t13">Listen to your whole essay read aloud</label>
+  </div>
+</div>
+
+<!-- Phase 5: Plan New Essay -->
+<div class="phase" id="phase5">
+  <div class="phase-header">
+    <span class="phase-icon">&#x1F4A1;</span>
+    <span class="phase-title">Plan Your Recess Essay</span>
+    <span class="phase-time">12 min</span>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t14">
+    <label for="t14">Answer: Should schools have longer recess?</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t15">
+    <label for="t15">Pick your reasons (2 strong ones!)</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t16">
+    <label for="t16">Think about what someone who disagrees would say</label>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t17">
+    <label for="t17">Check your plan &mdash; does it look right?</label>
+  </div>
+</div>
+
+<!-- Phase 6: Bonus + Wrap-Up -->
+<div class="phase" id="phase6">
+  <div class="phase-header">
+    <span class="phase-icon">&#x1F389;</span>
+    <span class="phase-title">Wrap-Up</span>
+    <span class="phase-time">2 min</span>
+  </div>
+  <div class="task">
+    <input type="checkbox" id="t18">
+    <label for="t18">Celebrate everything you did today!</label>
+  </div>
+</div>
+
+<div class="celebration" id="celebration">
+  <h2>You did it!</h2>
+  <p>You revised, finished your essay, AND planned a new one. Amazing work, Marcello!</p>
+</div>
+
+<script>
+  const STORAGE_KEY = 'marcello_checklist_mar9_2026';
+  const CLOUD_STATE_KEY = 'mar2026_checklist';
+  const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+
+  const totalTasks = document.querySelectorAll('input[type="checkbox"]').length;
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+  const celebration = document.getElementById('celebration');
+
+  // ---- SAVE / RESTORE ----
+
+  function getCheckedState() {
+    const state = {};
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      state[cb.id] = cb.checked;
+    });
+    return state;
+  }
+
+  function applyCheckedState(state) {
+    if (!state) return;
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      if (state[cb.id] !== undefined) cb.checked = state[cb.id];
+    });
+  }
+
+  function saveToLocalStorage() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(getCheckedState()));
+    } catch(e) {}
+  }
+
+  function loadFromLocalStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) applyCheckedState(JSON.parse(raw));
+    } catch(e) {}
+  }
+
+  let saveDebounce = null;
+  function debounceSave() {
+    clearTimeout(saveDebounce);
+    saveDebounce = setTimeout(() => {
+      saveToLocalStorage();
+      saveStateToCloud();
+    }, 500);
+  }
+
+  function saveStateToCloud() {
+    try {
+      fetch(TRACKER_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: getCheckedState() })
+      });
+    } catch(e) {}
+  }
+
+  function loadStateFromCloud() {
+    try {
+      const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      window[cbName] = function(result) {
+        if (result && result.success && result.state) {
+          applyCheckedState(result.state);
+          updateProgress();
+          saveToLocalStorage();
+        }
+        delete window[cbName];
+        const el = document.getElementById('script_' + cbName);
+        if (el) el.remove();
+      };
+      const script = document.createElement('script');
+      script.id = 'script_' + cbName;
+      script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(CLOUD_STATE_KEY) + '&callback=' + cbName;
+      document.head.appendChild(script);
+    } catch(e) {}
+  }
+
+  // ---- PROGRESS UI ----
+
+  function updateProgress() {
+    const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    const pct = Math.round((checked / totalTasks) * 100);
+    progressFill.style.width = pct + '%';
+    progressText.textContent = checked + ' / ' + totalTasks;
+
+    // Update phase states
+    document.querySelectorAll('.phase').forEach(phase => {
+      const boxes = phase.querySelectorAll('input[type="checkbox"]');
+      const checkedInPhase = phase.querySelectorAll('input[type="checkbox"]:checked').length;
+      phase.classList.remove('active', 'done');
+      if (checkedInPhase === boxes.length) {
+        phase.classList.add('done');
+      } else if (checkedInPhase > 0) {
+        phase.classList.add('active');
+      }
+    });
+
+    // Update task styling
+    document.querySelectorAll('.task').forEach(task => {
+      const cb = task.querySelector('input[type="checkbox"]');
+      task.classList.toggle('checked', cb.checked);
+    });
+
+    // Show celebration when all done
+    celebration.classList.toggle('show', checked === totalTasks);
+  }
+
+  document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => { updateProgress(); debounceSave(); });
+  });
+
+  // Make whole task row tappable
+  document.querySelectorAll('.task').forEach(task => {
+    task.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'INPUT') {
+        const cb = task.querySelector('input[type="checkbox"]');
+        cb.checked = !cb.checked;
+        updateProgress();
+        debounceSave();
+      }
+    });
+  });
+
+  // ---- INIT: load saved state ----
+  loadFromLocalStorage();
+  updateProgress();
+  loadStateFromCloud(); // cloud overwrites local if newer
+</script>
+</body>
+</html>
