@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — March 16, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --orange-light: #FFF3E0;
+    --red: #E53935;
+    --red-light: #FFEBEE;
+    --purple: #9C27B0;
+    --purple-light: #F3E5F5;
+    --teal: #00897B;
+    --teal-light: #E0F2F1;
+    --bg: #F4F6FB;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, #43a047 100%);
+    color: white;
+    text-align: center;
+    padding: 24px 20px 48px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 36px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.85; }
+  .save-indicator {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .save-indicator.flash { opacity: 1; }
+
+  .main-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 8px 0;
+    max-width: 750px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+  .main-tab {
+    padding: 9px 11px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid #D0D5DD;
+    background: white;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Nunito', sans-serif;
+    white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--teal); color: var(--teal); }
+  .main-tab.active {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+    box-shadow: 0 3px 12px rgba(0,137,123,0.35);
+    transform: translateY(-2px);
+  }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container {
+    max-width: 720px;
+    margin: 16px auto;
+    padding: 0 16px;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .act-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .act-read  { background: var(--teal-light); color: var(--teal); }
+  .act-plan  { background: var(--purple-light); color: var(--purple); }
+  .act-write { background: var(--green-light); color: #2E7D32; }
+  .act-dash  { background: var(--orange-light); color: #E65100; }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange  { background: var(--orange); color: white; }
+  .btn-purple  { background: var(--purple); color: white; }
+  .btn-red     { background: var(--red); color: white; }
+  .btn-gold    { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  .q-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; transition: background 0.3s; }
+  .q-dot.done { background: var(--green); }
+  .q-dot.current { background: var(--teal); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  .flashcard {
+    background: white;
+    border: 3px solid var(--teal);
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 16px 0;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .flashcard .word { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text); }
+  .flashcard .word-parts { font-size: 2rem; font-weight: 800; margin-top: 10px; }
+  .flashcard .word-parts span { padding: 2px 8px; border-radius: 8px; margin: 0 2px; }
+  .flashcard.correct { border-color: var(--green); background: var(--green-light); }
+  .flashcard.incorrect { border-color: var(--red); background: var(--red-light); }
+
+  .cwc-area {
+    background: var(--gold-light);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    text-align: center;
+    display: none;
+  }
+  .cwc-area.show { display: block; animation: fadeUp 0.3s; }
+  .cwc-area input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    padding: 8px 16px;
+    width: 200px;
+    margin: 8px 0;
+  }
+  .cwc-area .cwc-result { font-weight: 800; font-size: 1.1rem; margin-top: 8px; }
+
+  .passage-box {
+    background: white;
+    border: 2px solid #D0D5DD;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 14px 0;
+  }
+  .passage-box .target-word { background: var(--gold-light); padding: 1px 6px; border-radius: 6px; font-weight: 700; }
+
+  .prosody-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .prosody-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .prosody-item .pi-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .prosody-item .pi-scores { display: flex; justify-content: center; gap: 6px; }
+  .pi-score {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border: 2px solid #D0D5DD;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .pi-score:hover { border-color: var(--teal); }
+  .pi-score.selected { background: var(--teal); color: white; border-color: var(--teal); }
+
+  .pair-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 14px 0;
+  }
+  .pair-card {
+    border: 3px solid;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+  .pair-card .pair-word { font-size: 2rem; font-weight: 800; letter-spacing: 1px; }
+  .pair-card .pair-def { font-size: 0.9rem; color: var(--muted); margin-top: 6px; font-weight: 600; }
+  .pair-card .pair-tip { font-size: 0.82rem; margin-top: 4px; font-weight: 700; }
+
+  .pair-quiz-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .pair-quiz-item .pq-sentence { font-size: 1rem; line-height: 1.6; margin-bottom: 8px; }
+  .pair-quiz-item .pq-blank { background: var(--gold-light); padding: 2px 12px; border-radius: 6px; font-weight: 700; border-bottom: 2px dashed var(--gold); }
+  .pair-quiz-btns { display: flex; gap: 8px; justify-content: center; }
+  .pair-quiz-btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: 2px solid #D0D5DD;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .pair-quiz-btn:hover { border-color: var(--teal); background: var(--teal-light); }
+  .pair-quiz-btn.pq-correct { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .pair-quiz-btn.pq-wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+  .pair-quiz-btn:disabled { cursor: default; transform: none; }
+
+  /* Interview planner */
+  .interview-q {
+    background: var(--teal-light);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .interview-q .iq-num { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 6px; }
+  .interview-q .iq-question { font-size: 1.05rem; font-weight: 700; color: #004D40; margin-bottom: 12px; line-height: 1.4; }
+  .interview-q .say-first {
+    background: var(--gold-light);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #5D4037;
+    margin-bottom: 12px;
+  }
+  .iq-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .iq-option {
+    padding: 12px 16px;
+    border: 2px solid #80CBC4;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.93rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+    text-align: left;
+    line-height: 1.4;
+  }
+  .iq-option:hover { border-color: var(--teal); background: #E0F2F1; }
+  .iq-option.selected { border-color: var(--teal); background: var(--teal-light); color: #004D40; }
+  .iq-custom { display: flex; gap: 8px; align-items: center; }
+  .iq-custom input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 600;
+  }
+  .iq-custom input:focus { border-color: var(--teal); outline: none; }
+
+  .help-btn-wrap { text-align: center; margin-top: 8px; }
+  .help-btn {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .help-btn:hover { background: #FFE0B2; }
+  .help-panel {
+    background: var(--orange-light);
+    border: 2px solid #FFB74D;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 10px;
+    display: none;
+    animation: fadeUp 0.3s;
+  }
+  .help-panel.show { display: block; }
+  .help-level { margin-bottom: 12px; }
+  .help-level-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #E65100; margin-bottom: 4px; }
+  .help-level p { font-size: 0.9rem; line-height: 1.5; }
+
+  .plan-preview {
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .plan-preview h3 { color: #2E7D32; margin-bottom: 10px; }
+  .plan-preview .pp-item { margin-bottom: 8px; font-size: 0.95rem; line-height: 1.5; }
+  .plan-preview .pp-label { font-weight: 800; color: #2E7D32; font-size: 0.78rem; text-transform: uppercase; }
+
+  .opinion-box {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .oq-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; font-weight: 800; margin-bottom: 4px; }
+
+  /* Dictation writing styles */
+  .step-indicator {
+    display: flex;
+    gap: 6px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+  .step-pill {
+    flex: 1;
+    min-width: 70px;
+    padding: 8px 6px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    border: 2px solid #E0E0E0;
+    background: #FAFBFC;
+    transition: all 0.3s;
+  }
+  .step-pill.step-active { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .step-pill.step-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .step-pill .step-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+  .dictation-box {
+    background: #FAFBFC;
+    border: 2px dashed #B0BEC5;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 14px 0;
+    text-align: center;
+  }
+  .dictation-box textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .dictation-box textarea:focus { border-color: var(--teal); outline: none; }
+
+  .talk-timer {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--teal);
+    margin: 10px 0;
+  }
+  .talk-timer.long { color: var(--green); }
+
+  .kernel-card {
+    background: var(--gold-light);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .kernel-card .kc-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #B8860B; margin-bottom: 4px; }
+  .kernel-card .kc-text { font-size: 1rem; line-height: 1.5; font-weight: 600; font-style: italic; }
+
+  .sentence-frame {
+    background: #FAFBFC;
+    border: 2px solid var(--teal);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 10px 0;
+    font-size: 1rem;
+    line-height: 2.4;
+  }
+  .sentence-frame .frame-text {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .sentence-frame .frame-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #B0BEC5;
+    margin-bottom: -4px;
+  }
+  .sentence-frame .frame-blank-wrap {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .sentence-frame input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-bottom: 2px solid var(--teal);
+    background: var(--teal-light);
+    padding: 4px 8px;
+    border-radius: 4px 4px 0 0;
+    min-width: 120px;
+    max-width: 100%;
+    color: var(--text);
+  }
+  .sentence-frame input:focus { outline: none; border-bottom-color: var(--green); background: var(--green-light); }
+  .sentence-frame input.filled { border-bottom-color: var(--green); }
+
+  .assembled-sentence {
+    background: var(--green-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #2E7D32;
+    font-weight: 600;
+    min-height: 40px;
+  }
+  .assembled-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #2E7D32; margin-bottom: 4px; }
+
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .word-bank-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .wb-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--teal);
+    background: var(--teal-light);
+    color: var(--teal);
+    font-family: 'Nunito', sans-serif;
+  }
+  .wb-chip:hover { transform: translateY(-2px); background: var(--teal); color: white; }
+
+  .essay-preview {
+    background: #FFFDE7;
+    border: 2px solid #FDD835;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+  .essay-preview .cw { background: var(--teal-light); padding: 1px 4px; border-radius: 4px; font-weight: 700; color: var(--teal); }
+
+  .essay-so-far {
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .essay-so-far h3 { color: #2E7D32; margin-bottom: 8px; font-size: 1rem; }
+  .essay-so-far .esf-sentence {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-weight: 600;
+    border-left: 3px solid var(--green);
+  }
+
+  .sentence-nav {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+    justify-content: center;
+  }
+  .sentence-nav-btn {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 2px solid #D0D5DD;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .sentence-nav-btn.sn-active { border-color: var(--teal); background: var(--teal); color: white; }
+  .sentence-nav-btn.sn-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+
+  .specificity-panel {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    display: none;
+    animation: fadeUp 0.3s;
+  }
+  .specificity-panel.show { display: block; }
+  .specificity-card {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-left: 3px solid var(--orange);
+  }
+
+  .stats-row { display: flex; justify-content: center; gap: 16px; margin: 14px 0; flex-wrap: wrap; }
+  .stat-box { text-align: center; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: var(--shadow); min-width: 80px; }
+  .stat-box .num { font-size: 1.5rem; font-weight: 800; color: var(--teal); }
+  .stat-box .lbl { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+
+  .celebration { text-align: center; padding: 20px 0; }
+  .celebration .big-star { font-size: 3rem; margin-bottom: 8px; }
+
+  .dash-section { margin-bottom: 20px; }
+  .dash-section h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-stat {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .dash-stat .ds-val { font-size: 1.4rem; font-weight: 800; color: var(--teal); }
+  .dash-stat .ds-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+  .report-box {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+
+  .confetti-burst {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .pop-in { animation: popIn 0.4s ease; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Writing Session</h1>
+  <p>March 16, 2026 — Recess Essay: Talk First, Write Better!</p>
+  <div class="save-indicator" id="saveIndicator">Saved &#10003;</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">&#128214; Reading</button>
+  <button class="main-tab" id="mtab-planner" onclick="switchTab('planner')">&#128161; Plan</button>
+  <button class="main-tab" id="mtab-writing" onclick="switchTab('writing')">&#9997;&#65039; Write</button>
+  <button class="main-tab" id="mtab-dashboard" onclick="switchTab('dashboard')">&#128202; Dash</button>
+</div>
+
+<div class="container">
+  <div class="tab-panel active" id="panel-reading">
+    <div class="card" id="card-reading"></div>
+  </div>
+  <div class="tab-panel" id="panel-planner">
+    <div class="card" id="card-planner"></div>
+  </div>
+  <div class="tab-panel" id="panel-writing">
+    <div id="card-writing"></div>
+  </div>
+  <div class="tab-panel" id="panel-dashboard">
+    <div class="card" id="card-dashboard"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  GLOBALS & CONFIG
+// ============================================================
+const STORAGE_KEY = 'marcello_mar16_session';
+const CLOUD_STATE_KEY = 'mar2026_session_3';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-03-16';
+
+let activeTab = 'reading';
+
+// ---- SESSION STATE ----
+let S = {
+  reading: {
+    words: { current: 0, results: [], done: false },
+    thinkThings: { answers: [], done: false },
+    passage: { prosody: { expression: 0, phrasing: 0, pace: 0, smoothness: 0 }, done: false }
+  },
+  planner: {
+    opinion: '',
+    reason1: '',
+    reason2: '',
+    disagree: '',
+    conclusion: '',
+    helpUsed: {},
+    done: false
+  },
+  writing: {
+    sentences: [
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false }
+    ],
+    currentSentence: 0,
+    done: false
+  },
+  timestamps: {},
+  points: 0
+};
+
+// ============================================================
+//  DATA
+// ============================================================
+
+const IRREGULAR_WORDS = [
+  { word: 'through', parts: ['th','rough'], phonetic: 'throo', tag: 'review' },
+  { word: 'league', parts: ['lea','gue'], phonetic: 'leeg', tag: 'review' },
+  { word: 'foreign', parts: ['for','eign'], phonetic: 'for-in', tag: 'review' },
+  { word: 'enough', parts: ['e','nough'], phonetic: 'ee-nuf', tag: 'new' },
+  { word: 'island', parts: ['is','land'], phonetic: 'eye-lund', tag: 'new' },
+  { word: 'caught', parts: ['c','aught'], phonetic: 'kawt', tag: 'new' }
+];
+
+const THINK_THINGS_QUIZ = [
+  { sentence: 'Scientists discover new _____ every day.', answer: 'things', explanation: 'Stuff discovered = things (with G and S)!' },
+  { sentence: 'I _____ recess should be longer.', answer: 'think', explanation: 'Your brain has an opinion = think (no G, no S)!' }
+];
+
+const PASSAGE_TEXT = `Recess was the best part of the day at Lincoln Elementary. Every afternoon, the students ran <span class="target-word">through</span> the doors and onto the big field. Some kids played soccer while others <span class="target-word">caught</span> footballs near the fence. There was always <span class="target-word">enough</span> room for everyone to play. Even the new student from a <span class="target-word">foreign</span> country joined the kickball game on his first day. Nobody felt left out because recess gave every kid a chance to run, laugh, and make friends. By the time the bell rang, everyone had <span class="target-word">enough</span> energy to focus in class again. Recess wasn't just fun — it made the whole school day better!`;
+
+const PLAN_OPTIONS = {
+  opinion: [
+    { text: "Yes! Schools should definitely have longer recess.", value: "Yes" },
+    { text: "No, I think recess is long enough already.", value: "No" },
+    { text: "It depends on the school and the students.", value: "It depends" }
+  ],
+  reason1: [
+    "Kids need more time to run around and get their energy out.",
+    "Longer recess helps kids focus better when they go back to class.",
+    "Playing with friends teaches teamwork and how to get along.",
+    "Kids feel happier and less stressed when they get more time outside."
+  ],
+  reason2: [
+    "Exercise during recess keeps kids healthy and strong.",
+    "Some kids don't get to play outside at home, so they need more time at school.",
+    "Recess gives kids a break so their brains can rest and learn more later.",
+    "Kids learn how to solve problems and share when they play games together."
+  ],
+  disagree: [
+    "There isn't enough time in the day for all the subjects AND longer recess.",
+    "Some kids might get hurt if recess is too long.",
+    "Teachers need that time for important lessons."
+  ],
+  conclusion: [
+    "That is why I believe schools should have longer recess.",
+    "Although some people disagree, I think longer recess would help all students.",
+    "I think every school should give kids more time to play and be active."
+  ]
+};
+
+const SENTENCE_FRAMES = [
+  {
+    label: 'Introduction',
+    prefix: 'I think schools should ',
+    blanks: [
+      { key: 'verb', label: 'have/give/get', placeholder: 'have longer recess' },
+      { key: 'reason', label: 'what happens', placeholder: 'kids can run and play' }
+    ],
+    connector: ' because ',
+    suffix: '.',
+    prompt: 'Tell me: should schools have longer recess? Why?'
+  },
+  {
+    label: 'Reason 1',
+    prefix: 'I believe this because ',
+    blanks: [
+      { key: 'who_does', label: 'who does what', placeholder: 'kids run around' },
+      { key: 'when_where', label: 'when or where', placeholder: 'during recess' }
+    ],
+    connector: ' ',
+    suffix: '.',
+    prompt: 'Tell me more about your first reason. WHY is it true? Give me an example.'
+  },
+  {
+    label: 'Reason 2',
+    prefix: 'Also, ',
+    blanks: [
+      { key: 'who_feel', label: 'who does/feels what', placeholder: 'kids feel happier' },
+      { key: 'because_so', label: 'what happens', placeholder: 'they get to play with friends' }
+    ],
+    connector: ' because ',
+    suffix: '.',
+    prompt: 'What is another reason recess should be longer?'
+  }
+];
+
+const WORD_BANK = ['run','play','exercise','friends','energy','focus','learn','relax','happy','tired','stressed','team','games','outside','recess','break','healthy','strong'];
+
+const CONNECTING_WORDS = ['after','because','when','before','although','since','until','if','first','also','furthermore','so','believe'];
+
+const SPECIFICITY_PROMPTS = [
+  { trigger: 'things', prompt: 'You said "things" \u2014 what ARE the things? Name one.' },
+  { trigger: 'important', prompt: 'You said "important" \u2014 WHY does it matter? What happens WITHOUT it?' },
+  { trigger: 'stuff', prompt: 'You said "stuff" \u2014 what kind of stuff? Be specific!' },
+  { trigger: '', prompt: 'Give me an example you can SEE or TOUCH.' }
+];
+
+// ============================================================
+//  UTILITY FUNCTIONS
+// ============================================================
+
+function toast(msg, isWarn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isWarn ? ' warning' : '');
+  setTimeout(() => t.className = 'toast', 2400);
+}
+
+function addPoints(pts) {
+  S.points += pts;
+  if (pts > 0) toast('+' + pts + ' points! \uD83C\uDFC6');
+}
+
+function esc(text) {
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+function saveToLocalStorage() {
+  try {
+    const data = JSON.parse(JSON.stringify(S));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved \u2713';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    S = data;
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null;
+let cloudDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(saveStateToCloud, 3000);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+function saveStateToCloud() {
+  try {
+    const data = JSON.parse(JSON.stringify(S));
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: data })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved \u2601\ufe0f';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud(key) {
+  return new Promise((resolve) => {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(() => { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state);
+      else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available', true); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.9;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function fireCelebration() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  const emojis = ['\uD83C\uDF89','\uD83C\uDF8A','\u2B50','\uD83C\uDFC3','\u26BD','\uD83C\uDF33','\uD83C\uDF1F'];
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4000);
+}
+
+// Add confetti keyframes
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(confettiStyle);
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  if (tab === 'reading') renderReading();
+  else if (tab === 'planner') renderPlanner();
+  else if (tab === 'writing') renderWriting();
+  else if (tab === 'dashboard') renderDashboard();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+// ============================================================
+//  TAB 1: READING SKILLS
+// ============================================================
+
+let readingPhase = 'words';
+
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const ws = S.reading.words;
+
+  if (readingPhase === 'words' && !ws.done) {
+    renderWords(el);
+  } else if (!S.reading.thinkThings.done) {
+    readingPhase = 'thinkThings';
+    renderThinkThings(el);
+  } else if (!S.reading.passage.done) {
+    readingPhase = 'passage';
+    renderPassage(el);
+  } else {
+    el.innerHTML = `
+      <div class="act-label act-read">&#128214; Reading Complete!</div>
+      <div class="celebration"><div class="big-star">&#127942;</div>
+        <h2>Reading Skills Done!</h2>
+        <p>Great job with tricky words, think/things, and reading about recess!</p>
+      </div>
+      <div class="btn-row"><button class="btn btn-success" onclick="switchTab('planner')">Next: Plan Your Essay! &#128161;</button></div>`;
+  }
+}
+
+function renderWords(el) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  let dotsHTML = IRREGULAR_WORDS.map((wd, i) => {
+    let cls = 'q-dot';
+    if (i < ws.current) cls += ws.results[i] && ws.results[i].correct ? ' done' : '';
+    else if (i === ws.current) cls += ' current';
+    return '<div class="' + cls + '"></div>';
+  }).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Irregular Word Practice</div>
+    <h2>Read this word aloud!</h2>
+    <p class="directions">Look at the <strong>whole word</strong> carefully. Say it out loud!
+      <span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:0.78rem;font-weight:700;background:${w.tag === 'review' ? 'var(--gold-light);color:#B8860B' : 'var(--teal-light);color:var(--teal)'};">${w.tag === 'review' ? 'Review' : 'New Word'}</span></p>
+    <div class="q-progress"><div class="q-dots">${dotsHTML}</div><div class="q-label">Word ${ws.current+1} of ${IRREGULAR_WORDS.length}</div></div>
+    <div class="flashcard" id="flashcard">
+      <div class="word" id="wordDisplay">${w.word}</div>
+      <div class="word-parts" id="wordParts" style="display:none;"></div>
+      <div id="wordPhonetic" style="display:none;font-size:1rem;color:var(--muted);margin-top:6px;"></div>
+    </div>
+    <div class="cwc-area" id="cwcArea">
+      <p style="font-weight:700;">Cover-Write-Check!</p>
+      <p style="font-size:0.88rem;color:var(--muted);">The word is hidden. Type it from memory:</p>
+      <input type="text" id="cwcInput" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')checkCWC()">
+      <div class="cwc-result" id="cwcResult"></div>
+      <div class="btn-row"><button class="btn btn-sm btn-primary" onclick="checkCWC()">Check!</button></div>
+    </div>
+    <div class="btn-row" id="wordBtns">
+      <button class="btn btn-success" onclick="markWord(true)">&#10003; Correct</button>
+      <button class="btn btn-red" onclick="markWord(false)">&#10007; Incorrect</button>
+    </div>
+    <div class="btn-row" id="wordNextBtn" style="display:none;">
+      <button class="btn btn-primary" onclick="nextWord()">Next Word &#8594;</button>
+    </div>`;
+}
+
+function markWord(correct) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  const fc = document.getElementById('flashcard');
+  const btns = document.getElementById('wordBtns');
+
+  if (correct) {
+    fc.className = 'flashcard correct';
+    ws.results[ws.current] = { word: w.word, correct: true, attempts: 1 };
+    btns.style.display = 'none';
+    document.getElementById('wordNextBtn').style.display = 'flex';
+    addPoints(5);
+  } else {
+    fc.className = 'flashcard incorrect';
+    const partsHTML = w.parts.map((p, i) => {
+      const colors = ['#E3F2FD','#FFF3E0','#E8F5E9','#F3E5F5'];
+      return '<span style="background:' + colors[i % colors.length] + '">' + p + '</span>';
+    }).join('');
+    document.getElementById('wordParts').innerHTML = partsHTML;
+    document.getElementById('wordParts').style.display = 'block';
+    document.getElementById('wordPhonetic').textContent = 'Says: "' + w.phonetic + '"';
+    document.getElementById('wordPhonetic').style.display = 'block';
+    btns.style.display = 'none';
+    setTimeout(() => {
+      document.getElementById('wordDisplay').style.display = 'none';
+      document.getElementById('wordParts').style.display = 'none';
+      document.getElementById('wordPhonetic').style.display = 'none';
+      fc.className = 'flashcard';
+      document.getElementById('cwcArea').classList.add('show');
+      document.getElementById('cwcInput').focus();
+    }, 2500);
+    ws.results[ws.current] = { word: w.word, correct: false, attempts: 1 };
+  }
+  debounceSave();
+}
+
+function checkCWC() {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  const input = document.getElementById('cwcInput').value.trim().toLowerCase();
+  const result = document.getElementById('cwcResult');
+  if (input === w.word.toLowerCase()) {
+    result.innerHTML = '<span style="color:var(--green);">&#10003; Perfect! You spelled it right!</span>';
+    addPoints(3);
+  } else {
+    result.innerHTML = '<span style="color:var(--red);">Not quite. The word is: <strong>' + w.word + '</strong></span>';
+  }
+  document.getElementById('wordNextBtn').style.display = 'flex';
+  debounceSave();
+}
+
+function nextWord() {
+  const ws = S.reading.words;
+  ws.current++;
+  if (ws.current >= IRREGULAR_WORDS.length) {
+    ws.done = true;
+    S.timestamps.wordsEnd = new Date().toISOString();
+    const correctCount = ws.results.filter(r => r && r.correct).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Irregular Words', 'Reading', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.map(r => r.word + ':' + (r.correct ? 'Y' : 'N')).join(', ')]);
+    postToSheets('Reading - Phonics', [SESSION_DATE, 'Irregular Words', 'RF.3.3', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.filter(r => !r.correct).map(r => r.word).join(', '), '']);
+    readingPhase = 'thinkThings';
+  }
+  renderReading();
+}
+
+// Think/Things
+function renderThinkThings(el) {
+  const tt = S.reading.thinkThings;
+  const currentQ = tt.answers.length;
+
+  if (tt.done) { renderReading(); return; }
+
+  let quizHTML = '';
+  THINK_THINGS_QUIZ.forEach((q, i) => {
+    const answered = i < tt.answers.length;
+    const correct = answered && tt.answers[i] === q.answer;
+    let btnsHTML = '';
+    if (!answered && i === currentQ) {
+      btnsHTML = `<div class="pair-quiz-btns">
+        <button class="pair-quiz-btn" onclick="pickThinkThings(${i},'think')">THINK</button>
+        <button class="pair-quiz-btn" onclick="pickThinkThings(${i},'things')">THINGS</button>
+      </div>`;
+    } else if (answered) {
+      const userAns = tt.answers[i];
+      btnsHTML = `<div class="pair-quiz-btns">
+        <button class="pair-quiz-btn ${userAns==='think' ? (q.answer==='think' ? 'pq-correct' : 'pq-wrong') : (q.answer==='think' ? 'pq-correct' : '')}" disabled>THINK</button>
+        <button class="pair-quiz-btn ${userAns==='things' ? (q.answer==='things' ? 'pq-correct' : 'pq-wrong') : (q.answer==='things' ? 'pq-correct' : '')}" disabled>THINGS</button>
+      </div>
+      <div style="font-size:0.85rem;margin-top:6px;font-weight:600;color:${correct ? '#2E7D32' : 'var(--red)'}">${correct ? '&#10003; ' : '&#10007; '}${q.explanation}</div>`;
+    }
+    quizHTML += `<div class="pair-quiz-item" style="${!answered && i !== currentQ ? 'opacity:0.4;' : ''}">
+      <div class="pq-sentence">${q.sentence.replace('_____', '<span class="pq-blank">_____</span>')}</div>
+      ${btnsHTML}
+    </div>`;
+  });
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Think vs. Things — Quick Check</div>
+    <h2>Two tricky words!</h2>
+    <p class="directions">Remember: <strong>THINK</strong> = your brain (no G, no S). <strong>THINGS</strong> = stuff (ends in G-S).</p>
+    <div class="pair-display">
+      <div class="pair-card" style="border-color: var(--teal);">
+        <div class="pair-word" style="color: var(--teal);">THINK</div>
+        <div class="pair-def">What your brain does</div>
+        <div class="pair-tip" style="color: var(--teal);">No G, no S</div>
+      </div>
+      <div class="pair-card" style="border-color: var(--purple);">
+        <div class="pair-word" style="color: var(--purple);">THINGS</div>
+        <div class="pair-def">Stuff, objects</div>
+        <div class="pair-tip" style="color: var(--purple);">Ends in G-S</div>
+      </div>
+    </div>
+    <h3 style="font-size:1rem;margin:14px 0 8px;">Quick Check: THINK or THINGS?</h3>
+    ${quizHTML}
+    ${currentQ >= THINK_THINGS_QUIZ.length ? '<div class="btn-row"><button class="btn btn-success" onclick="finishThinkThings()">Next: Read a Passage! &#8594;</button></div>' : ''}`;
+}
+
+function pickThinkThings(idx, choice) {
+  const tt = S.reading.thinkThings;
+  if (idx !== tt.answers.length) return;
+  tt.answers.push(choice);
+  const correct = choice === THINK_THINGS_QUIZ[idx].answer;
+  if (correct) addPoints(5);
+  if (tt.answers.length >= THINK_THINGS_QUIZ.length) {
+    const score = tt.answers.filter((a, i) => a === THINK_THINGS_QUIZ[i].answer).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Think vs Things', 'Reading', score, THINK_THINGS_QUIZ.length, Math.round(score/THINK_THINGS_QUIZ.length*100)+'%', 'Quick check: 2 sentences']);
+  }
+  renderThinkThings(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function finishThinkThings() {
+  S.reading.thinkThings.done = true;
+  readingPhase = 'passage';
+  renderReading();
+}
+
+// Passage
+function renderPassage(el) {
+  const ps = S.reading.passage;
+  const prosodyHTML = ['Expression','Phrasing','Pace','Smoothness'].map(dim => {
+    const key = dim.toLowerCase();
+    let scores = '';
+    for (let i = 1; i <= 4; i++) {
+      scores += '<div class="pi-score' + (ps.prosody[key]===i ? ' selected' : '') + '" onclick="setProsody(\'' + key + '\',' + i + ')">' + i + '</div>';
+    }
+    return '<div class="prosody-item"><div class="pi-label">' + dim + '</div><div class="pi-scores">' + scores + '</div></div>';
+  }).join('');
+
+  el.innerHTML = `
+    <div class="act-label act-read">&#128214; Passage Read-Aloud</div>
+    <h2>&#127939; Read about recess!</h2>
+    <p class="directions">Read the passage aloud. Make it sound like you're telling your friend an exciting story! <strong style="background:var(--gold-light);padding:1px 4px;border-radius:4px;">Highlighted words</strong> are the tricky words you practiced.</p>
+    <div class="passage-box">${PASSAGE_TEXT}</div>
+    <h3 style="font-size:1rem;margin:14px 0 8px;">Prosody Rubric (Tutor rates 1-4)</h3>
+    <div class="prosody-grid">${prosodyHTML}</div>
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="finishReading()">Done with Reading &#10003;</button>
+    </div>`;
+}
+
+function setProsody(dim, val) {
+  S.reading.passage.prosody[dim] = val;
+  renderPassage(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function finishReading() {
+  S.reading.passage.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  document.getElementById('mtab-reading').classList.add('done');
+  const p = S.reading.passage.prosody;
+  const avg = ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1);
+  postToSheets('Reading - ORF', [SESSION_DATE, 'Recess passage', '', '', '', '', '', p.expression, p.phrasing, p.pace, p.smoothness, avg, 'Recess-themed passage with target irregular words']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Passage Read-Aloud', 'Reading', 'Prosody avg: ' + avg, '', '', 'Exp:'+p.expression+' Phr:'+p.phrasing+' Pac:'+p.pace+' Smo:'+p.smoothness]);
+  toast('Reading section complete! &#127942;');
+  switchTab('planner');
+}
+
+// ============================================================
+//  TAB 2: ESSAY 5 PLANNER (Interview Style)
+// ============================================================
+
+function renderPlanner() {
+  const el = document.getElementById('card-planner');
+  const plan = S.planner;
+
+  if (plan.done) {
+    renderPlanPreview(el);
+    return;
+  }
+
+  const steps = ['opinion','reason1','reason2','disagree','conclusion'];
+  const labels = [
+    'Do you think schools should have longer recess?',
+    "What's your #1 reason?",
+    "What's another reason?",
+    'What might someone who DISAGREES say?',
+    'How do you want to end your essay?'
+  ];
+  const icons = ['\uD83D\uDCAD','\uD83D\uDCA1','\uD83D\uDCA1','\uD83E\uDD14','\uD83C\uDFC1'];
+
+  let stepsHTML = '';
+  steps.forEach((key, idx) => {
+    const opts = PLAN_OPTIONS[key];
+    const current = plan[key] || '';
+
+    let optionsHTML = '';
+    if (key === 'opinion') {
+      optionsHTML = opts.map((o, oi) => {
+        const sel = current === o.value ? ' selected' : '';
+        return '<div class="iq-option' + sel + '" onclick="planSelect(\'' + key + '\',' + oi + ')">' + o.text + '</div>';
+      }).join('');
+      const isCustom = current && !opts.map(o => o.value).includes(current);
+      optionsHTML += `
+        <div class="iq-custom">
+          <input type="text" id="plan-custom-${key}" placeholder="Or write your own opinion..." value="${isCustom ? esc(current) : ''}" oninput="planCustom('${key}',this.value)">
+        </div>`;
+    } else {
+      optionsHTML = opts.map((o, oi) => {
+        const sel = current === o ? ' selected' : '';
+        return '<div class="iq-option' + sel + '" onclick="planSelect(\'' + key + '\',' + oi + ')">' + o + '</div>';
+      }).join('');
+      const isCustom = current && !opts.includes(current);
+      optionsHTML += `
+        <div class="iq-custom">
+          <input type="text" id="plan-custom-${key}" placeholder="Or write your own..." value="${isCustom ? esc(current) : ''}" oninput="planCustom('${key}',this.value)">
+        </div>`;
+    }
+
+    const helpTexts = {
+      opinion: ['Do you like recess? Would you want more time to play?', 'Example: "I think schools should have longer recess because kids need to play."', 'Yes'],
+      reason1: ['Think about what you do at recess. Why is that important?', 'Example: "Kids need more time to run around and get exercise."', 'Kids need more time to run around and get their energy out.'],
+      reason2: ['What ELSE is good about recess? Think about feelings, friends, or learning.', 'Example: "Recess helps kids who feel stressed feel better."', 'Recess gives kids a break so their brains can rest and learn more later.'],
+      disagree: ['Imagine a teacher who says recess should be SHORT. Why would they say that?', 'Example: "Some people think there isn\'t enough time for all the subjects."', "There isn't enough time in the day for all the subjects AND longer recess."],
+      conclusion: ['What is the most important thing you want the reader to remember?', 'Example: "That is why I believe schools should have longer recess."', 'That is why I believe schools should have longer recess.']
+    };
+
+    const ht = helpTexts[key];
+    const helpLevel = plan.helpUsed[key] || 0;
+
+    let helpHTML = '';
+    if (helpLevel < 3) {
+      helpHTML = '<div class="help-btn-wrap"><button class="help-btn" onclick="planHelp(\'' + key + '\')">&#129300; I need help! ' + (helpLevel > 0 ? '(Tap ' + (helpLevel+1) + ')' : '') + '</button></div>';
+    }
+    let helpPanelHTML = '<div class="help-panel' + (helpLevel > 0 ? ' show' : '') + '" id="help-' + key + '">';
+    if (helpLevel >= 1) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Think about this...</div><p>' + ht[0] + '</p></div>';
+    if (helpLevel >= 2) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Example</div><p>' + ht[1] + '</p></div>';
+    if (helpLevel >= 3) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Ready-made option</div><p>You can use this: <strong>"' + ht[2] + '"</strong></p><button class="btn btn-sm btn-primary" onclick="planSelect(\'' + key + '\',-1,\'' + esc(ht[2]).replace(/'/g, "\\'") + '\')">Use this</button></div>';
+    helpPanelHTML += '</div>';
+
+    stepsHTML += `
+      <div class="interview-q">
+        <div class="iq-num">${icons[idx]} Question ${idx+1}${key === 'disagree' ? ' (Think like the other side!)' : ''}</div>
+        <div class="iq-question">${labels[idx]}</div>
+        ${key === 'disagree' ? '<div class="say-first" style="background:var(--purple-light);color:var(--purple);">&#129300; Think about what someone who thinks recess should NOT be longer would say!</div>' : '<div class="say-first">&#128483;&#65039; Say it first! Tell your tutor your answer out loud before picking.</div>'}
+        <div class="iq-options">${optionsHTML}</div>
+        ${helpHTML}
+        ${helpPanelHTML}
+      </div>`;
+  });
+
+  const canProceed = plan.opinion && plan.reason1;
+
+  el.innerHTML = `
+    <div class="act-label act-plan">&#128161; Essay 5: Plan Your Recess Essay</div>
+    <h2>&#9917; Let's plan!</h2>
+    <p class="directions">Answer each question to plan your opinion essay. Pick an answer OR write your own!</p>
+    <div class="opinion-box"><div class="oq-label">Essay Prompt</div>Should schools have longer recess? Why or why not?</div>
+    ${stepsHTML}
+    <div class="btn-row">
+      <button class="btn btn-success" onclick="finishPlanner()" ${canProceed ? '' : 'disabled'}>My plan is ready! &#10003;</button>
+    </div>`;
+}
+
+function planSelect(key, optIdx, customText) {
+  if (customText) {
+    S.planner[key] = customText;
+  } else if (key === 'opinion') {
+    if (optIdx >= 0) {
+      S.planner[key] = PLAN_OPTIONS[key][optIdx].value;
+      const ci = document.getElementById('plan-custom-' + key);
+      if (ci) ci.value = '';
+    }
+  } else {
+    if (optIdx >= 0) {
+      S.planner[key] = PLAN_OPTIONS[key][optIdx];
+      const ci = document.getElementById('plan-custom-' + key);
+      if (ci) ci.value = '';
+    }
+  }
+  renderPlanner();
+  debounceSave();
+}
+
+function planCustom(key, val) {
+  if (val.trim()) {
+    S.planner[key] = val.trim();
+    renderPlanner();
+    setTimeout(() => {
+      const ci = document.getElementById('plan-custom-' + key);
+      if (ci) { ci.focus(); ci.selectionStart = ci.selectionEnd = ci.value.length; }
+    }, 50);
+  } else {
+    S.planner[key] = '';
+  }
+  debounceSave();
+}
+
+function planHelp(key) {
+  S.planner.helpUsed[key] = (S.planner.helpUsed[key] || 0) + 1;
+  renderPlanner();
+  setTimeout(() => {
+    const panel = document.getElementById('help-' + key);
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+  debounceSave();
+}
+
+function finishPlanner() {
+  S.planner.done = true;
+  S.timestamps.plannerEnd = new Date().toISOString();
+  document.getElementById('mtab-planner').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay 5 Planner', 'Writing', '', '', '', 'Topic: Recess. Help used: ' + Object.keys(S.planner.helpUsed).length]);
+  addPoints(15);
+  renderPlanner();
+  debounceSave();
+}
+
+function renderPlanPreview(el) {
+  const plan = S.planner;
+  el.innerHTML = `
+    <div class="act-label act-plan">&#128161; Essay 5 Plan — Complete!</div>
+    <div class="celebration"><div class="big-star">&#128161;</div>
+      <h2>Your Recess Essay Plan!</h2>
+    </div>
+    <div class="plan-preview">
+      <h3>&#128203; Plan Preview</h3>
+      <div class="pp-item"><div class="pp-label">Your Opinion</div>${esc(plan.opinion || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Reason 1</div>${esc(plan.reason1 || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Reason 2</div>${esc(plan.reason2 || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Someone Might Disagree Because...</div>${esc(plan.disagree || '(not set)')}</div>
+      <div class="pp-item"><div class="pp-label">Your Ending</div>${esc(plan.conclusion || '(not set)')}</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="S.planner.done=false;renderPlanner();">&#9998; Edit Plan</button>
+      <button class="btn btn-success" onclick="switchTab('writing')">Start Writing! &#9997;&#65039;</button>
+    </div>`;
+}
+
+// ============================================================
+//  TAB 3: DICTATION-FIRST WRITING
+// ============================================================
+
+let talkTimerInterval = null;
+let talkStartTime = null;
+let showSpecificity = false;
+
+function renderWriting() {
+  const el = document.getElementById('card-writing');
+  const w = S.writing;
+  const ci = w.currentSentence;
+
+  if (w.done) {
+    renderWritingComplete(el);
+    return;
+  }
+
+  // Sentence navigation
+  const sentLabels = ['Intro', 'Reason 1', 'Reason 2'];
+  let navHTML = '<div class="sentence-nav">';
+  sentLabels.forEach((lbl, i) => {
+    let cls = 'sentence-nav-btn';
+    if (i === ci) cls += ' sn-active';
+    if (w.sentences[i].done) cls += ' sn-done';
+    const canClick = i <= ci || w.sentences[i].done;
+    navHTML += `<button class="${cls}" onclick="${canClick ? 'goToSentence('+i+')' : ''}" ${canClick ? '' : 'disabled'}>${w.sentences[i].done ? '&#10003; ' : ''}${lbl}</button>`;
+  });
+  navHTML += '</div>';
+
+  const sent = w.sentences[ci];
+  const frame = SENTENCE_FRAMES[ci];
+  const step = sent.step || 0;
+
+  let stepsHTML = `
+    <div class="step-indicator">
+      <div class="step-pill ${step >= 1 ? 'step-done' : step === 0 ? 'step-active' : ''}"><span class="step-icon">&#128483;&#65039;</span>Tell Me</div>
+      <div class="step-pill ${step >= 2 ? 'step-done' : step === 1 ? 'step-active' : ''}"><span class="step-icon">&#128270;</span>Find It</div>
+      <div class="step-pill ${step >= 3 ? 'step-done' : step === 2 ? 'step-active' : ''}"><span class="step-icon">&#128295;</span>Build It</div>
+      <div class="step-pill ${step >= 4 ? 'step-done' : step === 3 ? 'step-active' : ''}"><span class="step-icon">&#128264;</span>Check</div>
+    </div>`;
+
+  let contentHTML = '';
+
+  // STEP 0: TELL ME
+  if (step === 0) {
+    const elapsed = talkStartTime ? Math.floor((Date.now() - talkStartTime) / 1000) : 0;
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    const timerStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    const timerClass = elapsed > 30 ? 'talk-timer long' : 'talk-timer';
+
+    contentHTML = `
+      <div class="dictation-box">
+        <h3 style="margin-bottom:4px;">&#128483;&#65039; Tell me about ${frame.label === 'Introduction' ? 'your opinion' : 'your ' + frame.label.toLowerCase()}</h3>
+        <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">Just talk \u2014 like you're telling a friend. Mr. Walker will write down what you say.</p>
+        ${S.planner[['opinion','reason1','reason2'][ci]] ? '<div class="kernel-card"><div class="kc-label">Your plan says:</div><div class="kc-text">"' + esc(S.planner[['opinion','reason1','reason2'][ci]]) + '"</div></div>' : ''}
+        ${talkStartTime ? '<div class="' + timerClass + '" id="talkTimer">' + timerStr + '</div><p style="color:var(--green);font-weight:700;font-size:0.88rem;">Keep going! You\'re doing great! &#127939;</p>' : '<div class="btn-row"><button class="btn btn-gold" onclick="startTalking()">&#127908; Start Talking!</button></div>'}
+        <textarea id="dictationArea" placeholder="Tutor: type what Marcello says here (verbatim)..." oninput="onDictation(${ci})">${esc(sent.dictation || '')}</textarea>
+        ${talkStartTime ? '<div class="btn-row"><button class="btn btn-success" onclick="doneTalking(' + ci + ')">Done talking! &#10003;</button></div>' : ''}
+      </div>`;
+  }
+
+  // STEP 1: FIND THE SENTENCE
+  if (step === 1) {
+    contentHTML = `
+      <div class="card" style="border-left:4px solid var(--gold);">
+        <h3 style="margin-bottom:4px;">&#128270; Find the sentence!</h3>
+        <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">You said all of this! Now find <strong>ONE sentence</strong> hiding in here.</p>
+        <div class="passage-box" style="background:#FFFDE7;border-color:var(--gold);">${esc(sent.dictation)}</div>
+        <div style="margin-top:12px;">
+          <label style="font-weight:700;font-size:0.93rem;display:block;margin-bottom:4px;">&#128161; The key idea I found:</label>
+          <textarea id="kernelInput" style="width:100%;min-height:60px;border:2px solid var(--teal);border-radius:10px;padding:12px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;resize:vertical;" placeholder="Type the key idea or sentence you found..." oninput="onKernel(${ci})">${esc(sent.kernel || '')}</textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="backToTell(${ci})">&#8592; More talking</button>
+          <button class="btn btn-success" onclick="foundIt(${ci})" ${sent.kernel ? '' : 'disabled'}>I found it! &#8594;</button>
+        </div>
+      </div>`;
+  }
+
+  // STEP 2: BUILD IT
+  if (step === 2) {
+    const f = frame;
+    let frameHTML = '<div class="sentence-frame">';
+    frameHTML += '<span class="frame-text">' + esc(f.prefix) + '</span>';
+    f.blanks.forEach((b, bi) => {
+      const val = (sent.blanks && sent.blanks[b.key]) || '';
+      frameHTML += '<span class="frame-blank-wrap"><span class="frame-label">[' + b.label + ']</span><input type="text" id="frame-' + ci + '-' + b.key + '" value="' + esc(val) + '" placeholder="' + esc(b.placeholder) + '" oninput="onFrameType(' + ci + ',\'' + b.key + '\',this.value)" style="width:' + Math.max(160, b.placeholder.length * 9) + 'px"></span>';
+      if (bi < f.blanks.length - 1) {
+        frameHTML += '<span class="frame-text">' + esc(f.connector) + '</span>';
+      }
+    });
+    frameHTML += '<span class="frame-text">' + esc(f.suffix) + '</span></div>';
+
+    // Assemble preview
+    let assembled = f.prefix;
+    f.blanks.forEach((b, bi) => {
+      assembled += (sent.blanks && sent.blanks[b.key]) || '______';
+      if (bi < f.blanks.length - 1) assembled += f.connector;
+    });
+    assembled += f.suffix;
+
+    contentHTML = `
+      <div class="card" style="border-left:4px solid var(--teal);">
+        <h3 style="margin-bottom:4px;">&#128295; Build your sentence!</h3>
+        <p style="color:var(--muted);font-size:0.92rem;margin-bottom:6px;">Fill in each blank. The labels tell you what kind of word goes there.</p>
+        <div class="kernel-card">
+          <div class="kc-label">&#128161; Your key idea</div>
+          <div class="kc-text">"${esc(sent.kernel)}"</div>
+        </div>
+        ${frameHTML}
+        <div class="word-bank-label">&#128218; Word Bank (tap to use):</div>
+        <div class="word-bank" id="wordBank">
+          ${WORD_BANK.map(w => '<span class="wb-chip" onclick="insertWordBank(' + ci + ',\'' + w + '\')">' + w + '</span>').join('')}
+        </div>
+        <div class="assembled-label">Your sentence:</div>
+        <div class="assembled-sentence" id="assembled-${ci}">${esc(assembled)}</div>
+
+        <div style="text-align:center;margin-top:12px;">
+          <button class="help-btn" onclick="toggleSpecificity()">&#129300; Specificity Help</button>
+        </div>
+        <div class="specificity-panel ${showSpecificity ? 'show' : ''}" id="specificityPanel">
+          ${SPECIFICITY_PROMPTS.map(sp => '<div class="specificity-card">' + (sp.trigger ? '"' + sp.trigger + '" \u2192 ' : '') + sp.prompt + '</div>').join('')}
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="backToFind(${ci})">&#8592; Find again</button>
+          <button class="btn btn-success" onclick="buildDone(${ci})">Check it! &#128264;</button>
+        </div>
+      </div>`;
+  }
+
+  // STEP 3: CHECK
+  if (step === 3) {
+    const f = frame;
+    let assembled = f.prefix;
+    f.blanks.forEach((b, bi) => {
+      assembled += (sent.blanks && sent.blanks[b.key]) || '';
+      if (bi < f.blanks.length - 1) assembled += f.connector;
+    });
+    assembled += f.suffix;
+
+    contentHTML = `
+      <div class="card pop-in" style="border-left:4px solid var(--green);">
+        <h3 style="margin-bottom:4px;">&#128264; Check your sentence!</h3>
+        <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">Listen to your sentence. Does it sound like something you would say to a friend?</p>
+        <div class="assembled-sentence" style="font-size:1.15rem;text-align:center;padding:20px;">${esc(assembled)}</div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="speakText('${esc(assembled).replace(/'/g, "\\'")}')">&#128264; Read it Back</button>
+        </div>
+        <div class="btn-row" style="margin-top:20px;">
+          <button class="btn btn-secondary" onclick="fixIt(${ci})">&#9998; Let me fix it</button>
+          <button class="btn btn-success" onclick="sentenceDone(${ci})">&#127881; Yes, it's good!</button>
+        </div>
+      </div>`;
+  }
+
+  // Essay so far
+  let essaySoFarHTML = '';
+  const doneSentences = w.sentences.filter(s => s.done && s.assembled);
+  if (doneSentences.length > 0) {
+    essaySoFarHTML = '<div class="essay-so-far"><h3>&#128220; Your Essay So Far</h3>';
+    doneSentences.forEach((s, i) => {
+      essaySoFarHTML += '<div class="esf-sentence">' + esc(s.assembled) + '</div>';
+    });
+    essaySoFarHTML += '</div>';
+  }
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="act-label act-write">&#9997;&#65039; Dictation-First Writing</div>
+      <h2>&#127939; Sentence ${ci + 1}: ${SENTENCE_FRAMES[ci].label}</h2>
+      <p class="directions">${SENTENCE_FRAMES[ci].prompt}</p>
+      ${navHTML}
+      ${stepsHTML}
+    </div>
+    ${contentHTML}
+    ${essaySoFarHTML}`;
+}
+
+function startTalking() {
+  talkStartTime = Date.now();
+  talkTimerInterval = setInterval(updateTalkTimer, 1000);
+  renderWriting();
+  setTimeout(() => {
+    const ta = document.getElementById('dictationArea');
+    if (ta) ta.focus();
+  }, 100);
+}
+
+function updateTalkTimer() {
+  const el = document.getElementById('talkTimer');
+  if (!el || !talkStartTime) return;
+  const elapsed = Math.floor((Date.now() - talkStartTime) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  if (elapsed > 30) el.className = 'talk-timer long';
+}
+
+function onDictation(ci) {
+  const ta = document.getElementById('dictationArea');
+  if (ta) S.writing.sentences[ci].dictation = ta.value;
+  debounceSave();
+}
+
+function doneTalking(ci) {
+  clearInterval(talkTimerInterval);
+  talkTimerInterval = null;
+  const elapsed = talkStartTime ? Math.floor((Date.now() - talkStartTime) / 1000) : 0;
+  talkStartTime = null;
+  S.writing.sentences[ci].step = 1;
+  S.writing.sentences[ci].talkTime = elapsed;
+  addPoints(5);
+  renderWriting();
+  debounceSave();
+}
+
+function onKernel(ci) {
+  const input = document.getElementById('kernelInput');
+  if (input) S.writing.sentences[ci].kernel = input.value;
+  debounceSave();
+  // Enable/disable button
+  renderWriting();
+  setTimeout(() => {
+    const ki = document.getElementById('kernelInput');
+    if (ki) { ki.focus(); ki.selectionStart = ki.selectionEnd = ki.value.length; }
+  }, 50);
+}
+
+function backToTell(ci) {
+  S.writing.sentences[ci].step = 0;
+  renderWriting();
+  debounceSave();
+}
+
+function foundIt(ci) {
+  S.writing.sentences[ci].step = 2;
+  addPoints(5);
+  renderWriting();
+  debounceSave();
+}
+
+function backToFind(ci) {
+  S.writing.sentences[ci].step = 1;
+  showSpecificity = false;
+  renderWriting();
+  debounceSave();
+}
+
+function onFrameType(ci, blankKey, value) {
+  if (!S.writing.sentences[ci].blanks) S.writing.sentences[ci].blanks = {};
+  S.writing.sentences[ci].blanks[blankKey] = value;
+  // Update assembled preview
+  const f = SENTENCE_FRAMES[ci];
+  let assembled = f.prefix;
+  f.blanks.forEach((b, bi) => {
+    assembled += (S.writing.sentences[ci].blanks[b.key]) || '______';
+    if (bi < f.blanks.length - 1) assembled += f.connector;
+  });
+  assembled += f.suffix;
+  const aEl = document.getElementById('assembled-' + ci);
+  if (aEl) aEl.textContent = assembled;
+  debounceSave();
+}
+
+function insertWordBank(ci, word) {
+  const f = SENTENCE_FRAMES[ci];
+  const blanks = S.writing.sentences[ci].blanks || {};
+  // Find first empty blank or focused input
+  for (const b of f.blanks) {
+    const input = document.getElementById('frame-' + ci + '-' + b.key);
+    if (input && document.activeElement === input) {
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const before = input.value.slice(0, start);
+      const after = input.value.slice(end);
+      const spaceBefore = before && !before.endsWith(' ') ? ' ' : '';
+      input.value = before + spaceBefore + word + after;
+      blanks[b.key] = input.value;
+      S.writing.sentences[ci].blanks = blanks;
+      input.focus();
+      input.selectionStart = input.selectionEnd = start + spaceBefore.length + word.length;
+      onFrameType(ci, b.key, input.value);
+      toast('"' + word + '" added!');
+      return;
+    }
+  }
+  // Otherwise insert into first empty blank
+  for (const b of f.blanks) {
+    if (!blanks[b.key] || !blanks[b.key].trim()) {
+      blanks[b.key] = word;
+      S.writing.sentences[ci].blanks = blanks;
+      const input = document.getElementById('frame-' + ci + '-' + b.key);
+      if (input) input.value = word;
+      onFrameType(ci, b.key, word);
+      toast('"' + word + '" added!');
+      return;
+    }
+  }
+  toast('All blanks filled!', true);
+}
+
+function toggleSpecificity() {
+  showSpecificity = !showSpecificity;
+  const panel = document.getElementById('specificityPanel');
+  if (panel) panel.classList.toggle('show', showSpecificity);
+}
+
+function buildDone(ci) {
+  const f = SENTENCE_FRAMES[ci];
+  let assembled = f.prefix;
+  f.blanks.forEach((b, bi) => {
+    assembled += (S.writing.sentences[ci].blanks && S.writing.sentences[ci].blanks[b.key]) || '';
+    if (bi < f.blanks.length - 1) assembled += f.connector;
+  });
+  assembled += f.suffix;
+  S.writing.sentences[ci].assembled = assembled;
+  S.writing.sentences[ci].step = 3;
+  speakText(assembled);
+  showSpecificity = false;
+  renderWriting();
+  debounceSave();
+}
+
+function fixIt(ci) {
+  S.writing.sentences[ci].step = 2;
+  renderWriting();
+  debounceSave();
+}
+
+function sentenceDone(ci) {
+  S.writing.sentences[ci].done = true;
+  S.timestamps['sentence' + (ci+1) + 'End'] = new Date().toISOString();
+  addPoints(15);
+  fireCelebration();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay 5 Sentence ' + (ci+1), 'Writing', '', '', '', S.writing.sentences[ci].assembled]);
+
+  // Move to next sentence or mark writing done
+  if (ci < 2) {
+    S.writing.currentSentence = ci + 1;
+    toast('Sentence ' + (ci+1) + ' done! On to the next! &#127939;');
+  } else {
+    S.writing.done = true;
+    S.timestamps.writingEnd = new Date().toISOString();
+    document.getElementById('mtab-writing').classList.add('done');
+    toast('All 3 sentences done! Amazing! &#127881;');
+  }
+  renderWriting();
+  debounceSave();
+}
+
+function goToSentence(i) {
+  S.writing.currentSentence = i;
+  // Reset talk timer if going to a new undone sentence
+  if (!S.writing.sentences[i].done && S.writing.sentences[i].step === 0) {
+    clearInterval(talkTimerInterval);
+    talkTimerInterval = null;
+    talkStartTime = null;
+  }
+  renderWriting();
+}
+
+function renderWritingComplete(el) {
+  const w = S.writing;
+  const sentences = w.sentences.filter(s => s.done && s.assembled).map(s => s.assembled);
+  const essayText = sentences.join(' ');
+  const wordCount = essayText.split(/\s+/).filter(w => w).length;
+  let cwCount = 0;
+  for (const cw of CONNECTING_WORDS) {
+    const regex = new RegExp('\\b' + cw + '\\b', 'gi');
+    const matches = essayText.match(regex);
+    if (matches) cwCount += matches.length;
+  }
+
+  let essayHTML = '';
+  sentences.forEach(s => {
+    let html = esc(s);
+    for (const cw of CONNECTING_WORDS) {
+      const regex = new RegExp('\\b(' + cw + ')\\b', 'gi');
+      html = html.replace(regex, m => '<span class="cw">' + m + '</span>');
+    }
+    essayHTML += html + ' ';
+  });
+
+  el.innerHTML = `
+    <div class="card">
+      <div class="celebration">
+        <div class="big-star">&#127881;&#127939;&#127881;</div>
+        <h2>Your Recess Essay So Far!</h2>
+        <p>You wrote ${sentences.length} amazing sentences!</p>
+        <div class="stats-row">
+          <div class="stat-box"><div class="num">${wordCount}</div><div class="lbl">Words</div></div>
+          <div class="stat-box"><div class="num">${sentences.length}</div><div class="lbl">Sentences</div></div>
+          <div class="stat-box"><div class="num">${cwCount}</div><div class="lbl">Connecting Words</div></div>
+        </div>
+      </div>
+      <div class="essay-preview">     ${essayHTML}</div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="speakText('${esc(essayText).replace(/'/g, "\\'")}')">&#128264; Read My Essay!</button>
+        <button class="btn btn-success" onclick="switchTab('dashboard')">Dashboard &#128202;</button>
+      </div>
+    </div>`;
+}
+
+// ============================================================
+//  TAB 4: DASHBOARD
+// ============================================================
+
+function renderDashboard() {
+  const el = document.getElementById('card-dashboard');
+
+  // Reading stats
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+  const wordsTotal = ws.results ? ws.results.length : 0;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+  const ttCorrect = S.reading.thinkThings.answers ? S.reading.thinkThings.answers.filter((a, i) => THINK_THINGS_QUIZ[i] && a === THINK_THINGS_QUIZ[i].answer).length : 0;
+
+  // Planner
+  const planFields = ['opinion','reason1','reason2','disagree','conclusion'].filter(k => S.planner[k]).length;
+
+  // Writing
+  const sentencesDone = S.writing.sentences.filter(s => s.done).length;
+  const allSentences = S.writing.sentences.filter(s => s.done && s.assembled).map(s => s.assembled);
+  const essayText = allSentences.join(' ');
+  const wordCount = essayText ? essayText.split(/\s+/).filter(w => w).length : 0;
+  let cwCount = 0;
+  if (essayText) {
+    for (const cw of CONNECTING_WORDS) {
+      const regex = new RegExp('\\b' + cw + '\\b', 'gi');
+      const matches = essayText.match(regex);
+      if (matches) cwCount += matches.length;
+    }
+  }
+
+  const report = generateReport();
+
+  // Essay so far
+  let essaySoFarHTML = '';
+  if (allSentences.length > 0) {
+    essaySoFarHTML = '<div class="essay-so-far"><h3>&#128220; Your Essay So Far</h3>';
+    allSentences.forEach(s => {
+      essaySoFarHTML += '<div class="esf-sentence">' + esc(s) + '</div>';
+    });
+    essaySoFarHTML += '</div>';
+  }
+
+  el.innerHTML = `
+    <div class="act-label act-dash">&#128202; Session Dashboard</div>
+    <h2>Session Summary — March 16</h2>
+
+    <div class="dash-section">
+      <h3>&#128214; Reading Skills</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${wordsCorrect}/${wordsTotal || IRREGULAR_WORDS.length}</div><div class="ds-label">Irregular Words</div></div>
+        <div class="dash-stat"><div class="ds-val">${prosodyAvg}</div><div class="ds-label">Prosody Avg (1-4)</div></div>
+        <div class="dash-stat"><div class="ds-val">${ttCorrect}/${THINK_THINGS_QUIZ.length}</div><div class="ds-label">Think/Things</div></div>
+        <div class="dash-stat"><div class="ds-val">${S.points}</div><div class="ds-label">Total Points</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128161; Essay Plan</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${planFields}/5</div><div class="ds-label">Plan Questions</div></div>
+        <div class="dash-stat"><div class="ds-val">${S.planner.done ? '&#10003;' : '--'}</div><div class="ds-label">Plan Complete</div></div>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#9997;&#65039; Writing (Dictation-First)</h3>
+      <div class="dash-grid">
+        <div class="dash-stat"><div class="ds-val">${sentencesDone}/3</div><div class="ds-label">Sentences Done</div></div>
+        <div class="dash-stat"><div class="ds-val">${wordCount}</div><div class="ds-label">Words Written</div></div>
+        <div class="dash-stat"><div class="ds-val">${cwCount}</div><div class="ds-label">Connecting Words</div></div>
+        <div class="dash-stat"><div class="ds-val">${S.writing.done ? '&#10003;' : '--'}</div><div class="ds-label">All Done</div></div>
+      </div>
+    </div>
+
+    ${essaySoFarHTML}
+
+    <div class="dash-section">
+      <h3>&#128203; Parent Report</h3>
+      <div class="report-box" id="reportBox">${esc(report)}</div>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-primary" onclick="copyReport()">&#128203; Copy Report</button>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128190; Data Export</h3>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-purple" id="sheetsSaveBtn" onclick="saveAllToSheets()">&#128202; Save to Google Sheets</button>
+        <button class="btn btn-sm btn-orange" onclick="downloadJSON()">&#128229; Download JSON</button>
+      </div>
+    </div>
+
+    <div class="dash-section">
+      <h3>&#128736;&#65039; Session Management</h3>
+      <div class="btn-row">
+        <button class="btn btn-sm btn-red" onclick="if(confirm('Clear all session data? This cannot be undone!')){localStorage.removeItem(STORAGE_KEY);location.reload();}">&#128465; Reset Session</button>
+      </div>
+    </div>`;
+}
+
+function generateReport() {
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(r => r && r.correct).length : 0;
+  const total = ws.results ? ws.results.length : IRREGULAR_WORDS.length;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+  const ttCorrect = S.reading.thinkThings.answers ? S.reading.thinkThings.answers.filter((a, i) => THINK_THINGS_QUIZ[i] && a === THINK_THINGS_QUIZ[i].answer).length : 0;
+  const planFields = ['opinion','reason1','reason2','disagree','conclusion'].filter(k => S.planner[k]).length;
+  const sentencesDone = S.writing.sentences.filter(s => s.done).length;
+  const allSentences = S.writing.sentences.filter(s => s.done && s.assembled).map(s => s.assembled);
+  const essayText = allSentences.join(' ');
+  const wordCount = essayText ? essayText.split(/\s+/).filter(w => w).length : 0;
+
+  let sentenceList = '';
+  allSentences.forEach((s, i) => {
+    sentenceList += '\n  ' + (i+1) + '. "' + s + '"';
+  });
+
+  return `MARCELLO'S TUTORING SESSION - March 16, 2026
+=============================================
+
+READING SKILLS:
+- Irregular Words: ${wordsCorrect}/${total} correct (${total ? Math.round(wordsCorrect/total*100) : 0}%)
+  Review: through, league, foreign | New: enough, island, caught${ws.results && ws.results.filter(r => r && !r.correct).length ? '\n  Missed: ' + ws.results.filter(r => r && !r.correct).map(r => r.word).join(', ') : ''}
+- Think vs Things Quick Check: ${ttCorrect}/${THINK_THINGS_QUIZ.length} correct
+- Prosody (recess passage): ${prosodyAvg}/4 average
+  Expression: ${p.expression}/4, Phrasing: ${p.phrasing}/4, Pace: ${p.pace}/4, Smoothness: ${p.smoothness}/4
+
+ESSAY 5 PLAN (Should schools have longer recess?):
+- Plan questions answered: ${planFields}/5
+- Help button used: ${Object.keys(S.planner.helpUsed).length} times
+- Plan complete: ${S.planner.done ? 'YES' : 'Not yet'}
+
+ESSAY 5 WRITING (Dictation-First Approach):
+- Sentences completed: ${sentencesDone}/3${sentenceList}
+- Total words: ${wordCount}
+- Writing complete: ${S.writing.done ? 'YES' : 'Not yet'}
+
+NEW APPROACH THIS SESSION: DICTATION-FIRST WRITING
+- "Tell Me" phase: Marcello talks freely, tutor transcribes verbatim
+- "Find the Sentence" phase: Student identifies key idea in own words
+- "Build It" phase: Labeled sentence frames guide grammar structure
+- "Check" phase: Text-to-speech read-back for self-monitoring
+- Purpose: Bridges strong oral narrative ability to written output
+- Labeled blanks (e.g., [who does what], [when or where]) address
+  expressive syntax gaps identified in Mar 9 session
+
+NOTES:
+- Topic is personal experience (recess) to support plan-to-sentence transfer
+- Carries forward from Mar 9: Essay 4 complete (7 sentences, ~130 words)
+- Key finding from Mar 9: Marcello's oral language is strong, but written
+  sentences had missing objects and broken clauses. Dictation-first approach
+  uses his oral fluency as the starting point for writing.`;
+}
+
+function copyReport() {
+  const box = document.getElementById('reportBox');
+  const text = box.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    toast('Report copied to clipboard!');
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Report copied!');
+  });
+}
+
+function saveAllToSheets() {
+  const btn = document.getElementById('sheetsSaveBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Full Session Save', 'Dashboard', S.points, '', '', 'Manual save from dashboard']);
+  saveStateToCloud();
+
+  setTimeout(() => {
+    btn.textContent = 'Saved!';
+    toast('Data saved to Google Sheets!');
+    setTimeout(() => { btn.innerHTML = '&#128202; Save to Google Sheets'; btn.disabled = false; }, 2000);
+  }, 1500);
+}
+
+function downloadJSON() {
+  const data = JSON.stringify(S, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'marcello_mar16_session.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('JSON downloaded!');
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+
+async function init() {
+  const localLoaded = loadFromLocalStorage();
+
+  if (localLoaded) {
+    // Restore tab done states
+    if (S.reading.passage.done) document.getElementById('mtab-reading').classList.add('done');
+    if (S.planner.done) document.getElementById('mtab-planner').classList.add('done');
+    if (S.writing.done) document.getElementById('mtab-writing').classList.add('done');
+    // Restore reading phase
+    if (S.reading.words.done && !S.reading.thinkThings.done) readingPhase = 'thinkThings';
+    else if (S.reading.words.done && S.reading.thinkThings.done && !S.reading.passage.done) readingPhase = 'passage';
+    else if (S.reading.passage.done) readingPhase = 'done';
+    renderReading();
+    return;
+  }
+
+  // Try cloud restore
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState) {
+    S = cloudState;
+    if (S.reading.words.done && !S.reading.thinkThings.done) readingPhase = 'thinkThings';
+    else if (S.reading.words.done && S.reading.thinkThings.done && !S.reading.passage.done) readingPhase = 'passage';
+    else if (S.reading.passage.done) readingPhase = 'done';
+    if (S.reading.passage.done) document.getElementById('mtab-reading').classList.add('done');
+    if (S.planner.done) document.getElementById('mtab-planner').classList.add('done');
+    if (S.writing.done) document.getElementById('mtab-writing').classList.add('done');
+    renderReading();
+    toast('Session restored from cloud!');
+    return;
+  }
+
+  renderReading();
+  saveToLocalStorage();
+}
+
+// Auto-save safety nets
+setInterval(saveToLocalStorage, 15000);
+setInterval(saveStateToCloud, 30000);
+window.addEventListener('beforeunload', () => { saveToLocalStorage(); saveStateToCloud(); });
+
+init();
+</script>
+</body>
+</html>
