@@ -678,7 +678,7 @@ const STORAGE_KEY = 'marcello_mar8_session';
 const CLOUD_STATE_KEY = 'mar2026_session_2';
 const MAR2_CLOUD_KEY = 'mar2026_session';
 const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
-const SESSION_DATE = '2026-03-08';
+const SESSION_DATE = '2026-03-09';
 
 let activeTab = 'reading';
 
@@ -878,9 +878,13 @@ function loadFromLocalStorage() {
 }
 
 let saveDebounce = null;
+let cloudDebounce = null;
 function debounceSave() {
   clearTimeout(saveDebounce);
   saveDebounce = setTimeout(saveToLocalStorage, 500);
+  // Also save to cloud, debounced at 3 seconds to avoid hammering
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(saveStateToCloud, 3000);
 }
 
 function postToSheets(sheet, row) {
