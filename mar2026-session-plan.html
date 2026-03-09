@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session Plan — March 9, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --green: #4CAF50;
+    --gold: #F5C542;
+    --orange: #FF9800;
+    --purple: #9C27B0;
+    --teal: #00897B;
+    --red: #E53935;
+    --bg: #F4F6FB;
+    --text: #2D3748;
+    --muted: #718096;
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ---- NAV BAR ---- */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 8px;
+    z-index: 100;
+  }
+  .nav-title {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .nav-dots {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .nav-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #CBD5E0;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    padding: 0;
+  }
+  .nav-dot.active { background: var(--blue); transform: scale(1.3); }
+  .nav-dot:hover { background: #A0AEC0; }
+  .nav-counter {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ---- SLIDES ---- */
+  .slide-container {
+    position: fixed;
+    top: 46px; bottom: 0; left: 0; right: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .slide {
+    display: none;
+    padding: 24px 20px 100px;
+    max-width: 720px;
+    margin: 0 auto;
+    animation: fadeIn 0.25s ease;
+  }
+  .slide.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- SLIDE HEADER ---- */
+  .slide-header {
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    color: white;
+    position: relative;
+  }
+  .slide-phase {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.85;
+    margin-bottom: 6px;
+  }
+  .slide-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .slide-meta {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+  .slide-tab-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: rgba(255,255,255,0.25);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* header colors */
+  .hdr-blue   { background: linear-gradient(135deg, #1a237e, var(--blue)); }
+  .hdr-green  { background: linear-gradient(135deg, #1b5e20, var(--green)); }
+  .hdr-gold   { background: linear-gradient(135deg, #e65100, var(--orange)); }
+  .hdr-purple { background: linear-gradient(135deg, #4a148c, var(--purple)); }
+  .hdr-teal   { background: linear-gradient(135deg, #004d40, var(--teal)); }
+  .hdr-red    { background: linear-gradient(135deg, #b71c1c, var(--red)); }
+
+  /* ---- CONTENT CARDS ---- */
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  .card-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  /* script blocks */
+  .script {
+    background: #EDF2F7;
+    border-left: 4px solid var(--blue);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 16px;
+    margin: 10px 0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  /* alert / note blocks */
+  .note {
+    background: #FFF8E1;
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .note-red {
+    background: #FFEBEE;
+    border-left-color: var(--red);
+  }
+
+  /* sentence cards (for Stars & Wish) */
+  .sentence-card {
+    background: #F7FAFC;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 10px 0;
+  }
+  .sentence-text {
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #4A5568;
+  }
+  .star {
+    color: #2E7D32;
+    font-size: 0.88rem;
+    margin: 4px 0;
+    padding-left: 4px;
+  }
+  .wish {
+    color: #E65100;
+    font-size: 0.88rem;
+    margin: 4px 0;
+    padding-left: 4px;
+  }
+  .frame {
+    background: white;
+    border: 2px dashed var(--blue);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: var(--blue);
+  }
+
+  /* word bank */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0;
+  }
+  .word-chip {
+    background: #E8F5E9;
+    color: #2E7D32;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  /* collapsible */
+  details {
+    margin: 8px 0;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--blue);
+    padding: 6px 0;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  details[open] summary { margin-bottom: 8px; }
+
+  /* lists */
+  ul, ol { padding-left: 20px; margin: 6px 0; }
+  li { margin: 4px 0; font-size: 0.92rem; line-height: 1.5; }
+
+  h3 { font-size: 1rem; font-weight: 800; margin: 14px 0 6px; }
+
+  /* ---- BOTTOM NAV ---- */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+    display: flex;
+    padding: 10px 20px;
+    gap: 12px;
+    z-index: 100;
+  }
+  .btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-back {
+    background: #EDF2F7;
+    color: var(--text);
+  }
+  .btn-next {
+    background: var(--blue);
+    color: white;
+  }
+  .btn-next:hover { background: #3761a8; }
+  .btn:disabled { opacity: 0.4; cursor: default; }
+
+  @media (max-width: 500px) {
+    .slide-title { font-size: 1.25rem; }
+    .nav-title { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-title">Mar 9 Plan</span>
+  <div class="nav-dots" id="navDots"></div>
+  <span class="nav-counter" id="navCounter">1 / 9</span>
+</div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- ==================== SLIDE 0: OVERVIEW ==================== -->
+<div class="slide active" data-index="0">
+  <div class="slide-header hdr-blue">
+    <div class="slide-phase">Session 5 in Essay Arc</div>
+    <div class="slide-title">March 9, 2026</div>
+    <div class="slide-meta">50 min | Revision + New Essay Planning | No Math</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Previous Session (Mar 2)</div>
+    <ul>
+      <li>Essay #4 — partial (intro + body, no conclusion)</li>
+      <li>Interview planner worked: good idea generation</li>
+      <li>Key bottleneck: plan-to-sentence transfer</li>
+      <li>"When" sentence broken, insisted it was correct</li>
+      <li>"think/things" substitution persists</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Today's Plan</div>
+    <ol>
+      <li>Reading practice (7 min) — Tab 1</li>
+      <li>Stars & a Wish revision (10 min) — Tab 2</li>
+      <li>Finish space essay (12 min) — Tab 3</li>
+      <li>Plan recess essay (12 min) — Tab 4</li>
+      <li>Essay 5 Sentence 1, if time (4 min) — Tab 5</li>
+      <li>Wrap-up + celebrate (2 min) — Tab 6</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Three New Techniques</div>
+    <ul>
+      <li><strong>Stars & a Wish</strong> — celebrate strengths, one improvement per sentence</li>
+      <li><strong>Sentence Frames</strong> — grammatical scaffolding with blanks</li>
+      <li><strong>Say-Type-Check</strong> — say it aloud, type it, hear it read back</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Materials</div>
+    <ul>
+      <li>iPad with session app open (6 tabs)</li>
+      <li>This plan</li>
+      <li>Pencil (backup)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 1: WARM-UP ==================== -->
+<div class="slide" data-index="1">
+  <div class="slide-header hdr-green">
+    <div class="slide-phase">Phase 1 &bull; 0:00 - 0:03</div>
+    <div class="slide-title">Warm-Up + Celebration</div>
+    <div class="slide-meta">3 minutes &bull; Reconnect, celebrate, preview</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Goal</div>
+    <p>Reconnect, celebrate essay progress, preview today's plan.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Script</div>
+    <div class="script">"Hi Marcello! Great to see you! Last time you were writing your FOURTH essay about space exploration — do you remember? You wrote some really great sentences!
+
+Today we're going to do something new: we're going to READ your sentences and make them even better. That's what real writers do — they write, then they revise!"</div>
+    <div class="script">"And then, we have a BRAND NEW topic for Essay number FIVE! Want to guess what it is? ... It's about RECESS! Should schools have longer recess? I bet you have some strong opinions!"</div>
+    <div class="script">"Here's our plan:
+1. Quick reading practice (tricky words + a fun passage)
+2. Look at your space essay sentences — stars and wishes
+3. Finish your space essay (just 3 more sentences!)
+4. Plan your NEW recess essay
+Ready? Let's go!"</div>
+  </div>
+
+  <div class="note">Open the HTML app. Show Marcello the 6 tabs briefly.</div>
+</div>
+
+<!-- ==================== SLIDE 2: READING ==================== -->
+<div class="slide" data-index="2">
+  <div class="slide-header hdr-blue">
+    <div class="slide-phase">Phase 2 &bull; 0:03 - 0:10</div>
+    <div class="slide-title">Reading Skills</div>
+    <div class="slide-meta">7 minutes &bull; Irregular words, think/things, prosody</div>
+    <div class="slide-tab-badge">Tab 1</div>
+  </div>
+
+  <div class="card">
+    <h3>Irregular Words (3 min)</h3>
+    <p>Flashcard-style. Target "first-letter guessing" habit.</p>
+    <div class="word-bank">
+      <span class="word-chip">through</span>
+      <span class="word-chip">league</span>
+      <span class="word-chip">foreign</span>
+      <span class="word-chip">brought</span>
+      <span class="word-chip">straight</span>
+      <span class="word-chip">knowledge</span>
+    </div>
+    <div class="script">"Let's practice some tricky words! Remember, look at the WHOLE word — don't just guess from the first letters. Ready?"
+
+If correct: "Nice! You looked at the whole word!"
+If incorrect: App shows color-coded parts + phonetic guide. Cover-Write-Check for missed words.</div>
+  </div>
+
+  <div class="card">
+    <h3>Think vs Things (30 sec)</h3>
+    <p>Diagnostic — can he distinguish these when focused?</p>
+    <ul>
+      <li><strong>THINK</strong> = what your brain does (no G, no S)</li>
+      <li><strong>THINGS</strong> = stuff, objects (ends in G-S)</li>
+    </ul>
+    <div class="script">"Before we read, let's look at two words that sound similar.
+[Point to THINK] This is 'think' — T-H-I-N-K. What your brain does.
+[Point to THINGS] This is 'things' — T-H-I-N-G-S. Stuff! See the G and S at the end?"</div>
+    <div class="note">If he gets all 3 quiz questions correct here but still writes "think" for "things" during essay work, it's a motor/spelling habit, not a knowledge gap. Track this.</div>
+  </div>
+
+  <div class="card">
+    <h3>Prosody Passage (4 min)</h3>
+    <p>~100-word passage about recess. Rate prosody on 4 dimensions (1-4).</p>
+    <div class="script">"Now let's read a short passage. This one is about... RECESS! Try to read it like you're telling your friend an exciting story. Make it sound interesting, not like a robot. Ready? Go!"</div>
+    <details>
+      <summary>Coaching prompts</summary>
+      <ul>
+        <li>If monotone: "Try that sentence again — pretend you're really excited about it!"</li>
+        <li>If word-by-word: "Try reading it in chunks, like how you talk."</li>
+        <li>Target: expression 3/4, smoothness 3/4</li>
+      </ul>
+    </details>
+    <div class="note">Transition: "Great reading! Now let's look at your space essay from last time. I have some stars for you!" &rarr; Tap Tab 2</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: STARS & WISH ==================== -->
+<div class="slide" data-index="3">
+  <div class="slide-header hdr-gold">
+    <div class="slide-phase">Phase 3 &bull; 0:10 - 0:20</div>
+    <div class="slide-title">Stars and a Wish</div>
+    <div class="slide-meta">10 minutes &bull; First revision experience</div>
+    <div class="slide-tab-badge">Tab 2</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Goal</div>
+    <p>First experience with essay revision. <strong>Must be psychologically safe.</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Critical Framing</div>
+    <div class="script">"Real writers don't just write once — they revise! I read your sentences, and I found some AMAZING things. For each sentence, I'll show you the STARS — things you did great. And then sometimes I'll have a WISH — one thing we could make even better. Ready to see your stars?"</div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="card-label">Sentence 1 &mdash; Introduction</div>
+    <div class="sentence-text">"I think that exploring space is one of the most important things to do."</div>
+    <div class="star">&#11088; You stated your opinion clearly — I know exactly what you think!</div>
+    <div class="star">&#11088; You used 'one of the most important' — strong opinion words!</div>
+    <div class="note" style="border-left-color: var(--green); background: #E8F5E9;">No wish — pure celebration!</div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="card-label">Sentence 2 &mdash; Body Reason 1</div>
+    <div class="sentence-text">"I believe this because they make new amazing things that help the astronauts discover amazing things on earth and in space too."</div>
+    <div class="star">&#11088; You used 'because' to connect your reason!</div>
+    <div class="star">&#11088; You explained both Earth AND space — two places!</div>
+    <div class="wish">&#128161; Wish: Be more specific — what KINDS of things?</div>
+    <div class="frame">"I believe this because scientists _______ that help astronauts _______."</div>
+    <details>
+      <summary>If he fills in / keeps as is</summary>
+      <p>If fills in: "Now look — you made it more specific! That's revision!"</p>
+      <p>If keeps: "That's okay! You can always keep your original."</p>
+    </details>
+  </div>
+
+  <div class="sentence-card">
+    <div class="card-label">Sentence 3 &mdash; Body Reason 2</div>
+    <div class="sentence-text">"First, I think that scientists love learning space. They can discover more things if they want, so they can go back to space another time, in a new year."</div>
+    <div class="star">&#11088; You used 'First' to organize your essay — nice transition word!</div>
+    <div class="wish">&#128161; Wish: Name what scientists actually discover</div>
+    <div class="frame">"First, scientists can _______ when they explore space."</div>
+  </div>
+
+  <div class="sentence-card">
+    <div class="card-label">Sentence 4 &mdash; The "When" Sentence</div>
+    <div class="sentence-text">"When the astronauts got new things from space is cool because things from space are fun"</div>
+    <div class="star">&#11088; You tried 'When' — that's brave! Subordinating conjunctions are hard!</div>
+    <div class="wish">&#128161; Wish: Fix the grammar. 'When' sentences need TWO parts.</div>
+    <div class="frame">"When astronauts _______ from space, it is _______ because _______."</div>
+    <div class="script">"I love that you tried 'When' — that takes guts! Here's the thing about 'When' sentences: they need two parts. 'WHEN something happens, THEN something else.' Let me show you a frame that makes it work."</div>
+    <div class="note note-red">Never say it was "wrong." Say: "When sentences have a special pattern. Let's use the pattern!"</div>
+  </div>
+
+  <div class="note">After all 4: "Amazing work! You just did what real writers do — you revised! Now let's finish your essay." &rarr; Tap Tab 3</div>
+</div>
+
+<!-- ==================== SLIDE 4: FINISH ESSAY ==================== -->
+<div class="slide" data-index="4">
+  <div class="slide-header hdr-purple">
+    <div class="slide-phase">Phase 4 &bull; 0:20 - 0:32</div>
+    <div class="slide-title">Finish Your Space Essay</div>
+    <div class="slide-meta">12 minutes &bull; 3 sentences + read-aloud</div>
+    <div class="slide-tab-badge">Tab 3</div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Say-Type-Check Protocol</div>
+    <ol>
+      <li><strong>SAY</strong> — "Say your sentence out loud first!"</li>
+      <li><strong>TYPE</strong> — Type into the sentence frame</li>
+      <li><strong>CHECK</strong> — Tap "Read it Back" &rarr; speechSynthesis reads it &rarr; "Does it sound right?"</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Sentence 5: "Also" (2 min)</h3>
+    <div class="frame">"Also, exploring space helps us _______ because _______."</div>
+    <div class="word-bank">
+      <span class="word-chip">learn</span>
+      <span class="word-chip">discover</span>
+      <span class="word-chip">understand</span>
+      <span class="word-chip">protect</span>
+      <span class="word-chip">build</span>
+      <span class="word-chip">create</span>
+    </div>
+    <div class="script">"Your essay has an intro and two reasons. Let's add one more detail!
+Step 1: SAY IT. Say a sentence that starts with 'Also' out loud.
+Step 2: TYPE IT. Fill in the blanks.
+Step 3: CHECK IT. [Tap Read Back] Does that sound right?"</div>
+  </div>
+
+  <div class="card">
+    <h3>Sentence 6: "Although" (4 min) &#9888;&#65039; Hardest</h3>
+    <div class="frame">"Although _______ is _______, I still think space exploration is important because _______."</div>
+    <div class="word-bank">
+      <span class="word-chip">expensive</span>
+      <span class="word-chip">dangerous</span>
+      <span class="word-chip">hard</span>
+      <span class="word-chip">scary</span>
+      <span class="word-chip">risky</span>
+      <span class="word-chip">far away</span>
+    </div>
+    <div class="script">"Now the conclusion! We're going to use 'Although.' Remember, 'Although' means 'even though' — you say something that's true, BUT then you say why your opinion is still right.
+
+Step 1: SAY IT. 'Although something is hard or expensive...' Think about what someone who DISAGREES might say. Then say 'but I STILL think it's important because...'
+
+Step 2: TYPE IT. The frame helps you keep the grammar right.
+Step 3: CHECK IT. [Read Back] Does that sound like a real sentence?"</div>
+    <div class="note note-red">This is the hardest sentence. Use the word bank heavily. "Although" requires acknowledging a counterpoint.</div>
+  </div>
+
+  <div class="card">
+    <h3>Sentence 7: Final "I think" (2 min)</h3>
+    <div class="frame">"I think everyone should _______ because _______."</div>
+    <div class="word-bank">
+      <span class="word-chip">care about</span>
+      <span class="word-chip">support</span>
+      <span class="word-chip">learn about</span>
+      <span class="word-chip">explore</span>
+    </div>
+    <div class="script">"Last sentence! Wrap it up — restate your big opinion one more time."</div>
+  </div>
+
+  <div class="card">
+    <h3>Essay Read-Aloud (4 min)</h3>
+    <p>Show full assembled essay. Tap "Read My Whole Essay."</p>
+    <div class="script">"Look at that! You wrote a COMPLETE opinion essay — introduction, body, AND conclusion! Let's hear it out loud."
+
+[After reading]
+"That is an INCREDIBLE essay, Marcello. You used connecting words, you gave reasons, you even used 'Although'! I'm so proud of you. This is your best essay yet!"</div>
+    <div class="note">Transition: "Now — are you ready for something totally new?" &rarr; Tap Tab 4</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: NEW ESSAY PLANNING ==================== -->
+<div class="slide" data-index="5">
+  <div class="slide-header hdr-teal">
+    <div class="slide-phase">Phase 5 &bull; 0:32 - 0:44</div>
+    <div class="slide-title">Plan Your Recess Essay</div>
+    <div class="slide-meta">12 minutes &bull; Topic reveal + interview planner</div>
+    <div class="slide-tab-badge">Tab 4</div>
+  </div>
+
+  <div class="card">
+    <h3>Topic Reveal (2 min)</h3>
+    <div class="script">"We've been writing about space for FOUR essays. Today we start something brand new. The question is..."
+
+[REVEAL] "Should schools have LONGER recess?"
+
+"What do you think? [Let him respond] Interesting! Let's plan your essay about it!"</div>
+  </div>
+
+  <div class="card">
+    <h3>Interview Planner (10 min)</h3>
+
+    <details open>
+      <summary>Q1: "Do you think schools should have longer recess?"</summary>
+      <div class="word-bank">
+        <span class="word-chip">Yes</span>
+        <span class="word-chip">No</span>
+        <span class="word-chip">It depends</span>
+        <span class="word-chip">+ Write your own</span>
+      </div>
+    </details>
+
+    <details>
+      <summary>Q2: "What's your #1 reason?"</summary>
+      <ul>
+        <li>"Kids need more time to play and exercise."</li>
+        <li>"Longer recess helps kids focus better in class."</li>
+        <li>"Recess is the best part of the day and it's too short."</li>
+        <li>"Playing with friends teaches us important skills."</li>
+        <li>+ Write your own</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Q3: "What's another reason?"</summary>
+      <ul>
+        <li>"Kids who run around at recess can sit still better in class."</li>
+        <li>"Recess helps kids who feel stressed or worried feel better."</li>
+        <li>"We learn teamwork and sharing during recess games."</li>
+        <li>"Some kids don't get to play outside at home, so they need recess."</li>
+        <li>+ Write your own</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>Q4 (NEW): "What might someone who DISAGREES say?"</summary>
+      <ul>
+        <li>"There isn't enough time for all the subjects we need to learn."</li>
+        <li>"Some kids might get hurt if recess is too long."</li>
+        <li>"Teachers need that time for lessons."</li>
+        <li>+ Write your own</li>
+      </ul>
+      <div class="script">"This is a new question! Think about someone who thinks recess should NOT be longer. What would THEY say? This will help you write an amazing conclusion later!"</div>
+    </details>
+
+    <details>
+      <summary>Q5: "How do you want to end your essay?"</summary>
+      <ul>
+        <li>"That is why I believe schools should have longer recess."</li>
+        <li>"Although some people disagree, I think longer recess would help all kids."</li>
+        <li>"I think every school should give kids more recess time."</li>
+        <li>+ Write your own</li>
+      </ul>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Plan Preview</div>
+    <p>After all questions, the app shows a summary. "Does this look right?"</p>
+    <div class="script">"Look at this plan! You have your opinion, two strong reasons, AND you know what someone who disagrees might say. That's going to make your essay really convincing!"</div>
+    <div class="note">If time permits &rarr; Tab 5. Otherwise: "Great plan! Next time we'll turn this into sentences." &rarr; Tab 6</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: ESSAY 5 SENTENCE 1 ==================== -->
+<div class="slide" data-index="6">
+  <div class="slide-header hdr-green">
+    <div class="slide-phase">Phase 6 &bull; 0:44 - 0:48 &bull; If Time</div>
+    <div class="slide-title">Essay 5 &mdash; First Sentence</div>
+    <div class="slide-meta">4 minutes &bull; Only if time permits</div>
+    <div class="slide-tab-badge">Tab 5</div>
+  </div>
+
+  <div class="card">
+    <div class="frame">"I think schools should _______ because _______."</div>
+    <p style="margin-top:10px;">STC: Say it &rarr; Type it &rarr; Check it</p>
+    <div class="script">"Let's write just the FIRST sentence. Remember: Say it, Type it, Check it! Ready?"</div>
+    <div class="note note-red">Do NOT rush. If it's 0:47 and he hasn't started, skip to Tab 6.</div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 7: WRAP-UP ==================== -->
+<div class="slide" data-index="7">
+  <div class="slide-header hdr-blue">
+    <div class="slide-phase">Phase 7 &bull; 0:48 - 0:50</div>
+    <div class="slide-title">Wrap-Up + Celebrate</div>
+    <div class="slide-meta">2 minutes</div>
+    <div class="slide-tab-badge">Tab 6</div>
+  </div>
+
+  <div class="card">
+    <div class="script">"Marcello, today was HUGE. You:
+- Practiced tricky words
+- Revised your essay like a real writer
+- Finished your space essay with a conclusion!
+- Planned a WHOLE NEW essay about recess!
+
+Next time, we're going to turn that recess plan into sentences. You're going to be an essay machine! Great job today!"</div>
+    <ul>
+      <li>Save all data to Google Sheets</li>
+      <li>Generate parent report</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: DIFFERENTIATION ==================== -->
+<div class="slide" data-index="8">
+  <div class="slide-header hdr-red">
+    <div class="slide-phase">Reference</div>
+    <div class="slide-title">Differentiation + If Running Behind</div>
+    <div class="slide-meta">Quick reference for adjustments</div>
+  </div>
+
+  <div class="card">
+    <h3>If Struggling with Stars & Wish</h3>
+    <ul>
+      <li>Spend more time on celebration (stars)</li>
+      <li>Reduce wishes to just Sentence 4 only</li>
+      <li>Use "keep as is" button — never force revision</li>
+      <li>If upset: "These make your essay BETTER. Real authors get feedback on every book!"</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>If Struggling with Sentence Frames</h3>
+    <ul>
+      <li>Read the frame aloud together first</li>
+      <li>Let him dictate; you type, then he copies</li>
+      <li>Use word bank chips exclusively (tap, don't type)</li>
+      <li>Reduce to 2 frames instead of 3</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>If Excelling</h3>
+    <ul>
+      <li>Encourage writing beyond the frame</li>
+      <li>"Instead of 'cool,' what's a stronger word?"</li>
+      <li>Try "Although" without the frame</li>
+      <li>Write 2-3 sentences in Essay 5</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>If Running Behind</h3>
+    <ul>
+      <li><strong>At 0:20:</strong> Not done Stars & Wish &rarr; Show Sent 1 & 4 only</li>
+      <li><strong>At 0:30:</strong> Not done Finish Essay &rarr; Do "Although" only</li>
+      <li><strong>At 0:40:</strong> Not done planner &rarr; Skip Essay 5, go to Dashboard</li>
+    </ul>
+    <div class="note note-red"><strong>Priority:</strong> Stars/Wish &gt; Finish Essay &gt; Planning &gt; Essay 5 Writing</div>
+  </div>
+
+  <div class="card">
+    <h3>If "think/things" Appears During Writing</h3>
+    <ul>
+      <li>Point to the reference at top of writing area</li>
+      <li>"Which one do you need — the brain one or the stuff one?"</li>
+      <li>Track: correct in quiz but wrong in writing?</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>If STC Feels Awkward</h3>
+    <ul>
+      <li>Model it first: you say, type, read back</li>
+      <li>For "Say" step, accept pointing to frame and reading it</li>
+      <li>"Check" step: if speechSynthesis sounds robotic, you read instead</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end slide-container -->
+
+<div class="bottom-nav">
+  <button class="btn btn-back" id="btnBack" disabled>&larr; Back</button>
+  <button class="btn btn-next" id="btnNext">Next &rarr;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const navDots = document.getElementById('navDots');
+  const navCounter = document.getElementById('navCounter');
+  const btnBack = document.getElementById('btnBack');
+  const btnNext = document.getElementById('btnNext');
+  const container = document.getElementById('slideContainer');
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    navDots.appendChild(dot);
+  }
+
+  function goTo(n) {
+    if (n < 0 || n >= total) return;
+    slides[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    container.scrollTop = 0;
+
+    // Update dots
+    navDots.querySelectorAll('.nav-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+
+    navCounter.textContent = (current + 1) + ' / ' + total;
+    btnBack.disabled = current === 0;
+    btnNext.textContent = current === total - 1 ? 'Done' : 'Next \u2192';
+  }
+
+  btnNext.addEventListener('click', () => {
+    if (current < total - 1) goTo(current + 1);
+  });
+  btnBack.addEventListener('click', () => {
+    if (current > 0) goTo(current - 1);
+  });
+
+  // Keyboard nav
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+  });
+
+  // Swipe nav
+  let touchStartX = 0;
+  container.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  container.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 60) {
+      if (dx < 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, { passive: true });
+</script>
+</body>
+</html>
