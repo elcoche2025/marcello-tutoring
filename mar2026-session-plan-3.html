@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcello's Tutoring Plan - March 16</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        @media print {
+            body { background-color: white; }
+            .no-print { display: none; }
+            .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
+            .print-break-inside-avoid { break-inside: avoid; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        /* Checkbox styling */
+        input[type="checkbox"] {
+            accent-color: #4f46e5;
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="bg-indigo-900 text-white rounded-t-2xl p-8 shadow-lg relative overflow-hidden">
+            <div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+                <i data-lucide="book-open" class="w-64 h-64 -mt-10 -mr-10"></i>
+            </div>
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-indigo-500/30 text-indigo-100 px-3 py-1 rounded-full text-sm font-medium border border-indigo-400/30">3rd Grade</span>
+                        <span class="bg-emerald-500/30 text-emerald-100 px-3 py-1 rounded-full text-sm font-medium border border-emerald-400/30">50 Minutes</span>
+                    </div>
+                    <h1 class="text-4xl font-bold mb-2 tracking-tight">Marcello's Tutoring Session</h1>
+                    <p class="text-indigo-200 text-lg flex items-center gap-2">
+                        <i data-lucide="calendar" class="w-5 h-5"></i>
+                        Monday, March 16, 2026
+                    </p>
+                </div>
+                <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 text-right">
+                    <p class="text-sm text-indigo-200 uppercase tracking-wider font-semibold mb-1">Session Theme</p>
+                    <p class="text-xl font-medium text-white">"Should schools have longer recess?"</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="bg-white shadow-xl rounded-b-2xl border-x border-b border-slate-200 flex flex-col lg:flex-row">
+
+            <!-- Left Sidebar: Context & Objectives -->
+            <aside class="w-full lg:w-1/3 bg-slate-50 border-r border-slate-200 p-6 md:p-8 rounded-bl-2xl">
+
+                <!-- Focus -->
+                <div class="mb-8">
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <i data-lucide="target" class="w-4 h-4"></i> Primary Focus
+                    </h2>
+                    <p class="text-slate-700 font-medium">Essay 5 planning + writing with tighter scaffolding</p>
+                </div>
+
+                <!-- Previous Session -->
+                <div class="mb-8">
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Prev. Session (Mar 9)
+                    </h2>
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i>
+                            <span>Completed Essay 4 (space) — 7 sentences, ~130 words.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="star" class="w-4 h-4 text-amber-500 mt-0.5 shrink-0"></i>
+                            <span>Revised 2/4 sentences. Strongest: <em>"scientists make computers that help astronauts explore the moon"</em></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0"></i>
+                            <span>"When" sentence successfully restructured with frame (big win). "Although" conclusion structurally correct.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="alert-circle" class="w-4 h-4 text-amber-500 mt-0.5 shrink-0"></i>
+                            <span>Did NOT reach Essay 5 planning. Defaults to vague words ("new things", "important").</span>
+                        </li>
+                    </ul>
+
+                    <!-- Key Finding Alert -->
+                    <div class="mt-4 bg-rose-50 border border-rose-200 rounded-lg p-4">
+                        <h3 class="text-rose-800 font-bold text-sm mb-1 flex items-center gap-1">
+                            <i data-lucide="lightbulb" class="w-4 h-4"></i> KEY FINDING: Syntax Gaps
+                        </h3>
+                        <p class="text-rose-700 text-xs leading-relaxed">
+                            Expressive syntax gaps (missing objects, broken clauses after "because"). STC didn't catch these. <strong>Oral narrative is STRONG</strong> — performed coherent monologue when given a source.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Design Principles -->
+                <div class="mb-8">
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <i data-lucide="ruler" class="w-4 h-4"></i> Design Principles
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                            <span class="font-bold text-indigo-600 block text-sm">1. Dictation First</span>
+                            <span class="text-xs text-slate-600">Let Marcello talk. Transcribe his oral language. Then find the sentence.</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                            <span class="font-bold text-indigo-600 block text-sm">2. Tighter Frames</span>
+                            <span class="text-xs text-slate-600">Labeled blanks: "because [who] can [do what]" instead of open "because ___".</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                            <span class="font-bold text-indigo-600 block text-sm">3. Specificity Bank</span>
+                            <span class="text-xs text-slate-600">Provide reference passage/word bank to avoid "new things/important".</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                            <span class="font-bold text-indigo-600 block text-sm">4. One at a Time</span>
+                            <span class="text-xs text-slate-600">Hide whole essay structure. Focus on producing one good sentence, celebrate, move on.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Objectives -->
+                <div>
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <i data-lucide="graduation-cap" class="w-4 h-4"></i> Objectives
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-1 mb-2">Reading (7 mins)</h3>
+                            <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                <li>Review: through, league, foreign + 3 new</li>
+                                <li>Prosody passage on recess</li>
+                                <li class="text-slate-400">RF.3.3, RF.3.4</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-800 border-b border-slate-200 pb-1 mb-2">Writing (41 mins)</h3>
+                            <ul class="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                <li>Plan Essay 5 (interview-style)</li>
+                                <li>Write ≥2 sentences via dictation-first</li>
+                                <li>Practice labeled sentence frames</li>
+                                <li class="text-slate-400">W.3.1.a-d, W.3.5, L.3.1.h, L.3.1.i</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </aside>
+
+            <!-- Right Main Content: The Plan -->
+            <main class="w-full lg:w-2/3 p-6 md:p-8 lg:p-10">
+                <h2 class="text-2xl font-bold text-slate-800 mb-8 border-b-2 border-slate-100 pb-4 flex items-center gap-3">
+                    <i data-lucide="clock" class="text-indigo-600 w-6 h-6"></i>
+                    Minute-by-Minute Plan
+                </h2>
+
+                <div class="relative border-l-2 border-indigo-100 ml-3 space-y-10 pb-8">
+
+                    <!-- Phase 1 -->
+                    <div class="relative pl-8 print-break-inside-avoid">
+                        <div class="absolute w-6 h-6 bg-indigo-600 rounded-full -left-[13px] top-1 border-4 border-white shadow-sm flex items-center justify-center"></div>
+                        <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                            <h3 class="text-lg font-bold text-slate-800">Phase 1: Warm-up</h3>
+                            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded-md">3 mins</span>
+                            <span class="text-slate-400 text-sm font-mono">0:00 - 0:03</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-3">Goal: Celebrate Essay 4 completion, preview today's plan.</p>
+
+                        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg">
+                            <div class="flex gap-2 mb-1">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-amber-600 mt-0.5"></i>
+                                <span class="font-bold text-amber-800 text-sm">Script</span>
+                            </div>
+                            <p class="text-amber-900 text-sm italic leading-relaxed">
+                                "Hi Marcello! Last time you finished your ENTIRE space essay — introduction, body, AND conclusion! That was your first complete essay... Today we're starting something brand new. Remember the recess question? 'Should schools have longer recess?' We're going to plan it and start writing. And I have a new way of writing that I think you're going to love."
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="relative pl-8 print-break-inside-avoid">
+                        <div class="absolute w-6 h-6 bg-indigo-600 rounded-full -left-[13px] top-1 border-4 border-white shadow-sm flex items-center justify-center"></div>
+                        <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                            <h3 class="text-lg font-bold text-slate-800">Phase 2: Reading Skills</h3>
+                            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded-md">7 mins</span>
+                            <span class="text-slate-400 text-sm font-mono">0:03 - 0:10</span>
+                            <span class="bg-slate-100 text-slate-600 text-xs border border-slate-200 px-2 py-1 rounded-md flex items-center gap-1"><i data-lucide="layout" class="w-3 h-3"></i> TAB 1</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="border border-slate-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-sm text-slate-800 mb-2">Irregular Word Practice (3 min)</h4>
+                                <ul class="text-sm text-slate-600 space-y-1 mb-2">
+                                    <li><strong class="text-rose-600">Review:</strong> through, league, foreign</li>
+                                    <li><strong class="text-emerald-600">New:</strong> enough, island, caught</li>
+                                </ul>
+                                <p class="text-xs text-slate-500 italic">Script: "Let's see if you remember these tricky words... look at the WHOLE word."</p>
+                            </div>
+                            <div class="border border-slate-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-sm text-slate-800 mb-2">Prosody Passage (4 min)</h4>
+                                <p class="text-sm text-slate-600 mb-2">New passage about recess OR repeat Mar 9. Target: maintain expression 3/4, smoothness 3/4.</p>
+                                <p class="text-xs text-slate-500 italic">Includes quick 30s Think/Things check-in.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="relative pl-8 print-break-inside-avoid">
+                        <div class="absolute w-6 h-6 bg-indigo-600 rounded-full -left-[13px] top-1 border-4 border-white shadow-sm flex items-center justify-center"></div>
+                        <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                            <h3 class="text-lg font-bold text-slate-800">Phase 3: Essay 5 Planning</h3>
+                            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded-md">12 mins</span>
+                            <span class="text-slate-400 text-sm font-mono">0:10 - 0:22</span>
+                            <span class="bg-slate-100 text-slate-600 text-xs border border-slate-200 px-2 py-1 rounded-md flex items-center gap-1"><i data-lucide="layout" class="w-3 h-3"></i> TAB 4</span>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-3">Goal: Complete the interview-style planner for recess essay.</p>
+
+                        <div class="bg-white border border-slate-200 rounded-lg p-4 mb-3 shadow-sm">
+                            <h4 class="font-bold text-sm text-indigo-800 mb-2">Interview Questions:</h4>
+                            <ol class="list-decimal pl-5 text-sm text-slate-700 space-y-1 font-medium">
+                                <li>Do you think schools should have longer recess?</li>
+                                <li>What's your #1 reason?</li>
+                                <li>What's another reason?</li>
+                                <li>What might someone who DISAGREES say?</li>
+                                <li>How do you want to end your essay?</li>
+                            </ol>
+                        </div>
+                        <div class="bg-blue-50 text-blue-800 p-3 rounded-lg text-sm border border-blue-100 flex items-start gap-2">
+                            <i data-lucide="info" class="w-4 h-4 mt-0.5 shrink-0"></i>
+                            <p><strong>IMPORTANT:</strong> Let him move through at his own pace. The planner went well on Mar 2 — he generates good ideas here. The gap is in the WRITING, not the planning.</p>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4 (CORE) -->
+                    <div class="relative pl-8">
+                        <div class="absolute w-6 h-6 bg-indigo-600 rounded-full -left-[13px] top-1 border-4 border-white shadow-sm flex items-center justify-center ring-4 ring-indigo-100"></div>
+                        <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                            <h3 class="text-xl font-bold text-indigo-900">Phase 4: Dictation-First Writing</h3>
+                            <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-md">24 mins</span>
+                            <span class="text-slate-400 text-sm font-mono">0:22 - 0:46</span>
+                            <span class="bg-slate-100 text-slate-600 text-xs border border-slate-200 px-2 py-1 rounded-md flex items-center gap-1"><i data-lucide="layout" class="w-3 h-3"></i> TAB 5</span>
+                        </div>
+                        <p class="text-sm font-medium text-slate-700 mb-4">Goal: Write 2-3 sentences of Essay 5 using the new approach.</p>
+
+                        <!-- Protocol Steps -->
+                        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-xl p-5 mb-6 shadow-sm">
+                            <h4 class="font-bold text-indigo-900 mb-4 flex items-center gap-2 uppercase tracking-wide text-sm">
+                                <i data-lucide="workflow" class="w-4 h-4"></i> The Protocol: Tell Me → Find It → Write It
+                            </h4>
+                            <div class="space-y-4">
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0">1</div>
+                                    <div>
+                                        <h5 class="font-bold text-slate-800 text-sm">TELL ME (Oral, 2-3 min)</h5>
+                                        <p class="text-sm text-slate-600">"Tell me about your reason. Just talk." Tutor types EXACTLY what Marcello says verbatim. Do not interrupt.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0">2</div>
+                                    <div>
+                                        <h5 class="font-bold text-slate-800 text-sm">FIND THE SENTENCE (1-2 min)</h5>
+                                        <p class="text-sm text-slate-600">Show his words on screen. "Can you find ONE sentence hiding in here? Point to the part that would make a good sentence."</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0">3</div>
+                                    <div>
+                                        <h5 class="font-bold text-slate-800 text-sm">BUILD IT (Labeled Frames) (2-3 min)</h5>
+                                        <p class="text-sm text-slate-600 mb-1">Use specific labeled blanks, not open ones.</p>
+                                        <code class="text-xs bg-white px-2 py-1 rounded border border-indigo-100 text-indigo-700 block">"I think schools should [have] ___[what]___ because [kids] ___[what happens]___."</code>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold shrink-0">4</div>
+                                    <div>
+                                        <h5 class="font-bold text-slate-800 text-sm">CHECK (30 sec)</h5>
+                                        <p class="text-sm text-slate-600">Read it back with speechSynthesis. "Does that sound right?"</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sentence by Sentence breakdown -->
+                        <div class="space-y-4 mb-6">
+                            <div class="border border-slate-200 rounded-lg p-4 bg-white print-break-inside-avoid shadow-sm">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-bold text-slate-800">Sentence 1: Introduction</h4>
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">8 min | 0:22 - 0:30</span>
+                                </div>
+                                <p class="text-sm text-slate-600 mb-2"><span class="font-semibold">Prompt:</span> "So — should schools have longer recess? Tell me why."</p>
+                                <div class="bg-slate-50 p-2 rounded text-sm font-mono text-indigo-800 border border-slate-200 mb-2">
+                                    I think schools should [have/give] ___[what]___ because [kids/students] ___[what happens when they get it]___.
+                                </div>
+                                <p class="text-xs text-slate-500"><strong class="text-slate-700">Specificity:</strong> If he says "important", ask "for WHO? What happens?". If "things", ask "what kind of things?".</p>
+                            </div>
+
+                            <div class="border border-slate-200 rounded-lg p-4 bg-white print-break-inside-avoid shadow-sm">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-bold text-slate-800">Sentence 2: First Reason</h4>
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">8 min | 0:30 - 0:38</span>
+                                </div>
+                                <p class="text-sm text-slate-600 mb-2"><span class="font-semibold">Prompt:</span> "Your plan says [reason]. Tell me more. WHY is that true? Example?"</p>
+                                <div class="bg-slate-50 p-2 rounded text-sm font-mono text-indigo-800 border border-slate-200 mb-2">
+                                    I believe this because [kids/students/we] ___[do what]___ [when/during/at] ___[when or where]___.
+                                </div>
+                                <p class="text-xs text-amber-700 bg-amber-50 p-1.5 rounded border border-amber-100 inline-block mt-1">
+                                    <i data-lucide="alert-triangle" class="w-3 h-3 inline mr-1 -mt-0.5"></i> Note: The second blank forces a complete thought.
+                                </p>
+                            </div>
+
+                            <div class="border border-slate-200 rounded-lg p-4 bg-white print-break-inside-avoid shadow-sm opacity-90">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h4 class="font-bold text-slate-800 flex items-center gap-2">Sentence 3: Second Reason <span class="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">If Time</span></h4>
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded">8 min | 0:38 - 0:46</span>
+                                </div>
+                                <div class="bg-slate-50 p-2 rounded text-sm font-mono text-indigo-800 border border-slate-200">
+                                    Also, [kids/students/we] ___[do what or feel what]___ [when/because/so] ___[what happens]___.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Differentiation Box -->
+                        <details class="bg-slate-100 border border-slate-200 rounded-lg group print-break-inside-avoid">
+                            <summary class="font-bold text-sm text-slate-700 p-4 cursor-pointer hover:bg-slate-200 transition-colors flex items-center justify-between">
+                                Differentiation & Troubleshooting Strategies
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <div class="p-4 border-t border-slate-200 text-sm space-y-3 bg-white rounded-b-lg">
+                                <div>
+                                    <span class="font-bold text-rose-700 block text-xs uppercase tracking-wide mb-1">If short response in "Tell Me":</span>
+                                    <p class="text-slate-600">Ask: "What does that look like?", "If I was at your school, what would I SEE?", "Pretend you're the teacher."</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-rose-700 block text-xs uppercase tracking-wide mb-1">If he goes on a long monologue:</span>
+                                    <p class="text-slate-600">Let him finish! Then say: "That was AMAZING. Now let's find the ONE sentence hiding in that story."</p>
+                                </div>
+                                <div>
+                                    <span class="font-bold text-rose-700 block text-xs uppercase tracking-wide mb-1">If labeled frames are too hard:</span>
+                                    <p class="text-slate-600">Pre-fill more. Offer 3 options based on what he said. Last resort: you write from his dictation, he confirms.</p>
+                                </div>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- Phase 5 -->
+                    <div class="relative pl-8 print-break-inside-avoid">
+                        <div class="absolute w-6 h-6 bg-indigo-600 rounded-full -left-[13px] top-1 border-4 border-white shadow-sm flex items-center justify-center"></div>
+                        <div class="flex flex-wrap items-baseline gap-3 mb-2">
+                            <h3 class="text-lg font-bold text-slate-800">Phase 5: Wrap-up</h3>
+                            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded-md">4 mins</span>
+                            <span class="text-slate-400 text-sm font-mono">0:46 - 0:50</span>
+                            <span class="bg-slate-100 text-slate-600 text-xs border border-slate-200 px-2 py-1 rounded-md flex items-center gap-1"><i data-lucide="layout" class="w-3 h-3"></i> TAB 6</span>
+                        </div>
+
+                        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-lg mb-4">
+                            <p class="text-amber-900 text-sm italic">
+                                "Marcello, you planned AND started writing a whole new essay today! And you did it by TALKING first, which is smart — real writers do that too. They think out loud before they write..."
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-2 text-sm text-emerald-700 bg-emerald-50 px-3 py-2 rounded-md border border-emerald-200 w-fit">
+                            <i data-lucide="cloud-check" class="w-4 h-4"></i>
+                            <strong>Save:</strong> Verify "Cloud saved" indicator before closing. Generate parent report.
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- Checklists Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 no-print">
+            <!-- Materials -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
+                    <i data-lucide="box" class="w-5 h-5 text-indigo-600"></i> Materials Needed
+                </h3>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Session app with Essay 5 planner + new dictation-first writing tab (Or modify Tabs 4 & 5)</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Session plan presentation (update mar2026-session-plan.html)</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Student checklist (update mar2026-checklist.html)</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Reference passage about recess (optional — for specificity bank)</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700 font-medium">Push all to GitHub Pages and test on iPad before session</span>
+                </label>
+            </div>
+
+            <!-- Tech Check -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
+                    <i data-lucide="laptop" class="w-5 h-5 text-indigo-600"></i> Pre-Session Testing
+                </h3>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Open session app on iPad from GitHub Pages URL</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Verify cloud state loads (previous session data, if any)</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Make a test checkbox/input change</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700 text-emerald-700 font-medium">Verify "Cloud saved" indicator appears within 5 seconds</span>
+                </label>
+                <label class="flex items-start gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                    <input type="checkbox" class="mt-1 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300">
+                    <span class="text-sm text-slate-700">Test speechSynthesis & verify all tabs load correctly</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="text-center mt-8 mb-4 text-xs text-slate-400 no-print">
+            <p>Generated for Marcello's Tutoring Session • March 16, 2026</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
