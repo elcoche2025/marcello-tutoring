@@ -737,6 +737,7 @@ let S = {
     sentences: [
       { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
       { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
       { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false }
     ],
     currentSentence: 0,
@@ -829,6 +830,17 @@ const SENTENCE_FRAMES = [
     connector: ' because ',
     suffix: '.',
     prompt: 'What is another reason recess should be longer?'
+  },
+  {
+    label: 'Conclusion',
+    prefix: 'Although some people think ',
+    blanks: [
+      { key: 'disagree_point', label: 'what they think', placeholder: 'recess wastes time' },
+      { key: 'final_opinion', label: 'what you believe', placeholder: 'longer recess helps kids learn better' }
+    ],
+    connector: ', I believe ',
+    suffix: '.',
+    prompt: 'How do you want to wrap up your essay? Remember what someone who disagrees might say.'
   }
 ];
 
@@ -1422,7 +1434,7 @@ function renderWriting() {
   }
 
   // Sentence navigation
-  const sentLabels = ['Intro', 'Reason 1', 'Reason 2'];
+  const sentLabels = ['Intro', 'Reason 1', 'Reason 2', 'Conclusion'];
   let navHTML = '<div class="sentence-nav">';
   sentLabels.forEach((lbl, i) => {
     let cls = 'sentence-nav-btn';
@@ -1459,7 +1471,7 @@ function renderWriting() {
       <div class="dictation-box">
         <h3 style="margin-bottom:4px;">&#128483;&#65039; Tell me about ${frame.label === 'Introduction' ? 'your opinion' : 'your ' + frame.label.toLowerCase()}</h3>
         <p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">Just talk \u2014 like you're telling a friend. Mr. Walker will write down what you say.</p>
-        ${S.planner[['opinion','reason1','reason2'][ci]] ? '<div class="kernel-card"><div class="kc-label">Your plan says:</div><div class="kc-text">"' + esc(S.planner[['opinion','reason1','reason2'][ci]]) + '"</div></div>' : ''}
+        ${S.planner[['opinion','reason1','reason2','conclusion'][ci]] ? '<div class="kernel-card"><div class="kc-label">Your plan says:</div><div class="kc-text">"' + esc(S.planner[['opinion','reason1','reason2','conclusion'][ci]]) + '"</div></div>' : ''}
         ${talkStartTime ? '<div class="' + timerClass + '" id="talkTimer">' + timerStr + '</div><p style="color:var(--green);font-weight:700;font-size:0.88rem;">Keep going! You\'re doing great! &#127939;</p>' : '<div class="btn-row"><button class="btn btn-gold" onclick="startTalking()">&#127908; Start Talking!</button></div>'}
         <textarea id="dictationArea" placeholder="Tutor: type what Marcello says here (verbatim)..." oninput="onDictation(${ci})">${esc(sent.dictation || '')}</textarea>
         ${talkStartTime ? '<div class="btn-row"><button class="btn btn-success" onclick="doneTalking(' + ci + ')">Done talking! &#10003;</button></div>' : ''}
@@ -1743,14 +1755,14 @@ function sentenceDone(ci) {
   postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay 5 Sentence ' + (ci+1), 'Writing', '', '', '', S.writing.sentences[ci].assembled]);
 
   // Move to next sentence or mark writing done
-  if (ci < 2) {
+  if (ci < 3) {
     S.writing.currentSentence = ci + 1;
     toast('Sentence ' + (ci+1) + ' done! On to the next! &#127939;');
   } else {
     S.writing.done = true;
     S.timestamps.writingEnd = new Date().toISOString();
     document.getElementById('mtab-writing').classList.add('done');
-    toast('All 3 sentences done! Amazing! &#127881;');
+    toast('All 4 sentences done! Your essay is complete! &#127881;');
   }
   renderWriting();
   debounceSave();
@@ -1878,7 +1890,7 @@ function renderDashboard() {
     <div class="dash-section">
       <h3>&#9997;&#65039; Writing (Dictation-First)</h3>
       <div class="dash-grid">
-        <div class="dash-stat"><div class="ds-val">${sentencesDone}/3</div><div class="ds-label">Sentences Done</div></div>
+        <div class="dash-stat"><div class="ds-val">${sentencesDone}/4</div><div class="ds-label">Sentences Done</div></div>
         <div class="dash-stat"><div class="ds-val">${wordCount}</div><div class="ds-label">Words Written</div></div>
         <div class="dash-stat"><div class="ds-val">${cwCount}</div><div class="ds-label">Connecting Words</div></div>
         <div class="dash-stat"><div class="ds-val">${S.writing.done ? '&#10003;' : '--'}</div><div class="ds-label">All Done</div></div>
@@ -1945,7 +1957,7 @@ ESSAY 5 PLAN (Should schools have longer recess?):
 - Plan complete: ${S.planner.done ? 'YES' : 'Not yet'}
 
 ESSAY 5 WRITING (Dictation-First Approach):
-- Sentences completed: ${sentencesDone}/3${sentenceList}
+- Sentences completed: ${sentencesDone}/4${sentenceList}
 - Total words: ${wordCount}
 - Writing complete: ${S.writing.done ? 'YES' : 'Not yet'}
 
