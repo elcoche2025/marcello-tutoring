@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — March 30, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4472C4;
+    --blue-light: #D9E2F3;
+    --gold: #F5C542;
+    --gold-light: #FFF8E1;
+    --green: #4CAF50;
+    --green-light: #E8F5E9;
+    --orange: #FF9800;
+    --orange-light: #FFF3E0;
+    --red: #E53935;
+    --red-light: #FFEBEE;
+    --purple: #9C27B0;
+    --purple-light: #F3E5F5;
+    --teal: #00897B;
+    --teal-light: #E0F2F1;
+    --bg: #F4F6FB;
+    --card: #FFFFFF;
+    --text: #2D3748;
+    --muted: #718096;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 40%, #43a047 100%);
+    color: white;
+    text-align: center;
+    padding: 24px 20px 48px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 36px;
+    background: var(--bg);
+    border-radius: 50% 50% 0 0;
+  }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.85; }
+  .save-indicator {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 0.75rem;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  .save-indicator.flash { opacity: 1; }
+
+  .main-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px 8px 0;
+    max-width: 800px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+  }
+  .main-tab {
+    padding: 9px 11px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    border: 2px solid #D0D5DD;
+    background: white;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Nunito', sans-serif;
+    white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--teal); color: var(--teal); }
+  .main-tab.active {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: white;
+    box-shadow: 0 3px 12px rgba(0,137,123,0.35);
+    transform: translateY(-2px);
+  }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container {
+    max-width: 720px;
+    margin: 16px auto;
+    padding: 0 16px;
+  }
+  .container.wide { max-width: 960px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.35s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.5;
+  }
+
+  .act-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .act-read  { background: var(--teal-light); color: var(--teal); }
+  .act-plan  { background: var(--purple-light); color: var(--purple); }
+  .act-write { background: var(--green-light); color: #2E7D32; }
+  .act-dash  { background: var(--orange-light); color: #E65100; }
+  .act-essay { background: var(--gold-light); color: #B8860B; }
+
+  .btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange  { background: var(--orange); color: white; }
+  .btn-purple  { background: var(--purple); color: white; }
+  .btn-red     { background: var(--red); color: white; }
+  .btn-gold    { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  .q-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; transition: background 0.3s; }
+  .q-dot.done { background: var(--green); }
+  .q-dot.current { background: var(--teal); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  .flashcard {
+    background: white;
+    border: 3px solid var(--teal);
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    margin: 16px 0;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .flashcard .word { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text); }
+  .flashcard .tricky-highlight { font-size: 2.2rem; font-weight: 800; margin-top: 10px; letter-spacing: 2px; }
+  .flashcard .tricky-highlight .tricky { color: var(--red); background: var(--red-light); padding: 2px 6px; border-radius: 8px; }
+  .flashcard .tricky-highlight .normal { color: var(--text); }
+  .flashcard .sound-info { font-size: 1rem; color: var(--muted); margin-top: 8px; font-weight: 700; }
+  .flashcard.correct { border-color: var(--green); background: var(--green-light); }
+  .flashcard.incorrect { border-color: var(--red); background: var(--red-light); }
+
+  .passage-box {
+    background: white;
+    border: 2px solid #D0D5DD;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin: 14px 0;
+  }
+  .passage-box .target-word { background: var(--gold-light); padding: 1px 6px; border-radius: 6px; font-weight: 700; }
+
+  .prosody-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 14px 0;
+  }
+  .prosody-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .prosody-item .pi-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .prosody-item .pi-scores { display: flex; justify-content: center; gap: 6px; }
+  .pi-score {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border: 2px solid #D0D5DD;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .pi-score:hover { border-color: var(--teal); }
+  .pi-score.selected { background: var(--teal); color: white; border-color: var(--teal); }
+
+  .pair-display {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 14px 0;
+  }
+  .pair-card {
+    border: 3px solid;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+  .pair-card .pair-word { font-size: 2rem; font-weight: 800; letter-spacing: 1px; }
+  .pair-card .pair-def { font-size: 0.9rem; color: var(--muted); margin-top: 6px; font-weight: 600; }
+  .pair-card .pair-tip { font-size: 0.82rem; margin-top: 4px; font-weight: 700; }
+
+  .pair-quiz-item {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .pair-quiz-item .pq-sentence { font-size: 1rem; line-height: 1.6; margin-bottom: 8px; }
+  .pair-quiz-item .pq-blank { background: var(--gold-light); padding: 2px 12px; border-radius: 6px; font-weight: 700; border-bottom: 2px dashed var(--gold); }
+  .pair-quiz-btns { display: flex; gap: 8px; justify-content: center; }
+  .pair-quiz-btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: 2px solid #D0D5DD;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .pair-quiz-btn:hover { border-color: var(--teal); background: var(--teal-light); }
+  .pair-quiz-btn.pq-correct { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .pair-quiz-btn.pq-wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+  .pair-quiz-btn:disabled { cursor: default; transform: none; }
+
+  /* Interview planner */
+  .interview-q {
+    background: var(--teal-light);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .interview-q .iq-num { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 6px; }
+  .interview-q .iq-question { font-size: 1.05rem; font-weight: 700; color: #004D40; margin-bottom: 12px; line-height: 1.4; }
+  .interview-q .say-first {
+    background: var(--gold-light);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #5D4037;
+    margin-bottom: 12px;
+  }
+  .iq-textarea {
+    width: 100%;
+    min-height: 70px;
+    border: 2px solid #80CBC4;
+    border-radius: 10px;
+    padding: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    resize: vertical;
+    line-height: 1.5;
+    background: white;
+  }
+  .iq-textarea:focus { border-color: var(--teal); outline: none; }
+
+  .help-btn-wrap { text-align: center; margin-top: 8px; }
+  .help-btn {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .help-btn:hover { background: #FFE0B2; }
+  .help-panel {
+    background: var(--orange-light);
+    border: 2px solid #FFB74D;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 10px;
+    display: none;
+    animation: fadeUp 0.3s;
+  }
+  .help-panel.show { display: block; }
+  .help-level { margin-bottom: 12px; }
+  .help-level-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #E65100; margin-bottom: 4px; }
+  .help-level p { font-size: 0.9rem; line-height: 1.5; }
+
+  .plan-preview {
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 20px;
+    margin: 16px 0;
+  }
+  .plan-preview h3 { color: #2E7D32; margin-bottom: 10px; }
+  .plan-preview .pp-item { margin-bottom: 8px; font-size: 0.95rem; line-height: 1.5; }
+  .plan-preview .pp-label { font-weight: 800; color: #2E7D32; font-size: 0.78rem; text-transform: uppercase; }
+
+  .opinion-box {
+    background: var(--gold-light);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .oq-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; font-weight: 800; margin-bottom: 4px; }
+
+  /* Dictation writing styles */
+  .step-indicator {
+    display: flex;
+    gap: 6px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+  .step-pill {
+    flex: 1;
+    min-width: 70px;
+    padding: 8px 6px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    border: 2px solid #E0E0E0;
+    background: #FAFBFC;
+    transition: all 0.3s;
+  }
+  .step-pill.step-active { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .step-pill.step-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .step-pill .step-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+  .dictation-box {
+    background: #FAFBFC;
+    border: 2px dashed #B0BEC5;
+    border-radius: 14px;
+    padding: 20px;
+    margin: 14px 0;
+    text-align: center;
+  }
+  .dictation-box textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid #D0D5DD;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  .dictation-box textarea:focus { border-color: var(--teal); outline: none; }
+
+  .talk-timer {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--teal);
+    margin: 10px 0;
+  }
+  .talk-timer.long { color: var(--green); }
+
+  .kernel-card {
+    background: var(--gold-light);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .kernel-card .kc-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #B8860B; margin-bottom: 4px; }
+  .kernel-card .kc-text { font-size: 1rem; line-height: 1.5; font-weight: 600; font-style: italic; }
+
+  .sentence-frame {
+    background: #FAFBFC;
+    border: 2px solid var(--teal);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 10px 0;
+    font-size: 1rem;
+    line-height: 2.4;
+  }
+  .sentence-frame .frame-text {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .sentence-frame .frame-label {
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #B0BEC5;
+    margin-bottom: -4px;
+  }
+  .sentence-frame .frame-blank-wrap {
+    display: inline-block;
+    vertical-align: bottom;
+  }
+  .sentence-frame input {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-bottom: 2px solid var(--teal);
+    background: var(--teal-light);
+    padding: 4px 8px;
+    border-radius: 4px 4px 0 0;
+    min-width: 120px;
+    max-width: 100%;
+    color: var(--text);
+  }
+  .sentence-frame input:focus { outline: none; border-bottom-color: var(--green); background: var(--green-light); }
+  .sentence-frame input.filled { border-bottom-color: var(--green); }
+
+  .assembled-sentence {
+    background: var(--green-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #2E7D32;
+    font-weight: 600;
+    min-height: 40px;
+  }
+  .assembled-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #2E7D32; margin-bottom: 4px; }
+
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .word-bank-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .wb-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid var(--teal);
+    background: var(--teal-light);
+    color: var(--teal);
+    font-family: 'Nunito', sans-serif;
+  }
+  .wb-chip:hover { transform: translateY(-2px); background: var(--teal); color: white; }
+  .wb-cw {
+    border-color: var(--purple);
+    background: var(--purple-light);
+    color: var(--purple);
+  }
+  .wb-cw:hover { background: var(--purple); color: white; }
+
+  .essay-preview {
+    background: #FFFDE7;
+    border: 2px solid #FDD835;
+    border-radius: 12px;
+    padding: 20px;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    margin-bottom: 16px;
+  }
+  .essay-preview .cw { background: var(--teal-light); padding: 1px 4px; border-radius: 4px; font-weight: 700; color: var(--teal); }
+
+  .essay-so-far {
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .essay-so-far h3 { color: #2E7D32; margin-bottom: 8px; font-size: 1rem; }
+  .essay-so-far .esf-sentence {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    font-weight: 600;
+    border-left: 3px solid var(--green);
+  }
+
+  .sentence-nav {
+    display: flex;
+    gap: 8px;
+    margin: 14px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .sentence-nav-btn {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 2px solid #D0D5DD;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .sentence-nav-btn.sn-active { border-color: var(--teal); background: var(--teal); color: white; }
+  .sentence-nav-btn.sn-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+
+  .specificity-panel {
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    display: none;
+    animation: fadeUp 0.3s;
+  }
+  .specificity-panel.show { display: block; }
+  .specificity-card {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    border-left: 3px solid var(--orange);
+  }
+
+  .stats-row { display: flex; justify-content: center; gap: 16px; margin: 14px 0; flex-wrap: wrap; }
+  .stat-box { text-align: center; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: var(--shadow); min-width: 80px; }
+  .stat-box .num { font-size: 1.5rem; font-weight: 800; color: var(--teal); }
+  .stat-box .lbl { font-size: 0.75rem; font-weight: 700; color: var(--muted); text-transform: uppercase; }
+
+  .celebration { text-align: center; padding: 20px 0; }
+  .celebration .big-star { font-size: 3rem; margin-bottom: 8px; }
+
+  .dash-section { margin-bottom: 20px; }
+  .dash-section h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-stat {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+  .dash-stat .ds-val { font-size: 1.4rem; font-weight: 800; color: var(--teal); }
+  .dash-stat .ds-label { font-size: 0.78rem; color: var(--muted); font-weight: 700; }
+  .report-box {
+    background: #FAFBFC;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+
+  .confetti-burst {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  @keyframes popIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .pop-in { animation: popIn 0.4s ease; }
+
+  /* Completed sentences card */
+  .done-sentences-card {
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .done-sentences-card h3 { color: #2E7D32; margin-bottom: 8px; font-size: 0.95rem; }
+  .done-sent {
+    background: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-weight: 600;
+    border-left: 3px solid var(--green);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .done-sent .check { color: var(--green); font-weight: 800; }
+
+  /* Split view for egg drop writing */
+  .split-view {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .split-plan {
+    width: 38%;
+    flex-shrink: 0;
+    position: sticky;
+    top: 16px;
+  }
+  .split-writing {
+    flex: 1;
+    min-width: 0;
+  }
+  .plan-sidebar {
+    background: var(--purple-light);
+    border: 2px solid var(--purple);
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .plan-sidebar h3 { color: var(--purple); font-size: 0.95rem; margin-bottom: 10px; }
+  .ps-item { margin-bottom: 10px; }
+  .ps-label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); margin-bottom: 2px; }
+  .ps-text { font-size: 0.88rem; line-height: 1.4; font-weight: 600; color: var(--text); }
+  .ps-empty { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+
+  .plan-toggle-btn {
+    display: none;
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    border: 2px solid var(--purple);
+    background: var(--purple-light);
+    color: var(--purple);
+    font-family: 'Nunito', sans-serif;
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 768px) {
+    .split-view { flex-direction: column; }
+    .split-plan { width: 100%; position: static; }
+    .split-plan.collapsed { display: none; }
+    .plan-toggle-btn { display: block; }
+    .container.wide { max-width: 720px; }
+  }
+
+  /* Essay complete celebration */
+  .essay-complete-banner {
+    background: linear-gradient(135deg, #FFD54F, #FFB300);
+    border-radius: 16px;
+    padding: 30px 20px;
+    text-align: center;
+    margin: 16px 0;
+    animation: popIn 0.5s ease;
+  }
+  .essay-complete-banner h2 {
+    font-size: 1.6rem;
+    color: #5D4037;
+    margin-bottom: 4px;
+  }
+  .essay-complete-banner p {
+    color: #6D4C41;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Session</h1>
+  <p>March 30, 2026 &#8212; Finish Recess Essay + Egg Drop Challenge!</p>
+  <div class="save-indicator" id="saveIndicator">Saved &#10003;</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">&#128214; Reading</button>
+  <button class="main-tab" id="mtab-essay5" onclick="switchTab('essay5')">&#9999;&#65039; Essay 5</button>
+  <button class="main-tab" id="mtab-eggplan" onclick="switchTab('eggplan')">&#128161; Egg Plan</button>
+  <button class="main-tab" id="mtab-eggwrite" onclick="switchTab('eggwrite')">&#129370; Egg Write</button>
+  <button class="main-tab" id="mtab-dashboard" onclick="switchTab('dashboard')">&#128202; Dash</button>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-reading">
+    <div class="card" id="card-reading"></div>
+  </div>
+  <div class="tab-panel" id="panel-essay5">
+    <div id="card-essay5"></div>
+  </div>
+  <div class="tab-panel" id="panel-eggplan">
+    <div class="card" id="card-eggplan"></div>
+  </div>
+  <div class="tab-panel" id="panel-eggwrite">
+    <div id="card-eggwrite"></div>
+  </div>
+  <div class="tab-panel" id="panel-dashboard">
+    <div class="card" id="card-dashboard"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  GLOBALS & CONFIG
+// ============================================================
+const STORAGE_KEY = 'marcello_mar30_session';
+const CLOUD_STATE_KEY = 'mar2026_session_4';
+const PREV_CLOUD_KEY = 'mar2026_session_3';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-03-30';
+
+let activeTab = 'reading';
+
+// ---- SESSION STATE ----
+let S = {
+  reading: {
+    words: { current: 0, results: [], done: false },
+    thinkThings: { answers: [], done: false },
+    passage: { prosody: { expression: 0, phrasing: 0, pace: 0, smoothness: 0 }, done: false }
+  },
+  essay5: {
+    conclusion: { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+    done: false
+  },
+  eggPlanner: {
+    q1: '', q2: '', q3: '', q4: '', q5: '',
+    helpUsed: {},
+    done: false
+  },
+  eggWriting: {
+    sentences: [
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false },
+      { dictation: '', kernel: '', blanks: {}, assembled: '', step: 0, done: false }
+    ],
+    currentSentence: 0,
+    done: false
+  },
+  prevEssay: {
+    sentences: [
+      'I think schools should have longer recess because it helps kids focus in class.',
+      'I believe this because recess gives their brains a break so they can focus in class.',
+      'Also, kids can exercise because they get to play with their friends.'
+    ],
+    plan: {
+      opinion: 'Yes, schools should have longer recess',
+      reason1: 'It helps kids focus in class',
+      reason2: 'Kids can exercise and play with friends',
+      disagree: '(from planner)',
+      conclusion: '(from planner)'
+    }
+  },
+  timestamps: {},
+  points: 0
+};
+
+// ============================================================
+//  DATA
+// ============================================================
+
+const IRREGULAR_WORDS = [
+  { word: 'through', tricky: 'ough', sound: '/oo/', review: true },
+  { word: 'league', tricky: 'eague', sound: '/eeg/', review: true },
+  { word: 'foreign', tricky: 'eign', sound: '/in/', review: true },
+  { word: 'straight', tricky: 'aigh', sound: '/ay/', review: false },
+  { word: 'doubt', tricky: 'b', sound: '(silent)', review: false },
+  { word: 'built', tricky: 'ui', sound: '/ih/', review: false }
+];
+
+const THINK_THINGS_QUIZ = [
+  { sentence: 'I ___ the egg drop challenge will be fun!', answer: 'think', options: ['think', 'things'] },
+  { sentence: 'We need soft ___ to protect the egg.', answer: 'things', options: ['think', 'things'] },
+  { sentence: 'I ___ cotton balls will work best.', answer: 'think', options: ['think', 'things'] }
+];
+
+const PASSAGE_TEXT = 'Next week is the big egg drop! Every student <span class="target-word">built</span> a special container to protect their egg. Some used cotton balls and tape. Others tried cardboard boxes with padding inside. When the teacher drops each egg from the top of the ladder, everyone holds their breath. Will the egg survive? The students who designed the best containers will keep their eggs safe. It takes creativity and problem-solving to win the egg drop challenge!';
+
+// Essay 5 conclusion frame
+const ESSAY5_CONCLUSION_FRAME = {
+  label: 'Conclusion',
+  prefix: 'Although some people think ',
+  blanks: [
+    { key: 'disagree_point', label: 'what they think', placeholder: 'recess wastes time' },
+    { key: 'final_opinion', label: 'what you believe', placeholder: 'longer recess helps kids learn better' }
+  ],
+  connector: ', I believe ',
+  suffix: '.',
+  prompt: 'How do you want to wrap up your essay? Remember what someone who disagrees might say \u2014 and then tell me what YOU believe.'
+};
+
+// Egg drop planner help
+const EGG_HELP = {
+  q1: ['Think about what the teacher told you about the challenge.', 'Example: "We have to build something that keeps a raw egg from breaking when it\'s dropped from high up."', 'We have to build a container that protects a raw egg from breaking when it is dropped from a high place.'],
+  q2: ['What did you bring to school? What did you use to build?', 'Example: "I used cotton balls, a plastic cup, tape, and rubber bands."', 'I used cotton balls, a plastic cup, tape, and rubber bands.'],
+  q3: ['Think about what happens when something falls. How does your design stop the egg from cracking?', 'Example: "The cotton balls are soft so they cushion the egg when it lands."', 'The cotton balls are soft and they cushion the egg so it does not crack when it lands.'],
+  q4: ['Why those materials and not others?', 'Example: "Cotton balls are soft and squishy, so they absorb the impact."', 'I chose cotton balls because they are soft and absorb the impact when the egg lands.'],
+  q5: ['Do you think your egg will survive? Why or why not?', 'Example: "I think my egg will survive because the padding is really thick."', 'I think my egg will survive because I put a lot of padding around it.']
+};
+
+const EGG_SENTENCE_FRAMES = [
+  {
+    label: 'Introduction',
+    prefix: 'In the egg drop challenge, we have to ',
+    blanks: [
+      { key: 'what_do', label: 'what you do', placeholder: 'protect an egg from breaking' },
+      { key: 'my_container', label: 'what yours is made of', placeholder: 'cotton balls and a plastic cup' }
+    ],
+    connector: '. My container is made of ',
+    suffix: '.',
+    prompt: 'Tell me about the egg drop challenge. What do you have to do? What did you make?'
+  },
+  {
+    label: 'How It Works',
+    prefix: 'My design protects the egg because ',
+    blanks: [
+      { key: 'how_works', label: 'how it protects', placeholder: 'the cotton balls cushion the egg' },
+      { key: 'what_happens', label: 'what happens when it drops', placeholder: 'the egg lands softly' }
+    ],
+    connector: '. When the egg drops, ',
+    suffix: '.',
+    prompt: 'Tell me HOW your container protects the egg. What happens when it falls?'
+  },
+  {
+    label: 'Why I Chose This',
+    prefix: 'I chose ',
+    blanks: [
+      { key: 'materials', label: 'what materials', placeholder: 'cotton balls and tape' },
+      { key: 'why', label: 'why you picked them', placeholder: 'they are soft and squishy' }
+    ],
+    connector: ' because ',
+    suffix: '.',
+    prompt: 'Why did you pick those materials? What makes them good for protecting an egg?'
+  },
+  {
+    label: 'Prediction',
+    prefix: 'I think my container will ',
+    blanks: [
+      { key: 'prediction', label: 'what will happen', placeholder: 'keep the egg safe' },
+      { key: 'pred_why', label: 'why you think so', placeholder: 'there is a lot of padding around it' }
+    ],
+    connector: ' because ',
+    suffix: '.',
+    prompt: 'What do you think will happen on drop day? Will your egg survive?'
+  }
+];
+
+const EGG_WORD_BANK = ['protect','container','cushion','absorb','impact','padding','materials','design','survive','crack','break','drop','land','soft','strong','build','tape','wrap'];
+const EGG_CW_BANK = ['because','when','so','also','first','then','if','although','after','before'];
+
+const SPECIFICITY_PROMPTS = [
+  { trigger: 'things', prompt: 'You said "things" \u2014 what ARE the things? Name one.' },
+  { trigger: 'stuff', prompt: 'You said "stuff" \u2014 what kind of stuff? Be specific!' },
+  { trigger: '', prompt: 'Give me an example you can SEE or TOUCH.' }
+];
+
+// ============================================================
+//  UTILITY FUNCTIONS
+// ============================================================
+
+function toast(msg, isWarn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isWarn ? ' warning' : '');
+  setTimeout(() => t.className = 'toast', 2400);
+}
+
+function addPoints(pts) {
+  S.points += pts;
+  if (pts > 0) toast('+' + pts + ' points! \uD83C\uDFC6');
+}
+
+function esc(text) {
+  const d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
+}
+
+function saveToLocalStorage() {
+  try {
+    const data = JSON.parse(JSON.stringify(S));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved \u2713';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    S = data;
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null;
+let cloudDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(saveStateToCloud, 3000);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+function saveStateToCloud() {
+  try {
+    const data = JSON.parse(JSON.stringify(S));
+    fetch(TRACKER_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: data })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved \u2601\ufe0f';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud(key) {
+  return new Promise((resolve) => {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(() => { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state);
+      else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+function speakText(text) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available', true); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.9;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function fireCelebration() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  const emojis = ['\uD83C\uDF89','\uD83C\uDF8A','\u2B50','\uD83E\uDD5A','\uD83D\uDCA1','\uD83C\uDF1F','\uD83C\uDFC6'];
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4000);
+}
+
+// Add confetti keyframes
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(confettiStyle);
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  // Adjust container width for egg writing split view
+  const mc = document.getElementById('mainContainer');
+  if (tab === 'eggwrite') mc.classList.add('wide');
+  else mc.classList.remove('wide');
+
+  if (tab === 'reading') renderReading();
+  else if (tab === 'essay5') renderEssay5();
+  else if (tab === 'eggplan') renderEggPlanner();
+  else if (tab === 'eggwrite') renderEggWriting();
+  else if (tab === 'dashboard') renderDashboard();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+// ============================================================
+//  TAB 1: READING SKILLS
+// ============================================================
+
+let readingPhase = 'words';
+let wordMappingRevealed = false;
+
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const ws = S.reading.words;
+
+  if (readingPhase === 'words' && !ws.done) {
+    renderWords(el);
+  } else if (!S.reading.thinkThings.done) {
+    readingPhase = 'thinkThings';
+    renderThinkThings(el);
+  } else if (!S.reading.passage.done) {
+    readingPhase = 'passage';
+    renderPassage(el);
+  } else {
+    el.innerHTML = '<div class="act-label act-read">&#128214; Reading Complete!</div>' +
+      '<div class="celebration"><div class="big-star">&#127942;</div>' +
+      '<h2>Reading Skills Done!</h2>' +
+      '<p>Great job with word mapping, think/things, and reading about the egg drop!</p></div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="switchTab(\'essay5\')">Next: Finish Your Essay! &#9999;&#65039;</button></div>';
+  }
+}
+
+function renderWords(el) {
+  const ws = S.reading.words;
+  if (ws.current >= IRREGULAR_WORDS.length) {
+    ws.done = true;
+    renderReading();
+    return;
+  }
+  const w = IRREGULAR_WORDS[ws.current];
+  const result = ws.results[ws.current];
+
+  let dotsHTML = IRREGULAR_WORDS.map(function(wd, i) {
+    let cls = 'q-dot';
+    if (i < ws.current) cls += ws.results[i] && ws.results[i].firstCorrect ? ' done' : '';
+    else if (i === ws.current) cls += ' current';
+    return '<div class="' + cls + '"></div>';
+  }).join('');
+
+  let cardContent = '';
+
+  if (!result) {
+    // Step 1: Show word, student tries to read
+    cardContent = '<div class="flashcard" id="flashcard">' +
+      '<div class="word">' + w.word + '</div></div>' +
+      '<div class="btn-row" id="wordBtns">' +
+      '<button class="btn btn-success" onclick="markWord(true)">&#10003; Correct</button>' +
+      '<button class="btn btn-red" onclick="markWord(false)">&#10007; Incorrect</button></div>';
+  } else if (result && !result.trickyShown) {
+    // Correct on first try - still show tricky part briefly
+    cardContent = '<div class="flashcard correct" id="flashcard">' +
+      '<div class="word" style="color:var(--green);">' + w.word + '</div>' +
+      '<div style="font-size:1.1rem;font-weight:700;color:var(--green);margin-top:8px;">&#10003; Read correctly!</div></div>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="revealTricky()">Show Tricky Part &#128270;</button></div>';
+  } else if (result && result.trickyShown && !result.readAgainDone) {
+    // Show tricky part highlighted
+    const trickyHTML = buildTrickyHTML(w);
+    cardContent = '<div class="flashcard" id="flashcard">' +
+      '<div class="tricky-highlight">' + trickyHTML + '</div>' +
+      '<div class="sound-info">The tricky part <strong style="color:var(--red);">' + esc(w.tricky) + '</strong> says <strong>' + esc(w.sound) + '</strong></div>' +
+      '</div>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="readAgain()">&#128264; Read It Again</button></div>';
+  } else {
+    // Read again done, move to next
+    const trickyHTML = buildTrickyHTML(w);
+    cardContent = '<div class="flashcard' + (result.firstCorrect ? ' correct' : '') + '" id="flashcard">' +
+      '<div class="tricky-highlight">' + trickyHTML + '</div>' +
+      '<div class="sound-info">The tricky part <strong style="color:var(--red);">' + esc(w.tricky) + '</strong> says <strong>' + esc(w.sound) + '</strong></div>' +
+      '<div style="margin-top:10px;font-weight:700;color:var(--green);">&#10003; Great!</div></div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="nextWord()">Next Word &#8594;</button></div>';
+  }
+
+  el.innerHTML = '<div class="act-label act-read">&#128214; Word Mapping \u2014 Irregular Words</div>' +
+    '<h2>Read this word aloud!</h2>' +
+    '<p class="directions">Look at the <strong>whole word</strong> carefully. Say it out loud! ' +
+    '<span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:0.78rem;font-weight:700;background:' + (w.review ? 'var(--gold-light);color:#B8860B' : 'var(--teal-light);color:var(--teal)') + ';">' + (w.review ? 'Review' : 'New Word') + '</span></p>' +
+    '<div class="q-progress"><div class="q-dots">' + dotsHTML + '</div><div class="q-label">Word ' + (ws.current+1) + ' of ' + IRREGULAR_WORDS.length + '</div></div>' +
+    cardContent;
+}
+
+function buildTrickyHTML(w) {
+  const idx = w.word.indexOf(w.tricky);
+  if (idx === -1) return '<span class="tricky">' + w.word + '</span>';
+  const before = w.word.substring(0, idx);
+  const after = w.word.substring(idx + w.tricky.length);
+  let html = '';
+  if (before) html += '<span class="normal">' + before + '</span>';
+  html += '<span class="tricky">' + w.tricky + '</span>';
+  if (after) html += '<span class="normal">' + after + '</span>';
+  return html;
+}
+
+function markWord(correct) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  ws.results[ws.current] = { word: w.word, firstCorrect: correct, trickyShown: false, readAgainDone: false };
+  if (correct) addPoints(5);
+  renderWords(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function revealTricky() {
+  const ws = S.reading.words;
+  ws.results[ws.current].trickyShown = true;
+  renderWords(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function readAgain() {
+  const ws = S.reading.words;
+  ws.results[ws.current].readAgainDone = true;
+  addPoints(3);
+  renderWords(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function nextWord() {
+  const ws = S.reading.words;
+  ws.current++;
+  if (ws.current >= IRREGULAR_WORDS.length) {
+    ws.done = true;
+    S.timestamps.wordsEnd = new Date().toISOString();
+    const correctCount = ws.results.filter(function(r) { return r && r.firstCorrect; }).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Word Mapping - Irregular Words', 'Reading', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.map(function(r) { return r.word + ':' + (r.firstCorrect ? 'Y' : 'N'); }).join(', ')]);
+    postToSheets('Reading - Phonics', [SESSION_DATE, 'Word Mapping', 'RF.3.3', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.filter(function(r) { return !r.firstCorrect; }).map(function(r) { return r.word; }).join(', '), 'New approach: tricky part highlight']);
+    readingPhase = 'thinkThings';
+  }
+  renderReading();
+}
+
+// Think/Things
+function renderThinkThings(el) {
+  const tt = S.reading.thinkThings;
+  const currentQ = tt.answers.length;
+
+  if (tt.done) { renderReading(); return; }
+
+  let quizHTML = '';
+  THINK_THINGS_QUIZ.forEach(function(q, i) {
+    const answered = i < tt.answers.length;
+    const correct = answered && tt.answers[i] === q.answer;
+    let btnsHTML = '';
+    if (!answered && i === currentQ) {
+      btnsHTML = '<div class="pair-quiz-btns">' +
+        '<button class="pair-quiz-btn" onclick="pickThinkThings(' + i + ',\'think\')">THINK</button>' +
+        '<button class="pair-quiz-btn" onclick="pickThinkThings(' + i + ',\'things\')">THINGS</button></div>';
+    } else if (answered) {
+      const userAns = tt.answers[i];
+      btnsHTML = '<div class="pair-quiz-btns">' +
+        '<button class="pair-quiz-btn ' + (userAns==='think' ? (q.answer==='think' ? 'pq-correct' : 'pq-wrong') : (q.answer==='think' ? 'pq-correct' : '')) + '" disabled>THINK</button>' +
+        '<button class="pair-quiz-btn ' + (userAns==='things' ? (q.answer==='things' ? 'pq-correct' : 'pq-wrong') : (q.answer==='things' ? 'pq-correct' : '')) + '" disabled>THINGS</button></div>' +
+        '<div style="font-size:0.85rem;margin-top:6px;font-weight:600;color:' + (correct ? '#2E7D32' : 'var(--red)') + '">' + (correct ? '&#10003; Correct!' : '&#10007; The answer is ' + q.answer.toUpperCase() + '!') + '</div>';
+    }
+    quizHTML += '<div class="pair-quiz-item" style="' + (!answered && i !== currentQ ? 'opacity:0.4;' : '') + '">' +
+      '<div class="pq-sentence">' + q.sentence.replace('___', '<span class="pq-blank">___</span>') + '</div>' +
+      btnsHTML + '</div>';
+  });
+
+  el.innerHTML = '<div class="act-label act-read">&#128214; Think vs. Things \u2014 Quick Check</div>' +
+    '<h2>Two tricky words!</h2>' +
+    '<p class="directions">Remember: <strong>THINK</strong> = your brain (no G, no S). <strong>THINGS</strong> = stuff (ends in G-S).</p>' +
+    '<div class="pair-display">' +
+    '<div class="pair-card" style="border-color:var(--teal);"><div class="pair-word" style="color:var(--teal);">THINK</div><div class="pair-def">What your brain does</div><div class="pair-tip" style="color:var(--teal);">No G, no S</div></div>' +
+    '<div class="pair-card" style="border-color:var(--purple);"><div class="pair-word" style="color:var(--purple);">THINGS</div><div class="pair-def">Stuff, objects</div><div class="pair-tip" style="color:var(--purple);">Ends in G-S</div></div></div>' +
+    '<h3 style="font-size:1rem;margin:14px 0 8px;">Quick Check: THINK or THINGS?</h3>' +
+    quizHTML +
+    (currentQ >= THINK_THINGS_QUIZ.length ? '<div class="btn-row"><button class="btn btn-success" onclick="finishThinkThings()">Next: Read a Passage! &#8594;</button></div>' : '');
+}
+
+function pickThinkThings(idx, choice) {
+  const tt = S.reading.thinkThings;
+  if (idx !== tt.answers.length) return;
+  tt.answers.push(choice);
+  const correct = choice === THINK_THINGS_QUIZ[idx].answer;
+  if (correct) addPoints(5);
+  if (tt.answers.length >= THINK_THINGS_QUIZ.length) {
+    const score = tt.answers.filter(function(a, i) { return a === THINK_THINGS_QUIZ[i].answer; }).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Think vs Things', 'Reading', score, THINK_THINGS_QUIZ.length, Math.round(score/THINK_THINGS_QUIZ.length*100)+'%', 'Quick check: 3 sentences']);
+  }
+  renderThinkThings(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function finishThinkThings() {
+  S.reading.thinkThings.done = true;
+  readingPhase = 'passage';
+  renderReading();
+}
+
+// Passage
+function renderPassage(el) {
+  const ps = S.reading.passage;
+  const prosodyHTML = ['Expression','Phrasing','Pace','Smoothness'].map(function(dim) {
+    const key = dim.toLowerCase();
+    let scores = '';
+    for (let i = 1; i <= 4; i++) {
+      scores += '<div class="pi-score' + (ps.prosody[key]===i ? ' selected' : '') + '" onclick="setProsody(\'' + key + '\',' + i + ')">' + i + '</div>';
+    }
+    return '<div class="prosody-item"><div class="pi-label">' + dim + '</div><div class="pi-scores">' + scores + '</div></div>';
+  }).join('');
+
+  el.innerHTML = '<div class="act-label act-read">&#128214; Passage Read-Aloud</div>' +
+    '<h2>&#129370; Read about the egg drop!</h2>' +
+    '<p class="directions">Read the passage aloud. Make it sound like you\'re telling your friend an exciting story! <strong style="background:var(--gold-light);padding:1px 4px;border-radius:4px;">Highlighted words</strong> are tricky words you practiced.</p>' +
+    '<div class="passage-box">' + PASSAGE_TEXT + '</div>' +
+    '<h3 style="font-size:1rem;margin:14px 0 8px;">Prosody Rubric (Tutor rates 1-4)</h3>' +
+    '<div class="prosody-grid">' + prosodyHTML + '</div>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="finishReading()">Done with Reading &#10003;</button></div>';
+}
+
+function setProsody(dim, val) {
+  S.reading.passage.prosody[dim] = val;
+  renderPassage(document.getElementById('card-reading'));
+  debounceSave();
+}
+
+function finishReading() {
+  S.reading.passage.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  document.getElementById('mtab-reading').classList.add('done');
+  const p = S.reading.passage.prosody;
+  const avg = ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1);
+  postToSheets('Reading - ORF', [SESSION_DATE, 'Egg drop passage', '', '', '', '', '', p.expression, p.phrasing, p.pace, p.smoothness, avg, 'Egg drop themed passage with target irregular words']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Passage Read-Aloud', 'Reading', 'Prosody avg: ' + avg, '', '', 'Exp:'+p.expression+' Phr:'+p.phrasing+' Pac:'+p.pace+' Smo:'+p.smoothness]);
+  toast('Reading section complete! &#127942;');
+  switchTab('essay5');
+}
+
+// ============================================================
+//  TAB 2: FINISH ESSAY 5 (Conclusion)
+// ============================================================
+
+let essay5TalkTimer = null;
+let essay5TalkStart = null;
+
+function renderEssay5() {
+  const el = document.getElementById('card-essay5');
+  const e5 = S.essay5;
+
+  if (e5.done) {
+    renderEssay5Complete(el);
+    return;
+  }
+
+  // Previous sentences (read-only)
+  let prevHTML = '<div class="done-sentences-card">' +
+    '<h3>&#10003; Already Done!</h3>';
+  S.prevEssay.sentences.forEach(function(s, i) {
+    prevHTML += '<div class="done-sent"><span class="check">&#10003;</span>' + esc(s) + '</div>';
+  });
+  prevHTML += '</div>';
+
+  // Plan sidebar
+  const plan = S.prevEssay.plan;
+  let planHTML = '<div style="margin-bottom:16px;">' +
+    '<div class="plan-sidebar" style="border-color:var(--gold);background:var(--gold-light);">' +
+    '<h3 style="color:#B8860B;">&#128203; Your Plan</h3>' +
+    '<div class="ps-item"><div class="ps-label" style="color:#B8860B;">Opinion</div><div class="ps-text">' + esc(plan.opinion) + '</div></div>' +
+    '<div class="ps-item"><div class="ps-label" style="color:#B8860B;">Reason 1</div><div class="ps-text">' + esc(plan.reason1) + '</div></div>' +
+    '<div class="ps-item"><div class="ps-label" style="color:#B8860B;">Reason 2</div><div class="ps-text">' + esc(plan.reason2) + '</div></div>' +
+    '<div class="ps-item"><div class="ps-label" style="color:#B8860B;">Someone disagrees...</div><div class="ps-text">' + esc(plan.disagree) + '</div></div>' +
+    '<div class="ps-item"><div class="ps-label" style="color:#B8860B;">How to end</div><div class="ps-text">' + esc(plan.conclusion) + '</div></div>' +
+    '</div></div>';
+
+  // Conclusion writing - dictation first flow
+  const conc = e5.conclusion;
+  const step = conc.step || 0;
+  const frame = ESSAY5_CONCLUSION_FRAME;
+
+  let stepsHTML = '<div class="step-indicator">' +
+    '<div class="step-pill ' + (step >= 1 ? 'step-done' : step === 0 ? 'step-active' : '') + '"><span class="step-icon">&#128483;&#65039;</span>Tell Me</div>' +
+    '<div class="step-pill ' + (step >= 2 ? 'step-done' : step === 1 ? 'step-active' : '') + '"><span class="step-icon">&#128270;</span>Find It</div>' +
+    '<div class="step-pill ' + (step >= 3 ? 'step-done' : step === 2 ? 'step-active' : '') + '"><span class="step-icon">&#128295;</span>Build It</div>' +
+    '<div class="step-pill ' + (step >= 4 ? 'step-done' : step === 3 ? 'step-active' : '') + '"><span class="step-icon">&#128264;</span>Check</div></div>';
+
+  let contentHTML = '';
+
+  // STEP 0: TELL ME
+  if (step === 0) {
+    const elapsed = essay5TalkStart ? Math.floor((Date.now() - essay5TalkStart) / 1000) : 0;
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    const timerStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    const timerClass = elapsed > 30 ? 'talk-timer long' : 'talk-timer';
+
+    contentHTML = '<div class="dictation-box">' +
+      '<h3 style="margin-bottom:4px;">&#128483;&#65039; Tell me your conclusion</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">' + esc(frame.prompt) + '</p>' +
+      (essay5TalkStart ? '<div class="' + timerClass + '" id="essay5TalkTimer">' + timerStr + '</div><p style="color:var(--green);font-weight:700;font-size:0.88rem;">Keep going! You\'re doing great!</p>' : '<div class="btn-row"><button class="btn btn-gold" onclick="startEssay5Talk()">&#127908; Start Talking!</button></div>') +
+      '<textarea id="essay5Dictation" placeholder="Tutor: type what Marcello says here (verbatim)..." oninput="onEssay5Dictation()">' + esc(conc.dictation || '') + '</textarea>' +
+      (essay5TalkStart ? '<div class="btn-row"><button class="btn btn-success" onclick="doneEssay5Talk()">Done talking! &#10003;</button></div>' : '') +
+      '</div>';
+  }
+
+  // STEP 1: FIND IT
+  if (step === 1) {
+    contentHTML = '<div class="card" style="border-left:4px solid var(--gold);">' +
+      '<h3 style="margin-bottom:4px;">&#128270; Find the sentence!</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">You said all of this! Now find <strong>ONE sentence</strong> hiding in here.</p>' +
+      '<div class="passage-box" style="background:#FFFDE7;border-color:var(--gold);">' + esc(conc.dictation) + '</div>' +
+      '<div style="margin-top:12px;">' +
+      '<label style="font-weight:700;font-size:0.93rem;display:block;margin-bottom:4px;">&#128161; The key idea I found:</label>' +
+      '<textarea id="essay5Kernel" style="width:100%;min-height:60px;border:2px solid var(--teal);border-radius:10px;padding:12px;font-family:\'Nunito\',sans-serif;font-size:1rem;font-weight:600;resize:vertical;" placeholder="Type the key idea..." oninput="onEssay5Kernel()">' + esc(conc.kernel || '') + '</textarea></div>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="essay5BackToTell()">&#8592; More talking</button>' +
+      '<button class="btn btn-success" onclick="essay5FoundIt()" ' + (conc.kernel ? '' : 'disabled') + '>I found it! &#8594;</button></div></div>';
+  }
+
+  // STEP 2: BUILD IT
+  if (step === 2) {
+    let frameHTML = '<div class="sentence-frame"><span class="frame-text">' + esc(frame.prefix) + '</span>';
+    frame.blanks.forEach(function(b, bi) {
+      const val = (conc.blanks && conc.blanks[b.key]) || '';
+      frameHTML += '<span class="frame-blank-wrap"><span class="frame-label">[' + b.label + ']</span><input type="text" id="e5frame-' + b.key + '" value="' + esc(val) + '" placeholder="' + esc(b.placeholder) + '" oninput="onEssay5Frame(\'' + b.key + '\',this.value)" style="width:' + Math.max(160, b.placeholder.length * 9) + 'px"></span>';
+      if (bi < frame.blanks.length - 1) {
+        frameHTML += '<span class="frame-text">' + esc(frame.connector) + '</span>';
+      }
+    });
+    frameHTML += '<span class="frame-text">' + esc(frame.suffix) + '</span></div>';
+
+    let assembled = frame.prefix;
+    frame.blanks.forEach(function(b, bi) {
+      assembled += (conc.blanks && conc.blanks[b.key]) || '______';
+      if (bi < frame.blanks.length - 1) assembled += frame.connector;
+    });
+    assembled += frame.suffix;
+
+    contentHTML = '<div class="card" style="border-left:4px solid var(--teal);">' +
+      '<h3 style="margin-bottom:4px;">&#128295; Build your conclusion!</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:6px;">Fill in each blank to complete your sentence.</p>' +
+      '<div class="kernel-card"><div class="kc-label">&#128161; Your key idea</div><div class="kc-text">"' + esc(conc.kernel) + '"</div></div>' +
+      frameHTML +
+      '<div class="assembled-label">Your sentence:</div>' +
+      '<div class="assembled-sentence" id="e5assembled">' + esc(assembled) + '</div>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="essay5BackToFind()">&#8592; Find again</button>' +
+      '<button class="btn btn-success" onclick="essay5BuildDone()">Check it! &#128264;</button></div></div>';
+  }
+
+  // STEP 3: CHECK
+  if (step === 3) {
+    let assembled = frame.prefix;
+    frame.blanks.forEach(function(b, bi) {
+      assembled += (conc.blanks && conc.blanks[b.key]) || '';
+      if (bi < frame.blanks.length - 1) assembled += frame.connector;
+    });
+    assembled += frame.suffix;
+
+    contentHTML = '<div class="card pop-in" style="border-left:4px solid var(--green);">' +
+      '<h3 style="margin-bottom:4px;">&#128264; Check your sentence!</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">Listen to your conclusion. Does it sound right?</p>' +
+      '<div class="assembled-sentence" style="font-size:1.15rem;text-align:center;padding:20px;">' + esc(assembled) + '</div>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-primary" onclick="speakText(\'' + esc(assembled).replace(/'/g, "\\'") + '\')">&#128264; Read it Back</button></div>' +
+      '<div class="btn-row" style="margin-top:20px;">' +
+      '<button class="btn btn-secondary" onclick="essay5FixIt()">&#9998; Let me fix it</button>' +
+      '<button class="btn btn-success" onclick="essay5Done()">&#127881; Yes, it\'s good!</button></div></div>';
+  }
+
+  el.innerHTML = '<div class="card">' +
+    '<div class="act-label act-essay">&#9999;&#65039; Finish Essay 5: Recess Opinion</div>' +
+    '<h2>Write Your Conclusion!</h2>' +
+    '<p class="directions">You already wrote 3 sentences. Now let\'s finish with a powerful conclusion!</p>' +
+    stepsHTML +
+    '</div>' +
+    prevHTML +
+    planHTML +
+    contentHTML;
+}
+
+function startEssay5Talk() {
+  essay5TalkStart = Date.now();
+  essay5TalkTimer = setInterval(updateEssay5Timer, 1000);
+  renderEssay5();
+  setTimeout(function() {
+    const ta = document.getElementById('essay5Dictation');
+    if (ta) ta.focus();
+  }, 100);
+}
+
+function updateEssay5Timer() {
+  const el = document.getElementById('essay5TalkTimer');
+  if (!el || !essay5TalkStart) return;
+  const elapsed = Math.floor((Date.now() - essay5TalkStart) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  if (elapsed > 30) el.className = 'talk-timer long';
+}
+
+function onEssay5Dictation() {
+  const ta = document.getElementById('essay5Dictation');
+  if (ta) S.essay5.conclusion.dictation = ta.value;
+  debounceSave();
+}
+
+function doneEssay5Talk() {
+  clearInterval(essay5TalkTimer);
+  essay5TalkTimer = null;
+  const elapsed = essay5TalkStart ? Math.floor((Date.now() - essay5TalkStart) / 1000) : 0;
+  essay5TalkStart = null;
+  S.essay5.conclusion.step = 1;
+  S.essay5.conclusion.talkTime = elapsed;
+  addPoints(5);
+  renderEssay5();
+  debounceSave();
+}
+
+function onEssay5Kernel() {
+  const input = document.getElementById('essay5Kernel');
+  if (input) S.essay5.conclusion.kernel = input.value;
+  debounceSave();
+  renderEssay5();
+  setTimeout(function() {
+    const ki = document.getElementById('essay5Kernel');
+    if (ki) { ki.focus(); ki.selectionStart = ki.selectionEnd = ki.value.length; }
+  }, 50);
+}
+
+function essay5BackToTell() {
+  S.essay5.conclusion.step = 0;
+  renderEssay5();
+  debounceSave();
+}
+
+function essay5FoundIt() {
+  S.essay5.conclusion.step = 2;
+  addPoints(5);
+  renderEssay5();
+  debounceSave();
+}
+
+function essay5BackToFind() {
+  S.essay5.conclusion.step = 1;
+  renderEssay5();
+  debounceSave();
+}
+
+function onEssay5Frame(blankKey, value) {
+  if (!S.essay5.conclusion.blanks) S.essay5.conclusion.blanks = {};
+  S.essay5.conclusion.blanks[blankKey] = value;
+  const frame = ESSAY5_CONCLUSION_FRAME;
+  let assembled = frame.prefix;
+  frame.blanks.forEach(function(b, bi) {
+    assembled += (S.essay5.conclusion.blanks[b.key]) || '______';
+    if (bi < frame.blanks.length - 1) assembled += frame.connector;
+  });
+  assembled += frame.suffix;
+  const aEl = document.getElementById('e5assembled');
+  if (aEl) aEl.textContent = assembled;
+  debounceSave();
+}
+
+function essay5BuildDone() {
+  const frame = ESSAY5_CONCLUSION_FRAME;
+  let assembled = frame.prefix;
+  frame.blanks.forEach(function(b, bi) {
+    assembled += (S.essay5.conclusion.blanks && S.essay5.conclusion.blanks[b.key]) || '';
+    if (bi < frame.blanks.length - 1) assembled += frame.connector;
+  });
+  assembled += frame.suffix;
+  S.essay5.conclusion.assembled = assembled;
+  S.essay5.conclusion.step = 3;
+  speakText(assembled);
+  renderEssay5();
+  debounceSave();
+}
+
+function essay5FixIt() {
+  S.essay5.conclusion.step = 2;
+  renderEssay5();
+  debounceSave();
+}
+
+function essay5Done() {
+  S.essay5.conclusion.done = true;
+  S.essay5.done = true;
+  S.timestamps.essay5End = new Date().toISOString();
+  document.getElementById('mtab-essay5').classList.add('done');
+  addPoints(20);
+  fireCelebration();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay 5 Conclusion', 'Writing', '', '', '', S.essay5.conclusion.assembled]);
+  // Log the full essay
+  const fullEssay = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]).join(' ');
+  const wc = fullEssay.split(/\s+/).filter(function(w) { return w; }).length;
+  postToSheets('Writing', [SESSION_DATE, 'Opinion Essay - Recess', 4, wc, fullEssay, 'COMPLETE - First full opinion essay from scratch!']);
+  renderEssay5();
+  debounceSave();
+}
+
+function renderEssay5Complete(el) {
+  const allSentences = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]);
+  const fullEssay = allSentences.join(' ');
+  const wordCount = fullEssay.split(/\s+/).filter(function(w) { return w; }).length;
+
+  let essayHTML = '';
+  allSentences.forEach(function(s) {
+    let html = esc(s);
+    const cws = ['after','because','when','before','although','since','until','if','also','so','believe'];
+    for (const cw of cws) {
+      const regex = new RegExp('\\b(' + cw + ')\\b', 'gi');
+      html = html.replace(regex, function(m) { return '<span class="cw">' + m + '</span>'; });
+    }
+    essayHTML += html + ' ';
+  });
+
+  el.innerHTML = '<div class="essay-complete-banner">' +
+    '<div style="font-size:3rem;margin-bottom:8px;">&#127881;&#129370;&#127881;</div>' +
+    '<h2>ESSAY COMPLETE!</h2>' +
+    '<p>Marcello\'s first complete opinion essay from scratch!</p></div>' +
+    '<div class="card">' +
+    '<div class="celebration">' +
+    '<div class="stats-row">' +
+    '<div class="stat-box"><div class="num">' + wordCount + '</div><div class="lbl">Words</div></div>' +
+    '<div class="stat-box"><div class="num">' + allSentences.length + '</div><div class="lbl">Sentences</div></div>' +
+    '<div class="stat-box"><div class="num">&#10003;</div><div class="lbl">Complete!</div></div></div></div>' +
+    '<div class="essay-preview">' + essayHTML + '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-primary" onclick="speakText(\'' + esc(fullEssay).replace(/'/g, "\\'") + '\')">&#128264; Read My Essay!</button>' +
+    '<button class="btn btn-success" onclick="switchTab(\'eggplan\')">Next: Egg Drop Plan! &#128161;</button></div></div>';
+}
+
+// ============================================================
+//  TAB 3: EGG DROP PLANNER
+// ============================================================
+
+function renderEggPlanner() {
+  const el = document.getElementById('card-eggplan');
+  const plan = S.eggPlanner;
+
+  if (plan.done) {
+    renderEggPlanPreview(el);
+    return;
+  }
+
+  const qLabels = [
+    'What is the egg drop challenge? What do you have to do?',
+    'What materials are you using for your container?',
+    'How does your container protect the egg? What does it do when the egg falls?',
+    'Why did you choose those materials? What made you pick them?',
+    'What do you think will happen on drop day? (prediction)'
+  ];
+  const qKeys = ['q1','q2','q3','q4','q5'];
+  const icons = ['\uD83E\uDD5A','\uD83E\uDDF1','\uD83D\uDEE1\uFE0F','\uD83E\uDD14','\uD83D\uDD2E'];
+
+  let stepsHTML = '';
+  qKeys.forEach(function(key, idx) {
+    const val = plan[key] || '';
+    const helpLevel = plan.helpUsed[key] || 0;
+    const ht = EGG_HELP[key];
+
+    let helpHTML = '';
+    if (helpLevel < 3) {
+      helpHTML = '<div class="help-btn-wrap"><button class="help-btn" onclick="eggPlanHelp(\'' + key + '\')">&#129300; I need help! ' + (helpLevel > 0 ? '(Tap ' + (helpLevel+1) + ')' : '') + '</button></div>';
+    }
+    let helpPanelHTML = '<div class="help-panel' + (helpLevel > 0 ? ' show' : '') + '" id="egghelp-' + key + '">';
+    if (helpLevel >= 1) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Think about this...</div><p>' + ht[0] + '</p></div>';
+    if (helpLevel >= 2) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Example</div><p>' + ht[1] + '</p></div>';
+    if (helpLevel >= 3) helpPanelHTML += '<div class="help-level"><div class="help-level-label">Ready-made answer</div><p>You can use this: <strong>"' + esc(ht[2]) + '"</strong></p><button class="btn btn-sm btn-primary" onclick="eggPlanUseHelp(\'' + key + '\')">Use this</button></div>';
+    helpPanelHTML += '</div>';
+
+    stepsHTML += '<div class="interview-q">' +
+      '<div class="iq-num">' + icons[idx] + ' Question ' + (idx+1) + (idx === 4 ? ' (if time)' : '') + '</div>' +
+      '<div class="iq-question">' + qLabels[idx] + '</div>' +
+      '<div class="say-first">&#128483;&#65039; Say it first! Tell your tutor your answer out loud before writing.</div>' +
+      '<textarea class="iq-textarea" id="eggplan-' + key + '" placeholder="Type your answer..." oninput="onEggPlanInput(\'' + key + '\')">' + esc(val) + '</textarea>' +
+      helpHTML + helpPanelHTML + '</div>';
+  });
+
+  const canProceed = plan.q1 && plan.q2 && plan.q3;
+
+  el.innerHTML = '<div class="act-label act-plan">&#128161; Egg Drop Challenge \u2014 Plan Your Essay</div>' +
+    '<h2>&#129370; Let\'s plan!</h2>' +
+    '<p class="directions">Answer each question to plan your explanatory essay about the egg drop challenge. This is a WHAT essay \u2014 explain what you did and why!</p>' +
+    '<div class="opinion-box"><div class="oq-label">Essay Topic</div>Explain what the egg drop challenge is, how you built your container, and what you think will happen.</div>' +
+    stepsHTML +
+    '<div class="btn-row"><button class="btn btn-success" onclick="finishEggPlan()" ' + (canProceed ? '' : 'disabled') + '>My plan is ready! &#10003;</button></div>';
+}
+
+function onEggPlanInput(key) {
+  const ta = document.getElementById('eggplan-' + key);
+  if (ta) S.eggPlanner[key] = ta.value;
+  debounceSave();
+}
+
+function eggPlanHelp(key) {
+  S.eggPlanner.helpUsed[key] = (S.eggPlanner.helpUsed[key] || 0) + 1;
+  renderEggPlanner();
+  setTimeout(function() {
+    const panel = document.getElementById('egghelp-' + key);
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+  debounceSave();
+}
+
+function eggPlanUseHelp(key) {
+  S.eggPlanner[key] = EGG_HELP[key][2];
+  renderEggPlanner();
+  debounceSave();
+}
+
+function finishEggPlan() {
+  S.eggPlanner.done = true;
+  S.timestamps.eggPlanEnd = new Date().toISOString();
+  document.getElementById('mtab-eggplan').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Egg Drop Planner', 'Writing', '', '', '', 'Topic: Egg Drop. Help used: ' + Object.keys(S.eggPlanner.helpUsed).length]);
+  addPoints(15);
+  renderEggPlanner();
+  debounceSave();
+}
+
+function renderEggPlanPreview(el) {
+  const plan = S.eggPlanner;
+  const qLabels = ['What is the challenge', 'Materials', 'How it protects', 'Why those materials', 'Prediction'];
+  const qKeys = ['q1','q2','q3','q4','q5'];
+
+  let previewItems = '';
+  qKeys.forEach(function(key, i) {
+    previewItems += '<div class="pp-item"><div class="pp-label">' + qLabels[i] + '</div>' + esc(plan[key] || '(not answered)') + '</div>';
+  });
+
+  el.innerHTML = '<div class="act-label act-plan">&#128161; Egg Drop Plan \u2014 Complete!</div>' +
+    '<div class="celebration"><div class="big-star">&#128161;</div><h2>Your Egg Drop Plan!</h2></div>' +
+    '<div class="plan-preview"><h3>&#128203; Plan Preview</h3>' + previewItems + '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-secondary" onclick="S.eggPlanner.done=false;renderEggPlanner();">&#9998; Edit Plan</button>' +
+    '<button class="btn btn-success" onclick="switchTab(\'eggwrite\')">Start Writing! &#129370;</button></div>';
+}
+
+// ============================================================
+//  TAB 4: EGG DROP WRITING (Dictation-First + Split View)
+// ============================================================
+
+let eggTalkTimer = null;
+let eggTalkStart = null;
+let eggShowSpec = false;
+let planCollapsed = false;
+
+function renderEggWriting() {
+  const el = document.getElementById('card-eggwrite');
+  const w = S.eggWriting;
+  const ci = w.currentSentence;
+
+  if (w.done) {
+    renderEggWritingComplete(el);
+    return;
+  }
+
+  // Plan sidebar content
+  const plan = S.eggPlanner;
+  const planLabels = ['What is the challenge', 'Materials', 'How it protects', 'Why those materials', 'Prediction'];
+  const planKeys = ['q1','q2','q3','q4','q5'];
+
+  let planItems = '';
+  planKeys.forEach(function(key, i) {
+    const val = plan[key];
+    planItems += '<div class="ps-item"><div class="ps-label">' + planLabels[i] + '</div>' +
+      (val ? '<div class="ps-text">' + esc(val) + '</div>' : '<div class="ps-empty">Not yet answered</div>') + '</div>';
+  });
+
+  let planSidebarHTML = '<div class="plan-sidebar"><h3>&#128203; Your Plan</h3>' + planItems + '</div>';
+
+  // Toggle button for mobile
+  let toggleBtnHTML = '<button class="plan-toggle-btn" onclick="togglePlanPanel()">' +
+    (planCollapsed ? '&#128203; Show Plan' : '&#128203; Hide Plan') + '</button>';
+
+  // Sentence navigation
+  const sentLabels = ['Intro', 'How It Works', 'Why', 'Prediction'];
+  let navHTML = '<div class="sentence-nav">';
+  sentLabels.forEach(function(lbl, i) {
+    let cls = 'sentence-nav-btn';
+    if (i === ci) cls += ' sn-active';
+    if (w.sentences[i].done) cls += ' sn-done';
+    const canClick = i <= ci || w.sentences[i].done;
+    navHTML += '<button class="' + cls + '" onclick="' + (canClick ? 'goToEggSentence('+i+')' : '') + '" ' + (canClick ? '' : 'disabled') + '>' + (w.sentences[i].done ? '&#10003; ' : '') + lbl + (i === 3 ? ' (if time)' : '') + '</button>';
+  });
+  navHTML += '</div>';
+
+  const sent = w.sentences[ci];
+  const frame = EGG_SENTENCE_FRAMES[ci];
+  const step = sent.step || 0;
+
+  let stepsHTML = '<div class="step-indicator">' +
+    '<div class="step-pill ' + (step >= 1 ? 'step-done' : step === 0 ? 'step-active' : '') + '"><span class="step-icon">&#128483;&#65039;</span>Tell Me</div>' +
+    '<div class="step-pill ' + (step >= 2 ? 'step-done' : step === 1 ? 'step-active' : '') + '"><span class="step-icon">&#128270;</span>Find It</div>' +
+    '<div class="step-pill ' + (step >= 3 ? 'step-done' : step === 2 ? 'step-active' : '') + '"><span class="step-icon">&#128295;</span>Build It</div>' +
+    '<div class="step-pill ' + (step >= 4 ? 'step-done' : step === 3 ? 'step-active' : '') + '"><span class="step-icon">&#128264;</span>Check</div></div>';
+
+  let contentHTML = '';
+
+  // Map plan key to sentence index
+  const planKeyForSent = ['q1','q3','q4','q5'];
+
+  // STEP 0: TELL ME
+  if (step === 0) {
+    const elapsed = eggTalkStart ? Math.floor((Date.now() - eggTalkStart) / 1000) : 0;
+    const mins = Math.floor(elapsed / 60);
+    const secs = elapsed % 60;
+    const timerStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    const timerClass = elapsed > 30 ? 'talk-timer long' : 'talk-timer';
+
+    const planHint = plan[planKeyForSent[ci]];
+
+    contentHTML = '<div class="dictation-box">' +
+      '<h3 style="margin-bottom:4px;">&#128483;&#65039; Tell me about ' + frame.label.toLowerCase() + '</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">Just talk \u2014 like you\'re telling a friend. Mr. Walker will write down what you say.</p>' +
+      (planHint ? '<div class="kernel-card"><div class="kc-label">Your plan says:</div><div class="kc-text">"' + esc(planHint) + '"</div></div>' : '') +
+      (eggTalkStart ? '<div class="' + timerClass + '" id="eggTalkTimer">' + timerStr + '</div><p style="color:var(--green);font-weight:700;font-size:0.88rem;">Keep going! You\'re doing great! &#129370;</p>' : '<div class="btn-row"><button class="btn btn-gold" onclick="startEggTalk()">&#127908; Start Talking!</button></div>') +
+      '<textarea id="eggDictation" placeholder="Tutor: type what Marcello says here (verbatim)..." oninput="onEggDictation(' + ci + ')">' + esc(sent.dictation || '') + '</textarea>' +
+      (eggTalkStart ? '<div class="btn-row"><button class="btn btn-success" onclick="doneEggTalk(' + ci + ')">Done talking! &#10003;</button></div>' : '') +
+      '</div>';
+  }
+
+  // STEP 1: FIND IT
+  if (step === 1) {
+    contentHTML = '<div class="card" style="border-left:4px solid var(--gold);">' +
+      '<h3 style="margin-bottom:4px;">&#128270; Find the sentence!</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">You said all of this! Now find <strong>ONE sentence</strong> hiding in here.</p>' +
+      '<div class="passage-box" style="background:#FFFDE7;border-color:var(--gold);">' + esc(sent.dictation) + '</div>' +
+      '<div style="margin-top:12px;">' +
+      '<label style="font-weight:700;font-size:0.93rem;display:block;margin-bottom:4px;">&#128161; The key idea I found:</label>' +
+      '<textarea id="eggKernel" style="width:100%;min-height:60px;border:2px solid var(--teal);border-radius:10px;padding:12px;font-family:\'Nunito\',sans-serif;font-size:1rem;font-weight:600;resize:vertical;" placeholder="Type the key idea or sentence you found..." oninput="onEggKernel(' + ci + ')">' + esc(sent.kernel || '') + '</textarea></div>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="eggBackToTell(' + ci + ')">&#8592; More talking</button>' +
+      '<button class="btn btn-success" onclick="eggFoundIt(' + ci + ')" ' + (sent.kernel ? '' : 'disabled') + '>I found it! &#8594;</button></div></div>';
+  }
+
+  // STEP 2: BUILD IT
+  if (step === 2) {
+    let frameHTML = '<div class="sentence-frame"><span class="frame-text">' + esc(frame.prefix) + '</span>';
+    frame.blanks.forEach(function(b, bi) {
+      const val = (sent.blanks && sent.blanks[b.key]) || '';
+      frameHTML += '<span class="frame-blank-wrap"><span class="frame-label">[' + b.label + ']</span><input type="text" id="eggframe-' + ci + '-' + b.key + '" value="' + esc(val) + '" placeholder="' + esc(b.placeholder) + '" oninput="onEggFrameType(' + ci + ',\'' + b.key + '\',this.value)" style="width:' + Math.max(160, b.placeholder.length * 9) + 'px"></span>';
+      if (bi < frame.blanks.length - 1) {
+        frameHTML += '<span class="frame-text">' + esc(frame.connector) + '</span>';
+      }
+    });
+    frameHTML += '<span class="frame-text">' + esc(frame.suffix) + '</span></div>';
+
+    let assembled = frame.prefix;
+    frame.blanks.forEach(function(b, bi) {
+      assembled += (sent.blanks && sent.blanks[b.key]) || '______';
+      if (bi < frame.blanks.length - 1) assembled += frame.connector;
+    });
+    assembled += frame.suffix;
+
+    contentHTML = '<div class="card" style="border-left:4px solid var(--teal);">' +
+      '<h3 style="margin-bottom:4px;">&#128295; Build your sentence!</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:6px;">Fill in each blank. The labels tell you what kind of word goes there.</p>' +
+      '<div class="kernel-card"><div class="kc-label">&#128161; Your key idea</div><div class="kc-text">"' + esc(sent.kernel) + '"</div></div>' +
+      frameHTML +
+      '<div class="word-bank-label">&#129370; Word Bank (tap to use):</div>' +
+      '<div class="word-bank">' +
+      EGG_WORD_BANK.map(function(w) { return '<span class="wb-chip" onclick="insertEggWord(' + ci + ',\'' + w + '\')">' + w + '</span>'; }).join('') +
+      '</div>' +
+      '<div class="word-bank-label" style="margin-top:8px;">&#128279; Connecting Words:</div>' +
+      '<div class="word-bank">' +
+      EGG_CW_BANK.map(function(w) { return '<span class="wb-chip wb-cw" onclick="insertEggWord(' + ci + ',\'' + w + '\')">' + w + '</span>'; }).join('') +
+      '</div>' +
+      '<div class="assembled-label">Your sentence:</div>' +
+      '<div class="assembled-sentence" id="eggassembled-' + ci + '">' + esc(assembled) + '</div>' +
+      '<div style="text-align:center;margin-top:12px;"><button class="help-btn" onclick="toggleEggSpec()">&#129300; Specificity Help</button></div>' +
+      '<div class="specificity-panel ' + (eggShowSpec ? 'show' : '') + '" id="eggSpecPanel">' +
+      SPECIFICITY_PROMPTS.map(function(sp) { return '<div class="specificity-card">' + (sp.trigger ? '"' + sp.trigger + '" \u2192 ' : '') + sp.prompt + '</div>'; }).join('') + '</div>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="eggBackToFind(' + ci + ')">&#8592; Find again</button>' +
+      '<button class="btn btn-success" onclick="eggBuildDone(' + ci + ')">Check it! &#128264;</button></div></div>';
+  }
+
+  // STEP 3: CHECK
+  if (step === 3) {
+    let assembled = frame.prefix;
+    frame.blanks.forEach(function(b, bi) {
+      assembled += (sent.blanks && sent.blanks[b.key]) || '';
+      if (bi < frame.blanks.length - 1) assembled += frame.connector;
+    });
+    assembled += frame.suffix;
+
+    contentHTML = '<div class="card pop-in" style="border-left:4px solid var(--green);">' +
+      '<h3 style="margin-bottom:4px;">&#128264; Check your sentence!</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:12px;">Listen to your sentence. Does it sound like something you would say to a friend?</p>' +
+      '<div class="assembled-sentence" style="font-size:1.15rem;text-align:center;padding:20px;">' + esc(assembled) + '</div>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="speakText(\'' + esc(assembled).replace(/'/g, "\\'") + '\')">&#128264; Read it Back</button></div>' +
+      '<div class="btn-row" style="margin-top:20px;">' +
+      '<button class="btn btn-secondary" onclick="eggFixIt(' + ci + ')">&#9998; Let me fix it</button>' +
+      '<button class="btn btn-success" onclick="eggSentenceDone(' + ci + ')">&#127881; Yes, it\'s good!</button></div></div>';
+  }
+
+  // Essay so far
+  let essaySoFarHTML = '';
+  const doneSentences = w.sentences.filter(function(s) { return s.done && s.assembled; });
+  if (doneSentences.length > 0) {
+    essaySoFarHTML = '<div class="essay-so-far"><h3>&#128220; Your Egg Drop Essay So Far</h3>';
+    doneSentences.forEach(function(s) {
+      essaySoFarHTML += '<div class="esf-sentence">' + esc(s.assembled) + '</div>';
+    });
+    essaySoFarHTML += '</div>';
+  }
+
+  // Build split view
+  let writingContent = '<div class="card">' +
+    '<div class="act-label act-write">&#129370; Egg Drop Essay \u2014 Dictation-First Writing</div>' +
+    '<h2>Sentence ' + (ci + 1) + ': ' + EGG_SENTENCE_FRAMES[ci].label + '</h2>' +
+    '<p class="directions">' + EGG_SENTENCE_FRAMES[ci].prompt + '</p>' +
+    navHTML + stepsHTML + '</div>' +
+    contentHTML + essaySoFarHTML;
+
+  el.innerHTML = toggleBtnHTML +
+    '<div class="split-view">' +
+    '<div class="split-plan' + (planCollapsed ? ' collapsed' : '') + '" id="planSidebar">' + planSidebarHTML + '</div>' +
+    '<div class="split-writing">' + writingContent + '</div></div>';
+}
+
+function togglePlanPanel() {
+  planCollapsed = !planCollapsed;
+  renderEggWriting();
+}
+
+function startEggTalk() {
+  eggTalkStart = Date.now();
+  eggTalkTimer = setInterval(updateEggTimer, 1000);
+  renderEggWriting();
+  setTimeout(function() {
+    const ta = document.getElementById('eggDictation');
+    if (ta) ta.focus();
+  }, 100);
+}
+
+function updateEggTimer() {
+  const el = document.getElementById('eggTalkTimer');
+  if (!el || !eggTalkStart) return;
+  const elapsed = Math.floor((Date.now() - eggTalkStart) / 1000);
+  const mins = Math.floor(elapsed / 60);
+  const secs = elapsed % 60;
+  el.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+  if (elapsed > 30) el.className = 'talk-timer long';
+}
+
+function onEggDictation(ci) {
+  const ta = document.getElementById('eggDictation');
+  if (ta) S.eggWriting.sentences[ci].dictation = ta.value;
+  debounceSave();
+}
+
+function doneEggTalk(ci) {
+  clearInterval(eggTalkTimer);
+  eggTalkTimer = null;
+  const elapsed = eggTalkStart ? Math.floor((Date.now() - eggTalkStart) / 1000) : 0;
+  eggTalkStart = null;
+  S.eggWriting.sentences[ci].step = 1;
+  S.eggWriting.sentences[ci].talkTime = elapsed;
+  addPoints(5);
+  renderEggWriting();
+  debounceSave();
+}
+
+function onEggKernel(ci) {
+  const input = document.getElementById('eggKernel');
+  if (input) S.eggWriting.sentences[ci].kernel = input.value;
+  debounceSave();
+  renderEggWriting();
+  setTimeout(function() {
+    const ki = document.getElementById('eggKernel');
+    if (ki) { ki.focus(); ki.selectionStart = ki.selectionEnd = ki.value.length; }
+  }, 50);
+}
+
+function eggBackToTell(ci) {
+  S.eggWriting.sentences[ci].step = 0;
+  renderEggWriting();
+  debounceSave();
+}
+
+function eggFoundIt(ci) {
+  S.eggWriting.sentences[ci].step = 2;
+  addPoints(5);
+  renderEggWriting();
+  debounceSave();
+}
+
+function eggBackToFind(ci) {
+  S.eggWriting.sentences[ci].step = 1;
+  eggShowSpec = false;
+  renderEggWriting();
+  debounceSave();
+}
+
+function onEggFrameType(ci, blankKey, value) {
+  if (!S.eggWriting.sentences[ci].blanks) S.eggWriting.sentences[ci].blanks = {};
+  S.eggWriting.sentences[ci].blanks[blankKey] = value;
+  const f = EGG_SENTENCE_FRAMES[ci];
+  let assembled = f.prefix;
+  f.blanks.forEach(function(b, bi) {
+    assembled += (S.eggWriting.sentences[ci].blanks[b.key]) || '______';
+    if (bi < f.blanks.length - 1) assembled += f.connector;
+  });
+  assembled += f.suffix;
+  const aEl = document.getElementById('eggassembled-' + ci);
+  if (aEl) aEl.textContent = assembled;
+  debounceSave();
+}
+
+function insertEggWord(ci, word) {
+  const f = EGG_SENTENCE_FRAMES[ci];
+  const blanks = S.eggWriting.sentences[ci].blanks || {};
+  for (const b of f.blanks) {
+    const input = document.getElementById('eggframe-' + ci + '-' + b.key);
+    if (input && document.activeElement === input) {
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const before = input.value.slice(0, start);
+      const after = input.value.slice(end);
+      const spaceBefore = before && !before.endsWith(' ') ? ' ' : '';
+      input.value = before + spaceBefore + word + after;
+      blanks[b.key] = input.value;
+      S.eggWriting.sentences[ci].blanks = blanks;
+      input.focus();
+      input.selectionStart = input.selectionEnd = start + spaceBefore.length + word.length;
+      onEggFrameType(ci, b.key, input.value);
+      toast('"' + word + '" added!');
+      return;
+    }
+  }
+  for (const b of f.blanks) {
+    if (!blanks[b.key] || !blanks[b.key].trim()) {
+      blanks[b.key] = word;
+      S.eggWriting.sentences[ci].blanks = blanks;
+      const input = document.getElementById('eggframe-' + ci + '-' + b.key);
+      if (input) input.value = word;
+      onEggFrameType(ci, b.key, word);
+      toast('"' + word + '" added!');
+      return;
+    }
+  }
+  toast('All blanks filled!', true);
+}
+
+function toggleEggSpec() {
+  eggShowSpec = !eggShowSpec;
+  const panel = document.getElementById('eggSpecPanel');
+  if (panel) panel.classList.toggle('show', eggShowSpec);
+}
+
+function eggBuildDone(ci) {
+  const f = EGG_SENTENCE_FRAMES[ci];
+  let assembled = f.prefix;
+  f.blanks.forEach(function(b, bi) {
+    assembled += (S.eggWriting.sentences[ci].blanks && S.eggWriting.sentences[ci].blanks[b.key]) || '';
+    if (bi < f.blanks.length - 1) assembled += f.connector;
+  });
+  assembled += f.suffix;
+  S.eggWriting.sentences[ci].assembled = assembled;
+  S.eggWriting.sentences[ci].step = 3;
+  speakText(assembled);
+  eggShowSpec = false;
+  renderEggWriting();
+  debounceSave();
+}
+
+function eggFixIt(ci) {
+  S.eggWriting.sentences[ci].step = 2;
+  renderEggWriting();
+  debounceSave();
+}
+
+function eggSentenceDone(ci) {
+  S.eggWriting.sentences[ci].done = true;
+  S.timestamps['eggSentence' + (ci+1) + 'End'] = new Date().toISOString();
+  addPoints(15);
+  fireCelebration();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Egg Drop Sentence ' + (ci+1), 'Writing', '', '', '', S.eggWriting.sentences[ci].assembled]);
+
+  if (ci < 3) {
+    S.eggWriting.currentSentence = ci + 1;
+    toast('Sentence ' + (ci+1) + ' done! On to the next! &#129370;');
+  } else {
+    S.eggWriting.done = true;
+    S.timestamps.eggWritingEnd = new Date().toISOString();
+    document.getElementById('mtab-eggwrite').classList.add('done');
+    toast('All 4 sentences done! Your egg drop essay is complete! &#127881;');
+  }
+  renderEggWriting();
+  debounceSave();
+}
+
+function goToEggSentence(i) {
+  S.eggWriting.currentSentence = i;
+  if (!S.eggWriting.sentences[i].done && S.eggWriting.sentences[i].step === 0) {
+    clearInterval(eggTalkTimer);
+    eggTalkTimer = null;
+    eggTalkStart = null;
+  }
+  renderEggWriting();
+}
+
+function renderEggWritingComplete(el) {
+  const w = S.eggWriting;
+  const sentences = w.sentences.filter(function(s) { return s.done && s.assembled; }).map(function(s) { return s.assembled; });
+  const essayText = sentences.join(' ');
+  const wordCount = essayText.split(/\s+/).filter(function(w) { return w; }).length;
+  let cwCount = 0;
+  const allCW = EGG_CW_BANK;
+  for (const cw of allCW) {
+    const regex = new RegExp('\\b' + cw + '\\b', 'gi');
+    const matches = essayText.match(regex);
+    if (matches) cwCount += matches.length;
+  }
+
+  let essayHTML = '';
+  sentences.forEach(function(s) {
+    let html = esc(s);
+    for (const cw of allCW) {
+      const regex = new RegExp('\\b(' + cw + ')\\b', 'gi');
+      html = html.replace(regex, function(m) { return '<span class="cw">' + m + '</span>'; });
+    }
+    essayHTML += html + ' ';
+  });
+
+  el.innerHTML = '<div class="card">' +
+    '<div class="celebration">' +
+    '<div class="big-star">&#129370;&#127881;&#129370;</div>' +
+    '<h2>Your Egg Drop Essay!</h2>' +
+    '<p>You wrote ' + sentences.length + ' amazing sentences!</p>' +
+    '<div class="stats-row">' +
+    '<div class="stat-box"><div class="num">' + wordCount + '</div><div class="lbl">Words</div></div>' +
+    '<div class="stat-box"><div class="num">' + sentences.length + '</div><div class="lbl">Sentences</div></div>' +
+    '<div class="stat-box"><div class="num">' + cwCount + '</div><div class="lbl">Connecting Words</div></div></div></div>' +
+    '<div class="essay-preview">' + essayHTML + '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-primary" onclick="speakText(\'' + esc(essayText).replace(/'/g, "\\'") + '\')">&#128264; Read My Essay!</button>' +
+    '<button class="btn btn-success" onclick="switchTab(\'dashboard\')">Dashboard &#128202;</button></div></div>';
+}
+
+// ============================================================
+//  TAB 5: DASHBOARD
+// ============================================================
+
+function renderDashboard() {
+  const el = document.getElementById('card-dashboard');
+
+  // Reading stats
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(function(r) { return r && r.firstCorrect; }).length : 0;
+  const wordsTotal = ws.results ? ws.results.length : 0;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+  const ttCorrect = S.reading.thinkThings.answers ? S.reading.thinkThings.answers.filter(function(a, i) { return THINK_THINGS_QUIZ[i] && a === THINK_THINGS_QUIZ[i].answer; }).length : 0;
+
+  // Essay 5
+  const e5Done = S.essay5.done;
+  let e5FullEssay = '';
+  let e5WordCount = 0;
+  if (e5Done) {
+    const allE5 = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]);
+    e5FullEssay = allE5.join(' ');
+    e5WordCount = e5FullEssay.split(/\s+/).filter(function(w) { return w; }).length;
+  }
+
+  // Egg plan
+  const eggPlanFields = ['q1','q2','q3','q4','q5'].filter(function(k) { return S.eggPlanner[k]; }).length;
+
+  // Egg writing
+  const eggSentDone = S.eggWriting.sentences.filter(function(s) { return s.done; }).length;
+  const eggSentences = S.eggWriting.sentences.filter(function(s) { return s.done && s.assembled; }).map(function(s) { return s.assembled; });
+  const eggEssayText = eggSentences.join(' ');
+  const eggWordCount = eggEssayText ? eggEssayText.split(/\s+/).filter(function(w) { return w; }).length : 0;
+  let eggCwCount = 0;
+  if (eggEssayText) {
+    for (const cw of EGG_CW_BANK) {
+      const regex = new RegExp('\\b' + cw + '\\b', 'gi');
+      const matches = eggEssayText.match(regex);
+      if (matches) eggCwCount += matches.length;
+    }
+  }
+
+  const report = generateReport();
+
+  // Essay 5 so far
+  let e5SoFarHTML = '';
+  if (e5Done) {
+    const allE5 = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]);
+    e5SoFarHTML = '<div class="essay-so-far"><h3>&#128220; Complete Recess Essay</h3>';
+    allE5.forEach(function(s) { e5SoFarHTML += '<div class="esf-sentence">' + esc(s) + '</div>'; });
+    e5SoFarHTML += '</div>';
+  }
+
+  // Egg essay so far
+  let eggSoFarHTML = '';
+  if (eggSentences.length > 0) {
+    eggSoFarHTML = '<div class="essay-so-far"><h3>&#129370; Egg Drop Essay</h3>';
+    eggSentences.forEach(function(s) { eggSoFarHTML += '<div class="esf-sentence">' + esc(s) + '</div>'; });
+    eggSoFarHTML += '</div>';
+  }
+
+  el.innerHTML = '<div class="act-label act-dash">&#128202; Session Dashboard</div>' +
+    '<h2>Session Summary \u2014 March 30</h2>' +
+
+    '<div class="dash-section"><h3>&#128214; Reading Skills</h3>' +
+    '<div class="dash-grid">' +
+    '<div class="dash-stat"><div class="ds-val">' + wordsCorrect + '/' + (wordsTotal || IRREGULAR_WORDS.length) + '</div><div class="ds-label">Word Mapping</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + prosodyAvg + '</div><div class="ds-label">Prosody Avg (1-4)</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + ttCorrect + '/' + THINK_THINGS_QUIZ.length + '</div><div class="ds-label">Think/Things</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + S.points + '</div><div class="ds-label">Total Points</div></div></div></div>' +
+
+    '<div class="dash-section"><h3>&#9999;&#65039; Essay 5 (Recess Opinion)</h3>' +
+    '<div class="dash-grid">' +
+    '<div class="dash-stat"><div class="ds-val">' + (e5Done ? '&#10003;' : '--') + '</div><div class="ds-label">Conclusion Written</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + (e5Done ? e5WordCount : '--') + '</div><div class="ds-label">Full Essay Words</div></div></div></div>' +
+    e5SoFarHTML +
+
+    '<div class="dash-section"><h3>&#128161; Egg Drop Plan</h3>' +
+    '<div class="dash-grid">' +
+    '<div class="dash-stat"><div class="ds-val">' + eggPlanFields + '/5</div><div class="ds-label">Questions Answered</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + (S.eggPlanner.done ? '&#10003;' : '--') + '</div><div class="ds-label">Plan Complete</div></div></div></div>' +
+
+    '<div class="dash-section"><h3>&#129370; Egg Drop Writing</h3>' +
+    '<div class="dash-grid">' +
+    '<div class="dash-stat"><div class="ds-val">' + eggSentDone + '/4</div><div class="ds-label">Sentences Done</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + eggWordCount + '</div><div class="ds-label">Words Written</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + eggCwCount + '</div><div class="ds-label">Connecting Words</div></div>' +
+    '<div class="dash-stat"><div class="ds-val">' + (S.eggWriting.done ? '&#10003;' : '--') + '</div><div class="ds-label">All Done</div></div></div></div>' +
+    eggSoFarHTML +
+
+    '<div class="dash-section"><h3>&#128203; Parent Report</h3>' +
+    '<div class="report-box" id="reportBox">' + esc(report) + '</div>' +
+    '<div class="btn-row"><button class="btn btn-sm btn-primary" onclick="copyReport()">&#128203; Copy Report</button></div></div>' +
+
+    '<div class="dash-section"><h3>&#128190; Data Export</h3>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-sm btn-purple" id="sheetsSaveBtn" onclick="saveAllToSheets()">&#128202; Save to Google Sheets</button>' +
+    '<button class="btn btn-sm btn-orange" onclick="downloadJSON()">&#128229; Download JSON</button></div></div>' +
+
+    '<div class="dash-section"><h3>&#128736;&#65039; Session Management</h3>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-sm btn-red" onclick="if(confirm(\'Clear all session data? This cannot be undone!\')){localStorage.removeItem(STORAGE_KEY);location.reload();}">&#128465; Reset Session</button></div></div>';
+}
+
+function generateReport() {
+  const ws = S.reading.words;
+  const wordsCorrect = ws.results ? ws.results.filter(function(r) { return r && r.firstCorrect; }).length : 0;
+  const total = ws.results ? ws.results.length : IRREGULAR_WORDS.length;
+  const p = S.reading.passage.prosody;
+  const prosodyAvg = (p.expression + p.phrasing + p.pace + p.smoothness) ? ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1) : '--';
+  const ttCorrect = S.reading.thinkThings.answers ? S.reading.thinkThings.answers.filter(function(a, i) { return THINK_THINGS_QUIZ[i] && a === THINK_THINGS_QUIZ[i].answer; }).length : 0;
+
+  const eggPlanFields = ['q1','q2','q3','q4','q5'].filter(function(k) { return S.eggPlanner[k]; }).length;
+  const eggSentDone = S.eggWriting.sentences.filter(function(s) { return s.done; }).length;
+  const eggSentences = S.eggWriting.sentences.filter(function(s) { return s.done && s.assembled; }).map(function(s) { return s.assembled; });
+  const eggEssayText = eggSentences.join(' ');
+  const eggWordCount = eggEssayText ? eggEssayText.split(/\s+/).filter(function(w) { return w; }).length : 0;
+
+  let e5Info = '';
+  if (S.essay5.done) {
+    const allE5 = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]);
+    const e5Text = allE5.join(' ');
+    const e5WC = e5Text.split(/\s+/).filter(function(w) { return w; }).length;
+    e5Info = '\nESSAY 5 COMPLETE (Recess Opinion):\n' +
+      '- Total sentences: ' + allE5.length + '\n' +
+      '- Word count: ' + e5WC + '\n' +
+      '- This is Marcello\'s FIRST complete opinion essay from scratch!\n' +
+      '- Conclusion: "' + S.essay5.conclusion.assembled + '"\n';
+  } else {
+    e5Info = '\nESSAY 5 (Recess Opinion):\n- Conclusion: Not yet written\n';
+  }
+
+  let eggSentenceList = '';
+  eggSentences.forEach(function(s, i) {
+    eggSentenceList += '\n  ' + (i+1) + '. "' + s + '"';
+  });
+
+  return "MARCELLO'S TUTORING SESSION - March 30, 2026\n" +
+    "=============================================\n\n" +
+    "READING SKILLS:\n" +
+    "- Word Mapping (new approach): " + wordsCorrect + "/" + total + " correct on first try (" + (total ? Math.round(wordsCorrect/total*100) : 0) + "%)\n" +
+    "  Review: through, league, foreign | New: straight, doubt, built\n" +
+    (ws.results && ws.results.filter(function(r) { return r && !r.firstCorrect; }).length ? "  Needed tricky part: " + ws.results.filter(function(r) { return r && !r.firstCorrect; }).map(function(r) { return r.word; }).join(", ") + "\n" : "") +
+    "- Think vs Things Quick Check: " + ttCorrect + "/" + THINK_THINGS_QUIZ.length + " correct\n" +
+    "- Prosody (egg drop passage): " + prosodyAvg + "/4 average\n" +
+    "  Expression: " + p.expression + "/4, Phrasing: " + p.phrasing + "/4, Pace: " + p.pace + "/4, Smoothness: " + p.smoothness + "/4\n" +
+    e5Info +
+    "\nEGG DROP PLAN (Explanatory Essay):\n" +
+    "- Plan questions answered: " + eggPlanFields + "/5\n" +
+    "- Help button used: " + Object.keys(S.eggPlanner.helpUsed).length + " times\n" +
+    "- Plan complete: " + (S.eggPlanner.done ? "YES" : "Not yet") + "\n" +
+    "\nEGG DROP WRITING (Dictation-First + Split-View):\n" +
+    "- Sentences completed: " + eggSentDone + "/4" + eggSentenceList + "\n" +
+    "- Total words: " + eggWordCount + "\n" +
+    "- Writing complete: " + (S.eggWriting.done ? "YES" : "Not yet") + "\n" +
+    "\nNEW THIS SESSION:\n" +
+    "- Word Mapping: New approach to irregular words. Shows tricky part\n" +
+    "  highlighted in color with sound explanation, then re-read.\n" +
+    "- Split-View Writing: Plan visible alongside writing area so Marcello\n" +
+    "  can reference his plan while composing sentences.\n" +
+    "- Essay 5 completion: First full opinion essay from scratch (if done)\n" +
+    "- Explanatory writing: Egg drop is first non-opinion essay topic\n" +
+    "\nTOTAL POINTS: " + S.points;
+}
+
+function copyReport() {
+  const box = document.getElementById('reportBox');
+  const text = box.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    toast('Report copied to clipboard!');
+  }).catch(function() {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Report copied!');
+  });
+}
+
+function saveAllToSheets() {
+  const btn = document.getElementById('sheetsSaveBtn');
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Full Session Save', 'Dashboard', S.points, '', '', 'Manual save from dashboard']);
+  saveStateToCloud();
+  setTimeout(function() {
+    btn.textContent = 'Saved!';
+    toast('Data saved to Google Sheets!');
+    setTimeout(function() { btn.innerHTML = '&#128202; Save to Google Sheets'; btn.disabled = false; }, 2000);
+  }, 1500);
+}
+
+function downloadJSON() {
+  const data = JSON.stringify(S, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'marcello_mar30_session.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('JSON downloaded!');
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+
+async function init() {
+  const localLoaded = loadFromLocalStorage();
+
+  if (localLoaded) {
+    restoreTabStates();
+    renderReading();
+    return;
+  }
+
+  // Try cloud restore for THIS session
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState) {
+    S = cloudState;
+    restoreTabStates();
+    renderReading();
+    toast('Session restored from cloud!');
+    return;
+  }
+
+  // Try loading previous session data (Essay 5 plan + first 3 sentences)
+  const prevState = await loadStateFromCloud(PREV_CLOUD_KEY);
+  if (prevState) {
+    // Extract plan answers
+    if (prevState.planner) {
+      S.prevEssay.plan = {
+        opinion: prevState.planner.opinion || S.prevEssay.plan.opinion,
+        reason1: prevState.planner.reason1 || S.prevEssay.plan.reason1,
+        reason2: prevState.planner.reason2 || S.prevEssay.plan.reason2,
+        disagree: prevState.planner.disagree || S.prevEssay.plan.disagree,
+        conclusion: prevState.planner.conclusion || S.prevEssay.plan.conclusion
+      };
+    }
+    // Extract first 3 completed sentences
+    if (prevState.writing && prevState.writing.sentences) {
+      const prevSentences = prevState.writing.sentences.filter(function(s) { return s.done && s.assembled; }).map(function(s) { return s.assembled; });
+      if (prevSentences.length >= 3) {
+        S.prevEssay.sentences = prevSentences.slice(0, 3);
+      } else if (prevSentences.length > 0) {
+        S.prevEssay.sentences = prevSentences;
+      }
+    }
+    toast('Previous session data loaded!');
+  }
+
+  renderReading();
+  saveToLocalStorage();
+}
+
+function restoreTabStates() {
+  // Restore tab done states
+  if (S.reading && S.reading.passage && S.reading.passage.done) document.getElementById('mtab-reading').classList.add('done');
+  if (S.essay5 && S.essay5.done) document.getElementById('mtab-essay5').classList.add('done');
+  if (S.eggPlanner && S.eggPlanner.done) document.getElementById('mtab-eggplan').classList.add('done');
+  if (S.eggWriting && S.eggWriting.done) document.getElementById('mtab-eggwrite').classList.add('done');
+  // Restore reading phase
+  if (S.reading.words.done && !S.reading.thinkThings.done) readingPhase = 'thinkThings';
+  else if (S.reading.words.done && S.reading.thinkThings.done && !S.reading.passage.done) readingPhase = 'passage';
+  else if (S.reading.passage && S.reading.passage.done) readingPhase = 'done';
+}
+
+// Auto-save safety nets
+setInterval(saveToLocalStorage, 15000);
+setInterval(saveStateToCloud, 30000);
+window.addEventListener('beforeunload', function() { saveToLocalStorage(); saveStateToCloud(); });
+
+init();
+</script>
+</body>
+</html>
