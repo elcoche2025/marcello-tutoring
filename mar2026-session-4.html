@@ -1031,13 +1031,31 @@ function loadStateFromCloud(key) {
   });
 }
 
+let speechUnlocked = false;
+function unlockSpeech() {
+  if (speechUnlocked || !('speechSynthesis' in window)) return;
+  const dummy = new SpeechSynthesisUtterance('');
+  dummy.volume = 0;
+  window.speechSynthesis.speak(dummy);
+  speechUnlocked = true;
+}
+document.addEventListener('touchstart', unlockSpeech, { once: true });
+document.addEventListener('click', unlockSpeech, { once: true });
+
 function speakText(text) {
-  if (!('speechSynthesis' in window)) { toast('Speech not available', true); return; }
+  if (!('speechSynthesis' in window)) { toast('Speech not available on this device', true); return; }
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.9;
-  u.pitch = 1;
-  window.speechSynthesis.speak(u);
+  // Small delay after cancel to let Safari reset
+  setTimeout(function() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.9;
+    u.pitch = 1;
+    u.onerror = function(e) {
+      console.warn('Speech error:', e);
+      toast('Speech error — try tapping Read again', true);
+    };
+    window.speechSynthesis.speak(u);
+  }, 100);
 }
 
 function fireCelebration() {
@@ -1503,11 +1521,6 @@ function onEssay5Kernel() {
   const input = document.getElementById('essay5Kernel');
   if (input) S.essay5.conclusion.kernel = input.value;
   debounceSave();
-  renderEssay5();
-  setTimeout(function() {
-    const ki = document.getElementById('essay5Kernel');
-    if (ki) { ki.focus(); ki.selectionStart = ki.selectionEnd = ki.value.length; }
-  }, 50);
 }
 
 function essay5BackToTell() {
@@ -1951,11 +1964,6 @@ function onEggKernel(ci) {
   const input = document.getElementById('eggKernel');
   if (input) S.eggWriting.sentences[ci].kernel = input.value;
   debounceSave();
-  renderEggWriting();
-  setTimeout(function() {
-    const ki = document.getElementById('eggKernel');
-    if (ki) { ki.focus(); ki.selectionStart = ki.selectionEnd = ki.value.length; }
-  }, 50);
 }
 
 function eggBackToTell(ci) {
