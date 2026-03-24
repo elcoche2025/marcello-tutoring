@@ -724,6 +724,58 @@
     .container.wide { max-width: 720px; }
   }
 
+  /* Stars & a Wish */
+  .saw-section { margin: 16px 0; }
+  .saw-sentence {
+    background: white;
+    border: 2px solid #E0E0E0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+    transition: border-color 0.3s;
+  }
+  .saw-sentence.saw-starred { border-color: var(--gold); background: var(--gold-light); }
+  .saw-sentence.saw-wished { border-color: var(--orange); background: var(--orange-light); }
+  .saw-sentence .saw-text { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+  .saw-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .saw-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    font-family: 'Nunito', sans-serif;
+    transition: all 0.2s;
+  }
+  .saw-btn-star { background: var(--gold-light); border-color: var(--gold); color: #7B6400; }
+  .saw-btn-star:hover { background: var(--gold); color: white; }
+  .saw-btn-star.active { background: var(--gold); color: white; }
+  .saw-btn-wish { background: var(--orange-light); border-color: var(--orange); color: #7B4100; }
+  .saw-btn-wish:hover { background: var(--orange); color: white; }
+  .saw-btn-wish.active { background: var(--orange); color: white; }
+  .saw-wish-fix {
+    margin-top: 10px;
+    padding: 12px;
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+  }
+  .saw-wish-fix textarea {
+    width: 100%;
+    min-height: 50px;
+    border: 2px solid #FFB74D;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    resize: vertical;
+    margin-top: 6px;
+  }
+  .saw-summary { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 16px; margin-top: 12px; }
+
   /* Essay complete celebration */
   .essay-complete-banner {
     background: linear-gradient(135deg, #FFD54F, #FFB300);
@@ -818,6 +870,10 @@ let S = {
     currentSentence: 0,
     done: false
   },
+  starsAndWish: {
+    essay5: { stars: [], wish: '', wishFix: '', done: false },
+    eggDrop: { stars: [], wish: '', wishFix: '', done: false }
+  },
   prevEssay: {
     sentences: [
       'I think schools should have longer recess because it helps kids focus in class.',
@@ -841,12 +897,18 @@ let S = {
 // ============================================================
 
 const IRREGULAR_WORDS = [
-  { word: 'through', tricky: 'ough', sound: '/oo/', review: true },
-  { word: 'league', tricky: 'eague', sound: '/eeg/', review: true },
-  { word: 'foreign', tricky: 'eign', sound: '/in/', review: true },
-  { word: 'straight', tricky: 'aigh', sound: '/ay/', review: false },
-  { word: 'doubt', tricky: 'b', sound: '(silent)', review: false },
-  { word: 'built', tricky: 'ui', sound: '/ih/', review: false }
+  // Review from Mar 8/9 — persistent misses
+  { word: 'through', tricky: 'ough', sound: '/oo/', review: true, since: 'Mar 8' },
+  { word: 'league', tricky: 'eague', sound: '/eeg/', review: true, since: 'Mar 8' },
+  { word: 'foreign', tricky: 'eign', sound: '/in/', review: true, since: 'Mar 8' },
+  // Review from Mar 16 — got correct as new, now reinforcing
+  { word: 'enough', tricky: 'ough', sound: '/uf/', review: true, since: 'Mar 16' },
+  { word: 'island', tricky: 's', sound: '(silent)', review: true, since: 'Mar 16' },
+  { word: 'caught', tricky: 'augh', sound: '/aw/', review: true, since: 'Mar 16' },
+  // New for Mar 30
+  { word: 'science', tricky: 'sc', sound: '/s/', review: false },
+  { word: 'weight', tricky: 'eigh', sound: '/ay/', review: false },
+  { word: 'guard', tricky: 'u', sound: '(silent)', review: false }
 ];
 
 const THINK_THINGS_QUIZ = [
@@ -1598,6 +1660,7 @@ function renderEssay5Complete(el) {
   const allSentences = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]);
   const fullEssay = allSentences.join(' ');
   const wordCount = fullEssay.split(/\s+/).filter(function(w) { return w; }).length;
+  const saw = S.starsAndWish.essay5;
 
   let essayHTML = '';
   allSentences.forEach(function(s) {
@@ -1609,6 +1672,46 @@ function renderEssay5Complete(el) {
     }
     essayHTML += html + ' ';
   });
+
+  // Stars & a Wish section
+  let sawHTML = '';
+  if (saw.done) {
+    const starredSentences = saw.stars.map(function(i) { return allSentences[i]; });
+    sawHTML = '<div class="saw-summary">' +
+      '<h3 style="margin-bottom:8px;">&#11088; Stars & a Wish — Done!</h3>' +
+      '<p style="font-size:0.9rem;margin-bottom:6px;"><strong>Stars:</strong> ' + starredSentences.map(function(s) { return '"' + esc(s).substring(0,40) + '..."'; }).join(', ') + '</p>' +
+      (saw.wish ? '<p style="font-size:0.9rem;margin-bottom:6px;"><strong>Wish:</strong> "' + esc(allSentences[parseInt(saw.wish)]).substring(0,40) + '..."</p>' : '') +
+      (saw.wishFix ? '<p style="font-size:0.9rem;"><strong>Improved:</strong> "' + esc(saw.wishFix) + '"</p>' : '') +
+      '</div>';
+  } else {
+    sawHTML = '<div class="saw-section"><div class="card">' +
+      '<h3 style="margin-bottom:4px;">&#11088; Stars & a Wish</h3>' +
+      '<p style="color:var(--muted);font-size:0.88rem;margin-bottom:12px;">Let\'s look at your sentences! Tap &#11088; for sentences you\'re proud of. Tap &#128161; for one you\'d like to make even better.</p>';
+    allSentences.forEach(function(s, i) {
+      const isStarred = saw.stars.indexOf(i) >= 0;
+      const isWished = saw.wish === String(i);
+      const cls = isStarred ? 'saw-sentence saw-starred' : (isWished ? 'saw-sentence saw-wished' : 'saw-sentence');
+      sawHTML += '<div class="' + cls + '">' +
+        '<div class="saw-text">' + esc(s) + '</div>' +
+        '<div class="saw-btns">' +
+        '<button class="saw-btn saw-btn-star' + (isStarred ? ' active' : '') + '" onclick="toggleEssay5Star(' + i + ')">&#11088; Star!</button>' +
+        '<button class="saw-btn saw-btn-wish' + (isWished ? ' active' : '') + '" onclick="setEssay5Wish(' + i + ')">&#128161; Wish</button>' +
+        '</div></div>';
+    });
+    // Show wish fix area if a wish is selected
+    if (saw.wish !== '' && saw.wish !== undefined) {
+      const wishIdx = parseInt(saw.wish);
+      sawHTML += '<div class="saw-wish-fix">' +
+        '<strong style="color:var(--orange);">&#128161; Your wish:</strong> How could this sentence be even better?' +
+        '<div style="background:white;padding:8px;border-radius:8px;margin:6px 0;font-size:0.9rem;color:var(--muted);">"' + esc(allSentences[wishIdx]) + '"</div>' +
+        '<textarea id="essay5WishFix" placeholder="Try writing an improved version..." oninput="onEssay5WishFix()">' + esc(saw.wishFix || '') + '</textarea>' +
+        '</div>';
+    }
+    const hasStars = saw.stars.length > 0;
+    sawHTML += '<div class="btn-row" style="margin-top:12px;">' +
+      '<button class="btn btn-success" onclick="finishEssay5SAW()" ' + (hasStars ? '' : 'disabled') + '>Done with Stars & Wish! &#10003;</button></div>';
+    sawHTML += '</div></div>';
+  }
 
   el.innerHTML = '<div class="essay-complete-banner">' +
     '<div style="font-size:3rem;margin-bottom:8px;">&#127881;&#129370;&#127881;</div>' +
@@ -1622,8 +1725,43 @@ function renderEssay5Complete(el) {
     '<div class="stat-box"><div class="num">&#10003;</div><div class="lbl">Complete!</div></div></div></div>' +
     '<div class="essay-preview">' + essayHTML + '</div>' +
     '<div class="btn-row">' +
-    '<button class="btn btn-primary" onclick="speakText(\'' + esc(fullEssay).replace(/'/g, "\\'") + '\')">&#128264; Read My Essay!</button>' +
-    '<button class="btn btn-success" onclick="switchTab(\'eggplan\')">Next: Egg Drop Plan! &#128161;</button></div></div>';
+    '<button class="btn btn-primary" onclick="speakText(\'' + esc(fullEssay).replace(/'/g, "\\'") + '\')">&#128264; Read My Essay!</button></div></div>' +
+    sawHTML +
+    '<div class="btn-row" style="margin-top:12px;"><button class="btn btn-success" onclick="switchTab(\'eggplan\')">Next: Egg Drop Plan! &#128161;</button></div>';
+}
+
+function toggleEssay5Star(i) {
+  const saw = S.starsAndWish.essay5;
+  const idx = saw.stars.indexOf(i);
+  if (idx >= 0) { saw.stars.splice(idx, 1); }
+  else { saw.stars.push(i); }
+  debounceSave();
+  renderEssay5();
+}
+
+function setEssay5Wish(i) {
+  const saw = S.starsAndWish.essay5;
+  saw.wish = (saw.wish === String(i)) ? '' : String(i);
+  saw.wishFix = '';
+  debounceSave();
+  renderEssay5();
+}
+
+function onEssay5WishFix() {
+  const ta = document.getElementById('essay5WishFix');
+  if (ta) S.starsAndWish.essay5.wishFix = ta.value;
+  debounceSave();
+}
+
+function finishEssay5SAW() {
+  S.starsAndWish.essay5.done = true;
+  addPoints(10);
+  toast('Stars & a Wish complete! Great revision work!');
+  const saw = S.starsAndWish.essay5;
+  const allSentences = S.prevEssay.sentences.concat([S.essay5.conclusion.assembled]);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Stars & a Wish - Essay 5', 'Writing', saw.stars.length, 1, '', 'Stars: ' + saw.stars.map(function(i) { return (i+1); }).join(',') + ' | Wish: ' + (saw.wish !== '' ? 'S' + (parseInt(saw.wish)+1) : 'none') + ' | Fix: ' + (saw.wishFix || 'none')]);
+  renderEssay5();
+  debounceSave();
 }
 
 // ============================================================
@@ -2117,6 +2255,46 @@ function renderEggWritingComplete(el) {
     essayHTML += html + ' ';
   });
 
+  // Stars & a Wish for egg drop essay
+  const saw = S.starsAndWish.eggDrop;
+  let sawHTML = '';
+  if (saw.done) {
+    const starredSentences = saw.stars.map(function(i) { return sentences[i]; });
+    sawHTML = '<div class="saw-summary">' +
+      '<h3 style="margin-bottom:8px;">&#11088; Stars & a Wish — Done!</h3>' +
+      '<p style="font-size:0.9rem;margin-bottom:6px;"><strong>Stars:</strong> ' + starredSentences.map(function(s) { return '"' + esc(s).substring(0,40) + '..."'; }).join(', ') + '</p>' +
+      (saw.wish !== '' ? '<p style="font-size:0.9rem;margin-bottom:6px;"><strong>Wish:</strong> "' + esc(sentences[parseInt(saw.wish)]).substring(0,40) + '..."</p>' : '') +
+      (saw.wishFix ? '<p style="font-size:0.9rem;"><strong>Improved:</strong> "' + esc(saw.wishFix) + '"</p>' : '') +
+      '</div>';
+  } else if (sentences.length >= 2) {
+    sawHTML = '<div class="saw-section"><div class="card">' +
+      '<h3 style="margin-bottom:4px;">&#11088; Stars & a Wish</h3>' +
+      '<p style="color:var(--muted);font-size:0.88rem;margin-bottom:12px;">Let\'s look at your sentences! Tap &#11088; for sentences you\'re proud of. Tap &#128161; for one you\'d like to make even better.</p>';
+    sentences.forEach(function(s, i) {
+      const isStarred = saw.stars.indexOf(i) >= 0;
+      const isWished = saw.wish === String(i);
+      const cls = isStarred ? 'saw-sentence saw-starred' : (isWished ? 'saw-sentence saw-wished' : 'saw-sentence');
+      sawHTML += '<div class="' + cls + '">' +
+        '<div class="saw-text">' + esc(s) + '</div>' +
+        '<div class="saw-btns">' +
+        '<button class="saw-btn saw-btn-star' + (isStarred ? ' active' : '') + '" onclick="toggleEggStar(' + i + ')">&#11088; Star!</button>' +
+        '<button class="saw-btn saw-btn-wish' + (isWished ? ' active' : '') + '" onclick="setEggWish(' + i + ')">&#128161; Wish</button>' +
+        '</div></div>';
+    });
+    if (saw.wish !== '' && saw.wish !== undefined) {
+      const wishIdx = parseInt(saw.wish);
+      sawHTML += '<div class="saw-wish-fix">' +
+        '<strong style="color:var(--orange);">&#128161; Your wish:</strong> How could this sentence be even better?' +
+        '<div style="background:white;padding:8px;border-radius:8px;margin:6px 0;font-size:0.9rem;color:var(--muted);">"' + esc(sentences[wishIdx]) + '"</div>' +
+        '<textarea id="eggWishFix" placeholder="Try writing an improved version..." oninput="onEggWishFix()">' + esc(saw.wishFix || '') + '</textarea>' +
+        '</div>';
+    }
+    const hasStars = saw.stars.length > 0;
+    sawHTML += '<div class="btn-row" style="margin-top:12px;">' +
+      '<button class="btn btn-success" onclick="finishEggSAW()" ' + (hasStars ? '' : 'disabled') + '>Done with Stars & Wish! &#10003;</button></div>';
+    sawHTML += '</div></div>';
+  }
+
   el.innerHTML = '<div class="card">' +
     '<div class="celebration">' +
     '<div class="big-star">&#129370;&#127881;&#129370;</div>' +
@@ -2128,8 +2306,43 @@ function renderEggWritingComplete(el) {
     '<div class="stat-box"><div class="num">' + cwCount + '</div><div class="lbl">Connecting Words</div></div></div></div>' +
     '<div class="essay-preview">' + essayHTML + '</div>' +
     '<div class="btn-row">' +
-    '<button class="btn btn-primary" onclick="speakText(\'' + esc(essayText).replace(/'/g, "\\'") + '\')">&#128264; Read My Essay!</button>' +
-    '<button class="btn btn-success" onclick="switchTab(\'dashboard\')">Dashboard &#128202;</button></div></div>';
+    '<button class="btn btn-primary" onclick="speakText(\'' + esc(essayText).replace(/'/g, "\\'") + '\')">&#128264; Read My Essay!</button></div></div>' +
+    sawHTML +
+    '<div class="btn-row" style="margin-top:12px;"><button class="btn btn-success" onclick="switchTab(\'dashboard\')">Dashboard &#128202;</button></div>';
+}
+
+function toggleEggStar(i) {
+  const saw = S.starsAndWish.eggDrop;
+  const idx = saw.stars.indexOf(i);
+  if (idx >= 0) { saw.stars.splice(idx, 1); }
+  else { saw.stars.push(i); }
+  debounceSave();
+  renderEggWriting();
+}
+
+function setEggWish(i) {
+  const saw = S.starsAndWish.eggDrop;
+  saw.wish = (saw.wish === String(i)) ? '' : String(i);
+  saw.wishFix = '';
+  debounceSave();
+  renderEggWriting();
+}
+
+function onEggWishFix() {
+  const ta = document.getElementById('eggWishFix');
+  if (ta) S.starsAndWish.eggDrop.wishFix = ta.value;
+  debounceSave();
+}
+
+function finishEggSAW() {
+  S.starsAndWish.eggDrop.done = true;
+  addPoints(10);
+  toast('Stars & a Wish complete! Great revision thinking!');
+  const saw = S.starsAndWish.eggDrop;
+  const sentences = S.eggWriting.sentences.filter(function(s) { return s.done && s.assembled; }).map(function(s) { return s.assembled; });
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Stars & a Wish - Egg Drop', 'Writing', saw.stars.length, 1, '', 'Stars: ' + saw.stars.map(function(i) { return (i+1); }).join(',') + ' | Wish: ' + (saw.wish !== '' ? 'S' + (parseInt(saw.wish)+1) : 'none') + ' | Fix: ' + (saw.wishFix || 'none')]);
+  renderEggWriting();
+  debounceSave();
 }
 
 // ============================================================
