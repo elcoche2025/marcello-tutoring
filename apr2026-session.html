@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — April 27, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #4472C4; --blue-light: #D9E2F3;
+    --gold: #F5C542; --gold-light: #FFF8E1;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --orange: #FF9800; --orange-light: #FFF3E0;
+    --red: #E53935; --red-light: #FFEBEE;
+    --purple: #9C27B0; --purple-light: #F3E5F5;
+    --teal: #00897B; --teal-light: #E0F2F1;
+    --bg: #F4F6FB; --card: #FFFFFF;
+    --text: #2D3748; --muted: #718096;
+    --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header {
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 50%, #42a5f5 100%);
+    color: white; text-align: center; padding: 24px 20px 48px; position: relative;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.85; }
+  .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.7; transition: opacity 0.3s; }
+  .save-indicator.flash { opacity: 1; }
+
+  .main-tabs { display: flex; justify-content: center; gap: 5px; padding: 10px 8px 0; max-width: 800px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
+  .main-tab {
+    padding: 9px 11px; border-radius: 12px; font-weight: 700; font-size: 0.76rem;
+    cursor: pointer; transition: all 0.25s; border: 2px solid #D0D5DD;
+    background: white; color: var(--muted); display: flex; align-items: center; gap: 4px;
+    font-family: 'Nunito', sans-serif; white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--teal); color: var(--teal); }
+  .main-tab.active { background: var(--teal); border-color: var(--teal); color: white; box-shadow: 0 3px 12px rgba(0,137,123,0.35); transform: translateY(-2px); }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container { max-width: 720px; margin: 16px auto; padding: 0 16px; }
+  .container.wide { max-width: 980px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions { font-size: 0.92rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+  .act-label { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+  .act-read  { background: var(--teal-light); color: var(--teal); }
+  .act-retell { background: var(--blue-light); color: var(--blue); }
+  .act-plan  { background: var(--purple-light); color: var(--purple); }
+  .act-write { background: var(--green-light); color: #2E7D32; }
+  .act-wrap  { background: var(--gold-light); color: #B8860B; }
+
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-purple { background: var(--purple); color: white; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-gold { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  .q-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; transition: background 0.3s; }
+  .q-dot.done { background: var(--green); }
+  .q-dot.current { background: var(--teal); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  .flashcard { background: white; border: 3px solid var(--teal); border-radius: 20px; padding: 40px 20px; text-align: center; margin: 16px 0; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; }
+  .flashcard .word { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text); }
+  .flashcard .tricky-highlight { font-size: 2.2rem; font-weight: 800; margin-top: 10px; letter-spacing: 2px; }
+  .flashcard .tricky-highlight .tricky { color: var(--red); background: var(--red-light); padding: 2px 6px; border-radius: 8px; }
+  .flashcard .tricky-highlight .normal { color: var(--text); }
+  .flashcard .sound-info { font-size: 1rem; color: var(--muted); margin-top: 8px; font-weight: 700; }
+  .flashcard.correct { border-color: var(--green); background: var(--green-light); }
+  .flashcard.incorrect { border-color: var(--red); background: var(--red-light); }
+
+  .passage-box { background: white; border: 2px solid #D0D5DD; border-radius: 12px; padding: 20px; font-size: 1.1rem; line-height: 1.8; margin: 14px 0; }
+  .passage-box .target-word { background: var(--gold-light); padding: 1px 6px; border-radius: 6px; font-weight: 700; }
+
+  .prosody-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .prosody-item { background: #FAFBFC; border: 2px solid #E0E0E0; border-radius: 12px; padding: 12px; text-align: center; }
+  .prosody-item .pi-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .prosody-item .pi-scores { display: flex; justify-content: center; gap: 6px; }
+  .pi-score { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; border: 2px solid #D0D5DD; background: white; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif; }
+  .pi-score:hover { border-color: var(--teal); }
+  .pi-score.selected { background: var(--teal); color: white; border-color: var(--teal); }
+
+  /* RETELL TAB */
+  .model-story-box { background: var(--blue-light); border: 2px solid var(--blue); border-radius: 14px; padding: 20px; margin: 14px 0; font-size: 1.05rem; line-height: 1.9; }
+  .sticky-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  @media (max-width: 600px) { .sticky-grid { grid-template-columns: 1fr; } }
+  .sticky-note { background: #FFFDE7; border: 2px solid #FDD835; border-radius: 10px; padding: 14px; transform: rotate(-0.5deg); transition: transform 0.2s; }
+  .sticky-note:nth-child(2n) { background: #FFE0B2; border-color: #FFA726; transform: rotate(0.5deg); }
+  .sticky-note:nth-child(3n) { background: #C8E6C9; border-color: #66BB6A; transform: rotate(-0.3deg); }
+  .sticky-note:nth-child(4n) { background: #BBDEFB; border-color: #42A5F5; transform: rotate(0.3deg); }
+  .sticky-note:hover { transform: rotate(0deg) scale(1.02); }
+  .sticky-note .sn-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #5D4037; margin-bottom: 6px; }
+  .sticky-note .sn-question { font-size: 0.85rem; font-weight: 600; color: #6D4C41; margin-bottom: 8px; line-height: 1.4; }
+  .sticky-note textarea { width: 100%; min-height: 60px; border: none; background: rgba(255,255,255,0.6); border-radius: 6px; padding: 8px; font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 600; resize: vertical; line-height: 1.4; color: var(--text); }
+  .sticky-note textarea:focus { outline: 2px solid var(--orange); }
+
+  /* PLANNER TAB */
+  .interview-q { background: var(--purple-light); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .interview-q .iq-num { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--purple); margin-bottom: 6px; }
+  .interview-q .iq-question { font-size: 1.05rem; font-weight: 700; color: #4A148C; margin-bottom: 12px; line-height: 1.4; }
+  .iq-textarea { width: 100%; min-height: 70px; border: 2px solid #CE93D8; border-radius: 10px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; resize: vertical; line-height: 1.5; background: white; }
+  .iq-textarea:focus { border-color: var(--purple); outline: none; }
+  .help-btn-wrap { text-align: center; margin-top: 8px; }
+  .help-btn { background: var(--orange-light); border: 2px solid var(--orange); border-radius: 10px; padding: 8px 16px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; }
+  .help-btn:hover { background: #FFE0B2; }
+  .help-panel { background: var(--orange-light); border: 2px solid #FFB74D; border-radius: 12px; padding: 16px; margin-top: 10px; display: none; animation: fadeUp 0.3s; }
+  .help-panel.show { display: block; }
+  .help-level { margin-bottom: 12px; }
+  .help-level-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #E65100; margin-bottom: 4px; }
+  .help-level p { font-size: 0.9rem; line-height: 1.5; }
+
+  /* WRITE TAB - split view */
+  .split-view { display: flex; gap: 16px; align-items: flex-start; }
+  .split-plan { width: 36%; flex-shrink: 0; position: sticky; top: 16px; }
+  .split-writing { flex: 1; min-width: 0; }
+  .plan-sidebar { background: var(--purple-light); border: 2px solid var(--purple); border-radius: 14px; padding: 16px; }
+  .plan-sidebar h3 { color: var(--purple); font-size: 0.95rem; margin-bottom: 10px; }
+  .ps-item { margin-bottom: 10px; }
+  .ps-label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); margin-bottom: 2px; }
+  .ps-text { font-size: 0.88rem; line-height: 1.4; font-weight: 600; color: var(--text); }
+  .ps-empty { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  @media (max-width: 768px) {
+    .split-view { flex-direction: column; }
+    .split-plan { width: 100%; position: static; }
+    .container.wide { max-width: 720px; }
+  }
+
+  /* RUNNING GIST ANCHOR (NEW) */
+  .gist-anchor {
+    background: linear-gradient(135deg, #FFF8E1, #FFE082);
+    border: 3px solid var(--gold);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .gist-anchor .ga-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; margin-bottom: 4px; }
+  .gist-anchor .ga-text { font-size: 1.05rem; font-weight: 700; color: #5D4037; line-height: 1.4; font-style: italic; }
+  .gist-anchor .ga-icon { display: inline-block; margin-right: 6px; }
+
+  /* SENTENCE EXPANSION */
+  .step-indicator { display: flex; gap: 6px; margin: 14px 0; flex-wrap: wrap; }
+  .step-pill { flex: 1; min-width: 70px; padding: 8px 6px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 0.75rem; border: 2px solid #E0E0E0; background: #FAFBFC; transition: all 0.3s; }
+  .step-pill.step-active { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .step-pill.step-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .step-pill .step-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+  .dictation-box { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 14px; padding: 20px; margin: 14px 0; text-align: center; }
+  .dictation-box textarea { width: 100%; min-height: 100px; border: 2px solid #D0D5DD; border-radius: 10px; padding: 14px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; resize: vertical; line-height: 1.6; }
+  .dictation-box textarea:focus { border-color: var(--teal); outline: none; }
+  .talk-timer { font-size: 1.8rem; font-weight: 800; color: var(--teal); margin: 10px 0; }
+  .talk-timer.long { color: var(--green); }
+
+  .kernel-card { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 16px; margin: 12px 0; }
+  .kernel-card .kc-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #B8860B; margin-bottom: 4px; }
+  .kernel-card .kc-text { font-size: 1rem; line-height: 1.5; font-weight: 600; font-style: italic; }
+
+  .expand-card { background: white; border: 2px solid var(--teal); border-radius: 12px; padding: 16px; margin: 10px 0; }
+  .expand-card .ec-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 6px; }
+  .expand-card .ec-question { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .expand-card textarea { width: 100%; min-height: 50px; border: 2px solid var(--teal-light); border-radius: 8px; padding: 10px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; resize: vertical; line-height: 1.5; }
+  .expand-card textarea:focus { border-color: var(--teal); outline: none; }
+  .expand-card.purpose { border-color: var(--purple); }
+  .expand-card.purpose .ec-label { color: var(--purple); }
+  .expand-card.feeling { border-color: #E91E63; }
+  .expand-card.feeling .ec-label { color: #E91E63; }
+
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .word-bank-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .wb-chip { padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; border: 2px solid var(--teal); background: var(--teal-light); color: var(--teal); font-family: 'Nunito', sans-serif; }
+  .wb-chip:hover { transform: translateY(-2px); background: var(--teal); color: white; }
+  .wb-feel { border-color: #E91E63; background: #FCE4EC; color: #C2185B; }
+  .wb-feel:hover { background: #E91E63; color: white; }
+
+  .assembled-sentence { background: var(--green-light); border: 2px solid var(--green); border-radius: 10px; padding: 14px; margin-top: 10px; font-size: 1rem; line-height: 1.6; color: #2E7D32; font-weight: 700; min-height: 50px; }
+  .assembled-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #2E7D32; margin-bottom: 4px; }
+
+  /* 3-QUESTION COHERENCE CHECK (NEW) */
+  .coherence-check { background: white; border: 3px solid var(--orange); border-radius: 14px; padding: 18px; margin: 16px 0; }
+  .coherence-check h4 { font-size: 0.95rem; color: #E65100; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #FAFBFC; border-radius: 10px; margin-bottom: 8px; transition: all 0.25s; cursor: pointer; }
+  .check-item:hover { background: var(--orange-light); }
+  .check-item.checked { background: var(--green-light); border-left: 4px solid var(--green); }
+  .check-item .check-icon { font-size: 1.3rem; line-height: 1; }
+  .check-item .check-content { flex: 1; }
+  .check-item .check-label { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .check-item .check-detail { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+  .check-item.checked .check-icon::before { content: '✓'; color: var(--green); font-weight: 800; }
+  .check-item:not(.checked) .check-icon::before { content: '○'; color: #B0BEC5; }
+
+  .done-sentences-card { background: var(--green-light); border: 2px solid var(--green); border-radius: 14px; padding: 16px 20px; margin-bottom: 16px; }
+  .done-sentences-card h3 { color: #2E7D32; margin-bottom: 8px; font-size: 0.95rem; }
+  .done-sent { background: white; border-radius: 8px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.95rem; line-height: 1.5; font-weight: 600; border-left: 3px solid var(--green); display: flex; align-items: flex-start; gap: 6px; }
+  .done-sent .check { color: var(--green); font-weight: 800; }
+
+  .sentence-nav { display: flex; gap: 8px; margin: 14px 0; justify-content: center; flex-wrap: wrap; }
+  .sentence-nav-btn { padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; border: 2px solid #D0D5DD; background: white; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .sentence-nav-btn.sn-active { border-color: var(--teal); background: var(--teal); color: white; }
+  .sentence-nav-btn.sn-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+
+  /* WRAP-UP - Stars and a Wish */
+  .saw-section { margin: 16px 0; }
+  .saw-sentence { background: white; border: 2px solid #E0E0E0; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; transition: border-color 0.3s; }
+  .saw-sentence.saw-starred { border-color: var(--gold); background: var(--gold-light); }
+  .saw-sentence.saw-wished { border-color: var(--orange); background: var(--orange-light); }
+  .saw-sentence .saw-text { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+  .saw-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .saw-btn { padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: 2px solid transparent; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .saw-btn-star { background: var(--gold-light); border-color: var(--gold); color: #7B6400; }
+  .saw-btn-star:hover, .saw-btn-star.active { background: var(--gold); color: white; }
+  .saw-btn-wish { background: var(--orange-light); border-color: var(--orange); color: #7B4100; }
+  .saw-btn-wish:hover, .saw-btn-wish.active { background: var(--orange); color: white; }
+
+  .essay-complete-banner {
+    background: linear-gradient(135deg, #FFD54F, #FFB300);
+    border-radius: 16px; padding: 30px 20px; text-align: center; margin: 16px 0;
+    animation: popIn 0.5s ease;
+  }
+  .essay-complete-banner h2 { font-size: 1.6rem; color: #5D4037; margin-bottom: 4px; }
+  .essay-complete-banner p { color: #6D4C41; font-weight: 600; }
+  @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+
+  .celebration { text-align: center; padding: 20px 0; }
+  .celebration .big-star { font-size: 3rem; margin-bottom: 8px; }
+
+  .info-box { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; font-size: 0.92rem; color: #0D47A1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Session</h1>
+  <p>April 27, 2026 — Tell a Story: Coming to America 🗽</p>
+  <div class="save-indicator" id="saveIndicator">Saved ✓</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">📖 Reading</button>
+  <button class="main-tab" id="mtab-retell" onclick="switchTab('retell')">🔄 Retell</button>
+  <button class="main-tab" id="mtab-plan" onclick="switchTab('plan')">📝 Plan</button>
+  <button class="main-tab" id="mtab-write" onclick="switchTab('write')">✍️ Write</button>
+  <button class="main-tab" id="mtab-wrap" onclick="switchTab('wrap')">⭐ Wrap-up</button>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-reading"><div class="card" id="card-reading"></div></div>
+  <div class="tab-panel" id="panel-retell"><div class="card" id="card-retell"></div></div>
+  <div class="tab-panel" id="panel-plan"><div class="card" id="card-plan"></div></div>
+  <div class="tab-panel" id="panel-write"><div id="card-write"></div></div>
+  <div class="tab-panel" id="panel-wrap"><div class="card" id="card-wrap"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG & GLOBALS
+// ============================================================
+const STORAGE_KEY = 'marcello_apr27_session';
+const CLOUD_STATE_KEY = 'apr2026_session_6';
+const PREV_CLOUD_KEY = 'mar2026_session_4';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-04-27';
+
+let activeTab = 'reading';
+
+let S = {
+  reading: {
+    words: { current: 0, results: [], done: false },
+    passage: { prosody: { expression: 0, phrasing: 0, pace: 0, smoothness: 0 }, done: false }
+  },
+  retell: {
+    listened: false,
+    notes: { character: '', situation: '', action: '', ending: '' },
+    done: false
+  },
+  plan: {
+    q1: '', q2: '', q3: '', q4: '',
+    helpUsed: {},
+    done: false
+  },
+  write: {
+    runningGist: '',
+    sentences: [
+      { dictation: '', kernel: '', why: '', felt: '', assembled: '', step: 0, checks: { topic: false, why: false, felt: false }, done: false },
+      { dictation: '', kernel: '', why: '', felt: '', assembled: '', step: 0, checks: { topic: false, why: false, felt: false }, done: false },
+      { dictation: '', kernel: '', why: '', felt: '', assembled: '', step: 0, checks: { topic: false, why: false, felt: false }, done: false }
+    ],
+    currentSentence: 0,
+    done: false
+  },
+  starsAndWish: { stars: [], wish: '', wishFix: '', done: false },
+  timestamps: {},
+  points: 0
+};
+
+// ============================================================
+//  DATA
+// ============================================================
+// CAPE-relevant irregular words. Keeping running review band + new words.
+const IRREGULAR_WORDS = [
+  // Persistent misses from prior sessions
+  { word: 'through', tricky: 'ough', sound: '/oo/', review: true, since: 'Mar 8' },
+  { word: 'foreign', tricky: 'eign', sound: '/in/', review: true, since: 'Mar 8' },
+  { word: 'island', tricky: 's', sound: '(silent)', review: true, since: 'Mar 16' },
+  // From Mar 30
+  { word: 'science', tricky: 'sc', sound: '/s/', review: true, since: 'Mar 30' },
+  { word: 'weight', tricky: 'eigh', sound: '/ay/', review: true, since: 'Mar 30' },
+  // New Apr 27 — themed for narrative + immigration
+  { word: 'cousin', tricky: 'ous', sound: '/uz/', review: false },
+  { word: 'beautiful', tricky: 'eau', sound: '/yoo/', review: false },
+  { word: 'people', tricky: 'eo', sound: '/ee/', review: false }
+];
+
+// Model story for Retell (immigration / Statue of Liberty narrative) — short, clear arc
+const MODEL_STORY = {
+  title: "Sofia's First Morning",
+  text: "Long ago, a little girl named Sofia stood on a big ship with her mother. They had traveled for many days across the ocean. After so much salty wind and crowded nights, Sofia just wanted to feel the ground again. Then, in the early light, she saw something tall in the harbor — a green statue holding up a torch. \"That is the Statue of Liberty,\" her mother whispered. \"She welcomes everyone who comes here for a new home.\" Sofia held her mother's hand a little tighter. She felt small, and brave, and a little bit scared, all at once. She knew that this was where her new life would begin.",
+  parts: {
+    character: { question: "Who is the story about? Where are they?", answer: "Sofia, a little girl on a big ship with her mother." },
+    situation: { question: "What is happening? What do they need?", answer: "They have traveled for many days. Sofia wants to feel the ground again." },
+    action: { question: "What does she do or see?", answer: "She sees the Statue of Liberty in the harbor. Her mother tells her about it." },
+    ending: { question: "How does it end? How does Sofia feel?", answer: "She feels small, brave, and scared all at once. She knows this is where her new life begins." }
+  }
+};
+
+// Prosody passage — themed to the model story so the warm-up primes the writing topic
+const PASSAGE_TEXT = 'A long time ago, many <span class="target-word">people</span> traveled across the sea to come to America. They wanted to find a new home. After many days on a crowded ship, the travelers saw something <span class="target-word">beautiful</span> in the harbor. A tall green statue stood with her torch lifted up. The statue welcomed every <span class="target-word">cousin</span>, brother, mother, and child who came from far away. The travelers walked off the ship and onto the dock. They were tired, but they were also full of hope.';
+
+// Narrative planner — 4 events (Bancroft 3rd-grade pattern + Roth & Worthington)
+const PLAN_QUESTIONS = [
+  {
+    key: 'q1',
+    label: 'Event 1 — Character & Setting',
+    question: '👧 Who is your story about? Where are they at the start?',
+    sayFirst: 'Try: "My story is about ___. They are on a ___."',
+    placeholder: 'Tell who the person is and where the story starts...',
+    color: 'blue'
+  },
+  {
+    key: 'q2',
+    label: 'Event 2 — Situation',
+    question: '🌊 What is happening? What does the character want or need?',
+    sayFirst: 'Try: "They came from ___ because they wanted ___."',
+    placeholder: 'Tell what is going on in the story...',
+    color: 'orange'
+  },
+  {
+    key: 'q3',
+    label: 'Event 3 — Action',
+    question: '🗽 What big thing does your character DO or SEE?',
+    sayFirst: 'Try: "Then they saw ___" or "Then they ___"',
+    placeholder: 'Tell what happens next...',
+    color: 'green'
+  },
+  {
+    key: 'q4',
+    label: 'Event 4 — Ending That MAKES SENSE',
+    question: '💭 How does the story end? What does the character feel?',
+    sayFirst: 'Try: "At the end, they felt ___ because ___."',
+    placeholder: 'Tell how it ends and how the character feels...',
+    color: 'purple'
+  }
+];
+
+const PLAN_HELP = {
+  q1: ['Who is the character? Pick a name. Are they on a ship, at Ellis Island, in New York? When does the story happen?', 'Example: "My story is about a girl named Maria. She is on a big ship sailing across the ocean."', 'A girl named Maria is on a big ship coming from Italy a long time ago.'],
+  q2: ['Why did they leave their home? What are they hoping for? Are they tired, scared, excited?', 'Example: "Maria left her home because there was no food. She wants to find a new place to live."', 'Maria came from Italy because her family wanted a better life. She is tired from the long trip.'],
+  q3: ['Do they see the Statue of Liberty? Do they walk off the ship? Do they meet someone?', 'Example: "Maria saw the giant green statue. Her mother held her hand."', 'Maria sees the Statue of Liberty for the first time. She points to the torch.'],
+  q4: ['How does it end? Does the character feel scared, brave, hopeful, happy? What does the ending TELL us?', 'Example: "Maria felt brave because she knew her new life was starting."', 'Maria smiles at her mother. She feels brave because America will be her new home.']
+};
+
+// Per-sentence kernel prompts for the writing tab
+const WRITE_PROMPTS = [
+  {
+    label: 'Sentence 1: Set the Scene',
+    prompt: 'Tell me the BEGINNING. Where is your character? What are they doing?',
+    kernelHint: 'Like: "Maria was on a ship."',
+    expand: { why: 'When was this? OR Where did they come from?', felt: 'How did the character feel at the start?' },
+    color: 'blue'
+  },
+  {
+    label: 'Sentence 2: The Big Moment',
+    prompt: 'Tell me what your character SEES or DOES. The big moment in the story.',
+    kernelHint: 'Like: "Maria saw the Statue of Liberty."',
+    expand: { why: 'WHY is this moment important to your character?', felt: 'How does your character FEEL when this happens?' },
+    color: 'green'
+  },
+  {
+    label: 'Sentence 3: The Ending (Stretch)',
+    prompt: 'Tell me how it ends. What does the character do next? How do they feel?',
+    kernelHint: 'Like: "Maria stepped onto the dock."',
+    expand: { why: 'WHY is this the ending? What does it MEAN for them?', felt: 'How does your character feel at the very end?' },
+    color: 'purple'
+  }
+];
+
+// Word banks for narrative writing
+const FEELING_WORDS = ['hopeful', 'brave', 'scared', 'amazed', 'tired', 'excited', 'small', 'curious', 'happy', 'proud', 'nervous', 'safe'];
+const NARRATIVE_CW = ['when', 'because', 'so', 'after', 'then', 'finally', 'although', 'while'];
+
+// Purpose prompts (Ábalos et al.) — surfaced contextually in dictation
+const PURPOSE_PROMPTS = [
+  { label: 'Why?', prompt: 'WHY did they do that? What were they hoping for?' },
+  { label: 'So that what?', prompt: 'You said what they did — so that what? What were they trying to make happen?' },
+  { label: 'Felt?', prompt: 'How did the character FEEL? Use a feeling word.' },
+  { label: 'What does it mean?', prompt: 'What does this MEAN for your character? Why does it matter?' }
+];
+
+// ============================================================
+//  UTIL
+// ============================================================
+function toast(msg, isWarn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isWarn ? ' warning' : '');
+  setTimeout(() => t.className = 'toast', 2800);
+}
+function addPoints(pts) { S.points += pts; if (pts > 0) toast('+' + pts + ' points! 🏆'); }
+function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
+
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved ✓';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    S = Object.assign(S, JSON.parse(raw));
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null, cloudDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(saveStateToCloud, 3000);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+function saveStateToCloud() {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved ☁️';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud(key) {
+  return new Promise((resolve) => {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(() => { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state);
+      else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+let speechUnlocked = false;
+function unlockSpeech() {
+  if (speechUnlocked || !('speechSynthesis' in window)) return;
+  const dummy = new SpeechSynthesisUtterance('');
+  dummy.volume = 0;
+  window.speechSynthesis.speak(dummy);
+  speechUnlocked = true;
+}
+document.addEventListener('touchstart', unlockSpeech, { once: true });
+document.addEventListener('click', unlockSpeech, { once: true });
+
+function speakText(text, rate) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available on this device', true); return; }
+  window.speechSynthesis.cancel();
+  setTimeout(function() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = rate || 0.85;
+    u.pitch = 1;
+    u.onerror = function() { toast('Speech error — tap Read again', true); };
+    window.speechSynthesis.speak(u);
+  }, 100);
+}
+
+function fireCelebration() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  const emojis = ['🎉','🎊','⭐','🥳','💡','🌟','🏆','🗽'];
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4000);
+}
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(confettiStyle);
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  const mc = document.getElementById('mainContainer');
+  if (tab === 'write') mc.classList.add('wide'); else mc.classList.remove('wide');
+
+  if (tab === 'reading') renderReading();
+  else if (tab === 'retell') renderRetell();
+  else if (tab === 'plan') renderPlan();
+  else if (tab === 'write') renderWrite();
+  else if (tab === 'wrap') renderWrap();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+// ============================================================
+//  TAB 1: READING (word mapping + prosody)
+// ============================================================
+let readingPhase = 'words';
+
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const ws = S.reading.words;
+  if (readingPhase === 'words' && !ws.done) renderWords(el);
+  else if (!S.reading.passage.done) { readingPhase = 'passage'; renderPassage(el); }
+  else {
+    el.innerHTML = '<div class="act-label act-read">📖 Reading Complete!</div>' +
+      '<div class="celebration"><div class="big-star">🏆</div>' +
+      '<h2>Reading Skills Done!</h2>' +
+      '<p>Great word mapping and a strong read of the passage!</p></div>' +
+      '<div class="btn-row"><button class="btn btn-blue" onclick="switchTab(\'retell\')">Next: Retell a Story 🔄</button></div>';
+  }
+}
+
+function renderWords(el) {
+  const ws = S.reading.words;
+  if (ws.current >= IRREGULAR_WORDS.length) { ws.done = true; renderReading(); return; }
+  const w = IRREGULAR_WORDS[ws.current];
+  const result = ws.results[ws.current];
+  let dotsHTML = IRREGULAR_WORDS.map(function(wd, i) {
+    let cls = 'q-dot';
+    if (i < ws.current) cls += ws.results[i] && ws.results[i].firstCorrect ? ' done' : '';
+    else if (i === ws.current) cls += ' current';
+    return '<div class="' + cls + '"></div>';
+  }).join('');
+  let cardContent = '';
+  if (!result) {
+    cardContent = '<div class="flashcard" id="flashcard"><div class="word">' + w.word + '</div></div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="markWord(true)">✓ Correct</button>' +
+      '<button class="btn" style="background:var(--red);color:white;" onclick="markWord(false)">✗ Incorrect</button></div>';
+  } else if (result && !result.trickyShown) {
+    cardContent = '<div class="flashcard correct"><div class="word" style="color:var(--green);">' + w.word + '</div>' +
+      '<div style="font-size:1.1rem;font-weight:700;color:var(--green);margin-top:8px;">✓ Read correctly!</div></div>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="revealTricky()">Show Tricky Part 🔍</button></div>';
+  } else if (result && result.trickyShown && !result.readAgainDone) {
+    const trickyHTML = buildTrickyHTML(w);
+    cardContent = '<div class="flashcard"><div class="tricky-highlight">' + trickyHTML + '</div>' +
+      '<div class="sound-info">The tricky part <strong style="color:var(--red);">' + esc(w.tricky) + '</strong> says <strong>' + esc(w.sound) + '</strong></div></div>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="readAgain()">🔊 Read It Again</button></div>';
+  } else {
+    const trickyHTML = buildTrickyHTML(w);
+    cardContent = '<div class="flashcard' + (result.firstCorrect ? ' correct' : '') + '"><div class="tricky-highlight">' + trickyHTML + '</div>' +
+      '<div class="sound-info">The tricky part <strong style="color:var(--red);">' + esc(w.tricky) + '</strong> says <strong>' + esc(w.sound) + '</strong></div>' +
+      '<div style="margin-top:10px;font-weight:700;color:var(--green);">✓ Great!</div></div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="nextWord()">Next Word →</button></div>';
+  }
+  el.innerHTML = '<div class="act-label act-read">📖 Word Mapping — Irregular Words</div>' +
+    '<h2>Read this word aloud!</h2>' +
+    '<p class="directions">Look at the <strong>whole word</strong>. Say it out loud! ' +
+    '<span style="display:inline-block;padding:2px 8px;border-radius:8px;font-size:0.78rem;font-weight:700;background:' + (w.review ? 'var(--gold-light);color:#B8860B' : 'var(--teal-light);color:var(--teal)') + ';">' + (w.review ? 'Review' : 'New Word') + '</span></p>' +
+    '<div class="q-progress"><div class="q-dots">' + dotsHTML + '</div><div class="q-label">Word ' + (ws.current+1) + ' of ' + IRREGULAR_WORDS.length + '</div></div>' + cardContent;
+}
+
+function buildTrickyHTML(w) {
+  const idx = w.word.indexOf(w.tricky);
+  if (idx === -1) return '<span class="tricky">' + w.word + '</span>';
+  const before = w.word.substring(0, idx);
+  const after = w.word.substring(idx + w.tricky.length);
+  let html = '';
+  if (before) html += '<span class="normal">' + before + '</span>';
+  html += '<span class="tricky">' + w.tricky + '</span>';
+  if (after) html += '<span class="normal">' + after + '</span>';
+  return html;
+}
+function markWord(correct) {
+  const ws = S.reading.words;
+  const w = IRREGULAR_WORDS[ws.current];
+  ws.results[ws.current] = { word: w.word, firstCorrect: correct, trickyShown: false, readAgainDone: false };
+  if (correct) addPoints(5);
+  renderWords(document.getElementById('card-reading'));
+  debounceSave();
+}
+function revealTricky() { S.reading.words.results[S.reading.words.current].trickyShown = true; renderWords(document.getElementById('card-reading')); debounceSave(); }
+function readAgain() { S.reading.words.results[S.reading.words.current].readAgainDone = true; addPoints(3); renderWords(document.getElementById('card-reading')); debounceSave(); }
+function nextWord() {
+  const ws = S.reading.words;
+  ws.current++;
+  if (ws.current >= IRREGULAR_WORDS.length) {
+    ws.done = true;
+    S.timestamps.wordsEnd = new Date().toISOString();
+    const correctCount = ws.results.filter(r => r && r.firstCorrect).length;
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Word Mapping — Irregular Words', 'Reading', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.map(r => r.word + ':' + (r.firstCorrect ? 'Y' : 'N')).join(', ')]);
+    postToSheets('Reading - Phonics', [SESSION_DATE, 'Word Mapping', 'RF.3.3', correctCount, IRREGULAR_WORDS.length, Math.round(correctCount/IRREGULAR_WORDS.length*100)+'%', ws.results.filter(r => !r.firstCorrect).map(r => r.word).join(', '), 'Apr 27 — themed for narrative + immigration']);
+    readingPhase = 'passage';
+  }
+  renderReading();
+}
+
+function renderPassage(el) {
+  const ps = S.reading.passage;
+  const prosodyHTML = ['Expression','Phrasing','Pace','Smoothness'].map(function(dim) {
+    const key = dim.toLowerCase();
+    let scores = '';
+    for (let i = 1; i <= 4; i++) scores += '<div class="pi-score' + (ps.prosody[key]===i ? ' selected' : '') + '" onclick="setProsody(\'' + key + '\',' + i + ')">' + i + '</div>';
+    return '<div class="prosody-item"><div class="pi-label">' + dim + '</div><div class="pi-scores">' + scores + '</div></div>';
+  }).join('');
+  el.innerHTML = '<div class="act-label act-read">📖 Prosody Passage — Coming to America</div>' +
+    '<h2>🗽 Read like a storyteller!</h2>' +
+    '<p class="directions">Read aloud. Make it sound like you\'re telling a story to your friend. <strong style="background:var(--gold-light);padding:1px 4px;border-radius:4px;">Highlighted words</strong> are tricky words you just practiced.</p>' +
+    '<div class="passage-box">' + PASSAGE_TEXT + '</div>' +
+    '<h3 style="font-size:1rem;margin:14px 0 8px;">Prosody Rubric (Tutor rates 1–4)</h3>' +
+    '<div class="prosody-grid">' + prosodyHTML + '</div>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="finishReading()">Done with Reading ✓</button></div>';
+}
+function setProsody(dim, val) { S.reading.passage.prosody[dim] = val; renderPassage(document.getElementById('card-reading')); debounceSave(); }
+function finishReading() {
+  S.reading.passage.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  document.getElementById('mtab-reading').classList.add('done');
+  const p = S.reading.passage.prosody;
+  const avg = ((p.expression + p.phrasing + p.pace + p.smoothness) / 4).toFixed(1);
+  postToSheets('Reading - ORF', [SESSION_DATE, 'Coming to America passage', '', '', '', '', '', p.expression, p.phrasing, p.pace, p.smoothness, avg, 'Apr 27 — primes the narrative writing topic']);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Prosody Passage', 'Reading', 'Avg ' + avg, '', '', 'E:'+p.expression+' P:'+p.phrasing+' Pa:'+p.pace+' S:'+p.smoothness]);
+  toast('Reading complete! 🏆');
+  switchTab('retell');
+}
+
+// ============================================================
+//  TAB 2: RETELL-FIRST
+// ============================================================
+function renderRetell() {
+  const el = document.getElementById('card-retell');
+  const r = S.retell;
+  if (r.done) { renderRetellDone(el); return; }
+  const allFilled = r.notes.character && r.notes.situation && r.notes.action && r.notes.ending;
+  el.innerHTML =
+    '<div class="act-label act-retell">🔄 Retell First — Find the 4 Events</div>' +
+    '<h2>Listen to a story, then retell it</h2>' +
+    '<p class="directions">Before we make our OWN story, let\'s warm up by retelling someone else\'s. Listen carefully — we\'ll find the four parts of the story together.</p>' +
+    '<div class="model-story-box">' +
+    '<div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:6px;">📖 ' + esc(MODEL_STORY.title) + '</div>' +
+    esc(MODEL_STORY.text) + '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(MODEL_STORY.text).replace(/"/g, '&quot;') + ', 0.82)">🔊 Read Aloud</button>' +
+    '<button class="btn btn-secondary" onclick="markListened()">' + (r.listened ? '✓ Listened' : '👂 I listened') + '</button>' +
+    '</div>' +
+    '<div class="info-box" style="margin-top:18px;">📌 Now, on each sticky note, write what happened in that part of the story. <strong>Think of it like a comic strip with 4 boxes.</strong></div>' +
+    '<div class="sticky-grid">' +
+    Object.keys(MODEL_STORY.parts).map(function(k, i) {
+      const p = MODEL_STORY.parts[k];
+      const labels = { character: '1. Character & Setting', situation: '2. Situation', action: '3. Action', ending: '4. Ending' };
+      return '<div class="sticky-note">' +
+        '<div class="sn-label">' + labels[k] + '</div>' +
+        '<div class="sn-question">' + esc(p.question) + '</div>' +
+        '<textarea data-key="' + k + '" placeholder="Type what Marcello says..." oninput="onRetellNote(this)">' + esc(r.notes[k] || '') + '</textarea>' +
+        '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="btn-row" style="margin-top:18px;">' +
+    '<button class="btn btn-success" onclick="finishRetell()" ' + (allFilled ? '' : 'disabled') + '>Got it — let\'s plan MY story →</button>' +
+    '</div>';
+}
+
+function markListened() { S.retell.listened = true; renderRetell(); debounceSave(); }
+function onRetellNote(textarea) {
+  const k = textarea.getAttribute('data-key');
+  S.retell.notes[k] = textarea.value;
+  // Re-render only the button enable state without rebuilding textareas (preserve focus)
+  const allFilled = S.retell.notes.character && S.retell.notes.situation && S.retell.notes.action && S.retell.notes.ending;
+  const successBtn = document.querySelector('#card-retell .btn-success');
+  if (successBtn) successBtn.disabled = !allFilled;
+  debounceSave();
+}
+function finishRetell() {
+  S.retell.done = true;
+  S.timestamps.retellEnd = new Date().toISOString();
+  document.getElementById('mtab-retell').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Retell First — 4 Events', 'Writing', 'Complete', '', '',
+    'C: ' + (S.retell.notes.character || '').slice(0, 80) +
+    ' | Sit: ' + (S.retell.notes.situation || '').slice(0, 80) +
+    ' | A: ' + (S.retell.notes.action || '').slice(0, 80) +
+    ' | E: ' + (S.retell.notes.ending || '').slice(0, 80)]);
+  toast('Retell complete! 🎉');
+  fireCelebration();
+  switchTab('plan');
+}
+function renderRetellDone(el) {
+  el.innerHTML = '<div class="act-label act-retell">🔄 Retell Complete!</div>' +
+    '<div class="celebration"><div class="big-star">🌟</div><h2>Nice retell!</h2><p>You found all 4 parts of the story. Now let\'s make YOUR story.</p></div>' +
+    '<div class="btn-row"><button class="btn btn-purple" onclick="switchTab(\'plan\')">Plan My Story →</button></div>';
+}
+
+// ============================================================
+//  TAB 3: PLAN (4-event narrative planner)
+// ============================================================
+function renderPlan() {
+  const el = document.getElementById('card-plan');
+  const p = S.plan;
+  if (p.done) { renderPlanDone(el); return; }
+  const allFilled = p.q1 && p.q2 && p.q3 && p.q4;
+  el.innerHTML =
+    '<div class="act-label act-plan">📝 Plan Your Story — 4 Events</div>' +
+    '<h2>Plan a story about coming to America 🗽</h2>' +
+    '<p class="directions">Pick a character. Plan the four parts of THEIR story. Just like the story you retold, your story will have a Character, a Situation, an Action, and an Ending That Makes Sense.</p>' +
+    PLAN_QUESTIONS.map(function(q, i) {
+      const helpShown = !!p.helpUsed[q.key];
+      return '<div class="interview-q">' +
+        '<div class="iq-num">' + esc(q.label) + '</div>' +
+        '<div class="iq-question">' + esc(q.question) + '</div>' +
+        '<div style="background:var(--gold-light);border-radius:8px;padding:8px 12px;font-size:0.82rem;font-weight:600;color:#5D4037;margin-bottom:12px;">💡 Say first: ' + esc(q.sayFirst) + '</div>' +
+        '<textarea class="iq-textarea" data-key="' + q.key + '" placeholder="' + esc(q.placeholder) + '" oninput="onPlanInput(this)">' + esc(p[q.key] || '') + '</textarea>' +
+        '<div class="help-btn-wrap"><button class="help-btn" onclick="togglePlanHelp(\'' + q.key + '\')">' + (helpShown ? 'Hide' : 'Show') + ' Help 💭</button></div>' +
+        (helpShown ? buildHelpPanel(q.key) : '') +
+        '</div>';
+    }).join('') +
+    '<div class="btn-row" style="margin-top:18px;">' +
+    '<button class="btn btn-secondary" onclick="switchTab(\'retell\')">← Back to Retell</button>' +
+    '<button class="btn btn-success" onclick="finishPlan()" ' + (allFilled ? '' : 'disabled') + '>Plan Done — let\'s WRITE! ✍️</button>' +
+    '</div>';
+}
+
+function buildHelpPanel(key) {
+  const help = PLAN_HELP[key];
+  return '<div class="help-panel show">' +
+    '<div class="help-level"><div class="help-level-label">Hint</div><p>' + esc(help[0]) + '</p></div>' +
+    '<div class="help-level"><div class="help-level-label">Example</div><p>' + esc(help[1]) + '</p></div>' +
+    '<div class="help-level"><div class="help-level-label">Could say</div><p>' + esc(help[2]) + '</p></div>' +
+    '</div>';
+}
+
+function onPlanInput(textarea) {
+  S.plan[textarea.getAttribute('data-key')] = textarea.value;
+  const allFilled = S.plan.q1 && S.plan.q2 && S.plan.q3 && S.plan.q4;
+  const successBtn = document.querySelector('#card-plan .btn-success');
+  if (successBtn) successBtn.disabled = !allFilled;
+  debounceSave();
+}
+function togglePlanHelp(key) {
+  S.plan.helpUsed[key] = !S.plan.helpUsed[key];
+  renderPlan();
+  debounceSave();
+}
+function finishPlan() {
+  S.plan.done = true;
+  S.timestamps.planEnd = new Date().toISOString();
+  document.getElementById('mtab-plan').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Narrative Plan — 4 Events', 'Writing', 'Complete', '', '',
+    'Char: ' + (S.plan.q1 || '').slice(0, 60) + ' | Sit: ' + (S.plan.q2 || '').slice(0, 60) +
+    ' | Act: ' + (S.plan.q3 || '').slice(0, 60) + ' | End: ' + (S.plan.q4 || '').slice(0, 60) +
+    ' | Help used: ' + Object.keys(S.plan.helpUsed).filter(k => S.plan.helpUsed[k]).join(',')]);
+  toast('Plan complete! Let\'s write 🎉');
+  fireCelebration();
+  // Pre-fill running gist from plan q3 (the big moment) as a starting point
+  if (!S.write.runningGist) S.write.runningGist = derivedGist();
+  switchTab('write');
+}
+
+function derivedGist() {
+  // Generate a default gist anchor from the plan
+  const c = (S.plan.q1 || '').split('.')[0].slice(0, 50);
+  return c ? c + '\'s first morning in America' : 'a character\'s first morning in America';
+}
+
+function renderPlanDone(el) {
+  el.innerHTML = '<div class="act-label act-plan">📝 Plan Complete!</div>' +
+    '<div class="celebration"><div class="big-star">🎯</div><h2>Plan locked in!</h2></div>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="switchTab(\'write\')">Write My Story →</button></div>';
+}
+
+// ============================================================
+//  TAB 4: WRITE (split-view + gist anchor + dictation-first + sentence expansion + 3-question check)
+// ============================================================
+let writeTalkStart = null;
+let writeTalkTimer = null;
+
+function renderWrite() {
+  const el = document.getElementById('card-write');
+  const w = S.write;
+  if (w.done) { renderWriteComplete(el); return; }
+
+  const sIdx = w.currentSentence;
+  const sent = w.sentences[sIdx];
+  const promptCfg = WRITE_PROMPTS[sIdx];
+
+  // Sentence nav
+  let navHTML = '<div class="sentence-nav">' + WRITE_PROMPTS.map(function(p, i) {
+    let cls = 'sentence-nav-btn';
+    if (w.sentences[i].done) cls += ' sn-done';
+    if (i === sIdx) cls += ' sn-active';
+    return '<button class="' + cls + '" onclick="goToSentence(' + i + ')">' + (w.sentences[i].done ? '✓ ' : '') + (i+1) + '. ' + p.label.split(':')[1].trim() + '</button>';
+  }).join('') + '</div>';
+
+  // Plan sidebar
+  let planSidebar = '<div class="plan-sidebar"><h3>📋 Your Plan</h3>' +
+    PLAN_QUESTIONS.map(function(q) {
+      const val = S.plan[q.key];
+      const labels = { q1: 'Character & Setting', q2: 'Situation', q3: 'Action', q4: 'Ending' };
+      return '<div class="ps-item"><div class="ps-label">' + labels[q.key] + '</div>' +
+        '<div class="' + (val ? 'ps-text' : 'ps-empty') + '">' + (val ? esc(val) : '(empty)') + '</div></div>';
+    }).join('') + '</div>';
+
+  // Already-written sentences card
+  let doneSentencesHTML = '';
+  const doneSent = w.sentences.filter(s => s.done && s.assembled);
+  if (doneSent.length > 0) {
+    doneSentencesHTML = '<div class="done-sentences-card"><h3>✓ Sentences so far</h3>' +
+      doneSent.map(s => '<div class="done-sent"><span class="check">✓</span>' + esc(s.assembled) + '</div>').join('') + '</div>';
+  }
+
+  // Running gist anchor
+  const gistHTML = '<div class="gist-anchor">' +
+    '<div class="ga-label">📍 Running gist — what THIS paragraph is about</div>' +
+    '<div class="ga-text"><span class="ga-icon">💭</span><span id="gistDisplay">' + esc(w.runningGist || '(tutor: tap to set the anchor)') + '</span></div>' +
+    '<div style="margin-top:8px;text-align:right;">' +
+    '<button class="btn btn-sm btn-secondary" onclick="editGist()">✏️ Edit anchor</button>' +
+    '</div></div>';
+
+  // Step indicator
+  const step = sent.step || 0;
+  const stepsHTML = '<div class="step-indicator">' +
+    '<div class="step-pill ' + (step >= 1 ? 'step-done' : step === 0 ? 'step-active' : '') + '"><span class="step-icon">🗣️</span>Tell Me</div>' +
+    '<div class="step-pill ' + (step >= 2 ? 'step-done' : step === 1 ? 'step-active' : '') + '"><span class="step-icon">🔍</span>Find Kernel</div>' +
+    '<div class="step-pill ' + (step >= 3 ? 'step-done' : step === 2 ? 'step-active' : '') + '"><span class="step-icon">➕</span>Expand</div>' +
+    '<div class="step-pill ' + (step >= 4 ? 'step-done' : step === 3 ? 'step-active' : '') + '"><span class="step-icon">✓</span>Coherence</div></div>';
+
+  let contentHTML = '';
+
+  // STEP 0: TELL ME (dictation)
+  if (step === 0) {
+    const elapsed = writeTalkStart ? Math.floor((Date.now() - writeTalkStart) / 1000) : 0;
+    const mins = Math.floor(elapsed / 60); const secs = elapsed % 60;
+    const timerStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    contentHTML = '<div class="dictation-box">' +
+      '<h3 style="margin-bottom:4px;">🗣️ ' + esc(promptCfg.prompt) + '</h3>' +
+      (writeTalkStart ? '<div class="' + (elapsed > 30 ? 'talk-timer long' : 'talk-timer') + '" id="writeTalkTimer">' + timerStr + '</div>' : '') +
+      '<textarea id="writeDictation" placeholder="Tutor: type what Marcello says (verbatim)..." oninput="onWriteDictation()">' + esc(sent.dictation || '') + '</textarea>' +
+      (writeTalkStart ?
+        '<div style="margin-top:10px;"><div style="font-weight:700;font-size:0.82rem;color:var(--purple);margin-bottom:6px;">🎯 Purpose Prompts <span style="font-weight:400;color:var(--muted);">(draw out WHY + FELT)</span></div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+        PURPOSE_PROMPTS.map(p => '<button class="wb-chip" style="background:var(--purple-light);color:var(--purple);border:2px solid #CE93D8;font-size:0.82rem;" onclick="toast(' + JSON.stringify(p.prompt).replace(/"/g, '&quot;') + ',false)">' + esc(p.label) + '</button>').join('') +
+        '</div></div>' : '') +
+      (writeTalkStart ? '<div class="btn-row"><button class="btn btn-success" onclick="doneWriteTalk()">Done talking ✓</button></div>' :
+        '<div class="btn-row"><button class="btn btn-gold" onclick="startWriteTalk()">🎙️ Start Talking!</button></div>') +
+      '</div>';
+  }
+
+  // STEP 1: FIND KERNEL
+  if (step === 1) {
+    contentHTML = '<div style="background:#FFFDE7;border:2px solid var(--gold);border-radius:14px;padding:18px;margin:12px 0;">' +
+      '<h3 style="margin-bottom:6px;">🔍 Find the kernel sentence</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:10px;">You said all of this. Find <strong>ONE short sentence</strong> hiding inside it — just a Subject + Verb (+ object).</p>' +
+      '<div class="passage-box" style="background:white;border-color:var(--gold);font-size:1rem;">' + esc(sent.dictation) + '</div>' +
+      '<div class="kernel-card" style="margin-top:14px;">' +
+      '<div class="kc-label">💡 Kernel hint</div>' +
+      '<div class="kc-text">' + esc(promptCfg.kernelHint) + '</div></div>' +
+      '<label style="font-weight:700;font-size:0.93rem;display:block;margin:10px 0 4px;">Type the kernel:</label>' +
+      '<textarea id="writeKernel" style="width:100%;min-height:50px;border:2px solid var(--gold);border-radius:10px;padding:10px;font-family:Nunito,sans-serif;font-size:1rem;font-weight:700;resize:vertical;" placeholder="One short sentence..." oninput="onKernel()">' + esc(sent.kernel || '') + '</textarea>' +
+      '<div class="btn-row"><button class="btn btn-secondary" onclick="backToTell()">← Talk more</button>' +
+      '<button class="btn btn-success" onclick="kernelFound()" ' + (sent.kernel ? '' : 'disabled') + '>Got the kernel →</button></div></div>';
+  }
+
+  // STEP 2: EXPAND with Why + Felt
+  if (step === 2) {
+    contentHTML =
+      '<div class="kernel-card"><div class="kc-label">Your kernel</div><div class="kc-text">' + esc(sent.kernel) + '</div></div>' +
+      '<p style="font-size:0.95rem;font-weight:700;color:var(--text);margin:14px 0 8px;">Now let\'s grow it: add WHY and FEELING.</p>' +
+      '<div class="expand-card purpose">' +
+      '<div class="ec-label">🎯 WHY / WHAT IT MEANS</div>' +
+      '<div class="ec-question">' + esc(promptCfg.expand.why) + '</div>' +
+      '<textarea id="writeWhy" placeholder="Add a because/so/when..." oninput="onWhy()">' + esc(sent.why || '') + '</textarea>' +
+      '<div class="word-bank-label" style="margin-top:8px;">🔗 Try these connecting words:</div>' +
+      '<div class="word-bank">' + NARRATIVE_CW.map(w => '<button class="wb-chip" onclick="insertCW(\'writeWhy\',\'' + w + '\')">' + w + '</button>').join('') + '</div>' +
+      '</div>' +
+      '<div class="expand-card feeling">' +
+      '<div class="ec-label">💗 HOW THE CHARACTER FEELS</div>' +
+      '<div class="ec-question">' + esc(promptCfg.expand.felt) + '</div>' +
+      '<textarea id="writeFelt" placeholder="The character felt..." oninput="onFelt()">' + esc(sent.felt || '') + '</textarea>' +
+      '<div class="word-bank-label" style="margin-top:8px;">💭 Feeling words:</div>' +
+      '<div class="word-bank">' + FEELING_WORDS.map(f => '<button class="wb-chip wb-feel" onclick="insertCW(\'writeFelt\',\'' + f + '\')">' + f + '</button>').join('') + '</div>' +
+      '</div>' +
+      '<div class="assembled-sentence" id="assembledPreview"><div class="assembled-label">🪄 Combined sentence (you can edit it)</div>' +
+      '<textarea id="writeAssembled" style="width:100%;min-height:60px;border:2px solid var(--green);border-radius:10px;padding:10px;font-family:Nunito,sans-serif;font-size:1rem;font-weight:700;color:#2E7D32;background:white;margin-top:6px;resize:vertical;" placeholder="Combine your kernel + why + felt into ONE clear sentence..." oninput="onAssembled()">' + esc(sent.assembled || autoAssemble(sent)) + '</textarea>' +
+      '</div>' +
+      '<div class="btn-row"><button class="btn btn-secondary" onclick="backToKernel()">← Back to kernel</button>' +
+      '<button class="btn btn-success" onclick="expansionDone()" ' + (sent.assembled ? '' : 'disabled') + '>Looks good — check coherence →</button></div>';
+  }
+
+  // STEP 3: COHERENCE CHECK (3 questions)
+  if (step === 3) {
+    contentHTML = '<div class="assembled-sentence"><div class="assembled-label">Your sentence</div>' +
+      '<div style="font-size:1.05rem;font-weight:700;color:#2E7D32;margin-top:6px;">' + esc(sent.assembled) + '</div></div>' +
+      '<div class="coherence-check">' +
+      '<h4>🔍 Coherence Check — 3 quick questions</h4>' +
+      '<div class="check-item ' + (sent.checks.topic ? 'checked' : '') + '" onclick="toggleCheck(\'topic\')">' +
+      '<div class="check-icon"></div>' +
+      '<div class="check-content"><div class="check-label">Topic — Did I stay on the path?</div>' +
+      '<div class="check-detail">Does this sentence belong to the gist anchor? <em>(' + esc(S.write.runningGist || 'set the anchor') + ')</em></div></div></div>' +
+      '<div class="check-item ' + (sent.checks.why ? 'checked' : '') + '" onclick="toggleCheck(\'why\')">' +
+      '<div class="check-icon"></div>' +
+      '<div class="check-content"><div class="check-label">Purpose — Did I tell WHY?</div>' +
+      '<div class="check-detail">Does it tell why the character did this, or what they wanted, or what it meant?</div></div></div>' +
+      '<div class="check-item ' + (sent.checks.felt ? 'checked' : '') + '" onclick="toggleCheck(\'felt\')">' +
+      '<div class="check-icon"></div>' +
+      '<div class="check-content"><div class="check-label">Feeling — Can the reader tell what the character FELT?</div>' +
+      '<div class="check-detail">Does the sentence (or the one before it) tell us how they feel?</div></div></div>' +
+      '</div>' +
+      '<p style="font-size:0.85rem;color:var(--muted);text-align:center;font-style:italic;">If a check is missing, tap the box AND go back to fix the sentence — that\'s how we get coherent.</p>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="backToExpand()">← Edit sentence</button>' +
+      '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(sent.assembled).replace(/"/g, '&quot;') + ', 0.85)">🔊 Read it back</button>' +
+      '<button class="btn btn-success" onclick="sentenceDone()">Lock in & next ✓</button>' +
+      '</div>';
+  }
+
+  // Render entire write tab — split view: plan sidebar + writing area
+  el.innerHTML =
+    '<div class="card">' +
+    '<div class="act-label act-write">✍️ Write Your Story — Sentence by Sentence</div>' +
+    '<h2>' + esc(promptCfg.label) + '</h2>' +
+    navHTML +
+    '</div>' +
+    '<div class="split-view">' +
+    '<div class="split-plan">' + planSidebar + '</div>' +
+    '<div class="split-writing">' +
+    '<div class="card">' +
+    gistHTML +
+    doneSentencesHTML +
+    stepsHTML +
+    contentHTML +
+    '</div></div></div>';
+
+  // Update talk timer if running
+  if (writeTalkStart && step === 0) {
+    if (writeTalkTimer) clearInterval(writeTalkTimer);
+    writeTalkTimer = setInterval(function() {
+      const elapsed = Math.floor((Date.now() - writeTalkStart) / 1000);
+      const mins = Math.floor(elapsed / 60); const secs = elapsed % 60;
+      const t = document.getElementById('writeTalkTimer');
+      if (t) {
+        t.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+        if (elapsed > 30) t.className = 'talk-timer long';
+      }
+    }, 1000);
+  } else if (writeTalkTimer) { clearInterval(writeTalkTimer); writeTalkTimer = null; }
+}
+
+function autoAssemble(sent) {
+  if (!sent.kernel) return '';
+  let parts = [sent.kernel.trim()];
+  if (sent.why && sent.why.trim()) parts.push(sent.why.trim());
+  if (sent.felt && sent.felt.trim()) parts.push(sent.felt.trim());
+  return parts.join(' ');
+}
+
+function startWriteTalk() {
+  writeTalkStart = Date.now();
+  renderWrite();
+}
+function doneWriteTalk() {
+  if (writeTalkTimer) clearInterval(writeTalkTimer);
+  writeTalkTimer = null;
+  writeTalkStart = null;
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!sent.dictation) { toast('Type what was said first', true); return; }
+  sent.step = 1;
+  renderWrite();
+  debounceSave();
+}
+function onWriteDictation() {
+  S.write.sentences[S.write.currentSentence].dictation = document.getElementById('writeDictation').value;
+  debounceSave();
+}
+function onKernel() {
+  const v = document.getElementById('writeKernel').value;
+  S.write.sentences[S.write.currentSentence].kernel = v;
+  const btn = document.querySelector('#card-write .btn-success');
+  if (btn) btn.disabled = !v;
+  debounceSave();
+}
+function backToTell() { S.write.sentences[S.write.currentSentence].step = 0; renderWrite(); debounceSave(); }
+function kernelFound() {
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!sent.kernel) return;
+  sent.step = 2;
+  if (!sent.assembled) sent.assembled = sent.kernel;
+  renderWrite();
+  debounceSave();
+}
+function onWhy() {
+  S.write.sentences[S.write.currentSentence].why = document.getElementById('writeWhy').value;
+  // Auto-update assembled if it's still empty/just kernel
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!document.getElementById('writeAssembled').value || document.getElementById('writeAssembled').value === sent.kernel) {
+    document.getElementById('writeAssembled').value = autoAssemble(sent);
+    sent.assembled = document.getElementById('writeAssembled').value;
+  }
+  debounceSave();
+}
+function onFelt() {
+  S.write.sentences[S.write.currentSentence].felt = document.getElementById('writeFelt').value;
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!document.getElementById('writeAssembled').value || document.getElementById('writeAssembled').value === sent.kernel || document.getElementById('writeAssembled').value === autoAssemble({ kernel: sent.kernel, why: sent.why })) {
+    document.getElementById('writeAssembled').value = autoAssemble(sent);
+    sent.assembled = document.getElementById('writeAssembled').value;
+  }
+  debounceSave();
+}
+function onAssembled() {
+  const v = document.getElementById('writeAssembled').value;
+  S.write.sentences[S.write.currentSentence].assembled = v;
+  const btn = document.querySelector('#card-write .btn-success');
+  if (btn) btn.disabled = !v;
+  debounceSave();
+}
+function backToKernel() { S.write.sentences[S.write.currentSentence].step = 1; renderWrite(); debounceSave(); }
+function expansionDone() {
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!sent.assembled) return;
+  sent.step = 3;
+  renderWrite();
+  debounceSave();
+}
+function backToExpand() { S.write.sentences[S.write.currentSentence].step = 2; renderWrite(); debounceSave(); }
+function toggleCheck(key) {
+  const sent = S.write.sentences[S.write.currentSentence];
+  sent.checks[key] = !sent.checks[key];
+  renderWrite();
+  debounceSave();
+}
+function sentenceDone() {
+  const sent = S.write.sentences[S.write.currentSentence];
+  sent.done = true;
+  sent.step = 4;
+  S.timestamps['sentence' + (S.write.currentSentence + 1)] = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Narrative Sentence ' + (S.write.currentSentence + 1), 'Writing', 'Complete', '', '',
+    'Kernel: ' + (sent.kernel || '').slice(0, 60) + ' | Final: ' + (sent.assembled || '').slice(0, 120) +
+    ' | Checks: T' + (sent.checks.topic ? '✓' : '✗') + ' P' + (sent.checks.why ? '✓' : '✗') + ' F' + (sent.checks.felt ? '✓' : '✗')]);
+  toast('Sentence ' + (S.write.currentSentence + 1) + ' done! 🎉');
+  fireCelebration();
+  // Auto-advance
+  const nextIdx = S.write.sentences.findIndex(s => !s.done);
+  if (nextIdx === -1) {
+    S.write.done = true;
+    document.getElementById('mtab-write').classList.add('done');
+    renderWriteComplete(document.getElementById('card-write'));
+  } else {
+    S.write.currentSentence = nextIdx;
+    renderWrite();
+  }
+  debounceSave();
+}
+function goToSentence(i) {
+  S.write.currentSentence = i;
+  if (writeTalkTimer) clearInterval(writeTalkTimer);
+  writeTalkTimer = null; writeTalkStart = null;
+  renderWrite();
+  debounceSave();
+}
+function insertCW(targetId, word) {
+  const ta = document.getElementById(targetId);
+  if (!ta) return;
+  const insertText = (ta.value && !ta.value.endsWith(' ') ? ' ' : '') + word + ' ';
+  const start = ta.selectionStart || ta.value.length;
+  ta.value = ta.value.slice(0, start) + insertText + ta.value.slice(start);
+  ta.focus();
+  if (targetId === 'writeWhy') onWhy();
+  else if (targetId === 'writeFelt') onFelt();
+}
+function editGist() {
+  const current = S.write.runningGist || '';
+  const newG = prompt('What is THIS paragraph about? (one short line)', current);
+  if (newG !== null) {
+    S.write.runningGist = newG;
+    renderWrite();
+    debounceSave();
+  }
+}
+function renderWriteComplete(el) {
+  const sentences = S.write.sentences.filter(s => s.done);
+  const fullText = sentences.map(s => s.assembled).join(' ');
+  const wordCount = fullText.split(/\s+/).filter(Boolean).length;
+  const cwUsed = NARRATIVE_CW.filter(cw => fullText.toLowerCase().split(/\s+/).includes(cw)).length;
+  const feelUsed = FEELING_WORDS.filter(f => fullText.toLowerCase().includes(f)).length;
+  el.innerHTML =
+    '<div class="card">' +
+    '<div class="essay-complete-banner">' +
+    '<div style="font-size:3.5rem;margin-bottom:6px;">🎉</div>' +
+    '<h2>Your first narrative intro!</h2>' +
+    '<p>You wrote ' + sentences.length + ' coherent sentences about coming to America.</p>' +
+    '</div>' +
+    '<div style="background:white;border:2px solid var(--green);border-radius:14px;padding:20px;margin:16px 0;">' +
+    '<h3 style="color:#2E7D32;margin-bottom:10px;">📖 Your Story</h3>' +
+    '<p style="font-size:1.05rem;line-height:1.9;font-weight:600;">' + esc(fullText) + '</p>' +
+    '</div>' +
+    '<div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:14px 0;">' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 20px;box-shadow:var(--shadow);min-width:80px;"><div style="font-size:1.5rem;font-weight:800;color:var(--teal);">' + wordCount + '</div><div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Words</div></div>' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 20px;box-shadow:var(--shadow);min-width:80px;"><div style="font-size:1.5rem;font-weight:800;color:var(--purple);">' + cwUsed + '</div><div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Connectors</div></div>' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 20px;box-shadow:var(--shadow);min-width:80px;"><div style="font-size:1.5rem;font-weight:800;color:#E91E63;">' + feelUsed + '</div><div style="font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Feelings</div></div>' +
+    '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(fullText).replace(/"/g, '&quot;') + ', 0.85)">🔊 Read whole story</button>' +
+    '<button class="btn btn-success" onclick="switchTab(\'wrap\')">Wrap-up: Stars & a Wish ⭐</button>' +
+    '</div>' +
+    '</div>';
+}
+
+// ============================================================
+//  TAB 5: WRAP-UP — Stars & a Wish
+// ============================================================
+function renderWrap() {
+  const el = document.getElementById('card-wrap');
+  const saw = S.starsAndWish;
+  const sentences = S.write.sentences.filter(s => s.done);
+  if (sentences.length === 0) {
+    el.innerHTML = '<div class="act-label act-wrap">⭐ Wrap-up</div>' +
+      '<h2>Finish your story first!</h2>' +
+      '<p class="directions">Wrap-up needs at least one finished sentence to celebrate. Head back to Write.</p>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="switchTab(\'write\')">← Back to Write</button></div>';
+    return;
+  }
+
+  el.innerHTML = '<div class="act-label act-wrap">⭐ Stars & a Wish</div>' +
+    '<h2>Look back at your sentences</h2>' +
+    '<p class="directions">Tap <strong>⭐ Star</strong> for sentences that are STRONG. Pick ONE to give a 🌱 wish — what could make it even better?</p>' +
+    '<div class="saw-section">' +
+    sentences.map(function(s, i) {
+      const starred = saw.stars.includes(i);
+      const wished = saw.wish === String(i);
+      return '<div class="saw-sentence ' + (starred ? 'saw-starred' : '') + (wished ? ' saw-wished' : '') + '">' +
+        '<div class="saw-text">' + esc(s.assembled) + '</div>' +
+        '<div class="saw-btns">' +
+        '<button class="saw-btn saw-btn-star ' + (starred ? 'active' : '') + '" onclick="toggleStar(' + i + ')">⭐ Star</button>' +
+        '<button class="saw-btn saw-btn-wish ' + (wished ? 'active' : '') + '" onclick="toggleWish(' + i + ')">🌱 Wish</button>' +
+        '</div>' +
+        (wished ? '<div style="margin-top:10px;padding:12px;background:var(--orange-light);border:2px solid var(--orange);border-radius:12px;">' +
+          '<div style="font-weight:700;font-size:0.85rem;color:#E65100;margin-bottom:6px;">🌱 What could make this stronger?</div>' +
+          '<textarea style="width:100%;min-height:50px;border:2px solid #FFB74D;border-radius:8px;padding:10px;font-family:Nunito,sans-serif;font-size:0.95rem;font-weight:600;resize:vertical;" placeholder="Add WHY, FEELING, or be more specific..." oninput="onWishFix(this)">' + esc(saw.wishFix || '') + '</textarea>' +
+          '</div>' : '') +
+        '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="info-box">💡 Stars are for the parts you\'re PROUD of. The wish is just ONE thing to grow next time. We don\'t pile on.</div>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="finishWrap()">All done — finish session ✓</button></div>';
+}
+
+function toggleStar(i) {
+  const saw = S.starsAndWish;
+  if (saw.stars.includes(i)) saw.stars = saw.stars.filter(x => x !== i);
+  else saw.stars.push(i);
+  renderWrap();
+  debounceSave();
+}
+function toggleWish(i) {
+  const saw = S.starsAndWish;
+  saw.wish = saw.wish === String(i) ? '' : String(i);
+  renderWrap();
+  debounceSave();
+}
+function onWishFix(ta) { S.starsAndWish.wishFix = ta.value; debounceSave(); }
+function finishWrap() {
+  S.starsAndWish.done = true;
+  S.timestamps.sessionEnd = new Date().toISOString();
+  document.getElementById('mtab-wrap').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Stars & a Wish — Narrative', 'Writing', 'Complete', '', '',
+    'Stars on: ' + S.starsAndWish.stars.map(i => i+1).join(',') +
+    ' | Wish: ' + S.starsAndWish.wish +
+    ' | Fix: ' + (S.starsAndWish.wishFix || '').slice(0, 80)]);
+  toast('Session complete! 🏆🗽');
+  fireCelebration();
+  setTimeout(function() {
+    document.getElementById('card-wrap').innerHTML =
+      '<div class="celebration"><div class="big-star">🗽</div>' +
+      '<h2>Beautiful work today, Marcello!</h2>' +
+      '<p style="font-size:1.05rem;line-height:1.6;color:var(--muted);margin-top:8px;">You wrote your first narrative. You used WHY and FEELINGS. You stayed on the path. <br><br>That\'s real coherence. ⭐</p></div>' +
+      '<div class="btn-row"><button class="btn btn-secondary" onclick="switchTab(\'write\')">View my story</button></div>';
+  }, 1500);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+async function init() {
+  // Try cloud first (most recent), fall back to local
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState && cloudState.timestamps) {
+    Object.assign(S, cloudState);
+    toast('Loaded from cloud ☁️');
+  } else if (loadFromLocalStorage()) {
+    toast('Loaded local save');
+  }
+  // Resume on the right tab
+  if (S.starsAndWish && S.starsAndWish.done) switchTab('wrap');
+  else if (S.write && S.write.done) switchTab('wrap');
+  else if (S.plan && S.plan.done) switchTab('write');
+  else if (S.retell && S.retell.done) switchTab('plan');
+  else if (S.reading && S.reading.passage && S.reading.passage.done) switchTab('retell');
+  else renderReading();
+  // Periodic cloud safety net
+  setInterval(saveStateToCloud, 30000);
+}
+init();
+</script>
+</body>
+</html>
