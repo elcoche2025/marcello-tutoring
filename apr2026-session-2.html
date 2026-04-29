@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — April 29, 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --blue: #4472C4; --blue-light: #D9E2F3;
+    --gold: #F5C542; --gold-light: #FFF8E1;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --orange: #FF9800; --orange-light: #FFF3E0;
+    --red: #E53935; --red-light: #FFEBEE;
+    --purple: #9C27B0; --purple-light: #F3E5F5;
+    --teal: #00897B; --teal-light: #E0F2F1;
+    --bg: #F4F6FB; --card: #FFFFFF;
+    --text: #2D3748; --muted: #718096;
+    --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header {
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 50%, #42a5f5 100%);
+    color: white; text-align: center; padding: 24px 20px 48px; position: relative;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.85; }
+  .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.7; transition: opacity 0.3s; }
+  .save-indicator.flash { opacity: 1; }
+
+  .main-tabs { display: flex; justify-content: center; gap: 5px; padding: 10px 8px 0; max-width: 800px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
+  .main-tab {
+    padding: 9px 11px; border-radius: 12px; font-weight: 700; font-size: 0.76rem;
+    cursor: pointer; transition: all 0.25s; border: 2px solid #D0D5DD;
+    background: white; color: var(--muted); display: flex; align-items: center; gap: 4px;
+    font-family: 'Nunito', sans-serif; white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--teal); color: var(--teal); }
+  .main-tab.active { background: var(--teal); border-color: var(--teal); color: white; box-shadow: 0 3px 12px rgba(0,137,123,0.35); transform: translateY(-2px); }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container { max-width: 720px; margin: 16px auto; padding: 0 16px; }
+  .container.wide { max-width: 980px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions { font-size: 0.92rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+  .act-label { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; }
+  .act-read  { background: var(--teal-light); color: var(--teal); }
+  .act-retell { background: var(--blue-light); color: var(--blue); }
+  .act-plan  { background: var(--purple-light); color: var(--purple); }
+  .act-write { background: var(--green-light); color: #2E7D32; }
+  .act-wrap  { background: var(--gold-light); color: #B8860B; }
+
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-purple { background: var(--purple); color: white; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-gold { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  .q-progress { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .q-dots { display: flex; gap: 5px; }
+  .q-dot { width: 10px; height: 10px; border-radius: 50%; background: #E0E0E0; transition: background 0.3s; }
+  .q-dot.done { background: var(--green); }
+  .q-dot.current { background: var(--teal); }
+  .q-label { font-size: 0.78rem; color: var(--muted); font-weight: 600; }
+
+  .flashcard { background: white; border: 3px solid var(--teal); border-radius: 20px; padding: 40px 20px; text-align: center; margin: 16px 0; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.3s; }
+  .flashcard .word { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; color: var(--text); }
+  .flashcard .tricky-highlight { font-size: 2.2rem; font-weight: 800; margin-top: 10px; letter-spacing: 2px; }
+  .flashcard .tricky-highlight .tricky { color: var(--red); background: var(--red-light); padding: 2px 6px; border-radius: 8px; }
+  .flashcard .tricky-highlight .normal { color: var(--text); }
+  .flashcard .sound-info { font-size: 1rem; color: var(--muted); margin-top: 8px; font-weight: 700; }
+  .flashcard.correct { border-color: var(--green); background: var(--green-light); }
+  .flashcard.incorrect { border-color: var(--red); background: var(--red-light); }
+
+  .passage-box { background: white; border: 2px solid #D0D5DD; border-radius: 12px; padding: 20px; font-size: 1.1rem; line-height: 1.8; margin: 14px 0; }
+  .passage-box .target-word { background: var(--gold-light); padding: 1px 6px; border-radius: 6px; font-weight: 700; }
+
+  .prosody-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .prosody-item { background: #FAFBFC; border: 2px solid #E0E0E0; border-radius: 12px; padding: 12px; text-align: center; }
+  .prosody-item .pi-label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  .prosody-item .pi-scores { display: flex; justify-content: center; gap: 6px; }
+  .pi-score { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; border: 2px solid #D0D5DD; background: white; cursor: pointer; transition: all 0.2s; font-family: 'Nunito', sans-serif; }
+  .pi-score:hover { border-color: var(--teal); }
+  .pi-score.selected { background: var(--teal); color: white; border-color: var(--teal); }
+
+  /* RETELL TAB */
+  .model-story-box { background: var(--blue-light); border: 2px solid var(--blue); border-radius: 14px; padding: 20px; margin: 14px 0; font-size: 1.05rem; line-height: 1.9; }
+  .sticky-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  @media (max-width: 600px) { .sticky-grid { grid-template-columns: 1fr; } }
+  .sticky-note { background: #FFFDE7; border: 2px solid #FDD835; border-radius: 10px; padding: 14px; transform: rotate(-0.5deg); transition: transform 0.2s; }
+  .sticky-note:nth-child(2n) { background: #FFE0B2; border-color: #FFA726; transform: rotate(0.5deg); }
+  .sticky-note:nth-child(3n) { background: #C8E6C9; border-color: #66BB6A; transform: rotate(-0.3deg); }
+  .sticky-note:nth-child(4n) { background: #BBDEFB; border-color: #42A5F5; transform: rotate(0.3deg); }
+  .sticky-note:hover { transform: rotate(0deg) scale(1.02); }
+  .sticky-note .sn-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #5D4037; margin-bottom: 6px; }
+  .sticky-note .sn-question { font-size: 0.85rem; font-weight: 600; color: #6D4C41; margin-bottom: 8px; line-height: 1.4; }
+  .sticky-note textarea { width: 100%; min-height: 60px; border: none; background: rgba(255,255,255,0.6); border-radius: 6px; padding: 8px; font-family: 'Nunito', sans-serif; font-size: 0.92rem; font-weight: 600; resize: vertical; line-height: 1.4; color: var(--text); }
+  .sticky-note textarea:focus { outline: 2px solid var(--orange); }
+
+  /* PLANNER TAB */
+  .interview-q { background: var(--purple-light); border-radius: 14px; padding: 18px; margin-bottom: 16px; }
+  .interview-q .iq-num { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--purple); margin-bottom: 6px; }
+  .interview-q .iq-question { font-size: 1.05rem; font-weight: 700; color: #4A148C; margin-bottom: 12px; line-height: 1.4; }
+  .iq-textarea { width: 100%; min-height: 70px; border: 2px solid #CE93D8; border-radius: 10px; padding: 12px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; resize: vertical; line-height: 1.5; background: white; }
+  .iq-textarea:focus { border-color: var(--purple); outline: none; }
+  .help-btn-wrap { text-align: center; margin-top: 8px; }
+  .help-btn { background: var(--orange-light); border: 2px solid var(--orange); border-radius: 10px; padding: 8px 16px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; }
+  .help-btn:hover { background: #FFE0B2; }
+  .help-panel { background: var(--orange-light); border: 2px solid #FFB74D; border-radius: 12px; padding: 16px; margin-top: 10px; display: none; animation: fadeUp 0.3s; }
+  .help-panel.show { display: block; }
+  .help-level { margin-bottom: 12px; }
+  .help-level-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #E65100; margin-bottom: 4px; }
+  .help-level p { font-size: 0.9rem; line-height: 1.5; }
+
+  /* WRITE TAB - split view */
+  .split-view { display: flex; gap: 16px; align-items: flex-start; }
+  .split-plan { width: 36%; flex-shrink: 0; position: sticky; top: 16px; }
+  .split-writing { flex: 1; min-width: 0; }
+  .plan-sidebar { background: var(--purple-light); border: 2px solid var(--purple); border-radius: 14px; padding: 16px; }
+  .plan-sidebar h3 { color: var(--purple); font-size: 0.95rem; margin-bottom: 10px; }
+  .ps-item { margin-bottom: 10px; }
+  .ps-label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); margin-bottom: 2px; }
+  .ps-text { font-size: 0.88rem; line-height: 1.4; font-weight: 600; color: var(--text); }
+  .ps-empty { font-size: 0.85rem; color: var(--muted); font-style: italic; }
+  @media (max-width: 768px) {
+    .split-view { flex-direction: column; }
+    .split-plan { width: 100%; position: static; }
+    .container.wide { max-width: 720px; }
+  }
+
+  /* RUNNING GIST ANCHOR (NEW) */
+  .gist-anchor {
+    background: linear-gradient(135deg, #FFF8E1, #FFE082);
+    border: 3px solid var(--gold);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    position: sticky;
+    top: 8px;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .gist-anchor .ga-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #B8860B; margin-bottom: 4px; }
+  .gist-anchor .ga-text { font-size: 1.05rem; font-weight: 700; color: #5D4037; line-height: 1.4; font-style: italic; }
+  .gist-anchor .ga-icon { display: inline-block; margin-right: 6px; }
+
+  /* SENTENCE EXPANSION */
+  .step-indicator { display: flex; gap: 6px; margin: 14px 0; flex-wrap: wrap; }
+  .step-pill { flex: 1; min-width: 70px; padding: 8px 6px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 0.75rem; border: 2px solid #E0E0E0; background: #FAFBFC; transition: all 0.3s; }
+  .step-pill.step-active { border-color: var(--teal); background: var(--teal-light); color: var(--teal); }
+  .step-pill.step-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+  .step-pill .step-icon { font-size: 1.1rem; display: block; margin-bottom: 2px; }
+
+  .dictation-box { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 14px; padding: 20px; margin: 14px 0; text-align: center; }
+  .dictation-box textarea { width: 100%; min-height: 100px; border: 2px solid #D0D5DD; border-radius: 10px; padding: 14px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; resize: vertical; line-height: 1.6; }
+  .dictation-box textarea:focus { border-color: var(--teal); outline: none; }
+  .talk-timer { font-size: 1.8rem; font-weight: 800; color: var(--teal); margin: 10px 0; }
+  .talk-timer.long { color: var(--green); }
+
+  .kernel-card { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 16px; margin: 12px 0; }
+  .kernel-card .kc-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #B8860B; margin-bottom: 4px; }
+  .kernel-card .kc-text { font-size: 1rem; line-height: 1.5; font-weight: 600; font-style: italic; }
+
+  .expand-card { background: white; border: 2px solid var(--teal); border-radius: 12px; padding: 16px; margin: 10px 0; }
+  .expand-card .ec-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--teal); margin-bottom: 6px; }
+  .expand-card .ec-question { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .expand-card textarea { width: 100%; min-height: 50px; border: 2px solid var(--teal-light); border-radius: 8px; padding: 10px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; resize: vertical; line-height: 1.5; }
+  .expand-card textarea:focus { border-color: var(--teal); outline: none; }
+  .expand-card.purpose { border-color: var(--purple); }
+  .expand-card.purpose .ec-label { color: var(--purple); }
+  .expand-card.feeling { border-color: #E91E63; }
+  .expand-card.feeling .ec-label { color: #E91E63; }
+
+  .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .word-bank-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .wb-chip { padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; border: 2px solid var(--teal); background: var(--teal-light); color: var(--teal); font-family: 'Nunito', sans-serif; }
+  .wb-chip:hover { transform: translateY(-2px); background: var(--teal); color: white; }
+  .wb-feel { border-color: #E91E63; background: #FCE4EC; color: #C2185B; }
+  .wb-feel:hover { background: #E91E63; color: white; }
+
+  .assembled-sentence { background: var(--green-light); border: 2px solid var(--green); border-radius: 10px; padding: 14px; margin-top: 10px; font-size: 1rem; line-height: 1.6; color: #2E7D32; font-weight: 700; min-height: 50px; }
+  .assembled-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #2E7D32; margin-bottom: 4px; }
+
+  /* 3-QUESTION COHERENCE CHECK (NEW) */
+  .coherence-check { background: white; border: 3px solid var(--orange); border-radius: 14px; padding: 18px; margin: 16px 0; }
+  .coherence-check h4 { font-size: 0.95rem; color: #E65100; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; background: #FAFBFC; border-radius: 10px; margin-bottom: 8px; transition: all 0.25s; cursor: pointer; }
+  .check-item:hover { background: var(--orange-light); }
+  .check-item.checked { background: var(--green-light); border-left: 4px solid var(--green); }
+  .check-item .check-icon { font-size: 1.3rem; line-height: 1; }
+  .check-item .check-content { flex: 1; }
+  .check-item .check-label { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .check-item .check-detail { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+  .check-item.checked .check-icon::before { content: '✓'; color: var(--green); font-weight: 800; }
+  .check-item:not(.checked) .check-icon::before { content: '○'; color: #B0BEC5; }
+
+  .done-sentences-card { background: var(--green-light); border: 2px solid var(--green); border-radius: 14px; padding: 16px 20px; margin-bottom: 16px; }
+  .done-sentences-card h3 { color: #2E7D32; margin-bottom: 8px; font-size: 0.95rem; }
+  .done-sent { background: white; border-radius: 8px; padding: 10px 14px; margin-bottom: 6px; font-size: 0.95rem; line-height: 1.5; font-weight: 600; border-left: 3px solid var(--green); display: flex; align-items: flex-start; gap: 6px; }
+  .done-sent .check { color: var(--green); font-weight: 800; }
+
+  .sentence-nav { display: flex; gap: 8px; margin: 14px 0; justify-content: center; flex-wrap: wrap; }
+  .sentence-nav-btn { padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; border: 2px solid #D0D5DD; background: white; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .sentence-nav-btn.sn-active { border-color: var(--teal); background: var(--teal); color: white; }
+  .sentence-nav-btn.sn-done { border-color: var(--green); background: var(--green-light); color: #2E7D32; }
+
+  /* WRAP-UP - Stars and a Wish */
+  .saw-section { margin: 16px 0; }
+  .saw-sentence { background: white; border: 2px solid #E0E0E0; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; transition: border-color 0.3s; }
+  .saw-sentence.saw-starred { border-color: var(--gold); background: var(--gold-light); }
+  .saw-sentence.saw-wished { border-color: var(--orange); background: var(--orange-light); }
+  .saw-sentence .saw-text { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+  .saw-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .saw-btn { padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; border: 2px solid transparent; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .saw-btn-star { background: var(--gold-light); border-color: var(--gold); color: #7B6400; }
+  .saw-btn-star:hover, .saw-btn-star.active { background: var(--gold); color: white; }
+  .saw-btn-wish { background: var(--orange-light); border-color: var(--orange); color: #7B4100; }
+  .saw-btn-wish:hover, .saw-btn-wish.active { background: var(--orange); color: white; }
+
+  .essay-complete-banner {
+    background: linear-gradient(135deg, #FFD54F, #FFB300);
+    border-radius: 16px; padding: 30px 20px; text-align: center; margin: 16px 0;
+    animation: popIn 0.5s ease;
+  }
+  .essay-complete-banner h2 { font-size: 1.6rem; color: #5D4037; margin-bottom: 4px; }
+  .essay-complete-banner p { color: #6D4C41; font-weight: 600; }
+  @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+
+  .celebration { text-align: center; padding: 20px 0; }
+  .celebration .big-star { font-size: 3rem; margin-bottom: 8px; }
+
+  .info-box { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; font-size: 0.92rem; color: #0D47A1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Session</h1>
+  <p>April 29, 2026 — Charlie's Journal Entry 📓 + CAPE Warm-Up 🗽</p>
+  <div class="save-indicator" id="saveIndicator">Saved ✓</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">📖 CAPE Warm-Up</button>
+  <button class="main-tab" id="mtab-retell" onclick="switchTab('retell')">🔍 Look Back</button>
+  <button class="main-tab" id="mtab-plan" onclick="switchTab('plan')">📓 Plan Journal</button>
+  <button class="main-tab" id="mtab-write" onclick="switchTab('write')">✍️ Write</button>
+  <button class="main-tab" id="mtab-wrap" onclick="switchTab('wrap')">⭐ Compare</button>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-reading"><div class="card" id="card-reading"></div></div>
+  <div class="tab-panel" id="panel-retell"><div class="card" id="card-retell"></div></div>
+  <div class="tab-panel" id="panel-plan"><div class="card" id="card-plan"></div></div>
+  <div class="tab-panel" id="panel-write"><div id="card-write"></div></div>
+  <div class="tab-panel" id="panel-wrap"><div class="card" id="card-wrap"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG & GLOBALS
+// ============================================================
+const STORAGE_KEY = 'marcello_apr29_session';
+const CLOUD_STATE_KEY = 'apr2026_session_7';
+const PREV_CLOUD_KEY = 'apr2026_session_6';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-04-29';
+
+let activeTab = 'reading';
+
+let S = {
+  reading: {
+    // CAPE warm-up: tool rehearsal + 2 EBSR items on a real released passage
+    toolsRehearsed: { highlighter: false, eliminator: false, prompt: false },
+    passageRead: false,
+    ebsr: [
+      { partA: null, partB: null, done: false },
+      { partA: null, partB: null, done: false }
+    ],
+    done: false
+  },
+  retell: {
+    // "Look Back" — paragraph-level Stars & a Wish on his Apr 27 story
+    listenedToOwn: false,
+    sentenceTags: [null, null, null, null],   // 'most-new' | 'restate' | null per Apr 27 sentence
+    feelingsCounted: false,
+    repeatsCounted: false,
+    gender: '',         // 'boy' | 'girl' (Charlie's gender — locks pronouns)
+    pronouns: '',       // 'he/his' | 'she/her' (auto from gender)
+    done: false
+  },
+  plan: {
+    q1: '', q2: '', q3: '', q4: '',
+    helpUsed: {},
+    done: false
+  },
+  write: {
+    runningGist: '',
+    sentences: [
+      { dictation: '', kernel: '', why: '', felt: '', sensory: '', assembled: '', step: 0, checks: { topic: false, why: false, felt: false, fresh: false }, done: false },
+      { dictation: '', kernel: '', why: '', felt: '', sensory: '', assembled: '', step: 0, checks: { topic: false, why: false, felt: false, fresh: false }, done: false },
+      { dictation: '', kernel: '', why: '', felt: '', sensory: '', assembled: '', step: 0, checks: { topic: false, why: false, felt: false, fresh: false }, done: false }
+    ],
+    currentSentence: 0,
+    done: false
+  },
+  starsAndWish: { stars: [], done: false },
+  timestamps: {},
+  points: 0
+};
+
+// ============================================================
+//  DATA
+// ============================================================
+
+// === CAPE WARM-UP ===
+// Trimmed excerpt from "Johnny Chuck Finds the Best Thing in the World" by Thornton W. Burgess (PUBLIC DOMAIN).
+// Source: DC CAPE Grade 3 ELA Released Practice Test (Pearson dc.mypearsonsupport.com) — Unit 1, Passage 1.
+// Used here as authentic CAPE-format reading practice.
+const CAPE_PASSAGE = {
+  title: "Johnny Chuck Finds the Best Thing in the World",
+  author: "by Thornton W. Burgess",
+  source: "From the official DC CAPE Grade 3 ELA Practice Test",
+  paragraphs: [
+    { n: 1, text: 'Old Mother West Wind had stopped to talk with the Slender Fir Tree.' },
+    { n: 2, text: '"I\'ve just come across the Green Meadows," said Old Mother West Wind, "and there I saw the Best Thing in the World."' },
+    { n: 3, text: 'Striped Chipmunk was sitting under the Slender Fir Tree and he couldn\'t help hearing what Old Mother West Wind said. "The Best Thing in the World — now what can that be?" thought Striped Chipmunk. "Why, it must be heaps and heaps of nuts and acorns! I\'ll go and find it."' },
+    { n: 4, text: 'So Striped Chipmunk started down the Lone Little Path through the wood as fast as he could run. Pretty soon he met Peter Rabbit.' },
+    { n: 5, text: '"The Best Thing in the World," said Peter Rabbit, "why, that must be a great pile of carrots and cabbage! I think I\'ll go and find it."' },
+    { n: 6, text: 'But all day long Striped Chipmunk and Peter Rabbit and the others ran this way and ran that way over the Green Meadows trying to find the Best Thing in the World. The sun was very, very warm and they ran so far and they ran so fast that they were very, very hot and tired, and still they hadn\'t found the Best Thing in the World.' },
+    { n: 7, text: 'When the long day was over they started up the Lone Little Path past Johnny Chuck\'s house to their own homes. They didn\'t hurry now for they were so very, very tired! And they were cross — oh so cross!' },
+    { n: 8, text: 'Half way up the Lone Little Path they met Old Mother West Wind. "Did you find the Best Thing in the World?" asked Old Mother West Wind. "No!" they all shouted together.' },
+    { n: 9, text: '"Johnny Chuck has it," said Old Mother West Wind. "It is being happy with the things you have and not wanting things which some one else has."' }
+  ]
+};
+
+// Two real EBSR items from the released test, adapted for our shorter excerpt
+const CAPE_EBSR = [
+  {
+    qNum: 1,
+    standard: 'RL.3.4 — vocabulary in context',
+    partA: {
+      stem: 'What does <strong>cross</strong> mean as it is used in paragraph 7 of "Johnny Chuck Finds the Best Thing in the World"?',
+      options: [
+        { letter: 'A', text: 'excited' },
+        { letter: 'B', text: 'lost' },
+        { letter: 'C', text: 'upset' },
+        { letter: 'D', text: 'scared' }
+      ],
+      correct: 'C'
+    },
+    partB: {
+      stem: 'Which statement best supports the answer to Part A?',
+      options: [
+        { letter: 'A', text: '"... ran this way and ran that way ..."' },
+        { letter: 'B', text: '"... hadn\'t found the Best Thing in the World."' },
+        { letter: 'C', text: '"... they started up the Lone Little Path ..."' },
+        { letter: 'D', text: '"They didn\'t hurry now ..."' }
+      ],
+      correct: 'D'
+    },
+    teach: 'When BOTH parts are right, you get full credit. If only Part A is right but Part B is wrong — zero. So always go back to the text for Part B.'
+  },
+  {
+    qNum: 2,
+    standard: 'RL.3.2 — moral / central message',
+    partA: {
+      stem: 'What is the moral of "Johnny Chuck Finds the Best Thing in the World"?',
+      options: [
+        { letter: 'A', text: 'Sometimes you can find happiness by following others.' },
+        { letter: 'B', text: 'You will usually be happy when you are by yourself.' },
+        { letter: 'C', text: 'Sometimes you must search for happiness.' },
+        { letter: 'D', text: 'You can be happy with what you have.' }
+      ],
+      correct: 'D'
+    },
+    partB: {
+      stem: 'Which detail from the story best supports the answer to Part A?',
+      options: [
+        { letter: 'A', text: '"\'Where are you going in such a hurry?\' asked Johnny Chuck." (paragraph 4)' },
+        { letter: 'B', text: '"It is being happy with the things you have and not wanting things which some one else has." (paragraph 9)' },
+        { letter: 'C', text: '"... they were very, very hot and tired ..." (paragraph 6)' },
+        { letter: 'D', text: '"... met Old Mother West Wind." (paragraph 8)' }
+      ],
+      correct: 'B'
+    },
+    teach: 'For "main idea" or "moral" questions on CAPE, the right Part B is usually a quote that DIRECTLY says the lesson. Look for the sentence that sounds like the answer.'
+  }
+];
+
+// The official CAPE Grade 3 narrative writing prompt format (for Q19 prompt preview)
+const CAPE_NWT_PROMPT = {
+  source: 'DC CAPE Grade 3 ELA — Narrative Writing Task (Q19), Unit 3',
+  passageTitle: '"A Once-in-a-Lifetime Experience"',
+  promptText: 'This story tells about Derrick\'s first camping trip. <strong>Write Derrick\'s journal entry about this camping trip. Include information about how the characters responded to the events in the story as you write the journal entry.</strong>'
+};
+
+// === LOOK-BACK TAB ===
+// Marcello's 4 sentences from Apr 27. Read aloud, tag each, then we revise.
+const APR27_SENTENCES = [
+  { n: 1, text: 'Charlie went to New York with his dad and his mother because they had never seen the Statue of Liberty before and they just really wanted to go there. It was a long time ago, and they came from Italy. They felt happy and joyful.' },
+  { n: 2, text: 'A long time ago, Charlie and his parents sailed from Italy to New York to see the Statue of Liberty. They were so happy and joyful when they saw it.' },
+  { n: 3, text: 'Charlie and his parents felt excited when they finally got off the boat to see the Statue of Liberty, because it was their first time in New York.' },
+  { n: 4, text: 'They felt joyful as they went to the Statue of Liberty to take pictures because it was their first time visiting the Statue of Liberty and they wanted to remember it.' }
+];
+
+const APR27_REPEATS = ['Statue of Liberty (5 times)', 'happy / joyful (4 times)', '"first time" (3 times)', 'Italy (3 times)'];
+
+// === JOURNAL PLANNER ===
+// Reframed as Charlie's journal entry. First-person POV solves the pronoun-gender slip.
+// Q4 (gender lock) renders separately — see retell tab — and is shown read-only here.
+const PLAN_QUESTIONS = [
+  {
+    key: 'q1',
+    label: 'Sentence 1 — WHO + WHERE + WHEN',
+    question: '📓 Charlie sits down to write in his diary. Where IS Charlie? When is it? <em>(No big moment yet. No feelings yet.)</em>',
+    sayFirst: 'Try: "Tonight I am in ___. We just got here from ___."',
+    placeholder: 'Tonight I am ... / Today we ...',
+    color: 'blue',
+    territory: 'WHO (I + my family) · WHERE (the place) · WHEN (today / tonight). NOT the big moment. NOT a feeling.'
+  },
+  {
+    key: 'q2',
+    label: 'Sentence 2 — ONE thing I saw or did',
+    question: '👀 Pick ONE thing Charlie saw or did. Just ONE. Add ONE feeling about it.',
+    sayFirst: 'Try: "When I saw ___ I felt ___."',
+    placeholder: 'When I saw ... / Today I ...',
+    color: 'green',
+    territory: 'ONE specific thing seen or done · ONE feeling word (NOT happy or joyful — pick a different one).'
+  },
+  {
+    key: 'q3',
+    label: 'Sentence 3 — What happened NEXT (different feeling)',
+    question: '➡️ What happened AFTER that? What did Charlie do or notice next? Pick a DIFFERENT feeling word.',
+    sayFirst: 'Try: "Then we ___" or "After that, ___"',
+    placeholder: 'Then ... / After that ...',
+    color: 'purple',
+    territory: 'A DIFFERENT event from S2 · A DIFFERENT feeling from S2.'
+  },
+  {
+    key: 'q4',
+    label: 'Sentence 4 — Closing thought (optional, stretch)',
+    question: '💭 If Charlie keeps writing — what does he want to remember about today?',
+    sayFirst: 'Try: "I want to remember ___" or "Tomorrow ___"',
+    placeholder: 'Tomorrow ... / I think ...',
+    color: 'orange',
+    territory: 'A wrap-up thought · the diary closes. STRETCH only — three sentences is the goal.'
+  }
+];
+
+const PLAN_HELP = {
+  q1: [
+    'Charlie is writing in his journal at the end of the day. Where IS he? At a hotel? At Aunt Maria\'s house? Still on the boat? In New York City. WHEN is it — tonight? Today? After we got off the boat?',
+    'Example: "Tonight I am in New York City. We just got off the big ship from Italy."',
+    'I am sitting in my room in New York. We came here from Italy.'
+  ],
+  q2: [
+    'Pick ONE thing — Charlie can\'t write about everything tonight. The Statue of Liberty? The dock? The first time he heard English? Add a feeling that is NOT happy/joyful — try amazed, small, brave, tired, curious.',
+    'Example: "When I saw the Statue of Liberty I felt small."',
+    'When I saw the Statue I felt amazed because she was so tall.'
+  ],
+  q3: [
+    'After Charlie saw that ONE thing — what happened next? Did he walk somewhere? Did someone speak to him? Use a feeling word he hasn\'t used yet.',
+    'Example: "Then we walked off the boat and I felt nervous because everyone spoke a different language."',
+    'After that, my mother held my hand and I felt safer.'
+  ],
+  q4: [
+    'Charlie\'s diary needs a wrap-up — what does he want to remember? Or what does he hope for tomorrow? (Optional — three sentences is enough.)',
+    'Example: "I want to remember today forever."',
+    'Tomorrow I will see more of America.'
+  ]
+};
+
+// Per-sentence kernel prompts for the writing tab — JOURNAL ENTRY (1st-person)
+// Each slot has a TERRITORY (what it MUST cover) and a FORBIDDEN list (what it MUST NOT yet cover)
+const WRITE_PROMPTS = [
+  {
+    label: 'Sentence 1: Where + When',
+    prompt: 'Charlie opens his diary. Where IS he? When is it? (No big moment yet. No feelings yet.)',
+    kernelHint: 'Like: "Tonight I am in New York."',
+    territory: { mustCover: 'WHO (I + my family) · WHERE · WHEN', mustNotCover: 'No big moment. No feeling word yet.' },
+    expand: { why: 'WHEN is this? OR Where did Charlie come from?', felt: '(skip — no feeling on this sentence)' },
+    skipFelt: true,
+    color: 'blue'
+  },
+  {
+    label: 'Sentence 2: ONE thing I saw or did',
+    prompt: 'Pick ONE thing Charlie saw or did today. Add ONE feeling about it. (Not happy or joyful — pick a different one.)',
+    kernelHint: 'Like: "I saw the Statue of Liberty."',
+    territory: { mustCover: 'ONE specific thing seen/done · ONE feeling word', mustNotCover: 'NOT "happy" or "joyful" (used too much last time).' },
+    expand: { why: 'WHY did this matter? OR what does it MEAN?', felt: 'How did Charlie FEEL? (Use a feeling word he has NOT used yet.)' },
+    sensoryAlt: { stem: 'OR — instead of WHY — describe ONE sense:', see: 'What did Charlie SEE?', hear: 'What did Charlie HEAR?', feelTouch: 'What did Charlie FEEL with his body?' },
+    color: 'green'
+  },
+  {
+    label: 'Sentence 3: What happened NEXT',
+    prompt: 'After that — what happened next? Did Charlie walk somewhere? Did someone speak to him? Use a DIFFERENT feeling.',
+    kernelHint: 'Like: "Then my mother held my hand."',
+    territory: { mustCover: 'A DIFFERENT event from S2 · A DIFFERENT feeling from S2', mustNotCover: 'No reusing the SAME thing or feeling from S2.' },
+    expand: { why: 'WHY did that matter? What did it MEAN?', felt: 'How did Charlie feel NOW? (different from S2!)' },
+    color: 'purple'
+  }
+];
+
+// === WORD BANKS — paragraph-level state. Used words grey out. ===
+// Specifically organized so Marcello reaches BEYOND the happy/joyful cluster.
+const FEELING_WORDS_GROUPED = {
+  positive: ['hopeful', 'amazed', 'brave', 'proud', 'safe', 'curious'],
+  uncertain: ['nervous', 'scared', 'tired', 'small', 'shy', 'lonely'],
+  // overused last time — kept available, but visually marked as "used a lot already"
+  overused: ['happy', 'joyful', 'excited']
+};
+const FEELING_WORDS = [].concat(FEELING_WORDS_GROUPED.positive, FEELING_WORDS_GROUPED.uncertain, FEELING_WORDS_GROUPED.overused);
+const NARRATIVE_CW = ['when', 'because', 'so', 'after', 'then', 'finally', 'although', 'while'];
+
+// Purpose prompts (Ábalos et al.) + new "Stakes" prompt to fight tautological "because" from Apr 27
+const PURPOSE_PROMPTS = [
+  { label: 'Why?', prompt: 'WHY did Charlie do that? What was he hoping for?' },
+  { label: 'So that what?', prompt: 'You said what he did — so that what? What was he trying to make happen?' },
+  { label: 'Stakes', prompt: 'What if he DIDN\'T see the statue? What would have changed? (This pushes past "because he wanted to.")' },
+  { label: 'Felt?', prompt: 'How did Charlie FEEL? Pick a feeling word he has NOT used yet.' },
+  { label: 'What does it mean?', prompt: 'What does this MEAN for Charlie? Why does it matter?' }
+];
+
+// ============================================================
+//  UTIL
+// ============================================================
+function toast(msg, isWarn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isWarn ? ' warning' : '');
+  setTimeout(() => t.className = 'toast', 2800);
+}
+function addPoints(pts) { S.points += pts; if (pts > 0) toast('+' + pts + ' points! 🏆'); }
+function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
+
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved ✓';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    S = Object.assign(S, JSON.parse(raw));
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null, cloudDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(saveStateToCloud, 3000);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+function saveStateToCloud() {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved ☁️';
+    ind.classList.add('flash');
+    setTimeout(() => ind.classList.remove('flash'), 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud(key) {
+  return new Promise((resolve) => {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(() => { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state);
+      else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+let speechUnlocked = false;
+function unlockSpeech() {
+  if (speechUnlocked || !('speechSynthesis' in window)) return;
+  const dummy = new SpeechSynthesisUtterance('');
+  dummy.volume = 0;
+  window.speechSynthesis.speak(dummy);
+  speechUnlocked = true;
+}
+document.addEventListener('touchstart', unlockSpeech, { once: true });
+document.addEventListener('click', unlockSpeech, { once: true });
+
+function speakText(text, rate) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available on this device', true); return; }
+  window.speechSynthesis.cancel();
+  setTimeout(function() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = rate || 0.85;
+    u.pitch = 1;
+    u.onerror = function() { toast('Speech error — tap Read again', true); };
+    window.speechSynthesis.speak(u);
+  }, 100);
+}
+
+function fireCelebration() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  const emojis = ['🎉','🎊','⭐','🥳','💡','🌟','🏆','🗽'];
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(() => c.remove(), 4000);
+}
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(confettiStyle);
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  const mc = document.getElementById('mainContainer');
+  if (tab === 'write') mc.classList.add('wide'); else mc.classList.remove('wide');
+
+  if (tab === 'reading') renderReading();
+  else if (tab === 'retell') renderRetell();
+  else if (tab === 'plan') renderPlan();
+  else if (tab === 'write') renderWrite();
+  else if (tab === 'wrap') renderWrap();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+// ============================================================
+//  TAB 1: CAPE WARM-UP (real released passage + EBSR + tool rehearsal)
+// ============================================================
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const r = S.reading;
+  if (r.done) { renderReadingDone(el); return; }
+
+  // Build passage HTML with paragraph numbers (like the test booklet)
+  const passageHTML = CAPE_PASSAGE.paragraphs.map(function(p) {
+    return '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;">' +
+      '<span style="font-size:0.78rem;font-weight:800;color:var(--muted);min-width:20px;padding-top:3px;">' + p.n + '</span>' +
+      '<span style="flex:1;">' + esc(p.text) + '</span>' +
+      '</div>';
+  }).join('');
+
+  // Tool rehearsal panel (shown once, before EBSR items)
+  const toolsPanel =
+    '<div style="background:#FFF8E1;border:2px dashed #F5C542;border-radius:14px;padding:16px;margin:14px 0;">' +
+    '<h3 style="color:#B8860B;font-size:1rem;margin-bottom:8px;">🛠 CAPE Tool Rehearsal</h3>' +
+    '<p style="font-size:0.92rem;line-height:1.5;color:#5D4037;margin-bottom:12px;">On the real test, Marcello will see two big tools at the top of the screen:</p>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+      '<button class="btn ' + (r.toolsRehearsed.highlighter ? 'btn-success' : 'btn-gold') + '" onclick="rehearsedTool(\'highlighter\')" style="padding:10px;font-size:0.85rem;">' +
+        (r.toolsRehearsed.highlighter ? '✓ ' : '') + '🟨 Highlighter<br><span style="font-weight:400;font-size:0.78rem;">(blue or pink — for evidence)</span></button>' +
+      '<button class="btn ' + (r.toolsRehearsed.eliminator ? 'btn-success' : 'btn-gold') + '" onclick="rehearsedTool(\'eliminator\')" style="padding:10px;font-size:0.85rem;">' +
+        (r.toolsRehearsed.eliminator ? '✓ ' : '') + '✗ Answer Eliminator<br><span style="font-weight:400;font-size:0.78rem;">(X out wrong choices)</span></button>' +
+    '</div>' +
+    '<div style="margin-top:10px;font-size:0.85rem;color:#5D4037;line-height:1.5;">' +
+    '<strong>Highlighter rule of thumb:</strong> highlight the sentence in the passage that ANSWERS the question. That\'s your Part B.<br>' +
+    '<strong>Eliminator rule of thumb:</strong> X out 1-2 answers that are CLEARLY wrong before picking. Trust the X.' +
+    '</div>' +
+    '</div>';
+
+  // Two EBSR items rendered with answer highlighting
+  const ebsrHTML = CAPE_EBSR.map(function(item, idx) {
+    const stateItem = r.ebsr[idx];
+    return '<div class="card" style="margin-top:14px;border:2px solid var(--teal);background:#F8FFFE;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+      '<span style="font-weight:800;font-size:0.85rem;color:var(--teal);">📋 Question ' + item.qNum + ' (EBSR — Two Parts)</span>' +
+      '<span style="font-size:0.7rem;color:var(--muted);">' + esc(item.standard) + '</span>' +
+      '</div>' +
+      '<div style="background:white;border-radius:10px;padding:14px;margin-bottom:10px;">' +
+      '<div style="font-weight:700;font-size:0.92rem;margin-bottom:8px;">Part A</div>' +
+      '<div style="margin-bottom:10px;line-height:1.5;">' + item.partA.stem + '</div>' +
+      item.partA.options.map(function(o) {
+        const isPicked = stateItem.partA === o.letter;
+        const isCorrect = item.partA.correct === o.letter;
+        const style = isPicked
+          ? (isCorrect ? 'background:var(--green-light);border-color:var(--green);color:#2E7D32;' : 'background:var(--red-light);border-color:var(--red);color:#C62828;')
+          : 'background:white;border-color:#D0D5DD;';
+        return '<button class="ebsr-opt" onclick="answerEBSR(' + idx + ',\'A\',\'' + o.letter + '\')" style="display:block;width:100%;text-align:left;margin-bottom:5px;padding:9px 12px;border:2px solid;border-radius:8px;font-family:Nunito,sans-serif;font-size:0.92rem;font-weight:600;cursor:pointer;' + style + '">' +
+          '<strong>' + o.letter + '</strong> &nbsp; ' + o.text + '</button>';
+      }).join('') +
+      (stateItem.partA && stateItem.partA !== item.partA.correct
+        ? '<div style="margin-top:8px;font-size:0.85rem;color:var(--red);font-weight:700;">Try again — re-read the paragraph and look for the clue.</div>'
+        : '') +
+      '</div>' +
+      // Part B only after Part A correct
+      (stateItem.partA === item.partA.correct
+        ? '<div style="background:white;border-radius:10px;padding:14px;">' +
+          '<div style="font-weight:700;font-size:0.92rem;margin-bottom:8px;">Part B</div>' +
+          '<div style="margin-bottom:10px;line-height:1.5;">' + item.partB.stem + '</div>' +
+          item.partB.options.map(function(o) {
+            const isPicked = stateItem.partB === o.letter;
+            const isCorrect = item.partB.correct === o.letter;
+            const style = isPicked
+              ? (isCorrect ? 'background:var(--green-light);border-color:var(--green);color:#2E7D32;' : 'background:var(--red-light);border-color:var(--red);color:#C62828;')
+              : 'background:white;border-color:#D0D5DD;';
+            return '<button class="ebsr-opt" onclick="answerEBSR(' + idx + ',\'B\',\'' + o.letter + '\')" style="display:block;width:100%;text-align:left;margin-bottom:5px;padding:9px 12px;border:2px solid;border-radius:8px;font-family:Nunito,sans-serif;font-size:0.92rem;font-weight:600;cursor:pointer;' + style + '">' +
+              '<strong>' + o.letter + '</strong> &nbsp; ' + o.text + '</button>';
+          }).join('') +
+          (stateItem.done ? '<div style="margin-top:10px;padding:10px;background:var(--blue-light);border-radius:8px;font-size:0.88rem;line-height:1.4;color:#0D47A1;"><strong>💡 Test tip:</strong> ' + esc(item.teach) + '</div>' : '') +
+          '</div>'
+        : '<div style="text-align:center;font-size:0.85rem;color:var(--muted);font-style:italic;padding:12px;">Get Part A correct to unlock Part B.</div>') +
+      '</div>';
+  }).join('');
+
+  // CAPE NWT prompt preview (Q19 format) — show after both EBSR done
+  const allEBSRDone = r.ebsr.every(function(e) { return e.done; });
+  const promptPreview = allEBSRDone ?
+    '<div class="card" style="border:3px solid var(--purple);background:#FAF5FF;margin-top:14px;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+    '<span style="font-weight:800;font-size:0.85rem;color:var(--purple);">📓 CAPE Narrative Writing Task — Q19</span>' +
+    '<span style="font-size:0.7rem;color:var(--muted);">From the official released test</span>' +
+    '</div>' +
+    '<p style="font-size:0.88rem;color:var(--muted);margin-bottom:10px;">On the real CAPE, after reading a story like this, students see this writing prompt:</p>' +
+    '<div style="background:white;border:2px dashed var(--purple);border-radius:10px;padding:14px;font-style:italic;line-height:1.6;font-size:0.95rem;color:#4A148C;">' + CAPE_NWT_PROMPT.promptText + '</div>' +
+    '<p style="font-size:0.92rem;color:var(--text);margin-top:10px;line-height:1.5;font-weight:600;">' +
+    '<strong>Notice:</strong> "Write [character\'s] journal entry. Include how the characters responded to the events." ' +
+    'That\'s exactly what we\'re doing today with Charlie. 🎯' +
+    '</p>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="markPromptShown()">' + (r.toolsRehearsed.prompt ? '✓ Got it' : 'Got it — let\'s look back at my story →') + '</button></div>' +
+    '</div>' : '';
+
+  el.innerHTML =
+    '<div class="act-label act-read">📖 CAPE Warm-Up — One Real Test Passage</div>' +
+    '<h2>This is what the CAPE looks like 🗽</h2>' +
+    '<p class="directions">CAPE testing is next week (May 6–8). Today we\'ll do <strong>one real released passage and two real EBSR questions</strong> from the official Grade 3 ELA Practice Test, plus a quick rehearsal of the on-screen tools.</p>' +
+    toolsPanel +
+    '<div class="card" style="background:#FAFBFC;border:2px solid #B0BEC5;">' +
+    '<div style="font-size:0.8rem;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">📖 Reading Passage</div>' +
+    '<h3 style="font-size:1.1rem;margin-bottom:2px;">' + esc(CAPE_PASSAGE.title) + '</h3>' +
+    '<div style="font-size:0.82rem;color:var(--muted);font-style:italic;margin-bottom:12px;">' + esc(CAPE_PASSAGE.author) + ' &middot; ' + esc(CAPE_PASSAGE.source) + '</div>' +
+    '<div style="background:white;border:1px solid #D0D5DD;border-radius:10px;padding:14px;font-size:0.96rem;line-height:1.7;">' + passageHTML + '</div>' +
+    '<div class="btn-row" style="margin-top:14px;">' +
+    '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(CAPE_PASSAGE.paragraphs.map(function(p) { return p.text; }).join(' ')).replace(/"/g, '&quot;') + ', 0.82)">🔊 Read aloud (Tutor option)</button>' +
+    '<button class="btn ' + (r.passageRead ? 'btn-success' : 'btn-secondary') + '" onclick="markPassageRead()">' + (r.passageRead ? '✓ Read it' : '👀 I read it') + '</button>' +
+    '</div>' +
+    '</div>' +
+    (r.passageRead ? ebsrHTML : '<div class="info-box" style="margin-top:14px;">📌 Read the passage above first, then the questions will appear.</div>') +
+    promptPreview;
+}
+
+function markPassageRead() {
+  S.reading.passageRead = true;
+  renderReading();
+  debounceSave();
+}
+
+function rehearsedTool(t) {
+  S.reading.toolsRehearsed[t] = true;
+  if (t === 'highlighter') toast('🟨 On the test: tap and drag across the sentence — choose blue or pink');
+  else if (t === 'eliminator') toast('✗ On the test: tap the X icon, then click any answer choice to cross it out');
+  renderReading();
+  debounceSave();
+}
+
+function answerEBSR(idx, part, letter) {
+  const item = CAPE_EBSR[idx];
+  const stateItem = S.reading.ebsr[idx];
+  if (part === 'A') {
+    stateItem.partA = letter;
+    if (letter === item.partA.correct) toast('✓ Part A correct! Now find the EVIDENCE.');
+    else toast('Not quite — re-read paragraph ' + (idx === 0 ? 7 : 9) + '.', true);
+  } else {
+    stateItem.partB = letter;
+    if (letter === item.partB.correct) {
+      stateItem.done = true;
+      addPoints(10);
+      toast('🎉 Both parts right! Full credit on this question.');
+      fireCelebration();
+      postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'CAPE EBSR ' + (idx + 1), 'Reading - CAPE Prep', 1, 1, '100%',
+        'Q' + item.qNum + ' (' + item.standard + ') — both parts correct on attempt']);
+    } else {
+      toast('Part B wrong — what SENTENCE shows the answer?', true);
+    }
+  }
+  renderReading();
+  debounceSave();
+}
+
+function markPromptShown() {
+  S.reading.toolsRehearsed.prompt = true;
+  S.reading.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  document.getElementById('mtab-reading').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'CAPE Warm-Up Complete', 'Reading - CAPE Prep', 'Done', '', '',
+    'Tools: H=' + (S.reading.toolsRehearsed.highlighter ? 'Y' : 'N') + ' X=' + (S.reading.toolsRehearsed.eliminator ? 'Y' : 'N') +
+    ' | EBSR1: ' + (S.reading.ebsr[0].done ? 'Both correct' : 'Incomplete') +
+    ' | EBSR2: ' + (S.reading.ebsr[1].done ? 'Both correct' : 'Incomplete')]);
+  toast('CAPE warm-up done! 🏆');
+  switchTab('retell');
+}
+
+function renderReadingDone(el) {
+  el.innerHTML = '<div class="act-label act-read">📖 CAPE Warm-Up Done!</div>' +
+    '<div class="celebration"><div class="big-star">🗽</div>' +
+    '<h2>Ready for CAPE</h2>' +
+    '<p>You read a real test passage, answered two EBSRs, and saw the writing prompt.<br>Now let\'s look back at your story from Monday.</p></div>' +
+    '<div class="btn-row"><button class="btn btn-blue" onclick="switchTab(\'retell\')">Look Back at My Story 🔍</button></div>';
+}
+
+// ============================================================
+//  TAB 2: LOOK BACK — review Apr 27 paragraph, find what's NEW vs RESTATE
+// ============================================================
+function renderRetell() {
+  const el = document.getElementById('card-retell');
+  const r = S.retell;
+  if (r.done) { renderRetellDone(el); return; }
+
+  const fullApr27 = APR27_SENTENCES.map(function(s) { return s.text; }).join(' ');
+
+  // Sentence cards — tap MOST NEW or RESTATE
+  const sentenceCards = APR27_SENTENCES.map(function(s, i) {
+    const tag = r.sentenceTags[i];
+    const isMostNew = tag === 'most-new';
+    const isRestate = tag === 'restate';
+    return '<div class="saw-sentence' + (isMostNew ? ' saw-starred' : '') + (isRestate ? ' saw-wished' : '') + '">' +
+      '<div style="font-size:0.78rem;font-weight:800;color:var(--muted);margin-bottom:4px;">SENTENCE ' + s.n + '</div>' +
+      '<div class="saw-text">' + esc(s.text) + '</div>' +
+      '<div class="saw-btns" style="margin-top:8px;">' +
+      '<button class="saw-btn saw-btn-star ' + (isMostNew ? 'active' : '') + '" onclick="tagSentence(' + i + ',\'most-new\')">⭐ Tells the MOST</button>' +
+      '<button class="saw-btn saw-btn-wish ' + (isRestate ? 'active' : '') + '" onclick="tagSentence(' + i + ',\'restate\')">🔁 Just RESTATES</button>' +
+      '<button class="btn btn-sm btn-secondary" onclick="speakText(' + JSON.stringify(s.text).replace(/"/g, '&quot;') + ', 0.85)">🔊 Listen</button>' +
+      '</div>' +
+      '</div>';
+  }).join('');
+
+  // Repeats panel
+  const repeatsHTML =
+    '<div class="info-box" style="background:#FFEBEE;border-left-color:var(--red);color:#B71C1C;margin-top:14px;">' +
+    '<strong>📊 What I noticed in Monday\'s paragraph:</strong>' +
+    '<ul style="margin-top:6px;padding-left:24px;line-height:1.7;">' +
+    APR27_REPEATS.map(function(r) { return '<li>' + esc(r) + '</li>'; }).join('') +
+    '</ul>' +
+    '<div style="margin-top:8px;font-style:italic;font-size:0.88rem;">"Charlie stayed on the path — but the path was a circle, not a line." Today we\'re going to make it a LINE.</div>' +
+    '</div>';
+
+  // Gender lock — central to the journal-entry reframe (and stops the his/her slip)
+  const genderLockHTML =
+    '<div class="card" style="background:#F3E5F5;border:2px solid var(--purple);margin-top:14px;padding:18px;">' +
+    '<h3 style="color:var(--purple);font-size:1rem;margin-bottom:6px;">📓 Lock in Charlie\'s pronouns</h3>' +
+    '<p style="font-size:0.92rem;color:var(--text);margin-bottom:12px;line-height:1.5;">Today Charlie is going to write IN HIS OWN VOICE — like a diary. So Charlie says <strong>"I"</strong>. But before we start, what is Charlie? A boy or a girl? Pick one and we LOCK it in.</p>' +
+    '<div class="btn-row" style="justify-content:flex-start;">' +
+    '<button class="btn ' + (r.gender === 'boy' ? 'btn-success' : 'btn-secondary') + '" onclick="setGender(\'boy\')">' + (r.gender === 'boy' ? '✓ ' : '') + '👦 Charlie is a BOY → he/his</button>' +
+    '<button class="btn ' + (r.gender === 'girl' ? 'btn-success' : 'btn-secondary') + '" onclick="setGender(\'girl\')">' + (r.gender === 'girl' ? '✓ ' : '') + '👧 Charlie is a GIRL → she/her</button>' +
+    '</div>' +
+    (r.gender ? '<div style="margin-top:10px;padding:10px;background:white;border-radius:8px;font-size:0.9rem;font-weight:700;color:var(--purple);">✓ Locked: Charlie is a ' + r.gender + ' &rarr; pronouns are <strong>' + r.pronouns + '</strong>. (Inside the diary Charlie just says "I".)</div>' : '') +
+    '</div>';
+
+  const tagsFilled = r.sentenceTags.filter(function(t) { return t !== null; }).length;
+  const ready = r.listenedToOwn && r.gender && tagsFilled >= 2;
+
+  el.innerHTML =
+    '<div class="act-label act-retell">🔍 Look Back — Find the LINE in Monday\'s Paragraph</div>' +
+    '<h2>Listen to your story from Monday</h2>' +
+    '<p class="directions">Before we revise, let\'s LISTEN to what you wrote on Monday. Then tag each sentence: which one tells us the MOST? Which ones just RESTATE the same idea?</p>' +
+    '<div class="model-story-box">' +
+    '<div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:6px;">📖 Charlie\'s Story (Monday, April 27)</div>' +
+    esc(fullApr27) + '</div>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(fullApr27).replace(/"/g, '&quot;') + ', 0.85)">🔊 Read whole paragraph aloud</button>' +
+    '<button class="btn ' + (r.listenedToOwn ? 'btn-success' : 'btn-secondary') + '" onclick="markListenedOwn()">' + (r.listenedToOwn ? '✓ Listened' : '👂 I listened') + '</button>' +
+    '</div>' +
+    repeatsHTML +
+    '<h3 style="font-size:1rem;margin:20px 0 8px;">⭐ Tag each sentence:</h3>' +
+    '<p style="font-size:0.88rem;color:var(--muted);margin-bottom:10px;">For each sentence, decide: does it tell us NEW info, or does it just say the same thing again in different words? Tag at least two.</p>' +
+    sentenceCards +
+    genderLockHTML +
+    '<div class="btn-row" style="margin-top:18px;">' +
+    '<button class="btn btn-success" onclick="finishLookBack()" ' + (ready ? '' : 'disabled') + '>Ready — Plan Charlie\'s Journal →</button>' +
+    '</div>' +
+    (!ready ? '<p style="text-align:center;font-size:0.85rem;color:var(--muted);font-style:italic;margin-top:6px;">Listen, tag at least 2 sentences, and lock the gender to continue.</p>' : '');
+}
+
+function markListenedOwn() { S.retell.listenedToOwn = true; renderRetell(); debounceSave(); }
+function tagSentence(i, tag) {
+  if (S.retell.sentenceTags[i] === tag) S.retell.sentenceTags[i] = null;
+  else S.retell.sentenceTags[i] = tag;
+  renderRetell();
+  debounceSave();
+}
+function setGender(g) {
+  S.retell.gender = g;
+  S.retell.pronouns = g === 'boy' ? 'he/his' : 'she/her';
+  renderRetell();
+  debounceSave();
+}
+function finishLookBack() {
+  S.retell.done = true;
+  S.timestamps.retellEnd = new Date().toISOString();
+  document.getElementById('mtab-retell').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Look Back — Apr 27 Paragraph Stars', 'Writing', 'Complete', '', '',
+    'Tags: ' + S.retell.sentenceTags.map(function(t, i) { return 'S' + (i+1) + ':' + (t || '-'); }).join(' ') +
+    ' | Charlie gender: ' + S.retell.gender + ' (' + S.retell.pronouns + ')']);
+  toast('Look-back done — let\'s revise! 🎉');
+  fireCelebration();
+  switchTab('plan');
+}
+function renderRetellDone(el) {
+  el.innerHTML = '<div class="act-label act-retell">🔍 Look Back Complete!</div>' +
+    '<div class="celebration"><div class="big-star">🎯</div><h2>You found the line.</h2><p>You spotted what RESTATED and what told us NEW. Now let\'s plan Charlie\'s journal entry.</p></div>' +
+    '<div class="btn-row"><button class="btn btn-purple" onclick="switchTab(\'plan\')">Plan Charlie\'s Journal →</button></div>';
+}
+
+// ============================================================
+//  TAB 3: PLAN (4-event narrative planner)
+// ============================================================
+function renderPlan() {
+  const el = document.getElementById('card-plan');
+  const p = S.plan;
+  if (p.done) { renderPlanDone(el); return; }
+  // Q1-Q3 required, Q4 stretch optional
+  const required = p.q1 && p.q2 && p.q3;
+
+  // Pronoun reminder banner pulled from Tab 2 lock
+  const charSays = S.retell.gender === 'girl' ? 'she/her' : (S.retell.gender === 'boy' ? 'he/his' : '(not set yet)');
+  const pronounBanner =
+    '<div style="background:var(--purple-light);border:2px solid var(--purple);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">' +
+    '<div><strong style="color:var(--purple);">📓 Charlie is a ' + esc(S.retell.gender || 'BLANK') + '</strong>' +
+    '<span style="font-size:0.85rem;color:var(--text);"> &rarr; outside pronouns: <strong>' + charSays + '</strong>. Inside the diary: <strong>"I"</strong>.</span></div>' +
+    '<button class="btn btn-sm btn-secondary" onclick="switchTab(\'retell\')">← Change</button>' +
+    '</div>';
+
+  // Q19 prompt reminder
+  const promptReminder =
+    '<div style="background:#FAF5FF;border:2px dashed var(--purple);border-radius:12px;padding:12px 16px;margin-bottom:14px;">' +
+    '<div style="font-size:0.78rem;font-weight:800;color:var(--purple);text-transform:uppercase;margin-bottom:4px;">📋 The CAPE Q19 Prompt (what we\'re practicing today)</div>' +
+    '<div style="font-style:italic;color:#4A148C;font-size:0.92rem;line-height:1.5;">' + CAPE_NWT_PROMPT.promptText + '</div>' +
+    '</div>';
+
+  el.innerHTML =
+    '<div class="act-label act-plan">📓 Plan Charlie\'s Journal Entry</div>' +
+    '<h2>Plan four short journal sentences</h2>' +
+    '<p class="directions">It\'s Charlie\'s first night in America. Help Charlie write a journal entry. <strong>Each sentence has a JOB</strong> — and a job it must NOT do yet. We\'re going to keep each one in its lane.</p>' +
+    pronounBanner +
+    promptReminder +
+    PLAN_QUESTIONS.map(function(q, i) {
+      const helpShown = !!p.helpUsed[q.key];
+      const isStretch = i === 3;
+      return '<div class="interview-q"' + (isStretch ? ' style="background:#FFF3E0;"' : '') + '>' +
+        '<div class="iq-num">' + esc(q.label) + (isStretch ? ' <span style="background:#FFB74D;color:white;padding:2px 8px;border-radius:8px;font-size:0.65rem;margin-left:6px;">STRETCH</span>' : '') + '</div>' +
+        '<div class="iq-question">' + q.question + '</div>' +
+        '<div style="background:var(--gold-light);border-radius:8px;padding:8px 12px;font-size:0.82rem;font-weight:600;color:#5D4037;margin-bottom:8px;">💡 Say first: ' + esc(q.sayFirst) + '</div>' +
+        '<div style="background:#E8F5E9;border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:8px 12px;font-size:0.82rem;font-weight:600;color:#2E7D32;margin-bottom:12px;">🎯 <strong>Territory:</strong> ' + esc(q.territory) + '</div>' +
+        '<textarea class="iq-textarea" data-key="' + q.key + '" placeholder="' + esc(q.placeholder) + '" oninput="onPlanInput(this)">' + esc(p[q.key] || '') + '</textarea>' +
+        '<div class="help-btn-wrap"><button class="help-btn" onclick="togglePlanHelp(\'' + q.key + '\')">' + (helpShown ? 'Hide' : 'Show') + ' Help 💭</button></div>' +
+        (helpShown ? buildHelpPanel(q.key) : '') +
+        '</div>';
+    }).join('') +
+    '<div class="btn-row" style="margin-top:18px;">' +
+    '<button class="btn btn-secondary" onclick="switchTab(\'retell\')">← Back</button>' +
+    '<button class="btn btn-success" onclick="finishPlan()" ' + (required ? '' : 'disabled') + '>Plan Done — let\'s WRITE! ✍️</button>' +
+    '</div>' +
+    (!required ? '<p style="text-align:center;font-size:0.83rem;color:var(--muted);font-style:italic;margin-top:6px;">Sentences 1, 2, and 3 are required. Sentence 4 is a stretch.</p>' : '');
+}
+
+function buildHelpPanel(key) {
+  const help = PLAN_HELP[key];
+  return '<div class="help-panel show">' +
+    '<div class="help-level"><div class="help-level-label">Hint</div><p>' + esc(help[0]) + '</p></div>' +
+    '<div class="help-level"><div class="help-level-label">Example</div><p>' + esc(help[1]) + '</p></div>' +
+    '<div class="help-level"><div class="help-level-label">Could say</div><p>' + esc(help[2]) + '</p></div>' +
+    '</div>';
+}
+
+function onPlanInput(textarea) {
+  S.plan[textarea.getAttribute('data-key')] = textarea.value;
+  const required = S.plan.q1 && S.plan.q2 && S.plan.q3;
+  const successBtn = document.querySelector('#card-plan .btn-success');
+  if (successBtn) successBtn.disabled = !required;
+  debounceSave();
+}
+function togglePlanHelp(key) {
+  S.plan.helpUsed[key] = !S.plan.helpUsed[key];
+  renderPlan();
+  debounceSave();
+}
+function finishPlan() {
+  S.plan.done = true;
+  S.timestamps.planEnd = new Date().toISOString();
+  document.getElementById('mtab-plan').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Narrative Plan — 4 Events', 'Writing', 'Complete', '', '',
+    'Char: ' + (S.plan.q1 || '').slice(0, 60) + ' | Sit: ' + (S.plan.q2 || '').slice(0, 60) +
+    ' | Act: ' + (S.plan.q3 || '').slice(0, 60) + ' | End: ' + (S.plan.q4 || '').slice(0, 60) +
+    ' | Help used: ' + Object.keys(S.plan.helpUsed).filter(k => S.plan.helpUsed[k]).join(',')]);
+  toast('Plan complete! Let\'s write 🎉');
+  fireCelebration();
+  // Pre-fill running gist from plan q3 (the big moment) as a starting point
+  if (!S.write.runningGist) S.write.runningGist = derivedGist();
+  switchTab('write');
+}
+
+function derivedGist() {
+  // Default journal-entry gist anchor
+  return 'Charlie\'s journal entry — first night in America';
+}
+
+function renderPlanDone(el) {
+  el.innerHTML = '<div class="act-label act-plan">📝 Plan Complete!</div>' +
+    '<div class="celebration"><div class="big-star">🎯</div><h2>Plan locked in!</h2></div>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="switchTab(\'write\')">Write My Story →</button></div>';
+}
+
+// ============================================================
+//  TAB 4: WRITE (split-view + gist anchor + dictation-first + sentence expansion + 3-question check)
+// ============================================================
+let writeTalkStart = null;
+let writeTalkTimer = null;
+
+function renderWrite() {
+  const el = document.getElementById('card-write');
+  const w = S.write;
+  if (w.done) { renderWriteComplete(el); return; }
+
+  const sIdx = w.currentSentence;
+  const sent = w.sentences[sIdx];
+  const promptCfg = WRITE_PROMPTS[sIdx];
+
+  // Sentence nav
+  let navHTML = '<div class="sentence-nav">' + WRITE_PROMPTS.map(function(p, i) {
+    let cls = 'sentence-nav-btn';
+    if (w.sentences[i].done) cls += ' sn-done';
+    if (i === sIdx) cls += ' sn-active';
+    return '<button class="' + cls + '" onclick="goToSentence(' + i + ')">' + (w.sentences[i].done ? '✓ ' : '') + (i+1) + '. ' + p.label.split(':')[1].trim() + '</button>';
+  }).join('') + '</div>';
+
+  // === TERRITORY CARD (NEW) — what THIS sentence MUST cover and MUST NOT cover yet ===
+  let territoryHTML =
+    '<div style="background:linear-gradient(135deg,#E8F5E9,#C8E6C9);border:2px solid var(--green);border-radius:14px;padding:14px 16px;margin-bottom:14px;">' +
+    '<div style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#2E7D32;margin-bottom:6px;">🎯 Sentence ' + (sIdx + 1) + ' Territory</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:0.88rem;line-height:1.5;">' +
+    '<div><div style="font-weight:800;color:#2E7D32;font-size:0.78rem;text-transform:uppercase;margin-bottom:2px;">✓ MUST cover:</div>' + esc(promptCfg.territory.mustCover) + '</div>' +
+    '<div><div style="font-weight:800;color:#C62828;font-size:0.78rem;text-transform:uppercase;margin-bottom:2px;">✗ MUST NOT yet:</div>' + esc(promptCfg.territory.mustNotCover) + '</div>' +
+    '</div></div>';
+
+  // Plan sidebar
+  let planSidebar = '<div class="plan-sidebar"><h3>📋 Your Plan</h3>' +
+    PLAN_QUESTIONS.map(function(q, i) {
+      const val = S.plan[q.key];
+      const labels = { q1: 'S1 — Where + When', q2: 'S2 — One thing seen/done', q3: 'S3 — What next', q4: 'S4 — Closing (stretch)' };
+      const isCurrent = i === sIdx;
+      return '<div class="ps-item"' + (isCurrent ? ' style="background:white;border-radius:8px;padding:6px 8px;border-left:3px solid var(--purple);"' : '') + '><div class="ps-label">' + labels[q.key] + '</div>' +
+        '<div class="' + (val ? 'ps-text' : 'ps-empty') + '">' + (val ? esc(val) : '(empty)') + '</div></div>';
+    }).join('') +
+    '<div style="margin-top:12px;padding-top:10px;border-top:2px dashed #CE93D8;font-size:0.78rem;color:var(--purple);font-weight:700;">📓 Charlie says <strong>"I"</strong></div>' +
+    '</div>';
+
+  // Already-written sentences card
+  let doneSentencesHTML = '';
+  const doneSent = w.sentences.filter(s => s.done && s.assembled);
+  if (doneSent.length > 0) {
+    doneSentencesHTML = '<div class="done-sentences-card"><h3>✓ Sentences so far</h3>' +
+      doneSent.map(s => '<div class="done-sent"><span class="check">✓</span>' + esc(s.assembled) + '</div>').join('') + '</div>';
+  }
+
+  // Running gist anchor
+  const gistHTML = '<div class="gist-anchor">' +
+    '<div class="ga-label">📍 Running gist — what THIS paragraph is about</div>' +
+    '<div class="ga-text"><span class="ga-icon">💭</span><span id="gistDisplay">' + esc(w.runningGist || '(tutor: tap to set the anchor)') + '</span></div>' +
+    '<div style="margin-top:8px;text-align:right;">' +
+    '<button class="btn btn-sm btn-secondary" onclick="editGist()">✏️ Edit anchor</button>' +
+    '</div></div>';
+
+  // Step indicator
+  const step = sent.step || 0;
+  const stepsHTML = '<div class="step-indicator">' +
+    '<div class="step-pill ' + (step >= 1 ? 'step-done' : step === 0 ? 'step-active' : '') + '"><span class="step-icon">🗣️</span>Tell Me</div>' +
+    '<div class="step-pill ' + (step >= 2 ? 'step-done' : step === 1 ? 'step-active' : '') + '"><span class="step-icon">🔍</span>Find Kernel</div>' +
+    '<div class="step-pill ' + (step >= 3 ? 'step-done' : step === 2 ? 'step-active' : '') + '"><span class="step-icon">➕</span>Expand</div>' +
+    '<div class="step-pill ' + (step >= 4 ? 'step-done' : step === 3 ? 'step-active' : '') + '"><span class="step-icon">✓</span>4 Checks</div></div>';
+
+  let contentHTML = '';
+
+  // STEP 0: TELL ME (dictation)
+  if (step === 0) {
+    const elapsed = writeTalkStart ? Math.floor((Date.now() - writeTalkStart) / 1000) : 0;
+    const mins = Math.floor(elapsed / 60); const secs = elapsed % 60;
+    const timerStr = mins + ':' + (secs < 10 ? '0' : '') + secs;
+    contentHTML = '<div class="dictation-box">' +
+      '<h3 style="margin-bottom:4px;">🗣️ ' + esc(promptCfg.prompt) + '</h3>' +
+      (writeTalkStart ? '<div class="' + (elapsed > 30 ? 'talk-timer long' : 'talk-timer') + '" id="writeTalkTimer">' + timerStr + '</div>' : '') +
+      '<textarea id="writeDictation" placeholder="Tutor: type what Marcello says (verbatim)..." oninput="onWriteDictation()">' + esc(sent.dictation || '') + '</textarea>' +
+      (writeTalkStart ?
+        '<div style="margin-top:10px;"><div style="font-weight:700;font-size:0.82rem;color:var(--purple);margin-bottom:6px;">🎯 Purpose Prompts <span style="font-weight:400;color:var(--muted);">(draw out WHY + FELT)</span></div>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+        PURPOSE_PROMPTS.map(p => '<button class="wb-chip" style="background:var(--purple-light);color:var(--purple);border:2px solid #CE93D8;font-size:0.82rem;" onclick="toast(' + JSON.stringify(p.prompt).replace(/"/g, '&quot;') + ',false)">' + esc(p.label) + '</button>').join('') +
+        '</div></div>' : '') +
+      (writeTalkStart ? '<div class="btn-row"><button class="btn btn-success" onclick="doneWriteTalk()">Done talking ✓</button></div>' :
+        '<div class="btn-row"><button class="btn btn-gold" onclick="startWriteTalk()">🎙️ Start Talking!</button></div>') +
+      '</div>';
+  }
+
+  // STEP 1: FIND KERNEL
+  if (step === 1) {
+    contentHTML = '<div style="background:#FFFDE7;border:2px solid var(--gold);border-radius:14px;padding:18px;margin:12px 0;">' +
+      '<h3 style="margin-bottom:6px;">🔍 Find the kernel sentence</h3>' +
+      '<p style="color:var(--muted);font-size:0.92rem;margin-bottom:10px;">You said all of this. Find <strong>ONE short sentence</strong> hiding inside it — just a Subject + Verb (+ object).</p>' +
+      '<div class="passage-box" style="background:white;border-color:var(--gold);font-size:1rem;">' + esc(sent.dictation) + '</div>' +
+      '<div class="kernel-card" style="margin-top:14px;">' +
+      '<div class="kc-label">💡 Kernel hint</div>' +
+      '<div class="kc-text">' + esc(promptCfg.kernelHint) + '</div></div>' +
+      '<label style="font-weight:700;font-size:0.93rem;display:block;margin:10px 0 4px;">Type the kernel:</label>' +
+      '<textarea id="writeKernel" style="width:100%;min-height:50px;border:2px solid var(--gold);border-radius:10px;padding:10px;font-family:Nunito,sans-serif;font-size:1rem;font-weight:700;resize:vertical;" placeholder="One short sentence..." oninput="onKernel()">' + esc(sent.kernel || '') + '</textarea>' +
+      '<div class="btn-row"><button class="btn btn-secondary" onclick="backToTell()">← Talk more</button>' +
+      '<button class="btn btn-success" onclick="kernelFound()" ' + (sent.kernel ? '' : 'disabled') + '>Got the kernel →</button></div></div>';
+  }
+
+  // STEP 2: EXPAND with Why + Felt + (optional Sensory) + paragraph-level feeling-grey-out + single-sentence cap
+  if (step === 2) {
+    // Compute used feeling words across PRIOR sentences (paragraph-level greying)
+    const usedFeels = paragraphUsedFeelings(sIdx);
+    const renderFeelChip = function(f, group) {
+      const isUsed = usedFeels.indexOf(f.toLowerCase()) !== -1;
+      const isOver = group === 'overused';
+      let style = '';
+      if (isUsed) style = 'opacity:0.35;text-decoration:line-through;cursor:not-allowed;';
+      else if (isOver) style = 'background:#FFE0B2;border-color:#FFB74D;color:#E65100;';
+      const onClick = isUsed ? '' : 'onclick="insertCW(\'writeFelt\',\'' + f + '\')"';
+      return '<button class="wb-chip wb-feel" ' + onClick + ' style="' + style + '" title="' + (isUsed ? 'Already used in this paragraph' : (isOver ? 'You used this a lot Monday — try a different one' : '')) + '">' + f + (isUsed ? ' ✓' : '') + '</button>';
+    };
+    const feelChipsHTML =
+      '<div style="margin-top:8px;">' +
+      '<div class="word-bank-label">💚 Confident feelings:</div>' +
+      '<div class="word-bank">' + FEELING_WORDS_GROUPED.positive.map(function(f) { return renderFeelChip(f, 'positive'); }).join('') + '</div>' +
+      '<div class="word-bank-label" style="margin-top:6px;">💙 Uncertain / mixed feelings:</div>' +
+      '<div class="word-bank">' + FEELING_WORDS_GROUPED.uncertain.map(function(f) { return renderFeelChip(f, 'uncertain'); }).join('') + '</div>' +
+      '<div class="word-bank-label" style="margin-top:6px;color:#E65100;">⚠️ Used a lot Monday (try the others first):</div>' +
+      '<div class="word-bank">' + FEELING_WORDS_GROUPED.overused.map(function(f) { return renderFeelChip(f, 'overused'); }).join('') + '</div>' +
+      '</div>';
+
+    const skipFelt = !!promptCfg.skipFelt;
+
+    // Sensory alternative card (only S2)
+    const sensoryHTML = promptCfg.sensoryAlt ?
+      '<div class="expand-card" style="border-color:var(--orange);background:#FFF8E1;">' +
+      '<div class="ec-label" style="color:#E65100;">👁️ OR — describe with the SENSES</div>' +
+      '<div class="ec-question">' + esc(promptCfg.sensoryAlt.stem) + '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px;">' +
+      '<button class="btn btn-sm btn-orange" onclick="insertSensoryHint(\'see\')">👁️ ' + esc(promptCfg.sensoryAlt.see) + '</button>' +
+      '<button class="btn btn-sm btn-orange" onclick="insertSensoryHint(\'hear\')">👂 ' + esc(promptCfg.sensoryAlt.hear) + '</button>' +
+      '<button class="btn btn-sm btn-orange" onclick="insertSensoryHint(\'feelTouch\')">🤲 ' + esc(promptCfg.sensoryAlt.feelTouch) + '</button>' +
+      '</div>' +
+      '<textarea id="writeSensory" placeholder="A sensory detail..." oninput="onSensory()" style="margin-top:10px;">' + esc(sent.sensory || '') + '</textarea>' +
+      '</div>' : '';
+
+    contentHTML =
+      '<div class="kernel-card"><div class="kc-label">Your kernel</div><div class="kc-text">' + esc(sent.kernel) + '</div></div>' +
+      '<p style="font-size:0.95rem;font-weight:700;color:var(--text);margin:14px 0 8px;">Now let\'s grow it: add WHY' + (skipFelt ? ' (no feeling on this sentence — territory says no feeling).' : ' and FEELING.') + '</p>' +
+      '<div class="expand-card purpose">' +
+      '<div class="ec-label">🎯 WHY / WHAT IT MEANS</div>' +
+      '<div class="ec-question">' + esc(promptCfg.expand.why) + '</div>' +
+      '<textarea id="writeWhy" placeholder="Add a because/so/when..." oninput="onWhy()">' + esc(sent.why || '') + '</textarea>' +
+      '<div class="word-bank-label" style="margin-top:8px;">🔗 Try these connecting words:</div>' +
+      '<div class="word-bank">' + NARRATIVE_CW.map(function(w) { return '<button class="wb-chip" onclick="insertCW(\'writeWhy\',\'' + w + '\')">' + w + '</button>'; }).join('') + '</div>' +
+      '</div>' +
+      sensoryHTML +
+      (skipFelt ? '' :
+        '<div class="expand-card feeling">' +
+        '<div class="ec-label">💗 HOW CHARLIE FEELS (use a NEW word)</div>' +
+        '<div class="ec-question">' + esc(promptCfg.expand.felt) + '</div>' +
+        '<textarea id="writeFelt" placeholder="I felt..." oninput="onFelt()">' + esc(sent.felt || '') + '</textarea>' +
+        feelChipsHTML +
+        '</div>') +
+      '<div class="assembled-sentence" id="assembledPreview"><div class="assembled-label">🪄 Combined sentence — ONE sentence only (auto-checked)</div>' +
+      '<textarea id="writeAssembled" style="width:100%;min-height:60px;border:2px solid var(--green);border-radius:10px;padding:10px;font-family:Nunito,sans-serif;font-size:1rem;font-weight:700;color:#2E7D32;background:white;margin-top:6px;resize:vertical;" placeholder="Combine into ONE clear sentence — Charlie says \'I\'..." oninput="onAssembled()">' + esc(sent.assembled || autoAssemble(sent)) + '</textarea>' +
+      '<div id="sentenceCapWarning" style="display:none;margin-top:6px;padding:8px 12px;background:#FFEBEE;border:2px solid var(--red);border-radius:8px;font-size:0.85rem;color:#C62828;font-weight:700;">⚠️ This looks like more than ONE sentence. Each slot holds ONE sentence — pick the most important and save the rest for the next slot.</div>' +
+      '</div>' +
+      '<div class="btn-row"><button class="btn btn-secondary" onclick="backToKernel()">← Back to kernel</button>' +
+      '<button class="btn btn-success" onclick="expansionDone()" ' + (sent.assembled ? '' : 'disabled') + '>Looks good — check coherence →</button></div>';
+  }
+
+  // STEP 3: COHERENCE CHECK — 4 questions (NEW: "What's NEW?")
+  if (step === 3) {
+    // For "What's NEW?" — auto-flag if the sentence looks repetitive
+    const freshness = analyzeFreshness(sent.assembled, sIdx);
+    const skipFelt = !!promptCfg.skipFelt;
+
+    contentHTML = '<div class="assembled-sentence"><div class="assembled-label">Your sentence</div>' +
+      '<div style="font-size:1.05rem;font-weight:700;color:#2E7D32;margin-top:6px;">' + esc(sent.assembled) + '</div></div>' +
+      '<div class="coherence-check">' +
+      '<h4>🔍 Coherence Check — 4 questions</h4>' +
+      // 1. Topic
+      '<div class="check-item ' + (sent.checks.topic ? 'checked' : '') + '" onclick="toggleCheck(\'topic\')">' +
+      '<div class="check-icon"></div>' +
+      '<div class="check-content"><div class="check-label">1. Topic — Did I stay on the path?</div>' +
+      '<div class="check-detail">Does this sentence belong to the gist anchor? <em>(' + esc(S.write.runningGist || 'set the anchor') + ')</em></div></div></div>' +
+      // 2. Purpose / why
+      '<div class="check-item ' + (sent.checks.why ? 'checked' : '') + '" onclick="toggleCheck(\'why\')">' +
+      '<div class="check-icon"></div>' +
+      '<div class="check-content"><div class="check-label">2. Purpose — Did I tell WHY?</div>' +
+      '<div class="check-detail">Does it tell why Charlie did this, or what mattered? <em>(Not just "because he wanted to" — the STAKES.)</em></div></div></div>' +
+      // 3. Felt — only if territory allows
+      (skipFelt
+        ? '<div class="check-item checked" style="opacity:0.65;cursor:default;">' +
+          '<div class="check-icon"></div>' +
+          '<div class="check-content"><div class="check-label">3. Feeling — Skipped on Sentence 1</div>' +
+          '<div class="check-detail">Sentence 1\'s territory says NO feeling word — that\'s correct. Feelings start in Sentence 2.</div></div></div>'
+        : '<div class="check-item ' + (sent.checks.felt ? 'checked' : '') + '" onclick="toggleCheck(\'felt\')">' +
+          '<div class="check-icon"></div>' +
+          '<div class="check-content"><div class="check-label">3. Feeling — Can a reader tell what Charlie FELT?</div>' +
+          '<div class="check-detail">Is there a feeling word? Is it DIFFERENT from earlier sentences?</div></div></div>') +
+      // 4. NEW! NEW! NEW!
+      '<div class="check-item ' + (sent.checks.fresh ? 'checked' : '') + '" onclick="toggleCheck(\'fresh\')">' +
+      '<div class="check-icon"></div>' +
+      '<div class="check-content"><div class="check-label">4. ⭐ NEW — Did this sentence tell something the reader didn\'t know yet?</div>' +
+      '<div class="check-detail">' + (sIdx === 0 ? 'First sentence is always new.' : (freshness.repeats.length === 0 ? '<span style="color:var(--green);font-weight:800;">✓ I don\'t see any repeats from your earlier sentences. Good.</span>' : '<span style="color:#C62828;font-weight:800;">⚠ This sentence repeats: ' + freshness.repeats.map(esc).join(', ') + '. Either add NEW info or rewrite the part that repeats.</span>')) + '</div></div></div>' +
+      '</div>' +
+      '<p style="font-size:0.85rem;color:var(--muted);text-align:center;font-style:italic;">A sentence that passes the first three but not "NEW" is a repeat. That was Monday\'s problem. Today we\'re fixing it.</p>' +
+      '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="backToExpand()">← Edit sentence</button>' +
+      '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(sent.assembled).replace(/"/g, '&quot;') + ', 0.85)">🔊 Read it back</button>' +
+      '<button class="btn btn-success" onclick="sentenceDone()">Lock in & next ✓</button>' +
+      '</div>';
+  }
+
+  // Render entire write tab — split view: plan sidebar + writing area
+  el.innerHTML =
+    '<div class="card">' +
+    '<div class="act-label act-write">✍️ Charlie\'s Journal — Sentence by Sentence</div>' +
+    '<h2>' + esc(promptCfg.label) + '</h2>' +
+    navHTML +
+    '</div>' +
+    '<div class="split-view">' +
+    '<div class="split-plan">' + planSidebar + '</div>' +
+    '<div class="split-writing">' +
+    '<div class="card">' +
+    gistHTML +
+    territoryHTML +
+    doneSentencesHTML +
+    stepsHTML +
+    contentHTML +
+    '</div></div></div>';
+
+  // Trigger single-sentence cap check on initial render (in case of restored state)
+  if (step === 2) checkSentenceCap();
+
+  // Update talk timer if running
+  if (writeTalkStart && step === 0) {
+    if (writeTalkTimer) clearInterval(writeTalkTimer);
+    writeTalkTimer = setInterval(function() {
+      const elapsed = Math.floor((Date.now() - writeTalkStart) / 1000);
+      const mins = Math.floor(elapsed / 60); const secs = elapsed % 60;
+      const t = document.getElementById('writeTalkTimer');
+      if (t) {
+        t.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+        if (elapsed > 30) t.className = 'talk-timer long';
+      }
+    }, 1000);
+  } else if (writeTalkTimer) { clearInterval(writeTalkTimer); writeTalkTimer = null; }
+}
+
+function autoAssemble(sent) {
+  if (!sent.kernel) return '';
+  let parts = [sent.kernel.trim()];
+  if (sent.why && sent.why.trim()) parts.push(sent.why.trim());
+  if (sent.sensory && sent.sensory.trim()) parts.push(sent.sensory.trim());
+  if (sent.felt && sent.felt.trim()) parts.push(sent.felt.trim());
+  return parts.join(' ');
+}
+
+// === Paragraph-level used-feelings tracker ===
+function paragraphUsedFeelings(currentIdx) {
+  const used = [];
+  S.write.sentences.forEach(function(s, i) {
+    if (i === currentIdx) return;
+    const text = ((s.assembled || '') + ' ' + (s.felt || '')).toLowerCase();
+    FEELING_WORDS.forEach(function(f) {
+      if (text.indexOf(f.toLowerCase()) !== -1 && used.indexOf(f.toLowerCase()) === -1) used.push(f.toLowerCase());
+    });
+  });
+  return used;
+}
+
+// === Freshness analyzer — does this sentence repeat noun-phrases or feeling words from prior sentences? ===
+const STOPWORDS = ['the','a','an','of','and','or','but','to','in','on','at','for','with','from','that','this','it','was','were','is','are','be','been','have','has','had','do','did','does','i','my','me','we','us','our','you','your','he','she','his','her','they','them','their','as','so','if','when','then','very','just','really','also','too','one','two','three','four','five','six','seven','eight','nine','ten'];
+function analyzeFreshness(sentence, currentIdx) {
+  if (!sentence || currentIdx === 0) return { repeats: [] };
+  const cleanWords = function(s) {
+    return (s || '').toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(function(w) {
+      return w.length >= 4 && STOPWORDS.indexOf(w) === -1;
+    });
+  };
+  const myWords = cleanWords(sentence);
+  // Build set of words from prior sentences
+  const priorWords = {};
+  for (let i = 0; i < currentIdx; i++) {
+    cleanWords(S.write.sentences[i].assembled).forEach(function(w) { priorWords[w] = true; });
+  }
+  // Find repeats — words of length 4+ that appear in prior + here
+  const repeats = [];
+  const seen = {};
+  myWords.forEach(function(w) {
+    if (priorWords[w] && !seen[w]) { repeats.push(w); seen[w] = true; }
+  });
+  return { repeats: repeats };
+}
+
+// === Single-sentence cap — soft warning if assembled looks like 2+ sentences ===
+function checkSentenceCap() {
+  const ta = document.getElementById('writeAssembled');
+  const warn = document.getElementById('sentenceCapWarning');
+  if (!ta || !warn) return;
+  const v = (ta.value || '').trim();
+  // Count terminal punctuation (.!?) NOT followed by digit (so "3.5" doesn't count)
+  const terminalCount = (v.match(/[.!?](?!\d)/g) || []).length;
+  // 0 = unfinished, 1 = one sentence (good), 2+ = multiple sentences
+  // Also catch ". " with capital letter as a softer signal
+  const looksLikeMultiple = terminalCount >= 2 || /[.!?]\s+[A-Z]/.test(v);
+  warn.style.display = looksLikeMultiple ? 'block' : 'none';
+}
+
+function onSensory() {
+  S.write.sentences[S.write.currentSentence].sensory = document.getElementById('writeSensory').value;
+  // Re-flow assembled
+  const sent = S.write.sentences[S.write.currentSentence];
+  const ta = document.getElementById('writeAssembled');
+  if (ta && (!ta.value || ta.value === sent.kernel)) {
+    ta.value = autoAssemble(sent);
+    sent.assembled = ta.value;
+  }
+  debounceSave();
+}
+function insertSensoryHint(kind) {
+  const stems = { see: 'I saw ', hear: 'I heard ', feelTouch: 'I felt the ' };
+  const ta = document.getElementById('writeSensory');
+  if (!ta) return;
+  if (!ta.value.trim()) ta.value = stems[kind];
+  ta.focus();
+  onSensory();
+}
+
+function startWriteTalk() {
+  writeTalkStart = Date.now();
+  renderWrite();
+}
+function doneWriteTalk() {
+  if (writeTalkTimer) clearInterval(writeTalkTimer);
+  writeTalkTimer = null;
+  writeTalkStart = null;
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!sent.dictation) { toast('Type what was said first', true); return; }
+  sent.step = 1;
+  renderWrite();
+  debounceSave();
+}
+function onWriteDictation() {
+  S.write.sentences[S.write.currentSentence].dictation = document.getElementById('writeDictation').value;
+  debounceSave();
+}
+function onKernel() {
+  const v = document.getElementById('writeKernel').value;
+  S.write.sentences[S.write.currentSentence].kernel = v;
+  const btn = document.querySelector('#card-write .btn-success');
+  if (btn) btn.disabled = !v;
+  debounceSave();
+}
+function backToTell() { S.write.sentences[S.write.currentSentence].step = 0; renderWrite(); debounceSave(); }
+function kernelFound() {
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!sent.kernel) return;
+  sent.step = 2;
+  if (!sent.assembled) sent.assembled = sent.kernel;
+  renderWrite();
+  debounceSave();
+}
+function onWhy() {
+  S.write.sentences[S.write.currentSentence].why = document.getElementById('writeWhy').value;
+  // Auto-update assembled if it's still empty/just kernel
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!document.getElementById('writeAssembled').value || document.getElementById('writeAssembled').value === sent.kernel) {
+    document.getElementById('writeAssembled').value = autoAssemble(sent);
+    sent.assembled = document.getElementById('writeAssembled').value;
+  }
+  debounceSave();
+}
+function onFelt() {
+  S.write.sentences[S.write.currentSentence].felt = document.getElementById('writeFelt').value;
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!document.getElementById('writeAssembled').value || document.getElementById('writeAssembled').value === sent.kernel || document.getElementById('writeAssembled').value === autoAssemble({ kernel: sent.kernel, why: sent.why })) {
+    document.getElementById('writeAssembled').value = autoAssemble(sent);
+    sent.assembled = document.getElementById('writeAssembled').value;
+  }
+  debounceSave();
+}
+function onAssembled() {
+  const v = document.getElementById('writeAssembled').value;
+  S.write.sentences[S.write.currentSentence].assembled = v;
+  const btn = document.querySelector('#card-write .btn-success');
+  if (btn) btn.disabled = !v;
+  checkSentenceCap();
+  debounceSave();
+}
+function backToKernel() { S.write.sentences[S.write.currentSentence].step = 1; renderWrite(); debounceSave(); }
+function expansionDone() {
+  const sent = S.write.sentences[S.write.currentSentence];
+  if (!sent.assembled) return;
+  sent.step = 3;
+  renderWrite();
+  debounceSave();
+}
+function backToExpand() { S.write.sentences[S.write.currentSentence].step = 2; renderWrite(); debounceSave(); }
+function toggleCheck(key) {
+  const sent = S.write.sentences[S.write.currentSentence];
+  sent.checks[key] = !sent.checks[key];
+  renderWrite();
+  debounceSave();
+}
+function sentenceDone() {
+  const sent = S.write.sentences[S.write.currentSentence];
+  sent.done = true;
+  sent.step = 4;
+  S.timestamps['sentence' + (S.write.currentSentence + 1)] = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Journal Sentence ' + (S.write.currentSentence + 1), 'Writing - Revision', 'Complete', '', '',
+    'Kernel: ' + (sent.kernel || '').slice(0, 60) + ' | Final: ' + (sent.assembled || '').slice(0, 120) +
+    ' | Checks: T' + (sent.checks.topic ? '✓' : '✗') + ' P' + (sent.checks.why ? '✓' : '✗') + ' F' + (sent.checks.felt ? '✓' : '✗') + ' N' + (sent.checks.fresh ? '✓' : '✗')]);
+  toast('Sentence ' + (S.write.currentSentence + 1) + ' done! 🎉');
+  fireCelebration();
+  // Auto-advance
+  const nextIdx = S.write.sentences.findIndex(s => !s.done);
+  if (nextIdx === -1) {
+    S.write.done = true;
+    document.getElementById('mtab-write').classList.add('done');
+    renderWriteComplete(document.getElementById('card-write'));
+  } else {
+    S.write.currentSentence = nextIdx;
+    renderWrite();
+  }
+  debounceSave();
+}
+function goToSentence(i) {
+  S.write.currentSentence = i;
+  if (writeTalkTimer) clearInterval(writeTalkTimer);
+  writeTalkTimer = null; writeTalkStart = null;
+  renderWrite();
+  debounceSave();
+}
+function insertCW(targetId, word) {
+  const ta = document.getElementById(targetId);
+  if (!ta) return;
+  const insertText = (ta.value && !ta.value.endsWith(' ') ? ' ' : '') + word + ' ';
+  const start = ta.selectionStart || ta.value.length;
+  ta.value = ta.value.slice(0, start) + insertText + ta.value.slice(start);
+  ta.focus();
+  if (targetId === 'writeWhy') onWhy();
+  else if (targetId === 'writeFelt') onFelt();
+}
+function editGist() {
+  const current = S.write.runningGist || '';
+  const newG = prompt('What is THIS paragraph about? (one short line)', current);
+  if (newG !== null) {
+    S.write.runningGist = newG;
+    renderWrite();
+    debounceSave();
+  }
+}
+function renderWriteComplete(el) {
+  const sentences = S.write.sentences.filter(function(s) { return s.done; });
+  const fullText = sentences.map(function(s) { return s.assembled; }).join(' ');
+  const wordCount = fullText.split(/\s+/).filter(Boolean).length;
+  // NEW STATS — what we actually care about: unique noun-ish phrases + distinct feelings
+  const uniquePhrases = countUniqueNounish(fullText);
+  const distinctFeelings = FEELING_WORDS.filter(function(f) { return fullText.toLowerCase().indexOf(f.toLowerCase()) !== -1; }).length;
+  const cwUsed = NARRATIVE_CW.filter(function(cw) { return fullText.toLowerCase().split(/\s+/).indexOf(cw) !== -1; }).length;
+
+  el.innerHTML =
+    '<div class="card">' +
+    '<div class="essay-complete-banner">' +
+    '<div style="font-size:3.5rem;margin-bottom:6px;">📓</div>' +
+    '<h2>Charlie\'s journal entry — done!</h2>' +
+    '<p>' + sentences.length + ' coherent sentence' + (sentences.length === 1 ? '' : 's') + ', each in its own lane.</p>' +
+    '</div>' +
+    '<div style="background:white;border:2px solid var(--green);border-radius:14px;padding:20px;margin:16px 0;">' +
+    '<h3 style="color:#2E7D32;margin-bottom:6px;">📖 Charlie\'s Journal Entry</h3>' +
+    '<p style="font-size:0.82rem;color:var(--muted);font-style:italic;margin-bottom:10px;">First night in America</p>' +
+    '<p style="font-size:1.05rem;line-height:1.9;font-weight:600;">' + esc(fullText) + '</p>' +
+    '</div>' +
+    '<div style="display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:14px 0;">' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);min-width:90px;"><div style="font-size:1.5rem;font-weight:800;color:var(--teal);">' + uniquePhrases + '</div><div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Unique noun phrases</div></div>' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);min-width:90px;"><div style="font-size:1.5rem;font-weight:800;color:#E91E63;">' + distinctFeelings + '</div><div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Distinct feelings</div></div>' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);min-width:90px;"><div style="font-size:1.5rem;font-weight:800;color:var(--purple);">' + cwUsed + '</div><div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Connectors</div></div>' +
+    '<div style="text-align:center;background:white;border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);min-width:90px;"><div style="font-size:1.5rem;font-weight:800;color:var(--gold);">' + wordCount + '</div><div style="font-size:0.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;">Words</div></div>' +
+    '</div>' +
+    '<p style="font-size:0.85rem;color:var(--muted);text-align:center;font-style:italic;">⭐ The numbers we care about: <strong>unique noun phrases</strong> and <strong>distinct feelings</strong>. Word count alone doesn\'t show coherence.</p>' +
+    '<div class="btn-row">' +
+    '<button class="btn btn-blue" onclick="speakText(' + JSON.stringify(fullText).replace(/"/g, '&quot;') + ', 0.85)">🔊 Read journal aloud</button>' +
+    '<button class="btn btn-success" onclick="switchTab(\'wrap\')">Compare with Monday →</button>' +
+    '</div>' +
+    '</div>';
+}
+
+// Count unique "noun-ish" phrases (4+ letters, non-stopwords) — proxy for content variety
+function countUniqueNounish(text) {
+  const STOPWORDS_LOCAL = ['the','and','but','for','with','that','this','was','were','have','has','had','they','their','them','from','when','then','also','just','really','very','about','after','before','because','what','where','want','wanted','went','came','got','will','went','said','told'];
+  const words = (text || '').toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(function(w) {
+    return w.length >= 4 && STOPWORDS_LOCAL.indexOf(w) === -1;
+  });
+  const unique = {};
+  words.forEach(function(w) { unique[w] = true; });
+  return Object.keys(unique).length;
+}
+
+// ============================================================
+//  TAB 5: WRAP-UP — Compare Apr 27 vs Apr 29 + Stars
+// ============================================================
+function renderWrap() {
+  const el = document.getElementById('card-wrap');
+  const saw = S.starsAndWish;
+  const sentences = S.write.sentences.filter(function(s) { return s.done; });
+  if (sentences.length === 0) {
+    el.innerHTML = '<div class="act-label act-wrap">⭐ Compare</div>' +
+      '<h2>Finish Charlie\'s journal first!</h2>' +
+      '<p class="directions">The compare view needs at least one finished sentence to show. Head back to Write.</p>' +
+      '<div class="btn-row"><button class="btn btn-primary" onclick="switchTab(\'write\')">← Back to Write</button></div>';
+    return;
+  }
+
+  // Build text for both
+  const apr27Full = APR27_SENTENCES.map(function(s) { return s.text; }).join(' ');
+  const apr29Full = sentences.map(function(s) { return s.assembled; }).join(' ');
+
+  // Stats
+  const apr27Stats = {
+    sents: APR27_SENTENCES.length,
+    words: apr27Full.split(/\s+/).filter(Boolean).length,
+    uniquePhrases: countUniqueNounish(apr27Full),
+    distinctFeelings: FEELING_WORDS.filter(function(f) { return apr27Full.toLowerCase().indexOf(f.toLowerCase()) !== -1; }).length
+  };
+  const apr29Stats = {
+    sents: sentences.length,
+    words: apr29Full.split(/\s+/).filter(Boolean).length,
+    uniquePhrases: countUniqueNounish(apr29Full),
+    distinctFeelings: FEELING_WORDS.filter(function(f) { return apr29Full.toLowerCase().indexOf(f.toLowerCase()) !== -1; }).length
+  };
+
+  // Side-by-side comparison + diff in stats
+  const compareHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;">' +
+    '<div style="background:white;border:2px solid #B0BEC5;border-radius:12px;padding:14px;">' +
+    '<div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">📅 Monday, April 27</div>' +
+    '<h3 style="font-size:0.95rem;color:var(--text);margin-bottom:8px;">Charlie\'s Story</h3>' +
+    '<p style="font-size:0.9rem;line-height:1.6;color:#5D4037;font-style:italic;">' + esc(apr27Full) + '</p>' +
+    '</div>' +
+    '<div style="background:#F1F8E9;border:2px solid var(--green);border-radius:12px;padding:14px;">' +
+    '<div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;color:#2E7D32;margin-bottom:4px;">📅 Today, April 29</div>' +
+    '<h3 style="font-size:0.95rem;color:#2E7D32;margin-bottom:8px;">Charlie\'s Journal Entry</h3>' +
+    '<p style="font-size:0.9rem;line-height:1.6;color:#1B5E20;font-style:italic;">' + esc(apr29Full) + '</p>' +
+    '</div>' +
+    '</div>' +
+    // Stats comparison row
+    '<div style="background:white;border-radius:14px;padding:16px;border:2px solid #E0E0E0;margin-top:14px;">' +
+    '<h3 style="font-size:1rem;margin-bottom:10px;">📊 Compare the numbers that count</h3>' +
+    '<div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:8px;font-size:0.88rem;align-items:center;">' +
+    '<div></div><div style="font-weight:800;color:var(--muted);text-align:center;">Monday</div><div style="font-weight:800;color:#2E7D32;text-align:center;">Today</div><div style="font-weight:800;text-align:center;">Change</div>' +
+    statRow('Unique noun phrases', apr27Stats.uniquePhrases, apr29Stats.uniquePhrases) +
+    statRow('Distinct feelings', apr27Stats.distinctFeelings, apr29Stats.distinctFeelings) +
+    statRow('Total words', apr27Stats.words, apr29Stats.words, true) +
+    statRow('Sentences', apr27Stats.sents, apr29Stats.sents, true) +
+    '</div>' +
+    '<p style="font-size:0.82rem;color:var(--muted);font-style:italic;margin-top:12px;line-height:1.5;">Words and sentences alone don\'t mean a paragraph is good. <strong>Unique noun phrases</strong> and <strong>distinct feelings</strong> tell us if it\'s telling something NEW.</p>' +
+    '</div>';
+
+  el.innerHTML =
+    '<div class="act-label act-wrap">⭐ Compare — Monday vs Today</div>' +
+    '<h2>Look at the difference!</h2>' +
+    '<p class="directions">Same character (Charlie), same first night in America. Two different paragraphs. Compare them, then tap <strong>⭐ Star</strong> the sentences from today\'s journal that you\'re proud of.</p>' +
+    compareHTML +
+    '<h3 style="font-size:1rem;margin:20px 0 8px;">⭐ Star the sentences that did the work</h3>' +
+    '<p style="font-size:0.85rem;color:var(--muted);margin-bottom:10px;">Star the ones where Charlie sounds like a real kid writing in his diary.</p>' +
+    '<div class="saw-section">' +
+    sentences.map(function(s, i) {
+      const starred = saw.stars.indexOf(i) !== -1;
+      return '<div class="saw-sentence ' + (starred ? 'saw-starred' : '') + '">' +
+        '<div class="saw-text">' + esc(s.assembled) + '</div>' +
+        '<div class="saw-btns">' +
+        '<button class="saw-btn saw-btn-star ' + (starred ? 'active' : '') + '" onclick="toggleStar(' + i + ')">⭐ Star</button>' +
+        '<button class="btn btn-sm btn-secondary" onclick="speakText(' + JSON.stringify(s.assembled).replace(/"/g, '&quot;') + ', 0.85)">🔊 Listen</button>' +
+        '</div>' +
+        '</div>';
+    }).join('') +
+    '</div>' +
+    '<div class="info-box" style="margin-top:14px;">💡 No "wish" today — Monday gave us the wish, and today is the celebration that we DID it. Stars only.</div>' +
+    '<div class="btn-row"><button class="btn btn-success" onclick="finishWrap()">All done — finish session ✓</button></div>';
+}
+
+function statRow(label, a, b, neutral) {
+  const change = b - a;
+  let symbol = '', color = 'var(--muted)';
+  if (!neutral) {
+    if (change > 0) { symbol = '▲ +' + change; color = '#2E7D32'; }
+    else if (change < 0) { symbol = '▼ ' + change; color = '#C62828'; }
+    else { symbol = '—'; }
+  } else {
+    symbol = (change > 0 ? '+' : '') + change;
+  }
+  return '<div style="font-weight:700;color:var(--text);">' + label + '</div>' +
+    '<div style="text-align:center;color:var(--muted);font-weight:700;">' + a + '</div>' +
+    '<div style="text-align:center;color:#2E7D32;font-weight:800;">' + b + '</div>' +
+    '<div style="text-align:center;font-weight:800;color:' + color + ';">' + symbol + '</div>';
+}
+
+function toggleStar(i) {
+  const saw = S.starsAndWish;
+  const idx = saw.stars.indexOf(i);
+  if (idx !== -1) saw.stars.splice(idx, 1);
+  else saw.stars.push(i);
+  renderWrap();
+  debounceSave();
+}
+function finishWrap() {
+  S.starsAndWish.done = true;
+  S.timestamps.sessionEnd = new Date().toISOString();
+  document.getElementById('mtab-wrap').classList.add('done');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Compare Apr 27 vs Apr 29', 'Writing - Revision', 'Complete', '', '',
+    'Stars on: ' + S.starsAndWish.stars.map(function(i) { return i+1; }).join(',')]);
+  toast('Session complete! 🏆📓');
+  fireCelebration();
+  setTimeout(function() {
+    document.getElementById('card-wrap').innerHTML =
+      '<div class="celebration"><div class="big-star">📓</div>' +
+      '<h2>Charlie\'s journal entry — done!</h2>' +
+      '<p style="font-size:1.05rem;line-height:1.6;color:var(--muted);margin-top:8px;">You revised Monday\'s paragraph into a real journal entry. You stayed in your sentence-lanes. You used new feelings. You said something NEW each time.<br><br>That\'s exactly what CAPE is going to ask for next week. You\'re ready. ⭐</p></div>' +
+      '<div class="btn-row"><button class="btn btn-secondary" onclick="switchTab(\'write\')">View journal entry</button>' +
+      '<button class="btn btn-blue" onclick="switchTab(\'wrap\')">Back to compare</button></div>';
+  }, 1500);
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+async function init() {
+  // Try cloud first (most recent), fall back to local
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState && cloudState.timestamps) {
+    Object.assign(S, cloudState);
+    toast('Loaded from cloud ☁️');
+  } else if (loadFromLocalStorage()) {
+    toast('Loaded local save');
+  }
+  // Resume on the right tab
+  if (S.starsAndWish && S.starsAndWish.done) switchTab('wrap');
+  else if (S.write && S.write.done) switchTab('wrap');
+  else if (S.plan && S.plan.done) switchTab('write');
+  else if (S.retell && S.retell.done) switchTab('plan');
+  else if (S.reading && S.reading.done) switchTab('retell');
+  else renderReading();
+  // Periodic cloud safety net
+  setInterval(saveStateToCloud, 30000);
+}
+init();
+</script>
+</body>
+</html>
