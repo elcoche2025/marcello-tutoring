@@ -30,6 +30,8 @@
   header p { font-size: 0.95rem; opacity: 0.9; }
   .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.7; transition: opacity 0.3s; }
   .save-indicator.flash { opacity: 1; }
+  .tutor-reset { position: absolute; top: 10px; left: 16px; font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.55; transition: opacity 0.2s; }
+  .tutor-reset:hover { opacity: 1; background: rgba(255,255,255,0.25); }
 
   .main-tabs { display: flex; justify-content: center; gap: 5px; padding: 10px 8px 0; max-width: 800px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
   .main-tab {
@@ -239,6 +241,7 @@
 <body>
 
 <header>
+  <button class="tutor-reset" onclick="tutorReset()" title="Tutor only: wipe all session progress for this date — local + cloud — and start fresh.">🔄 Reset</button>
   <h1>Marcello's Session</h1>
   <p>May 4, 2026 — CAPE Dress Rehearsal 🐢 (testing Wed–Fri this week)</p>
   <div class="save-indicator" id="saveIndicator">Saved ✓</div>
@@ -273,6 +276,46 @@ const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphw
 const SESSION_DATE = '2026-05-04';
 
 let activeTab = 'reading';
+
+// Initial-state factory — used by tutorReset() to wipe to a clean slate
+function freshState() {
+  return {
+    reading: {
+      toolsRehearsed: { highlighter: false, eliminator: false },
+      passageRead: false,
+      ebsr: [
+        { partA: null, partB: null, done: false },
+        { partA: null, partB: null, done: false }
+      ],
+      promptShown: false,
+      done: false
+    },
+    retell: {
+      listenedToStory: false,
+      notes: { where: '', who: '', decided: '', happened: '' },
+      done: false
+    },
+    plan: {
+      q1: '', q2: '', q3: '', q4: '',
+      helpUsed: {},
+      done: false
+    },
+    write: {
+      runningGist: '',
+      sentences: [
+        { text: '', locked: false },
+        { text: '', locked: false },
+        { text: '', locked: false }
+      ],
+      scaffoldsOpen: { 0: false, 1: false, 2: false },
+      examplesOpen: { 0: false, 1: false, 2: false },
+      done: false
+    },
+    starsAndWish: { stars: [], done: false },
+    timestamps: {},
+    points: 0
+  };
+}
 
 let S = {
   reading: {
@@ -608,6 +651,28 @@ function speakText(text, rate) {
     u.onerror = function() { toast('Speech error — tap Read again', true); };
     window.speechSynthesis.speak(u);
   }, 100);
+}
+
+// Tutor-only: wipe the current session state (local + cloud) and start fresh.
+// Triggered by the small 🔄 Reset button in the header.
+function tutorReset() {
+  if (!confirm('Reset this session?\n\nThis wipes ALL progress for May 4 — locally and in the cloud — and starts the app fresh. Use this if Marcello is starting the session and the app is showing leftover progress from testing.')) return;
+  // Replace S with a fresh state
+  S = freshState();
+  // Wipe localStorage for this session key
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  // Push the empty state to cloud so the next load doesn't restore stale data
+  saveStateToCloud();
+  // Reset all tab badges
+  ['reading','retell','plan','write','wrap'].forEach(function(k) {
+    const tab = document.getElementById('mtab-' + k);
+    const check = document.getElementById('check-' + k);
+    if (tab) tab.classList.remove('done');
+    if (check) check.textContent = '';
+  });
+  // Restart on Tab 1
+  switchTab('reading');
+  toast('Session reset — fresh start ✨');
 }
 
 function fireCelebration() {
