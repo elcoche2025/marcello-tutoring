@@ -1177,7 +1177,7 @@ function computeLiveChecks(idx, text) {
   // NEW = doesn't repeat 4+letter words from prior locked sentences
   let repeats = [];
   if (idx > 0) {
-    const STOP = ['the','and','but','for','with','that','this','was','were','have','has','had','they','their','them','from','when','then','also','just','really','very','about','after','before','because','what','where','want','wanted','went','came','got','will','said','told','tonight','today'];
+    const STOP = ['the','and','but','for','with','that','this','was','were','have','has','had','they','their','them','from','when','then','also','just','really','very','about','after','before','because','what','where','want','wanted','went','came','got','will','said','told','tonight','today','felt','feel','feeling','that','then'];
     const cleanWords = function(s) { return (s || '').toLowerCase().replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(function(w) { return w.length >= 4 && STOP.indexOf(w) === -1; }); };
     const myWords = cleanWords(text);
     const priorWords = {};
