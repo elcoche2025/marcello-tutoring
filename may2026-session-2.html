@@ -637,7 +637,11 @@ function setupCanvas(i) {
   ctx.strokeStyle = '#1a1a1a';
   canvasContexts[i] = ctx;
 
-  // Restore saved drawing
+  // Fill white background so JPEG saves don't render as black
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Restore saved drawing on top of white
   if (S.draw.panels[i]) {
     const img = new Image();
     img.onload = function() { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); };
@@ -714,7 +718,9 @@ function clearPanel(i) {
   const canvas = document.getElementById('pbcanvas-' + i);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Fill white instead of clearRect so the canvas stays opaque white
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   S.draw.panels[i] = null;
   debounceSave();
   // Re-eval ready state
