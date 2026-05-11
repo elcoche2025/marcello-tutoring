@@ -1082,14 +1082,30 @@ function setAnchor(sentIdx, panelIdx) {
 function onWriteText(i) {
   const ta = document.getElementById('write-text-' + i);
   if (!ta) return;
-  S.write.sentences[i].text = ta.value;
-  // Reset source check if text changes after a check
-  if (S.write.sentences[i].sourceCheck === 'match') S.write.sentences[i].sourceCheck = null;
-  // Re-render only if check chip might appear/disappear
-  const showCheck = ta.value.trim() && S.write.sentences[i].anchorPanel !== null;
-  const checkBox = document.querySelector('#card-write .write-card:nth-of-type(' + (i+1) + ') .source-check');
-  if ((showCheck && !checkBox) || (!showCheck && checkBox) || S.write.sentences[i].sourceCheck === null) {
+  const sent = S.write.sentences[i];
+  const prevHadText = !!(sent.text && sent.text.trim());
+  const prevSourceCheck = sent.sourceCheck;
+  sent.text = ta.value;
+  const nowHasText = !!ta.value.trim();
+  // If a previous "match" was clicked, typing invalidates it.
+  if (prevSourceCheck === 'match') sent.sourceCheck = null;
+  // Re-render ONLY on real UI transitions: source-check chip appearing/disappearing,
+  // or a stale "match" badge that needs to be cleared. Re-rendering on every
+  // keystroke destroys the focused textarea and kicks iPad Safari out.
+  const visibilityChanged = (prevHadText !== nowHasText);
+  const matchInvalidated = (prevSourceCheck === 'match');
+  if (visibilityChanged || matchInvalidated) {
+    const wasFocused = (document.activeElement === ta);
+    const selStart = wasFocused ? ta.selectionStart : null;
+    const selEnd = wasFocused ? ta.selectionEnd : null;
     renderWrite();
+    if (wasFocused) {
+      const ta2 = document.getElementById('write-text-' + i);
+      if (ta2) {
+        ta2.focus();
+        try { ta2.setSelectionRange(selStart, selEnd); } catch (e) {}
+      }
+    }
   }
   debounceSave();
 }
@@ -1152,27 +1168,53 @@ function toggleMic(idx) {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   recog = new SR();
   recog.continuous = false;
-  recog.interimResults = false;
+  // interimResults: true is required on iOS Safari — otherwise onresult often
+  // never fires (start tone plays but no transcript ever lands).
+  recog.interimResults = true;
   recog.lang = 'en-US';
   activeMicIdx = idx;
+  // Snapshot the text at start so each interim event replaces (not duplicates)
+  // the dictated portion. Append after a space if there was prior text.
+  const starting = S.write.sentences[idx].text || '';
+  const needsSpace = starting && !/\s$/.test(starting);
+  const prefix = starting + (needsSpace ? ' ' : '');
   const btn = document.getElementById('mic-' + idx);
   if (btn) { btn.classList.add('recording'); btn.textContent = '⏸'; }
   recog.onresult = function(e) {
-    for (let i = e.resultIndex; i < e.results.length; i++) {
-      if (e.results[i].isFinal) {
-        const ta = document.getElementById('write-text-' + idx);
-        if (ta) {
-          const sep = (ta.value && !ta.value.endsWith(' ') ? ' ' : '');
-          ta.value += sep + e.results[i][0].transcript;
-          onWriteText(idx);
-        }
-      }
+    let interim = '';
+    let finalT = '';
+    for (let i = 0; i < e.results.length; i++) {
+      const piece = e.results[i][0].transcript;
+      if (e.results[i].isFinal) finalT += piece;
+      else interim += piece;
     }
+    const transcript = (finalT + interim).trim();
+    if (!transcript) return;
+    const newText = prefix + transcript;
+    // Update state + textarea directly. Don't call onWriteText — that triggers
+    // re-render mid-recognition and breaks the listener.
+    S.write.sentences[idx].text = newText;
+    if (S.write.sentences[idx].sourceCheck === 'match') S.write.sentences[idx].sourceCheck = null;
+    const ta = document.getElementById('write-text-' + idx);
+    if (ta) ta.value = newText;
   };
-  recog.onerror = function() { stopMic(); toast('Mic error — try again', 'warning'); };
-  recog.onend = function() { stopMic(); };
-  try { recog.start(); toast('🎤 Listening...'); }
-  catch(e) { stopMic(); toast('Mic could not start', 'warning'); }
+  recog.onerror = function(e) {
+    const err = (e && e.error) || 'unknown';
+    console.error('mic error', err);
+    stopMic();
+    const msg = err === 'not-allowed'
+      ? 'Mic blocked — allow microphone in Safari settings, then try again'
+      : 'Mic error: ' + err + ' — try typing';
+    toast(msg, 'warning');
+  };
+  recog.onend = function() {
+    stopMic();
+    // One render now so the source-fidelity chip appears with the dictated text.
+    renderWrite();
+    debounceSave();
+  };
+  try { recog.start(); toast('🎤 Listening... tap mic again to stop'); }
+  catch(e) { stopMic(); toast('Mic could not start: ' + (e && e.message || ''), 'warning'); }
 }
 function stopMic() {
   if (activeMicIdx !== null) {
