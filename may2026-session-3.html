@@ -414,11 +414,32 @@ function loadFromLocalStorage() {
 }
 
 let saveDebounce = null, cloudDebounce = null;
+let cloudFireDeadline = null;
 function debounceSave() {
   clearTimeout(saveDebounce);
   saveDebounce = setTimeout(saveToLocalStorage, 500);
+  // Cloud: normally debounce 3.5s, but cap at 8s after first change since last
+  // successful save. Prevents the case where rapid actions (Y/N/M ratings,
+  // typing, drawing strokes) keep resetting the debounce and cloud save never
+  // fires before a tab switch or phase change.
+  const now = Date.now();
+  if (cloudFireDeadline === null) cloudFireDeadline = now + 8000;
+  const remaining = Math.max(cloudFireDeadline - now, 0);
+  const fireIn = Math.min(3500, remaining);
   clearTimeout(cloudDebounce);
-  cloudDebounce = setTimeout(saveStateToCloud, 3500);
+  cloudDebounce = setTimeout(function() {
+    cloudFireDeadline = null;
+    saveStateToCloud();
+  }, fireIn);
+}
+// Force-flush: local + cloud now, regardless of debounce state. Use on phase
+// transitions and tab switches so completion flags actually land in the cloud.
+function saveImmediate() {
+  clearTimeout(saveDebounce);
+  clearTimeout(cloudDebounce);
+  cloudFireDeadline = null;
+  saveToLocalStorage();
+  saveStateToCloud();
 }
 
 function postToSheets(sheet, row) {
@@ -535,7 +556,9 @@ function switchTab(tab) {
 
   updateTabBadges();
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  saveToLocalStorage();
+  // Flush local + cloud on every tab switch so phase work isn't stranded on
+  // the device if the user moves on before the 3.5s debounce fires.
+  saveImmediate();
 }
 
 function updateTabBadges() {
@@ -740,6 +763,7 @@ function finishRead() {
     ' | Drawn: ' + S.draw.panels.map(function(p) { return p ? 'Y' : 'N'; }).join('/')]);
   toast('Read & draw done! 🎉');
   fireCelebration();
+  saveImmediate();
   updateTabBadges();
   switchTab('question');
 }
@@ -932,6 +956,7 @@ function finishQuestion() {
   S.timestamps.questionEnd = new Date().toISOString();
   toast('Great work on the question 🎯');
   fireCelebration();
+  saveImmediate();
   updateTabBadges();
   switchTab('write');
 }
@@ -1147,6 +1172,7 @@ function finishWrite() {
     'Stars: ' + S.write.stars.map(function(i) { return i+1; }).join(',') + ' | Sentences locked: ' + S.write.sentences.filter(function(s) { return s.locked; }).length + '/2']);
   toast('Session complete! 🏆');
   fireCelebration();
+  saveImmediate();
   updateTabBadges();
 }
 
