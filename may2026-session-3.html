@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — May 11, 2026 (After Math CAPE Day 1)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #00838F; --teal-light: #E0F2F1; --teal-dark: #006064;
+    --blue: #4472C4; --blue-light: #D9E2F3;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --gold: #F5C542; --gold-light: #FFF8E1;
+    --orange: #FF9800; --orange-light: #FFF3E0;
+    --red: #E53935; --red-light: #FFEBEE;
+    --purple: #9C27B0; --purple-light: #F3E5F5;
+    --bg: #F4F6FB; --card: #FFFFFF;
+    --text: #2D3748; --muted: #718096;
+    --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header {
+    background: linear-gradient(135deg, #4A148C 0%, #6A1B9A 50%, #AB47BC 100%);
+    color: white; text-align: center; padding: 24px 20px 48px; position: relative;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.9; }
+  .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.7; transition: opacity 0.3s; }
+  .save-indicator.flash { opacity: 1; }
+  .tutor-reset { position: absolute; top: 10px; left: 16px; font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.55; transition: opacity 0.2s; }
+  .tutor-reset:hover { opacity: 1; background: rgba(255,255,255,0.25); }
+
+  .main-tabs { display: flex; justify-content: center; gap: 6px; padding: 10px 8px 0; max-width: 720px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
+  .main-tab {
+    padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+    cursor: pointer; transition: all 0.25s; border: 2px solid #D0D5DD;
+    background: white; color: var(--muted);
+    font-family: 'Nunito', sans-serif; white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--purple); color: var(--purple); }
+  .main-tab.active { background: var(--purple); border-color: var(--purple); color: white; box-shadow: 0 3px 12px rgba(156,39,176,0.35); transform: translateY(-2px); }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container { max-width: 720px; margin: 16px auto; padding: 0 16px; }
+  .container.wide { max-width: 1000px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions { font-size: 0.92rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+  .review-banner { display: flex; align-items: center; gap: 8px; background: var(--green-light); border: 2px solid var(--green); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.88rem; color: #2E7D32; font-weight: 700; }
+
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-purple { background: var(--purple); color: white; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-gold { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 14px; font-size: 0.85rem; border-radius: 10px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  /* Tab 1: Read & Draw */
+  .paragraph-block {
+    background: white; border: 2px solid #E0E0E0; border-radius: 16px;
+    padding: 18px; margin-bottom: 14px; transition: border-color 0.3s;
+  }
+  .paragraph-block.read { border-color: var(--green); background: #FAFFFB; }
+  .pb-num { display: inline-block; background: var(--purple); color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; margin-bottom: 8px; }
+  .pb-num.read { background: var(--green); }
+  .pb-text { font-size: 1.05rem; line-height: 1.7; color: var(--text); margin-bottom: 14px; font-weight: 500; }
+  .pb-row { display: grid; grid-template-columns: 240px 1fr; gap: 14px; align-items: start; }
+  @media (max-width: 600px) { .pb-row { grid-template-columns: 1fr; } }
+  .pb-canvas-wrap { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 8px; text-align: center; }
+  .pb-canvas {
+    width: 220px; height: 160px;
+    background: white; border-radius: 8px;
+    cursor: crosshair; touch-action: none;
+    border: 1px solid #D0D5DD;
+    display: block; margin: 0 auto;
+  }
+  .pb-canvas-tools { display: flex; justify-content: space-between; gap: 6px; margin-top: 6px; align-items: center; }
+  .pb-canvas-tools .tool-btn { font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; background: #F0F0F0; border: 1px solid #B0BEC5; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
+  .pb-canvas-tools .tool-btn:hover { background: #E0E0E0; }
+  .pb-canvas-tools .tool-btn.danger { color: var(--red); border-color: #FFB3B3; }
+  .pb-side { display: flex; flex-direction: column; gap: 10px; }
+  .pb-label-input {
+    width: 100%; padding: 10px 12px; border: 2px solid #D0D5DD; border-radius: 10px;
+    font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600;
+  }
+  .pb-label-input:focus { border-color: var(--purple); outline: none; }
+  .pb-label-hint { font-size: 0.78rem; color: var(--muted); font-style: italic; }
+  .pb-check-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pb-check { padding: 7px 12px; border-radius: 18px; font-size: 0.82rem; font-weight: 700; cursor: pointer; border: 2px solid #D0D5DD; background: white; color: var(--muted); font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .pb-check:hover { border-color: var(--purple); }
+  .pb-check.checked { background: var(--green-light); border-color: var(--green); color: #2E7D32; }
+
+  /* Tab 2: Big Question with Y/N/M */
+  .question-card {
+    background: white; border: 3px solid var(--purple); border-radius: 16px;
+    padding: 20px; margin-bottom: 14px;
+  }
+  .question-stem { font-size: 1.05rem; font-weight: 700; line-height: 1.6; margin-bottom: 14px; color: #4A148C; }
+  .ynm-choice { display: grid; grid-template-columns: 36px 1fr auto; gap: 10px; align-items: center; padding: 12px; border: 2px solid #E0E0E0; border-radius: 12px; margin-bottom: 8px; transition: all 0.25s; background: white; }
+  .ynm-choice.eliminated { opacity: 0.35; background: #F5F5F5; text-decoration: line-through; }
+  .ynm-choice.selected-final { border-color: var(--green); background: var(--green-light); }
+  .ynm-choice .ynm-letter { width: 32px; height: 32px; border-radius: 50%; background: #F0F0F0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1rem; color: var(--text); }
+  .ynm-choice .ynm-text { font-size: 0.95rem; font-weight: 600; line-height: 1.5; }
+  .ynm-choice .ynm-buttons { display: flex; gap: 4px; }
+  .ynm-btn {
+    padding: 5px 12px; border-radius: 14px; font-size: 0.78rem; font-weight: 800;
+    border: 2px solid #D0D5DD; background: white; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: all 0.2s; min-width: 50px;
+  }
+  .ynm-btn:hover { transform: translateY(-1px); }
+  .ynm-btn.yes { color: var(--green); border-color: #A5D6A7; }
+  .ynm-btn.yes.active { background: var(--green); color: white; border-color: var(--green); }
+  .ynm-btn.no { color: var(--red); border-color: #EF9A9A; }
+  .ynm-btn.no.active { background: var(--red); color: white; border-color: var(--red); }
+  .ynm-btn.maybe { color: var(--orange); border-color: #FFCC80; }
+  .ynm-btn.maybe.active { background: var(--orange); color: white; border-color: var(--orange); }
+  .ynm-step {
+    background: var(--blue-light); border-radius: 10px; padding: 12px 16px;
+    margin: 14px 0; font-size: 0.92rem; line-height: 1.5; color: #0D47A1;
+    border-left: 4px solid var(--blue);
+  }
+  .ynm-step strong { color: #0D47A1; }
+  .ynm-final-row { margin-top: 14px; padding-top: 14px; border-top: 2px dashed #D0D5DD; }
+  .ynm-final-row .ynm-final-label { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+  .ynm-final-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ynm-pick { padding: 10px 16px; border-radius: 12px; font-weight: 800; border: 2px solid #D0D5DD; background: white; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .ynm-pick:hover { border-color: var(--purple); }
+  .ynm-pick.disabled { opacity: 0.4; cursor: not-allowed; }
+  .ynm-feedback {
+    margin-top: 14px; padding: 12px 16px; border-radius: 12px;
+    font-weight: 700; font-size: 0.95rem; line-height: 1.5;
+  }
+  .ynm-feedback.correct { background: var(--green-light); border: 2px solid var(--green); color: #2E7D32; }
+  .ynm-feedback.incorrect { background: var(--red-light); border: 2px solid var(--red); color: #C62828; }
+
+  /* Tab 3: Write with panel anchor */
+  .panel-strip { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 14px; margin-bottom: 14px; scroll-snap-type: x mandatory; }
+  .panel-strip::-webkit-scrollbar { height: 6px; }
+  .panel-strip::-webkit-scrollbar-thumb { background: #D0D5DD; border-radius: 4px; }
+  .panel-thumb {
+    flex-shrink: 0; width: 130px; background: white; border: 3px solid #E0E0E0;
+    border-radius: 12px; padding: 6px; cursor: pointer; transition: all 0.2s;
+    scroll-snap-align: start;
+  }
+  .panel-thumb:hover { border-color: var(--purple); transform: translateY(-2px); }
+  .panel-thumb.selected { border-color: var(--purple); background: var(--purple-light); box-shadow: 0 4px 14px rgba(156,39,176,0.25); }
+  .panel-thumb img, .panel-thumb canvas { width: 100%; height: 84px; object-fit: contain; background: white; border-radius: 6px; display: block; }
+  .panel-thumb .panel-thumb-empty { width: 100%; height: 84px; background: #F5F5F5; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: var(--muted); text-align: center; padding: 4px; }
+  .panel-thumb .panel-thumb-label { font-size: 0.78rem; font-weight: 700; text-align: center; margin-top: 5px; color: var(--text); line-height: 1.2; min-height: 28px; }
+  .panel-thumb .panel-thumb-num { font-size: 0.65rem; font-weight: 800; color: var(--muted); text-align: center; margin-bottom: 2px; }
+
+  .write-card {
+    background: white; border: 2px solid #E0E0E0; border-radius: 16px;
+    padding: 18px 20px; margin-bottom: 16px; transition: all 0.25s;
+  }
+  .write-card.locked { background: var(--green-light); border-color: var(--green); }
+  .write-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .write-card-title { font-size: 1.05rem; font-weight: 800; color: var(--purple); }
+  .write-card-title.locked { color: var(--green); }
+  .anchor-display {
+    background: var(--purple-light); border-left: 4px solid var(--purple);
+    border-radius: 0 10px 10px 0; padding: 10px 14px; margin-bottom: 12px;
+    font-size: 0.9rem; line-height: 1.5; display: flex; align-items: center; gap: 10px;
+  }
+  .anchor-display.empty { background: #FFF3E0; border-color: var(--orange); color: #E65100; }
+  .anchor-display .anchor-thumb { width: 60px; height: 44px; flex-shrink: 0; background: white; border-radius: 6px; border: 1px solid #D0D5DD; }
+  .anchor-display .anchor-thumb img, .anchor-display .anchor-thumb canvas { width: 100%; height: 100%; object-fit: contain; border-radius: 6px; }
+  .write-textarea-wrap { position: relative; }
+  .write-textarea {
+    width: 100%; min-height: 80px; border: 2px solid #D0D5DD; border-radius: 12px;
+    padding: 14px 50px 14px 14px; font-family: 'Nunito', sans-serif;
+    font-size: 1rem; font-weight: 600; resize: vertical; line-height: 1.6; background: #FAFBFC;
+  }
+  .write-textarea:focus { border-color: var(--purple); outline: none; background: white; }
+  .write-textarea.locked { background: white; border-color: var(--green); }
+  .mic-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: var(--purple-light); border: 2px solid var(--purple); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+  .mic-btn:hover { background: var(--purple); color: white; }
+  .mic-btn.recording { background: var(--red); border-color: var(--red); color: white; animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(229,57,53,0.5); } 50% { box-shadow: 0 0 0 8px rgba(229,57,53,0); } }
+
+  .source-check {
+    background: #FFFDE7; border: 2px solid var(--gold); border-radius: 12px;
+    padding: 12px 14px; margin-top: 12px;
+  }
+  .source-check.matched { background: var(--green-light); border-color: var(--green); }
+  .source-check.unmatched { background: var(--red-light); border-color: var(--red); }
+  .source-check-prompt { font-size: 0.92rem; line-height: 1.5; font-weight: 600; margin-bottom: 10px; color: #5D4037; }
+  .source-check-row { display: flex; gap: 8px; }
+  .source-btn {
+    flex: 1; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.85rem;
+    border: 2px solid; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s;
+  }
+  .source-btn.match { background: white; color: var(--green); border-color: var(--green); }
+  .source-btn.match.active { background: var(--green); color: white; }
+  .source-btn.unmatch { background: white; color: var(--red); border-color: var(--red); }
+  .source-btn.unmatch.active { background: var(--red); color: white; }
+
+  .lock-row { display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px; }
+  .lock-btn { background: var(--green); color: white; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .lock-btn:disabled { background: #E0E0E0; color: var(--muted); cursor: not-allowed; }
+  .unlock-btn { background: white; color: var(--green); border: 2px solid var(--green); border-radius: 10px; padding: 6px 12px; font-weight: 700; font-size: 0.82rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+
+  /* Wrap-up / stars */
+  .stars-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .star-btn {
+    padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 700;
+    background: var(--gold-light); border: 2px solid var(--gold); color: #7B6400;
+    cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s;
+  }
+  .star-btn:hover, .star-btn.active { background: var(--gold); color: white; }
+
+  .pep-banner {
+    background: linear-gradient(135deg, #4DD0E1, #26C6DA, #00ACC1);
+    color: white; border-radius: 16px; padding: 22px 20px; text-align: center;
+    margin: 16px 0; box-shadow: var(--shadow);
+  }
+  .pep-banner h3 { font-size: 1.3rem; margin-bottom: 4px; }
+  .pep-banner p { font-size: 0.95rem; opacity: 0.95; line-height: 1.5; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+  .toast.error { background: var(--red); }
+
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+
+  .info-box { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; font-size: 0.92rem; color: #0D47A1; }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="tutor-reset" onclick="tutorReset()" title="Tutor only: wipe all session progress for this date — local + cloud — and start fresh.">🔄 Reset</button>
+  <h1>Marcello's Session</h1>
+  <p>Monday, May 11, 2026 — After Math CAPE Day 1 🧮</p>
+  <div class="save-indicator" id="saveIndicator">Saved ✓</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-read" onclick="switchTab('read')">📖 Read & Draw</button>
+  <button class="main-tab" id="mtab-question" onclick="switchTab('question')">❓ The Big Question</button>
+  <button class="main-tab" id="mtab-write" onclick="switchTab('write')">✍️ Write 2 Sentences</button>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-read"><div id="card-read"></div></div>
+  <div class="tab-panel" id="panel-question"><div id="card-question"></div></div>
+  <div class="tab-panel" id="panel-write"><div id="card-write"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG & GLOBALS
+// ============================================================
+const STORAGE_KEY = 'marcello_may11_session';
+const CLOUD_STATE_KEY = 'may2026_session_9';
+const PREV_CLOUD_KEY = 'may2026_session_8';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-05-11';
+
+let activeTab = 'read';
+
+function freshState() {
+  return {
+    read: {
+      paragraphs: [
+        { read: false, label: '', spoken: false },
+        { read: false, label: '', spoken: false },
+        { read: false, label: '', spoken: false },
+        { read: false, label: '', spoken: false }
+      ],
+      done: false
+    },
+    draw: {
+      panels: [null, null, null, null]  // base64 dataURLs
+    },
+    question: {
+      partA: {
+        rated: { 0: null, 1: null, 2: null, 3: null }, // 'yes'|'no'|'maybe'|null
+        eliminated: [false, false, false, false],
+        finalAnswer: null,
+        correct: null,
+        step: 0  // 0=rate, 1=eliminate Nos, 2=re-read maybes, 3=pick final
+      },
+      partB: {
+        rated: { 0: null, 1: null, 2: null, 3: null },
+        eliminated: [false, false, false, false],
+        finalAnswer: null,
+        correct: null,
+        step: 0
+      },
+      done: false
+    },
+    write: {
+      sentences: [
+        { text: '', anchorPanel: null, sourceCheck: null, locked: false },
+        { text: '', anchorPanel: null, sourceCheck: null, locked: false }
+      ],
+      stars: [],
+      done: false
+    },
+    timestamps: {},
+    points: 0
+  };
+}
+
+let S = freshState();
+
+// ============================================================
+//  STORY DATA — The Crow and the Pitcher (Aesop, public domain)
+// ============================================================
+const STORY = {
+  title: "The Crow and the Pitcher",
+  source: "Aesop's Fables (public domain)",
+  paragraphs: [
+    {
+      n: 1,
+      text: 'On a hot summer day, a thirsty crow flew over the dusty fields. He had been flying for a long, long time, and every pond was dry. He grew weak. He could barely flap his wings.',
+      panelHint: 'Tip: a crow flying over dry land. Maybe stick figures + a sun.'
+    },
+    {
+      n: 2,
+      text: 'At last, the crow saw a tall pitcher on a stone wall. He flew down quickly. There was water at the bottom — but the pitcher was tall, and his beak could not reach it. The crow nearly gave up.',
+      panelHint: 'Tip: a tall pitcher with a little water at the bottom + the crow on top.'
+    },
+    {
+      n: 3,
+      text: 'Then the crow had an idea. He picked up a small pebble in his beak and dropped it into the pitcher. Plink! He picked up another, and another. Plink, plink. With each pebble, the water rose a little higher.',
+      panelHint: 'Tip: pebbles dropping in + the water level going up.'
+    },
+    {
+      n: 4,
+      text: 'Soon the water came near the top. The crow drank deeply and felt strong again. He flew away with a happy heart.',
+      panelHint: 'Tip: the crow drinking from the now-full pitcher.'
+    }
+  ]
+};
+
+// THE BIG QUESTION — central message (RL.3.2 style)
+// All wrong choices share words with the passage to test source-monitoring.
+const BIG_QUESTION = {
+  partA: {
+    standard: 'RL.3.2 — central message',
+    stem: 'What is the <strong>central message</strong> of "The Crow and the Pitcher"?',
+    choices: [
+      { letter: 'A', text: 'Crows are smart birds.' },
+      { letter: 'B', text: 'Hard problems can be solved step by step.' },
+      { letter: 'C', text: 'Drinking water is important on hot days.' },
+      { letter: 'D', text: 'It is dangerous to fly far from home.' }
+    ],
+    correct: 'B',
+    teach: 'For CENTRAL MESSAGE questions, the right answer is the LESSON — not just something the story mentioned. "Smart birds" describes the crow but isn\'t the lesson. "Drinking water" is in the story but isn\'t the lesson. The lesson is the part that teaches us something we can use.'
+  },
+  partB: {
+    standard: 'Find the evidence sentence',
+    stem: 'Which sentence from the story BEST shows the central message you picked?',
+    choices: [
+      { letter: 'A', text: '"He had been flying for a long, long time."' },
+      { letter: 'B', text: '"His beak could not reach it."' },
+      { letter: 'C', text: '"With each pebble, the water rose a little higher."' },
+      { letter: 'D', text: '"He flew away with a happy heart."' }
+    ],
+    correct: 'C',
+    teach: 'For Part B on a moral/lesson question, the right sentence is usually the one that SHOWS the lesson happening. "With each pebble, the water rose a little higher" shows the step-by-step solution working. The other sentences are about the problem, the start, or the happy ending — not the lesson itself.'
+  }
+};
+
+// ============================================================
+//  UTIL
+// ============================================================
+function toast(msg, kind) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (kind ? ' ' + kind : '');
+  setTimeout(function() { t.className = 'toast'; }, 3000);
+}
+function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
+
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved ✓';
+    ind.classList.add('flash');
+    setTimeout(function() { ind.classList.remove('flash'); }, 1000);
+  } catch(e) {
+    if (e.name === 'QuotaExceededError') toast('Local save full — drawings may be too large', 'warning');
+  }
+}
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const loaded = JSON.parse(raw);
+    S = Object.assign(freshState(), loaded);
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null, cloudDebounce = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(saveStateToCloud, 3500);
+}
+
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: sheet, row: row })
+    });
+  } catch(e) {}
+}
+
+function saveStateToCloud() {
+  try {
+    fetch(TRACKER_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S })
+    });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved ☁️';
+    ind.classList.add('flash');
+    setTimeout(function() { ind.classList.remove('flash'); }, 1000);
+  } catch(e) {}
+}
+
+function loadStateFromCloud(key) {
+  return new Promise(function(resolve) {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(function() { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout);
+      delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state);
+      else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = function() { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+let speechUnlocked = false;
+function unlockSpeech() {
+  if (speechUnlocked || !('speechSynthesis' in window)) return;
+  const dummy = new SpeechSynthesisUtterance('');
+  dummy.volume = 0;
+  window.speechSynthesis.speak(dummy);
+  speechUnlocked = true;
+}
+document.addEventListener('touchstart', unlockSpeech, { once: true });
+document.addEventListener('click', unlockSpeech, { once: true });
+
+function speakText(text, rate) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available', 'warning'); return; }
+  window.speechSynthesis.cancel();
+  setTimeout(function() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = rate || 0.85;
+    u.pitch = 1;
+    u.onerror = function() { toast('Speech error — tap again', 'warning'); };
+    window.speechSynthesis.speak(u);
+  }, 100);
+}
+
+function fireCelebration() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  const emojis = ['🎉','🎊','⭐','🥳','🌟','🏆','🐦','💧','🪨'];
+  for (let i = 0; i < 24; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(function() { c.remove(); }, 4000);
+}
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(confettiStyle);
+
+// Tutor-only: wipe local + cloud + reset to Tab 1.
+function tutorReset() {
+  if (!confirm('Reset this session?\n\nThis wipes ALL progress for May 11 — locally and in the cloud — and starts the app fresh. Use this if Marcello is starting and the app is showing leftover progress from testing.')) return;
+  S = freshState();
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  saveStateToCloud();
+  ['read','question','write'].forEach(function(k) {
+    const tab = document.getElementById('mtab-' + k);
+    if (tab) tab.classList.remove('done');
+  });
+  switchTab('read');
+  toast('Session reset — fresh start ✨');
+}
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  const mc = document.getElementById('mainContainer');
+  if (tab === 'write' || tab === 'read') mc.classList.add('wide'); else mc.classList.remove('wide');
+
+  if (tab === 'read') renderRead();
+  else if (tab === 'question') renderQuestion();
+  else if (tab === 'write') renderWrite();
+
+  updateTabBadges();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveToLocalStorage();
+}
+
+function updateTabBadges() {
+  const map = { read: S.read.done, question: S.question.done, write: S.write.done };
+  Object.keys(map).forEach(function(k) {
+    const tab = document.getElementById('mtab-' + k);
+    if (map[k]) tab.classList.add('done'); else tab.classList.remove('done');
+  });
+}
+
+// ============================================================
+//  TAB 1 — READ & DRAW
+// ============================================================
+function renderRead() {
+  const el = document.getElementById('card-read');
+  const r = S.read;
+  const allRead = r.paragraphs.every(function(p) { return p.read; });
+  const allDrawn = S.draw.panels.every(function(p) { return !!p; });
+  const allLabeled = r.paragraphs.every(function(p) { return p.label.trim().length > 0; });
+  const ready = allRead && (allDrawn || allLabeled);  // either drawing OR label is fine
+
+  const reviewBanner = r.done
+    ? '<div class="review-banner">✅ Read & Draw complete. Tap any paragraph to come back, edit a label, or redraw a panel.</div>'
+    : '';
+
+  let html =
+    '<div class="card">' +
+    reviewBanner +
+    '<h2>📖 Read the story together — draw as you go</h2>' +
+    '<p class="directions">One paragraph at a time. Read it, then make a quick stick-figure drawing of what happened in that paragraph. Add a 1-2 word label so you remember. <strong>The drawings are how we\'ll remember the story exactly when we write later.</strong></p>' +
+    '<div class="info-box">📌 The drawings don\'t have to look good. Stick figures, lines, arrows. The point is to remember WHAT happened — not to make art.</div>' +
+    '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;font-style:italic;">' + esc(STORY.title) + ' · ' + esc(STORY.source) + '</div>' +
+    '</div>';
+
+  STORY.paragraphs.forEach(function(p, i) {
+    const state = r.paragraphs[i];
+    html += '<div class="paragraph-block ' + (state.read ? 'read' : '') + '">' +
+      '<div class="pb-num ' + (state.read ? 'read' : '') + '">Paragraph ' + p.n + (state.read ? ' ✓' : '') + '</div>' +
+      '<div class="pb-text">' + esc(p.text) + '</div>' +
+      '<div class="pb-row">' +
+      '<div class="pb-canvas-wrap">' +
+      '<canvas class="pb-canvas" id="pbcanvas-' + i + '" width="220" height="160"></canvas>' +
+      '<div class="pb-canvas-tools">' +
+      '<span style="font-size:0.7rem;color:var(--muted);">Panel ' + (i+1) + '</span>' +
+      '<button class="tool-btn danger" onclick="clearPanel(' + i + ')">Clear</button>' +
+      '</div></div>' +
+      '<div class="pb-side">' +
+      '<div>' +
+      '<div class="pb-label-hint">Label this panel (1-2 words):</div>' +
+      '<input class="pb-label-input" id="pblabel-' + i + '" placeholder="e.g., \'crow flying, thirsty\'" oninput="onPanelLabel(' + i + ')" value="' + esc(state.label) + '">' +
+      '</div>' +
+      '<div style="font-size:0.78rem;color:var(--muted);font-style:italic;line-height:1.4;">' + esc(p.panelHint) + '</div>' +
+      '<div class="pb-check-row">' +
+      '<button class="pb-check ' + (state.read ? 'checked' : '') + '" onclick="markRead(' + i + ')">' + (state.read ? '✓ Read' : '👀 I read it') + '</button>' +
+      '<button class="pb-check ' + (state.spoken ? 'checked' : '') + '" onclick="markSpoken(' + i + ')">' + (state.spoken ? '✓ Said in own words' : '🗣️ Said in own words'  ) + '</button>' +
+      '<button class="btn btn-sm btn-secondary" onclick="speakText(' + JSON.stringify(p.text).replace(/"/g, '&quot;') + ', 0.82)">🔊</button>' +
+      '</div>' +
+      '</div></div></div>';
+  });
+
+  html += '<div class="btn-row">' +
+    '<button class="btn btn-success" onclick="finishRead()" ' + (ready ? '' : 'disabled') + '>' +
+    (r.done ? '✓ Done — to the Big Question →' : 'Done reading — to the Big Question →') +
+    '</button></div>';
+  if (!ready) html += '<p style="text-align:center;font-size:0.83rem;color:var(--muted);font-style:italic;margin-top:6px;">Mark each paragraph as Read + add a label OR a drawing for each panel.</p>';
+
+  el.innerHTML = html;
+
+  // Hook up canvases AFTER the DOM exists
+  STORY.paragraphs.forEach(function(p, i) {
+    setupCanvas(i);
+  });
+}
+
+function markRead(i) { S.read.paragraphs[i].read = true; renderRead(); debounceSave(); }
+function markSpoken(i) { S.read.paragraphs[i].spoken = true; renderRead(); debounceSave(); }
+function onPanelLabel(i) {
+  const v = document.getElementById('pblabel-' + i).value;
+  S.read.paragraphs[i].label = v;
+  // Don't full re-render (would lose canvas state); just re-evaluate enabled state
+  const allRead = S.read.paragraphs.every(function(p) { return p.read; });
+  const allDrawn = S.draw.panels.every(function(p) { return !!p; });
+  const allLabeled = S.read.paragraphs.every(function(p) { return p.label.trim().length > 0; });
+  const ready = allRead && (allDrawn || allLabeled);
+  const btn = document.querySelector('#card-read .btn-success');
+  if (btn) btn.disabled = !ready;
+  debounceSave();
+}
+
+// === Canvas drawing ===
+const canvasContexts = {};
+function setupCanvas(i) {
+  const canvas = document.getElementById('pbcanvas-' + i);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#1a1a1a';
+  canvasContexts[i] = ctx;
+
+  // Fill white background so JPEG saves don't render as black
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Restore saved drawing on top of white
+  if (S.draw.panels[i]) {
+    const img = new Image();
+    img.onload = function() { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); };
+    img.src = S.draw.panels[i];
+  }
+
+  let drawing = false;
+  let lastX = 0, lastY = 0;
+  let dirty = false;
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const point = e.touches && e.touches[0] ? e.touches[0] : e;
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (point.clientX - rect.left) * scaleX,
+      y: (point.clientY - rect.top) * scaleY
+    };
+  }
+  function start(e) {
+    e.preventDefault();
+    drawing = true;
+    const p = getPos(e);
+    lastX = p.x; lastY = p.y;
+    // dot in case of single tap
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+    dirty = true;
+  }
+  function move(e) {
+    if (!drawing) return;
+    e.preventDefault();
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    dirty = true;
+  }
+  function end() {
+    if (drawing && dirty) {
+      drawing = false;
+      // Save canvas as compressed JPEG
+      try {
+        S.draw.panels[i] = canvas.toDataURL('image/jpeg', 0.6);
+      } catch(e) {}
+      dirty = false;
+      // Re-evaluate ready state without full re-render
+      const allRead = S.read.paragraphs.every(function(p) { return p.read; });
+      const allDrawn = S.draw.panels.every(function(p) { return !!p; });
+      const allLabeled = S.read.paragraphs.every(function(p) { return p.label.trim().length > 0; });
+      const ready = allRead && (allDrawn || allLabeled);
+      const btn = document.querySelector('#card-read .btn-success');
+      if (btn) btn.disabled = !ready;
+      debounceSave();
+    }
+    drawing = false;
+  }
+
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove', move, { passive: false });
+  canvas.addEventListener('touchend', end);
+  canvas.addEventListener('touchcancel', end);
+}
+
+function clearPanel(i) {
+  const canvas = document.getElementById('pbcanvas-' + i);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  // Fill white instead of clearRect so the canvas stays opaque white
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  S.draw.panels[i] = null;
+  debounceSave();
+  // Re-eval ready state
+  const allRead = S.read.paragraphs.every(function(p) { return p.read; });
+  const allLabeled = S.read.paragraphs.every(function(p) { return p.label.trim().length > 0; });
+  const allDrawn = S.draw.panels.every(function(p) { return !!p; });
+  const ready = allRead && (allDrawn || allLabeled);
+  const btn = document.querySelector('#card-read .btn-success');
+  if (btn) btn.disabled = !ready;
+}
+
+function finishRead() {
+  S.read.done = true;
+  S.timestamps.readEnd = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Read & Draw — Crow & Pitcher', 'Reading-Writing Bridge', 'Complete', '', '',
+    'Labels: ' + S.read.paragraphs.map(function(p, i) { return 'P' + (i+1) + ':' + (p.label || '-'); }).join(' | ') +
+    ' | Drawn: ' + S.draw.panels.map(function(p) { return p ? 'Y' : 'N'; }).join('/')]);
+  toast('Read & draw done! 🎉');
+  fireCelebration();
+  updateTabBadges();
+  switchTab('question');
+}
+
+// ============================================================
+//  TAB 2 — THE BIG QUESTION (Y/N/M scaffold)
+// ============================================================
+function renderQuestion() {
+  const el = document.getElementById('card-question');
+  const q = S.question;
+
+  const reviewBanner = q.done
+    ? '<div class="review-banner">✅ Question complete. Both parts answered correctly. Continue to writing.</div>'
+    : '';
+
+  let html =
+    '<div class="card">' +
+    reviewBanner +
+    '<h2>❓ One Big Question</h2>' +
+    '<p class="directions">This works just like CAPE. Two parts: pick the answer, then find the sentence in the story that proves it. <strong>For each choice, rate it Yes / No / Maybe first</strong> — that helps us think about each one before picking.</p>' +
+    '</div>';
+
+  // Part A
+  html += '<div class="question-card">' +
+    '<div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;color:var(--purple);margin-bottom:6px;">PART A · ' + esc(BIG_QUESTION.partA.standard) + '</div>' +
+    '<div class="question-stem">' + BIG_QUESTION.partA.stem + '</div>' +
+    renderYNMSection('partA', BIG_QUESTION.partA, q.partA) +
+    '</div>';
+
+  // Part B (only if Part A done correctly)
+  if (q.partA.finalAnswer === BIG_QUESTION.partA.correct) {
+    html += '<div class="question-card" style="border-color:var(--blue);">' +
+      '<div style="font-size:0.78rem;font-weight:800;text-transform:uppercase;color:var(--blue);margin-bottom:6px;">PART B · ' + esc(BIG_QUESTION.partB.standard) + '</div>' +
+      '<div class="question-stem" style="color:#0D47A1;">' + BIG_QUESTION.partB.stem + '</div>' +
+      renderYNMSection('partB', BIG_QUESTION.partB, q.partB) +
+      '</div>';
+  }
+
+  // Continue button — once both parts are correct
+  const allDone = q.partA.finalAnswer === BIG_QUESTION.partA.correct && q.partB.finalAnswer === BIG_QUESTION.partB.correct;
+  if (allDone) {
+    html += '<div class="btn-row">' +
+      '<button class="btn btn-success" onclick="finishQuestion()">' + (q.done ? '✓ Continue to Writing →' : 'Both parts right — Write 2 sentences →') + '</button>' +
+      '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function renderYNMSection(partKey, qDef, qState) {
+  const step = qState.step;
+  const allRated = Object.values(qState.rated).every(function(r) { return r !== null; });
+  const noCount = Object.values(qState.rated).filter(function(r) { return r === 'no'; }).length;
+  const maybeCount = Object.values(qState.rated).filter(function(r) { return r === 'maybe'; }).length;
+  const yesCount = Object.values(qState.rated).filter(function(r) { return r === 'yes'; }).length;
+
+  let html = '';
+
+  // Step 0: rate each
+  html += '<div class="ynm-step"><strong>Step 1.</strong> For each answer, rate it <span style="color:var(--green);">Yes</span> (could be it), <span style="color:var(--red);">No</span> (definitely not), or <span style="color:var(--orange);">Maybe</span>.</div>';
+
+  qDef.choices.forEach(function(c, i) {
+    const rated = qState.rated[i];
+    const eliminated = qState.eliminated[i];
+    const isFinal = qState.finalAnswer === c.letter;
+    let cls = 'ynm-choice';
+    if (eliminated) cls += ' eliminated';
+    if (isFinal && qState.finalAnswer === qDef.correct) cls += ' selected-final';
+
+    html += '<div class="' + cls + '">' +
+      '<div class="ynm-letter">' + c.letter + '</div>' +
+      '<div class="ynm-text">' + c.text + '</div>' +
+      '<div class="ynm-buttons">' +
+      '<button class="ynm-btn yes ' + (rated === 'yes' ? 'active' : '') + '" onclick="rateChoice(\'' + partKey + '\',' + i + ',\'yes\')" ' + (eliminated || qState.finalAnswer ? 'disabled' : '') + '>Yes</button>' +
+      '<button class="ynm-btn no ' + (rated === 'no' ? 'active' : '') + '" onclick="rateChoice(\'' + partKey + '\',' + i + ',\'no\')" ' + (eliminated || qState.finalAnswer ? 'disabled' : '') + '>No</button>' +
+      '<button class="ynm-btn maybe ' + (rated === 'maybe' ? 'active' : '') + '" onclick="rateChoice(\'' + partKey + '\',' + i + ',\'maybe\')" ' + (eliminated || qState.finalAnswer ? 'disabled' : '') + '>Maybe</button>' +
+      '</div></div>';
+  });
+
+  // Step 1: eliminate Nos
+  if (allRated && step === 0) {
+    html += '<div class="ynm-step"><strong>Step 2.</strong> Cross out the answers you rated <span style="color:var(--red);">No</span>. Click the button below to eliminate them.</div>';
+    html += '<div class="btn-row">' +
+      '<button class="btn btn-orange" onclick="eliminateNos(\'' + partKey + '\')">✗ Cross out the ' + noCount + ' "No" answer' + (noCount === 1 ? '' : 's') + '</button>' +
+      '</div>';
+  }
+
+  // Step 2: re-read for maybes
+  if (step === 1 && maybeCount > 0) {
+    html += '<div class="ynm-step"><strong>Step 3.</strong> Look at the story again. Read carefully. Now decide on each <span style="color:var(--orange);">Maybe</span> — is it really Yes or really No?<br>(Tap Yes or No to change a Maybe.)</div>';
+    // Allow re-rating maybes only
+    html = html.replace(/disabled/g, '');  // re-enable Yes/No on non-eliminated rows for Step 3 — careful, this will re-enable yes/no on already-Yes rows too which is fine
+    html += '<div class="btn-row">' +
+      '<button class="btn btn-secondary" onclick="advanceQuestionStep(\'' + partKey + '\', 2)">Done with Maybes →</button>' +
+      '</div>';
+  }
+  if (step === 1 && maybeCount === 0) {
+    // Auto-advance — no maybes
+    setTimeout(function() { advanceQuestionStep(partKey, 2); }, 100);
+  }
+
+  // Step 3: pick final
+  if (step >= 2 && !qState.finalAnswer) {
+    html += '<div class="ynm-step"><strong>Step 4.</strong> Now pick the <span style="color:var(--green);">Yes</span> that survived. That\'s your answer.</div>';
+    html += '<div class="ynm-final-row">';
+    html += '<div class="ynm-final-label">Final answer:</div>';
+    html += '<div class="ynm-final-buttons">';
+    qDef.choices.forEach(function(c, i) {
+      if (qState.eliminated[i]) return;
+      html += '<button class="ynm-pick" onclick="pickFinal(\'' + partKey + '\',\'' + c.letter + '\')">' + c.letter + ' — ' + esc(c.text.slice(0, 50)) + (c.text.length > 50 ? '...' : '') + '</button>';
+    });
+    html += '</div></div>';
+  }
+
+  // Feedback after final answer
+  if (qState.finalAnswer) {
+    if (qState.finalAnswer === qDef.correct) {
+      html += '<div class="ynm-feedback correct">🎉 Yes! That\'s the right answer.<br><br>💡 ' + esc(qDef.teach) + '</div>';
+    } else {
+      html += '<div class="ynm-feedback incorrect">Not quite. Let\'s look at the story again.<br><br>The right answer is ' + esc(qDef.correct) + '. Tap "Try again" to redo Part ' + (partKey === 'partA' ? 'A' : 'B') + '.<br>' +
+        '<div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="btn btn-orange btn-sm" onclick="resetQuestionPart(\'' + partKey + '\')">↻ Try again</button></div>' +
+        '</div>';
+    }
+  }
+
+  return html;
+}
+
+function rateChoice(partKey, choiceIdx, rating) {
+  const q = S.question[partKey];
+  if (q.eliminated[choiceIdx]) return;
+  if (q.finalAnswer) return;
+  q.rated[choiceIdx] = rating;
+  // If we're back in step 1 (re-rating maybes), changing Yes/No is OK
+  // If in step 2+, lock to current — but UI prevents that anyway
+  renderQuestion();
+  debounceSave();
+}
+
+function eliminateNos(partKey) {
+  const q = S.question[partKey];
+  Object.keys(q.rated).forEach(function(k) {
+    if (q.rated[k] === 'no') q.eliminated[parseInt(k)] = true;
+  });
+  q.step = 1;
+  toast('✗ Crossed out the No answers');
+  renderQuestion();
+  debounceSave();
+}
+
+function advanceQuestionStep(partKey, step) {
+  S.question[partKey].step = step;
+  renderQuestion();
+  debounceSave();
+}
+
+function pickFinal(partKey, letter) {
+  const q = S.question[partKey];
+  const def = partKey === 'partA' ? BIG_QUESTION.partA : BIG_QUESTION.partB;
+  q.finalAnswer = letter;
+  q.step = 3;
+  if (letter === def.correct) {
+    toast('🎉 Correct!', 'success');
+    fireCelebration();
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Big Question ' + (partKey === 'partA' ? 'Part A' : 'Part B'), 'Reading - CAPE Prep', 1, 1, '100%',
+      'Y/N/M ratings: ' + Object.values(q.rated).join('/') + ' | Final: ' + letter + ' (correct)']);
+  } else {
+    toast('Not quite — look at the story again', 'warning');
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Big Question ' + (partKey === 'partA' ? 'Part A' : 'Part B'), 'Reading - CAPE Prep', 0, 1, '0%',
+      'Y/N/M ratings: ' + Object.values(q.rated).join('/') + ' | Picked: ' + letter + ' (correct: ' + def.correct + ')']);
+  }
+  renderQuestion();
+  debounceSave();
+}
+
+function resetQuestionPart(partKey) {
+  S.question[partKey] = {
+    rated: { 0: null, 1: null, 2: null, 3: null },
+    eliminated: [false, false, false, false],
+    finalAnswer: null,
+    correct: null,
+    step: 0
+  };
+  renderQuestion();
+  debounceSave();
+}
+
+function finishQuestion() {
+  S.question.done = true;
+  S.timestamps.questionEnd = new Date().toISOString();
+  toast('Great work on the question 🎯');
+  fireCelebration();
+  updateTabBadges();
+  switchTab('write');
+}
+
+// ============================================================
+//  TAB 3 — WRITE 2 SENTENCES (panel-anchored)
+// ============================================================
+function renderWrite() {
+  const el = document.getElementById('card-write');
+  const w = S.write;
+
+  // Build panel strip with thumbnails (live canvas mini-renders)
+  let panelStrip = '<div class="panel-strip">';
+  S.draw.panels.forEach(function(panel, i) {
+    const label = S.read.paragraphs[i].label || ('Panel ' + (i+1));
+    panelStrip += '<div class="panel-thumb" id="thumb-' + i + '">' +
+      '<div class="panel-thumb-num">PANEL ' + (i+1) + '</div>';
+    if (panel) {
+      panelStrip += '<img src="' + panel + '" alt="Panel ' + (i+1) + '">';
+    } else {
+      panelStrip += '<div class="panel-thumb-empty">No drawing yet</div>';
+    }
+    panelStrip += '<div class="panel-thumb-label">' + esc(label) + '</div>' +
+      '</div>';
+  });
+  panelStrip += '</div>';
+
+  const reviewBanner = w.done
+    ? '<div class="review-banner">✅ Writing complete. Tap any sentence to edit; both anchored to your panels.</div>'
+    : '';
+
+  let html =
+    '<div class="card">' +
+    reviewBanner +
+    '<h2>✍️ Write 2 sentences about the story</h2>' +
+    '<p class="directions">Each sentence must match a panel you drew. <strong>Tap a panel first to anchor your sentence to it</strong>, then write what happens in that panel. The check at the end: does your sentence match what the panel shows?</p>' +
+    '<div class="info-box">📌 The panels are your map of the story. We use them so we don\'t mix up what actually happened. Pick the panel, look at it, write what it shows.</div>' +
+    '<div style="font-size:0.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">YOUR PANELS</div>' +
+    panelStrip +
+    '</div>';
+
+  // 2 sentence cards
+  w.sentences.forEach(function(sent, i) {
+    html += buildWriteSentence(i, sent);
+  });
+
+  // Stars + finish
+  if (w.sentences.some(function(s) { return s.locked; })) {
+    html += '<div class="card">' +
+      '<h2>⭐ What worked today?</h2>' +
+      '<p class="directions">Tap any sentence below if you\'re proud of how it matches the panel.</p>' +
+      '<div class="stars-row">' +
+      w.sentences.map(function(s, i) {
+        if (!s.locked) return '';
+        const starred = w.stars.indexOf(i) !== -1;
+        return '<button class="star-btn ' + (starred ? 'active' : '') + '" onclick="toggleStar(' + i + ')">' + (starred ? '⭐ ' : '☆ ') + 'Sentence ' + (i+1) + '</button>';
+      }).join('') +
+      '</div>' +
+      '<div class="pep-banner">' +
+      '<div style="font-size:2.2rem;margin-bottom:4px;">🐦</div>' +
+      '<h3>You did it.</h3>' +
+      '<p>You read the story, drew it, answered the big question, and your sentences match what actually happened.<br>That\'s exactly the muscle CAPE writing needs.</p>' +
+      '</div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="finishWrite()">' + (w.done ? '✓ All done' : 'All done — finish session ✓') + '</button></div>' +
+      '</div>';
+  }
+
+  el.innerHTML = html;
+}
+
+function buildWriteSentence(i, sent) {
+  const isLocked = sent.locked;
+  const text = sent.text || '';
+  const anchor = sent.anchorPanel;
+  const sourceCheck = sent.sourceCheck;
+  const anchorLabel = anchor !== null ? (S.read.paragraphs[anchor].label || ('Panel ' + (anchor+1))) : null;
+  const anchorImg = anchor !== null ? S.draw.panels[anchor] : null;
+
+  let html = '<div class="write-card ' + (isLocked ? 'locked' : '') + '">' +
+    '<div class="write-card-header">' +
+    '<div class="write-card-title ' + (isLocked ? 'locked' : '') + '">' + (isLocked ? '✓ ' : '') + 'Sentence ' + (i+1) + '</div>' +
+    '</div>';
+
+  // Anchor panel display / picker
+  if (anchor === null) {
+    html += '<div class="anchor-display empty">' +
+      '<span style="font-size:1.4rem;">📍</span>' +
+      '<div><strong>First, tap a panel above to anchor this sentence.</strong><br><span style="font-size:0.82rem;">Pick the panel that shows what you want to write about.</span></div>' +
+      '</div>';
+    // Buttons to pick anchor — keep visible right by the textarea
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">';
+    S.draw.panels.forEach(function(p, pi) {
+      const lbl = S.read.paragraphs[pi].label || ('Panel ' + (pi+1));
+      html += '<button class="btn btn-sm btn-purple" onclick="setAnchor(' + i + ',' + pi + ')">📍 Anchor to Panel ' + (pi+1) + ': ' + esc(lbl) + '</button>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="anchor-display">' +
+      '<div class="anchor-thumb">' +
+      (anchorImg ? '<img src="' + anchorImg + '">' : '<div class="panel-thumb-empty" style="height:100%;font-size:0.65rem;">No drawing</div>') +
+      '</div>' +
+      '<div><strong>Anchored to Panel ' + (anchor+1) + ':</strong> ' + esc(anchorLabel) + '<br>' +
+      '<span style="font-size:0.82rem;color:var(--muted);">Your sentence must match this panel.' + (isLocked ? '' : ' <a href="#" onclick="setAnchor(' + i + ', null); return false;" style="color:var(--purple);">Change</a>') + '</span></div>' +
+      '</div>';
+  }
+
+  // Textarea
+  html += '<div class="write-textarea-wrap">' +
+    '<textarea class="write-textarea ' + (isLocked ? 'locked' : '') + '" id="write-text-' + i + '" placeholder="' + (anchor !== null ? 'Write what happens in panel ' + (anchor+1) + '...' : 'Pick a panel first.') + '" oninput="onWriteText(' + i + ')" ' + (isLocked || anchor === null ? 'readonly' : '') + '>' + esc(text) + '</textarea>' +
+    '<button class="mic-btn" id="mic-' + i + '" onclick="toggleMic(' + i + ')" title="Marcello speaks → text drops into the textarea">🎤</button>' +
+    '</div>';
+
+  // Source-fidelity check
+  if (text.trim() && anchor !== null && !isLocked) {
+    const cls = sourceCheck === 'match' ? 'matched' : (sourceCheck === 'unmatch' ? 'unmatched' : '');
+    html += '<div class="source-check ' + cls + '">' +
+      '<div class="source-check-prompt">🔍 <strong>Source check.</strong> Look at Panel ' + (anchor+1) + '. Look at your sentence. Do they tell the same thing?</div>' +
+      '<div class="source-check-row">' +
+      '<button class="source-btn match ' + (sourceCheck === 'match' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'match\')">✓ Yes — they match</button>' +
+      '<button class="source-btn unmatch ' + (sourceCheck === 'unmatch' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'unmatch\')">✗ Not yet — let me look again</button>' +
+      '</div>' +
+      '</div>';
+  }
+
+  // Lock row
+  if (!isLocked) {
+    const canLock = text.trim() && anchor !== null && sourceCheck === 'match';
+    html += '<div class="lock-row">' +
+      '<button class="lock-btn" onclick="lockWriteSentence(' + i + ')" ' + (canLock ? '' : 'disabled') + '>🔒 Lock sentence ' + (i+1) + '</button>' +
+      '</div>';
+  } else {
+    html += '<div class="lock-row">' +
+      '<button class="unlock-btn" onclick="unlockWriteSentence(' + i + ')">✏️ Edit again</button>' +
+      '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function setAnchor(sentIdx, panelIdx) {
+  if (S.write.sentences[sentIdx].locked) return;
+  S.write.sentences[sentIdx].anchorPanel = panelIdx;
+  S.write.sentences[sentIdx].sourceCheck = null;  // reset check when anchor changes
+  renderWrite();
+  debounceSave();
+}
+function onWriteText(i) {
+  const ta = document.getElementById('write-text-' + i);
+  if (!ta) return;
+  S.write.sentences[i].text = ta.value;
+  // Reset source check if text changes after a check
+  if (S.write.sentences[i].sourceCheck === 'match') S.write.sentences[i].sourceCheck = null;
+  // Re-render only if check chip might appear/disappear
+  const showCheck = ta.value.trim() && S.write.sentences[i].anchorPanel !== null;
+  const checkBox = document.querySelector('#card-write .write-card:nth-of-type(' + (i+1) + ') .source-check');
+  if ((showCheck && !checkBox) || (!showCheck && checkBox) || S.write.sentences[i].sourceCheck === null) {
+    renderWrite();
+  }
+  debounceSave();
+}
+function setSourceCheck(i, check) {
+  if (S.write.sentences[i].locked) return;
+  S.write.sentences[i].sourceCheck = check;
+  if (check === 'unmatch') toast('Look at the panel again — what does it actually show?', 'warning');
+  renderWrite();
+  debounceSave();
+}
+function lockWriteSentence(i) {
+  const sent = S.write.sentences[i];
+  if (!sent.text.trim() || sent.anchorPanel === null || sent.sourceCheck !== 'match') return;
+  sent.locked = true;
+  S.timestamps['s' + (i+1) + 'Locked'] = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Sentence ' + (i+1) + ' Locked', 'Writing - CAPE Prep', 'Locked', '', '',
+    'Anchor: Panel ' + (sent.anchorPanel + 1) + ' | Text: ' + sent.text.slice(0, 140)]);
+  toast('Sentence ' + (i+1) + ' locked! 🎉');
+  fireCelebration();
+  renderWrite();
+  debounceSave();
+}
+function unlockWriteSentence(i) {
+  S.write.sentences[i].locked = false;
+  renderWrite();
+  debounceSave();
+}
+function toggleStar(i) {
+  const idx = S.write.stars.indexOf(i);
+  if (idx !== -1) S.write.stars.splice(idx, 1);
+  else S.write.stars.push(i);
+  renderWrite();
+  debounceSave();
+}
+function finishWrite() {
+  S.write.done = true;
+  S.timestamps.sessionEnd = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Session Complete — May 11', 'Wrap-up', 'Done', '', '',
+    'Stars: ' + S.write.stars.map(function(i) { return i+1; }).join(',') + ' | Sentences locked: ' + S.write.sentences.filter(function(s) { return s.locked; }).length + '/2']);
+  toast('Session complete! 🏆');
+  fireCelebration();
+  updateTabBadges();
+}
+
+// === MIC / Speech-to-Text helper ===
+let recog = null;
+let activeMicIdx = null;
+function toggleMic(idx) {
+  if (S.write.sentences[idx].locked) { toast('Unlock the sentence to use the mic', 'warning'); return; }
+  if (S.write.sentences[idx].anchorPanel === null) { toast('Anchor to a panel first', 'warning'); return; }
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+    toast('Speech-to-text not available — type instead', 'warning');
+    return;
+  }
+  if (recog && activeMicIdx === idx) {
+    try { recog.stop(); } catch(e) {}
+    return;
+  }
+  if (recog) try { recog.stop(); } catch(e) {}
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recog = new SR();
+  recog.continuous = false;
+  recog.interimResults = false;
+  recog.lang = 'en-US';
+  activeMicIdx = idx;
+  const btn = document.getElementById('mic-' + idx);
+  if (btn) { btn.classList.add('recording'); btn.textContent = '⏸'; }
+  recog.onresult = function(e) {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) {
+        const ta = document.getElementById('write-text-' + idx);
+        if (ta) {
+          const sep = (ta.value && !ta.value.endsWith(' ') ? ' ' : '');
+          ta.value += sep + e.results[i][0].transcript;
+          onWriteText(idx);
+        }
+      }
+    }
+  };
+  recog.onerror = function() { stopMic(); toast('Mic error — try again', 'warning'); };
+  recog.onend = function() { stopMic(); };
+  try { recog.start(); toast('🎤 Listening...'); }
+  catch(e) { stopMic(); toast('Mic could not start', 'warning'); }
+}
+function stopMic() {
+  if (activeMicIdx !== null) {
+    const btn = document.getElementById('mic-' + activeMicIdx);
+    if (btn) { btn.classList.remove('recording'); btn.textContent = '🎤'; }
+  }
+  recog = null;
+  activeMicIdx = null;
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+async function init() {
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState && cloudState.timestamps) {
+    S = Object.assign(freshState(), cloudState);
+    toast('Loaded from cloud ☁️');
+  } else if (loadFromLocalStorage()) {
+    toast('Loaded local save');
+  }
+  // Resume on the right tab
+  if (S.write && S.write.done) switchTab('write');
+  else if (S.question && S.question.done) switchTab('write');
+  else if (S.read && S.read.done) switchTab('question');
+  else { renderRead(); updateTabBadges(); }
+  setInterval(saveStateToCloud, 30000);
+}
+init();
+</script>
+</body>
+</html>
