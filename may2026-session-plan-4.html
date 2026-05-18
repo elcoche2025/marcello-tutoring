@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Tutoring Plan — May 18, 2026</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+  @media print {
+    body { background-color: white; }
+    .no-print { display: none; }
+    .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
+    .print-break-inside-avoid { break-inside: avoid; }
+  }
+  input[type="checkbox"] { accent-color: #7c3aed; width: 1.25rem; height: 1.25rem; cursor: pointer; }
+</style>
+</head>
+<body class="text-slate-800 antialiased p-4 md:p-8">
+
+<div class="max-w-6xl mx-auto">
+
+  <!-- Header -->
+  <header class="bg-gradient-to-br from-purple-900 via-purple-700 to-purple-400 text-white rounded-t-2xl p-8 shadow-lg relative overflow-hidden">
+    <div class="absolute top-0 right-0 opacity-10 pointer-events-none">
+      <i data-lucide="pen-tool" class="w-64 h-64 -mt-10 -mr-10"></i>
+    </div>
+    <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2 flex-wrap">
+          <span class="bg-purple-500/30 text-purple-100 px-3 py-1 rounded-full text-sm font-medium border border-purple-300/30">3rd Grade</span>
+          <span class="bg-blue-500/30 text-blue-100 px-3 py-1 rounded-full text-sm font-medium border border-blue-400/30">50 Minutes</span>
+          <span class="bg-emerald-500/30 text-emerald-100 px-3 py-1 rounded-full text-sm font-medium border border-emerald-400/30">All testing wrapped</span>
+          <span class="bg-amber-500/30 text-amber-100 px-3 py-1 rounded-full text-sm font-medium border border-amber-400/30">Clean-code re-test</span>
+        </div>
+        <h1 class="text-4xl font-bold mb-2 tracking-tight">Marcello's Tutoring Session</h1>
+        <p class="text-purple-100 text-lg flex items-center gap-2">
+          <i data-lucide="calendar" class="w-5 h-5"></i>
+          Monday, May 18, 2026
+        </p>
+      </div>
+      <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 text-right">
+        <p class="text-sm text-purple-100 uppercase tracking-wider font-semibold mb-1">Session Theme</p>
+        <p class="text-xl font-medium text-white">The Little Wooden Bird 🐦<br><span class="text-sm font-normal text-purple-100">Read · Draw · Question · Write</span></p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="bg-white shadow-xl rounded-b-2xl border-x border-b border-slate-200 flex flex-col lg:flex-row">
+
+    <!-- Left Sidebar -->
+    <aside class="w-full lg:w-1/3 bg-slate-50 border-r border-slate-200 p-6 md:p-8 rounded-bl-2xl">
+
+      <!-- Focus -->
+      <div class="mb-8">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+          <i data-lucide="target" class="w-4 h-4"></i> Primary Focus
+        </h2>
+        <p class="text-slate-700 font-medium">All CAPE testing wrapped last week — normal energy. <strong>Three tabs</strong> — read+draw, one big question with Y/N/M scaffold, write 2 sentences anchored to his own drawings. Same architecture as May 11, applied to a <em>Polacco-flavored heritage narrative</em> that mirrors this week's class arc (Grandfather's Journey + The Keeping Quilt + RL.3.9 compare/contrast). This is the clean-code re-test of the panel-anchored writing mechanism after May 11's mid-session bug fixes.</p>
+      </div>
+
+      <!-- Why this session -->
+      <div class="mb-8 bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+        <h3 class="text-emerald-800 font-bold text-sm mb-2 flex items-center gap-1">
+          <i data-lucide="check-circle" class="w-4 h-4"></i> May 11 confirmed two scaffolds — re-testing the third
+        </h3>
+        <p class="text-emerald-700 text-xs leading-relaxed mb-2">Marcello self-affirmed on May 11: <strong>"liked having the drawings"</strong> and <strong>"liked doing the answer eliminator."</strong> Drawing-as-retell and Y/N/M are now standing scaffolds in the build guide.</p>
+        <p class="text-emerald-700 text-xs leading-relaxed mb-2">The panel-anchored writing mechanism only got <em>partial</em> confirmation on May 11 because three software bugs hit mid-write-phase (textarea focus-loss per keystroke, mic silent, save-flow gaps). All three were fixed and deployed: commits <code>52f449d</code> + <code>34b6c97</code>.</p>
+        <p class="text-emerald-700 text-xs leading-relaxed">Today is the clean-code re-test. Same panel-anchor + source-fidelity mechanism, working textarea, working mic, working saves. If it holds today, the full WCC-targeting toolkit graduates from "promising" to "confirmed."</p>
+      </div>
+
+      <!-- May 4/11 receipts -->
+      <div class="mb-8 bg-slate-100 border border-slate-300 rounded-lg p-4 print-break-inside-avoid">
+        <h3 class="text-slate-800 font-bold text-sm mb-2 flex items-center gap-1">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Why source-fidelity matters (the May 4 finding still drives the design)
+        </h3>
+        <p class="text-xs text-slate-600 leading-relaxed mb-2 italic">"Grandma wanted Tessa to <strong>stay</strong> in the tide pool" — text said the opposite. When asked "is that what happened?", he found a matching <em>word</em> in the passage and confirmed.</p>
+        <p class="text-xs text-slate-600 leading-relaxed">Marcello shows a <strong>Weak Central Coherence + comprehension monitoring</strong> pattern (Happé &amp; Frith 2006): strong local processing, weak global gist, self-checking firing at the <em>lexical</em> level instead of the meaning level. <strong>Panel anchors force source-checking at the sentence/meaning level instead of the word level.</strong> Story-map drawing scaffolds for autism are evidence-based (Stringfield, Luscre &amp; Gast 2011; Ukrainetz 1998 stickwriting).</p>
+      </div>
+
+      <!-- What's different in today's app -->
+      <div class="mb-8">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+          <i data-lucide="sparkles" class="w-4 h-4"></i> What's different from May 11
+        </h2>
+        <div class="space-y-3">
+          <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm ring-2 ring-cyan-300">
+            <span class="font-bold text-cyan-700 block text-sm">1. Bigger canvas <span class="text-xs bg-cyan-100 text-cyan-700 px-1.5 py-0.5 rounded-full ml-1">UX FIX</span></span>
+            <span class="text-xs text-slate-600">Canvas bumped <strong>220×160 → 320×220</strong>. May 11 carry-forward: "the boxes were pretty small" for iPad + stick-figure retell.</span>
+          </div>
+          <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm ring-2 ring-emerald-300">
+            <span class="font-bold text-emerald-700 block text-sm">2. New story · Polacco-flavored heritage narrative <span class="text-xs bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full ml-1">CONTENT</span></span>
+            <span class="text-xs text-slate-600">"The Little Wooden Bird" — 4 paragraphs, ~155 words, ONE-step moral. Mirrors The Keeping Quilt + Grandfather's Journey class arc this week. Family heirloom + immigration + dialogue beat.</span>
+          </div>
+          <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm ring-2 ring-purple-300">
+            <span class="font-bold text-purple-700 block text-sm">3. Three software bugs fixed <span class="text-xs bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-full ml-1">CODE</span></span>
+            <span class="text-xs text-slate-600">Textarea no longer kicks focus on every keystroke. iPad Safari mic actually transcribes. Phase-completion and tab-switch flush to cloud immediately. Build guide §15 has full root-cause + fix.</span>
+          </div>
+          <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm ring-2 ring-amber-300">
+            <span class="font-bold text-amber-700 block text-sm">4. Dialogue Easter egg <span class="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full ml-1">SEED</span></span>
+            <span class="text-xs text-slate-600">Story includes ONE small dialogue beat ("Keep it safe," she said). Soft preview of W.3.3.b dialogue work the class hits Wed-Fri. Not the focus today — just plant the seed in Phase 5.</span>
+          </div>
+          <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm ring-2 ring-blue-300">
+            <span class="font-bold text-blue-700 block text-sm">5. No Phase 0 recovery <span class="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded-full ml-1">ENERGY</span></span>
+            <span class="text-xs text-slate-600">All CAPE testing wrapped last Tuesday. Normal-energy session — standard Phase 1 greeting is enough.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Watch-for -->
+      <div class="mb-8 bg-amber-50 border border-amber-300 rounded-lg p-4">
+        <h3 class="text-amber-900 font-bold text-sm mb-2 flex items-center gap-1">
+          <i data-lucide="eye" class="w-4 h-4"></i> Watch-for
+        </h3>
+        <p class="text-amber-800 text-xs leading-relaxed mb-2">Word-traps in Part A are <strong>"birthday"</strong> (option A) and <strong>"apple tree"</strong> (option C). Both words appear in the story. The May 4 pattern is to confirm a Yes because the word matches — slow him down on those two.</p>
+        <p class="text-amber-800 text-xs leading-relaxed mb-2">Don't let him bypass Y/N/M ratings — <strong>the scaffold is the work.</strong></p>
+        <p class="text-amber-800 text-xs leading-relaxed">If he says <em>"yep that matches"</em> on the source-fidelity check without looking: read the sentence aloud, then read the panel label aloud — <strong>"same thing?"</strong> The verbal mirror often catches what the visual doesn't.</p>
+      </div>
+
+      <!-- Class context -->
+      <div class="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <h3 class="text-blue-800 font-bold text-sm mb-2 flex items-center gap-1">
+          <i data-lucide="book-open" class="w-4 h-4"></i> What class is doing this week
+        </h3>
+        <p class="text-blue-700 text-xs leading-relaxed mb-2"><strong>ELA:</strong> <em>Grandfather's Journey</em> (Allen Say) + <em>The Keeping Quilt</em> (Patricia Polacco). Heritage, immigration, character actions/feelings (RL.3.3), central message (RL.3.2), <strong>narrative writing with dialogue + temporal words + closure</strong> (W.3.3.a–c), vocabulary "ethnic"/"unfamiliar" (L.3.5.b), and <strong>compare/contrast two stories by the same author</strong> (RL.3.9).</p>
+        <p class="text-blue-700 text-xs leading-relaxed mb-2"><strong>Math:</strong> Module 6 Geometry/Measurement. Mon/Tue listed as "CAPE MATH" — likely template leftover; Wed–Fri is telling time on the number line + counting coins.</p>
+        <p class="text-blue-700 text-xs leading-relaxed">Today's session = warm-up for the central-message + character-feelings + dialogue work coming all week. Polacco-flavored story is deliberate.</p>
+      </div>
+
+      <!-- Materials -->
+      <div class="mb-2">
+        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+          <i data-lucide="folder-open" class="w-4 h-4"></i> Materials
+        </h2>
+        <ul class="space-y-1 text-xs text-slate-600">
+          <li>📱 iPad: <code>elcoche2025.github.io/marcello-tutoring/may2026-session-4.html</code></li>
+          <li>📋 Plan (this file): <code>2026.05.18_marcello_may18_session_plan.html</code></li>
+          <li>✅ Student checklist: <code>may2026-checklist-4.html</code></li>
+          <li>📓 Tutor protocol docx: <code>2026.05.18_marcello_may18_tutor_checklist.docx</code></li>
+          <li>📂 Source: "The Little Wooden Bird" (original, Polacco-flavored — 4 paragraphs, 1-step moral, "unfamiliar" L.3.5.b vocab embedded)</li>
+          <li>☁️ Cloud key: <code>may2026_session_10</code> · Resumes from <code>may2026_session_9</code></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Right: Time-blocked Plan -->
+    <main class="w-full lg:w-2/3 p-6 md:p-8">
+
+      <h2 class="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+        <i data-lucide="play-circle" class="w-7 h-7 text-purple-600"></i>
+        Session Plan (50 min)
+      </h2>
+
+      <!-- Phase 1 -->
+      <div class="mb-6 print-break-inside-avoid">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="bg-slate-200 text-slate-700 px-3 py-0.5 rounded-md text-sm font-bold">3 min</span>
+          <h3 class="text-xl font-bold text-slate-700">Phase 1 — Greeting + frame</h3>
+        </div>
+        <div class="ml-2 pl-4 border-l-2 border-slate-300 space-y-2 text-sm text-slate-600">
+          <p>Normal energy. Brief check-in: <strong>"How was the rest of last week? All the big tests are done now, right?"</strong> Quick, not a quiz.</p>
+          <p>Then frame today: <strong>"Today's a short story — about something a family passes down across generations. We're going to make a comic strip out of it, four panels. Then one big question. Then two sentences."</strong></p>
+          <p>Connection: <strong>"Your class is starting two new books this week — Grandfather's Journey and The Keeping Quilt. Both about families and the things they carry across the world. Today's story is the same shape, just shorter — warming up the muscle you'll use all week."</strong></p>
+          <p class="text-xs text-slate-500 italic">No Phase 0 recovery today — testing wrapped last Tuesday.</p>
+        </div>
+      </div>
+
+      <!-- Phase 2 - Tab 1 -->
+      <div class="mb-6 bg-cyan-50 rounded-lg p-5 border-l-4 border-cyan-500 print-break-inside-avoid">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="bg-cyan-200 text-cyan-800 px-3 py-0.5 rounded-md text-sm font-bold">20 min</span>
+          <h3 class="text-xl font-bold text-cyan-800">Phase 2 — Tab 1: Read &amp; Draw "The Little Wooden Bird" 🐦</h3>
+        </div>
+        <div class="ml-2 pl-4 border-l-2 border-cyan-300 space-y-2 text-sm text-slate-700">
+          <p><strong>One paragraph at a time.</strong> Four paragraphs total. ~5 min per paragraph.</p>
+          <p><strong>Step A — Read.</strong> Pick early who reads (you or him) and stick with it. If you read, he tracks. Tap <strong>"I read it"</strong>.</p>
+          <p><strong>Step B — Draw the panel.</strong> 320×220 canvas (bigger than May 11). <em>Stick figures, doesn't have to be art.</em> Encourage speed: "just enough so you'd remember what happened in this part." Add a <strong>1-2 word label</strong> below.</p>
+          <p><strong>Step C — Say it in your own words.</strong> Tap <strong>"Said in own words"</strong>. <em>This is the active paraphrase pause</em> — retell happens DURING reading, externalized into a visible artifact.</p>
+          <p class="text-xs text-slate-600 italic bg-cyan-100 p-2 rounded">If "unfamiliar" trips him on paragraph 2, word-map it quickly: show the whole word, point at <strong>un-</strong> (familiar prefix), then <strong>familiar</strong>. Don't drill — one quick pass.</p>
+          <p class="text-xs text-slate-600 italic bg-cyan-100 p-2 rounded">If a panel matches the wrong gist, <strong>don't correct directly.</strong> Ask: <strong>"show me the part of the paragraph this panel is about."</strong> Let the gap surface in his own re-reading.</p>
+          <div class="text-xs text-slate-700 bg-cyan-50 border border-cyan-200 rounded p-3 mt-2">
+            <strong>The 4 paragraphs (rough):</strong>
+            <ol class="list-decimal pl-5 mt-1 space-y-1">
+              <li>Long ago in a village far away, great-grandfather carved a small wooden bird from his apple tree. He gave it to grandmother on her 7th birthday.</li>
+              <li>Grandmother as a young woman left the old country, sailed across the sea. The new land was <strong>unfamiliar</strong>. She held the bird in her pocket the whole way. It helped her feel brave.</li>
+              <li>Grandmother grew up in the new country, married, had mother. On mother's 7th birthday, grandmother gave her the bird. <em>"Keep it safe," she said. "It remembers our family."</em></li>
+              <li>Last week, on the narrator's 7th birthday, mother put the bird in their hand. It is older than the narrator. Older than mother. <strong>"It carries a piece of every grown-up I love."</strong></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 - Tab 2 -->
+      <div class="mb-6 bg-purple-50 rounded-lg p-5 border-l-4 border-purple-500 print-break-inside-avoid">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="bg-purple-200 text-purple-800 px-3 py-0.5 rounded-md text-sm font-bold">10 min</span>
+          <h3 class="text-xl font-bold text-purple-800">Phase 3 — Tab 2: The Big Question with Y/N/M 🤔</h3>
+        </div>
+        <div class="ml-2 pl-4 border-l-2 border-purple-300 space-y-2 text-sm text-slate-700">
+          <p><strong>One EBSR pair.</strong> Central message question (RL.3.2). Walk through Y/N/M <em>explicitly</em> — narrate what each rating means before he taps.</p>
+          <p class="text-xs text-slate-600"><strong>The Y/N/M script:</strong> "<em>Yes</em> if you think this could be it. <em>No</em> if you're sure it's wrong. <em>Maybe</em> if you're not sure."</p>
+          <p class="font-semibold text-purple-900 mt-3">Part A — "What is the central message of 'The Little Wooden Bird'?"</p>
+          <ul class="list-none pl-2 text-xs space-y-1">
+            <li><strong>A.</strong> Birds make good birthday gifts. <span class="text-rose-700 italic">(word-trap — "birthday" appears)</span></li>
+            <li><strong>B.</strong> Family treasures carry love across generations. <span class="text-emerald-700 font-bold">✓ correct</span></li>
+            <li><strong>C.</strong> Apple trees grow good wood. <span class="text-rose-700 italic">(word-trap — "apple tree" appears)</span></li>
+            <li><strong>D.</strong> Brave people cross the sea. <span class="text-rose-700 italic">(word-trap — "brave" + "sea" appear)</span></li>
+          </ul>
+          <p class="font-semibold text-purple-900 mt-3">Part B — "Which sentence from the story BEST shows the central message?" (unlocks on A correct)</p>
+          <ul class="list-none pl-2 text-xs space-y-1">
+            <li><strong>A.</strong> "He made it from a piece of his apple tree." <span class="text-rose-700 italic">(about how, not message)</span></li>
+            <li><strong>B.</strong> "The trip was long, and the new land was unfamiliar." <span class="text-rose-700 italic">(about voyage difficulty)</span></li>
+            <li><strong>C.</strong> "It carries a piece of every grown-up I love." <span class="text-emerald-700 font-bold">✓ correct (shows the message)</span></li>
+            <li><strong>D.</strong> "She married, and she had my mother." <span class="text-rose-700 italic">(about timeline)</span></li>
+          </ul>
+          <p class="text-xs text-slate-600 italic bg-purple-100 p-2 rounded mt-3"><strong>Watch the "birthday" trap.</strong> The story OPENS with a birthday and CLOSES with a birthday. He might Yes-rate A because "birthday" feels central. Slow down: "is the <em>story</em> about birthday gifts being a good idea, or about how a small thing from family carries love across many people?"</p>
+        </div>
+      </div>
+
+      <!-- Phase 4 - Tab 3 -->
+      <div class="mb-6 bg-emerald-50 rounded-lg p-5 border-l-4 border-emerald-500 print-break-inside-avoid">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="bg-emerald-200 text-emerald-800 px-3 py-0.5 rounded-md text-sm font-bold">12 min</span>
+          <h3 class="text-xl font-bold text-emerald-800">Phase 4 — Tab 3: Write 2 Sentences anchored to panels ✍️</h3>
+        </div>
+        <div class="ml-2 pl-4 border-l-2 border-emerald-300 space-y-2 text-sm text-slate-700">
+          <p>Per sentence (~6 min each):</p>
+          <ol class="list-decimal pl-6 text-xs space-y-1">
+            <li><strong>Pick a panel.</strong> Tap a panel chip — anchor locks. He cannot write until a panel is anchored.</li>
+            <li><strong>Look at the panel.</strong> Read the label aloud. Say what's happening in the panel.</li>
+            <li><strong>Write the sentence about THAT panel.</strong> Type or use the mic button (now actually transcribes on iPad Safari — interimResults=true fix). Should be about THE PANEL, not the whole story.</li>
+            <li><strong>Source-fidelity check.</strong> The check appears: <em>"Look at Panel X. Look at your sentence. Do they match?"</em> Two buttons: ✓ Yes — they match / ✗ Not yet — let me look again.</li>
+            <li><strong>Lock.</strong> Sentence only locks when <code>sourceCheck === 'match'</code>.</li>
+          </ol>
+          <p class="text-xs text-slate-700 italic bg-emerald-100 p-2 rounded"><strong>Key script:</strong> "Pick a panel. Look at the panel. Now write a sentence about THAT panel. Then look at your sentence and your panel — do they match?"</p>
+          <p class="text-xs text-slate-700 italic bg-emerald-100 p-2 rounded"><strong>If he says "yes" reflexively:</strong> verbal mirror. <em>"Let me read your sentence: [reads it]. Now read your panel label: [he reads it]. Same thing?"</em></p>
+          <p class="text-xs text-slate-600 italic bg-emerald-100 p-2 rounded"><strong>If sentence 1 takes &gt; 7 min, end the write phase at one sentence.</strong> One locked sentence with a real source-check &gt; two rushed ones. This is the clean-code re-test — quality of mechanism &gt; volume.</p>
+        </div>
+      </div>
+
+      <!-- Phase 5 - Stars -->
+      <div class="mb-6 bg-amber-50 rounded-lg p-5 border-l-4 border-amber-500 print-break-inside-avoid">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="bg-amber-200 text-amber-800 px-3 py-0.5 rounded-md text-sm font-bold">3 min</span>
+          <h3 class="text-xl font-bold text-amber-800">Phase 5 — Stars + dialogue seed ⭐</h3>
+        </div>
+        <div class="ml-2 pl-4 border-l-2 border-amber-300 space-y-2 text-sm text-slate-700">
+          <p>Tap stars on sentences he's proud of. <strong>No "Wish" today.</strong></p>
+          <p>The pep banner reads:</p>
+          <p class="text-sm text-amber-900 font-medium bg-amber-100 p-3 rounded italic">"You did it. You read the story, drew it, answered the big question, and your sentences match what actually happened. That's the same muscle your class is using on Grandfather's Journey and The Keeping Quilt this week."</p>
+          <p>Then plant the dialogue seed: <strong>"Did you notice the grandmother SAYS something in the story? 'Keep it safe.' That's called dialogue. Your class is going to do more of that this week."</strong> Don't dwell — just seed it.</p>
+        </div>
+      </div>
+
+      <!-- Phase 6 - Reflection -->
+      <div class="mb-6 bg-rose-50 rounded-lg p-5 border-l-4 border-rose-500 print-break-inside-avoid">
+        <div class="flex items-baseline gap-3 mb-3">
+          <span class="bg-rose-200 text-rose-800 px-3 py-0.5 rounded-md text-sm font-bold">2 min</span>
+          <h3 class="text-xl font-bold text-rose-800">Phase 6 — Post-session reflection (Mekoce alone) 📝</h3>
+        </div>
+        <div class="ml-2 pl-4 border-l-2 border-rose-300 space-y-2 text-sm text-slate-700">
+          <p>Capture in <code>session_notes.txt</code>. The questions are below in the Post-Session Capture box.</p>
+        </div>
+      </div>
+
+      <!-- Notes to capture -->
+      <div class="mt-8 bg-slate-100 rounded-lg p-5 border border-slate-300 print-break-inside-avoid">
+        <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+          <i data-lucide="clipboard-list" class="w-5 h-5"></i> Post-session: capture in session_notes.txt
+        </h3>
+        <ul class="text-sm text-slate-700 space-y-2 list-disc pl-6">
+          <li><strong>Larger canvas (320×220):</strong> did the bigger size help? Did Marcello use more of the space?</li>
+          <li><strong>Drawing-as-retell:</strong> did his panels match the paragraphs? Any gist-drift moments — what did he draw vs what the paragraph said?</li>
+          <li><strong>Word-trap detection in Part A:</strong> did he resist <strong>"birthday"</strong> (A) and <strong>"apple tree"</strong> (C)? If he Yes/Maybe'd one, what did the re-read recover?</li>
+          <li><strong>Y/N/M pacing:</strong> did he slow down to rate, or speedrun to a final answer?</li>
+          <li><strong>Panel-anchored writing (clean-code re-test):</strong> did the source-fidelity check catch any sentence-doesn't-match-panel moments? Did he reflexively say "yes" or actually compare?</li>
+          <li><strong>Verbal mirror move:</strong> did you have to use it? Did it work?</li>
+          <li><strong>Bug-fix verification:</strong> textarea kept focus across multiple keystrokes? Mic actually transcribed when he tapped it? Cloud save indicator fired on tab switches?</li>
+          <li><strong>"Unfamiliar" word recognition:</strong> did he stumble on the word? Did the un- prefix scaffold work?</li>
+          <li><strong>Dialogue Easter egg:</strong> did he notice the "Keep it safe" line? Did the plant-the-seed framing land?</li>
+          <li><strong>Energy:</strong> was 50 min the right length on a normal-energy day post-CAPE?</li>
+          <li><strong>Compared to May 11:</strong> any moments where the bigger canvas, cleaner code, or new story produced something the May 11 build couldn't?</li>
+        </ul>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-6 text-center text-xs text-slate-500">
+    <p>📓 May 18 session · Marcello's Tutoring · v1 · Clean-code re-test of panel-anchored writing</p>
+    <p class="mt-1">Cloud key: <code>may2026_session_10</code> · Resumes from <code>may2026_session_9</code></p>
+  </footer>
+
+</div>
+
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>
