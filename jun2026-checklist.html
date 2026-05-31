@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Checklist — June 1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --crimson: #C62828; --crimson-light: #FCE4E4; --crimson-dark: #8E1B1B;
+    --blue: #1976D2; --blue-light: #BBDEFB;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --gold: #F5C542; --gold-light: #FFF8E1;
+    --teal: #00897B; --teal-light: #E0F2F1;
+    --orange: #FF9800; --orange-light: #FFF3E0;
+    --bg: #F4F6FB; --text: #2D3748; --muted: #718096;
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header {
+    background: linear-gradient(135deg, #8E1B1B 0%, #B71C1C 50%, #E53935 100%);
+    color: white; text-align: center; padding: 28px 20px 56px; position: relative;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: 4px; }
+  header p { font-size: 1rem; opacity: 0.9; }
+  .container { max-width: 600px; margin: -28px auto 0; padding: 0 16px; position: relative; z-index: 2; }
+  .progress-card { background: white; border-radius: 16px; padding: 18px 22px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 16px; }
+  .progress-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-row h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
+  .progress-count { font-size: 0.95rem; font-weight: 700; color: var(--green); }
+  .progress-bar { width: 100%; height: 14px; background: #E0E0E0; border-radius: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--crimson)); border-radius: 8px; transition: width 0.5s ease; }
+  .phase { background: white; border-radius: 16px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 14px; }
+  .phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #F0F0F0; }
+  .phase-icon { font-size: 1.6rem; }
+  .phase-title { font-size: 1.1rem; font-weight: 800; flex: 1; }
+  .phase-time { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+  .phase-1 .phase-title { color: var(--teal); }
+  .phase-2 .phase-title { color: var(--crimson); }
+  .phase-3 .phase-title { color: #2E7D32; }
+
+  .task { display: flex; align-items: flex-start; gap: 12px; padding: 12px 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; min-height: 50px; }
+  .task:hover { background: #FAFBFC; }
+  .task.checked { background: var(--green-light); }
+  .task .check-box {
+    width: 28px; height: 28px; border-radius: 8px; border: 3px solid #B0BEC5;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 800; color: white; transition: all 0.25s;
+  }
+  .task.checked .check-box { background: var(--green); border-color: var(--green); }
+  .task.checked .check-box::before { content: '✓'; }
+  .task .task-text { flex: 1; font-size: 0.97rem; line-height: 1.45; font-weight: 600; }
+  .task.checked .task-text { color: var(--muted); text-decoration: line-through; }
+  .task.star .task-text { color: #B7791F; }
+
+  .celebration {
+    background: linear-gradient(135deg, #FFD54F, #FFB300);
+    border-radius: 16px; padding: 30px 20px; text-align: center; margin: 20px 0;
+    display: none;
+  }
+  .celebration.show { display: block; animation: popIn 0.5s ease; }
+  @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+  .celebration h2 { color: #5D4037; font-size: 1.4rem; margin-bottom: 8px; }
+  .celebration p { color: #6D4C41; font-weight: 600; line-height: 1.5; }
+
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #333; color: white; padding: 12px 24px; border-radius: 24px;
+    font-weight: 700; font-size: 0.9rem; z-index: 1000;
+    transition: transform 0.3s ease; pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .footer-note { text-align: center; padding: 20px; font-size: 0.82rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Marcello's Checklist 🧣</h1>
+  <p>June 1, 2026 · The Red Scarf 🧣</p>
+</header>
+
+<div class="container">
+
+  <div class="progress-card">
+    <div class="progress-row">
+      <h2>Your Progress Today</h2>
+      <span class="progress-count" id="progressCount">0 / 14</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+  </div>
+
+  <!-- Phase 1: Read & Draw -->
+  <div class="phase phase-1">
+    <div class="phase-header">
+      <span class="phase-icon">📖</span>
+      <span class="phase-title">Read & Draw</span>
+      <span class="phase-time">18 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Paragraph 1 — read it, said it my own way, drew Panel 1 (with a speech bubble!)</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Paragraph 2 — read it, said it my own way, drew Panel 2</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Paragraph 3 — read it, said it my own way, drew Panel 3 (two speech bubbles!)</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Paragraph 4 — read it, said it my own way, drew Panel 4</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Each panel has a 1-2 word label</div></div>
+  </div>
+
+  <!-- Phase 2: Big Question -->
+  <div class="phase phase-2">
+    <div class="phase-header">
+      <span class="phase-icon">❓</span>
+      <span class="phase-title">The Big Question</span>
+      <span class="phase-time">9 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I rated each answer Yes / No / Maybe</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I crossed out the No answers</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I re-read the story for my Maybe answers</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I picked Part A and got it right</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I picked Part B and got it right</div></div>
+  </div>
+
+  <!-- Phase 3: Write -->
+  <div class="phase phase-3">
+    <div class="phase-header">
+      <span class="phase-icon">✍️</span>
+      <span class="phase-title">Write 2 Sentences</span>
+      <span class="phase-time">16 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Sentence 1 — tells what happened + matches my panel</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">🗣️ Sentence 2 — a TALKING sentence: who + said + "the exact words"</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">My quotation marks " " hug ONLY the words the character says</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I said my sentences out loud, then locked them ⭐</div></div>
+  </div>
+
+  <div class="celebration" id="celebration">
+    <h2>🏆 Done with everything! 🎉</h2>
+    <p>You read it.<br>You drew it.<br>You answered the Big Question.<br>And you made a character <strong>TALK</strong> with dialogue!<br><strong>That's exactly what your class is doing with Grandfather's Journey and The Keeping Quilt.</strong> 🧣</p>
+  </div>
+
+  <p class="footer-note">Tap a task to check it off. Saves automatically.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'marcello_jun1_checklist';
+const tasks = document.querySelectorAll('.task');
+
+function toggle(el) {
+  el.classList.toggle('checked');
+  saveState();
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = tasks.length;
+  const checked = document.querySelectorAll('.task.checked').length;
+  document.getElementById('progressCount').textContent = checked + ' / ' + total;
+  document.getElementById('progressFill').style.width = (checked / total * 100) + '%';
+  if (checked === total) {
+    document.getElementById('celebration').classList.add('show');
+    showToast('🎉 You\'re done!');
+  }
+}
+
+function saveState() {
+  const state = Array.from(tasks).map(function(t) { return t.classList.contains('checked'); });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    tasks.forEach(function(t, i) {
+      if (state[i]) t.classList.add('checked');
+    });
+    updateProgress();
+  } catch(e) {}
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+
+loadState();
+</script>
+</body>
+</html>
