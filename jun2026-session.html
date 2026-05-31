@@ -193,6 +193,11 @@
   .dlg-builder { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
   .dlg-builder-title { font-size: 0.95rem; font-weight: 800; color: #B7791F; margin-bottom: 4px; }
   .dlg-builder-sub { font-size: 0.82rem; color: #8D6E13; margin-bottom: 12px; line-height: 1.4; }
+  .dlg-chant { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: white; border: 2px dashed var(--crimson); border-radius: 10px; padding: 9px 13px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+  .dlg-chant:hover { background: var(--crimson-light); }
+  .dlg-chant-label { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--crimson); }
+  .dlg-chant-words { font-size: 0.98rem; font-weight: 800; color: var(--text); }
+  .dlg-chant-spk { margin-left: auto; font-size: 1.15rem; }
   .dlg-step-label { font-size: 0.85rem; font-weight: 800; color: #5D4037; margin: 10px 0 6px; }
   .dlg-chips { display: flex; gap: 6px; flex-wrap: wrap; }
   .dlg-chip { padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; border: 2px solid #E0C97A; background: white; color: #8D6E13; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
@@ -1160,7 +1165,12 @@ function buildDialogueBuilder(i, sent) {
   const d = sent.dlg || { who: '', tag: 'said', words: '' };
   let html = '<div class="dlg-builder">' +
     '<div class="dlg-builder-title">🗣️ Build a talking sentence (dialogue)</div>' +
-    '<div class="dlg-builder-sub">When a character TALKS in a story, we put their exact words inside quotation marks " ". Let\'s build one piece at a time.</div>';
+    '<div class="dlg-builder-sub">When a character TALKS in a story, we put their exact words inside quotation marks " ". Let\'s build one piece at a time.</div>' +
+    '<div class="dlg-chant" onclick="speakText(\'Who is talking? What did they say? Hug the words.\', 0.9)" title="Say it out loud together — then tap to hear it.">' +
+      '<span class="dlg-chant-label">📣 Say it<br>with me</span>' +
+      '<span class="dlg-chant-words">"Who\'s talking? · What did they say? · Hug the words."</span>' +
+      '<span class="dlg-chant-spk">🔊</span>' +
+    '</div>';
 
   // Step 1 — who
   html += '<div class="dlg-step-label">1 · Who is talking in this panel?</div><div class="dlg-chips">';
