@@ -261,7 +261,7 @@
 //  CONFIG & GLOBALS
 // ============================================================
 const STORAGE_KEY = 'marcello_jun8_session';
-const CLOUD_STATE_KEY = 'jun2026_session_12';
+const CLOUD_STATE_KEY = 'jun2026_session_12r';  // 'r' = restored key (the original _12 was clobbered by empty auto-saves on 2026-06-08; see CLOUD_BACKUP)
 const PREV_CLOUD_KEY = 'jun2026_session_11';
 const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
 const SESSION_DATE = '2026-06-08';
@@ -393,7 +393,21 @@ function postToSheets(sheet, row) {
     fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: sheet, row: row }) });
   } catch(e) {}
 }
+// Guard: never let a blank/fresh state overwrite a non-empty cloud blob. This is the
+// fix for the 2026-06-08 data-loss footgun, where a freshly-opened tab whose cloud
+// load timed out auto-saved an empty state (debounce + 30s interval) over a finished
+// session. If the in-memory state has no real work, we simply don't push it.
+function stateHasWork() {
+  try {
+    return (Object.keys(S.timestamps || {}).length > 0)
+      || (S.review && S.review.done.some(Boolean))
+      || (S.reading && (S.reading.done || S.reading.words.some(Boolean) || S.reading.prosodyRead))
+      || (S.story && (S.story.done || (S.story.sentences || []).some(function(x){ return x.text && x.text.trim(); }) || !!S.story.panel || (S.story.label || '').trim()))
+      || (S.plan && (S.plan.done || (S.plan.readingGoals || []).length || (S.plan.writingGoals || []).length || (S.plan.stars || []).length));
+  } catch (e) { return true; }  // fail open — never block a save on a guard error
+}
 function saveStateToCloud() {
+  if (!stateHasWork()) return;  // don't clobber the cloud with an empty session
   try {
     fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S }) });
     const ind = document.getElementById('saveIndicator');
