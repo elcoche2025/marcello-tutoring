@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Summer Adventure ☀️</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange:#FB8C00; --orange-light:#FFF3E0; --orange-dark:#E65100;
+    --gold:#F5B700; --gold-light:#FFF8E1; --gold-dark:#B7791F;
+    --teal:#00897B; --teal-light:#E0F2F1;
+    --purple:#9C27B0; --purple-light:#F3E5F5;
+    --green:#4CAF50; --green-light:#E8F5E9; --red:#E53935;
+    --bg:#F4F9FB; --text:#2D3748; --muted:#718096;
+    --shadow:0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family:'Nunito',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-bottom:90px; }
+  header { background:linear-gradient(135deg,#FF6F00,#FF9800,#FFC107); color:white; text-align:center; padding:24px 20px 46px; position:relative; }
+  header::after { content:''; position:absolute; bottom:-2px; left:0; right:0; height:34px; background:var(--bg); border-radius:50% 50% 0 0; }
+  header h1 { font-size:1.7rem; font-weight:900; text-shadow:0 2px 6px rgba(0,0,0,.12); }
+  header p { font-size:.92rem; opacity:.95; }
+  .tabs { display:flex; justify-content:center; gap:6px; padding:10px 8px 0; max-width:680px; margin:0 auto; flex-wrap:wrap; position:relative; z-index:2; }
+  .tab { padding:10px 16px; border-radius:12px; font-weight:800; font-size:.86rem; cursor:pointer; border:2px solid #D0D5DD; background:white; color:var(--muted); font-family:'Nunito',sans-serif; }
+  .tab.active { background:var(--orange); border-color:var(--orange); color:white; box-shadow:0 3px 12px rgba(251,140,0,.35); transform:translateY(-2px); }
+  .container { max-width:680px; margin:16px auto; padding:0 16px; }
+  .panel { display:none; } .panel.active { display:block; }
+  .card { background:white; border-radius:16px; box-shadow:var(--shadow); padding:22px; margin-bottom:16px; }
+  .card h2 { font-size:1.2rem; font-weight:800; margin-bottom:6px; }
+  .card .dir { font-size:.9rem; color:var(--muted); margin-bottom:14px; line-height:1.5; }
+  .btn { padding:12px 22px; border-radius:12px; font-weight:800; font-size:.95rem; cursor:pointer; border:none; font-family:'Nunito',sans-serif; transition:all .2s; }
+  .btn:hover { transform:translateY(-1px); filter:brightness(1.05); }
+  .btn-orange{background:var(--orange);color:white;} .btn-gold{background:var(--gold);color:#5D4037;}
+  .btn-purple{background:var(--purple);color:white;} .btn-teal{background:var(--teal);color:white;}
+  .btn-secondary{background:#E0E0E0;color:var(--text);} .btn-sm{padding:8px 14px;font-size:.85rem;border-radius:10px;}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+  .info{background:var(--gold-light);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:12px 16px;margin-bottom:14px;font-weight:600;line-height:1.5;font-size:.9rem;color:var(--gold-dark);}
+
+  /* reading suns */
+  .streak { text-align:center; margin-bottom:14px; }
+  .streak .big { font-size:2.6rem; font-weight:900; color:var(--orange); }
+  .streak .lbl { font-size:.85rem; color:var(--muted); font-weight:700; }
+  .suns { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+  .sun { aspect-ratio:1; border-radius:50%; border:3px dashed #FFB300; background:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:all .15s; }
+  .sun.filled { background:radial-gradient(circle,#FFD54F,#FF9800); border-style:solid; border-color:#FB8C00; }
+  .books textarea { width:100%; min-height:120px; border:2px solid #90CAF9; border-radius:12px; padding:12px; font-family:'Nunito',sans-serif; font-size:1rem; font-weight:600; resize:vertical; }
+
+  /* story */
+  .prompt-display { background:var(--orange-light); border:2px solid #FFCC80; border-radius:14px; padding:18px; text-align:center; font-size:1.15rem; font-weight:800; color:var(--orange-dark); margin-bottom:12px; min-height:64px; display:flex; align-items:center; justify-content:center; }
+  .story-canvas-wrap{background:#FAFBFC;border:2px dashed #B0BEC5;border-radius:12px;padding:10px;text-align:center;margin-bottom:12px;}
+  .story-canvas{width:320px;height:200px;max-width:100%;background:white;border-radius:8px;cursor:crosshair;touch-action:none;border:1px solid #D0D5DD;display:block;margin:0 auto;}
+  .story-text{width:100%;min-height:90px;border:2px solid #D0D5DD;border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;resize:vertical;line-height:1.6;}
+  .story-text:focus{border-color:var(--orange);outline:none;}
+
+  /* dialogue builder */
+  .dlg{background:var(--gold-light);border:2px solid var(--gold);border-radius:12px;padding:14px 16px;margin-bottom:12px;}
+  .dlg-title{font-weight:800;color:var(--gold-dark);margin-bottom:4px;}
+  .chant{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:white;border:2px dashed var(--orange);border-radius:10px;padding:9px 13px;margin:10px 0;cursor:pointer;}
+  .chant .w{font-weight:800;}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;}
+  .chip{padding:8px 16px;border-radius:20px;font-size:.9rem;font-weight:700;border:2px solid #E0C97A;background:white;color:#8D6E13;cursor:pointer;font-family:'Nunito',sans-serif;}
+  .chip.active{background:var(--gold);color:#5D4037;border-color:var(--gold);}
+  .dlg input{width:100%;padding:11px 14px;border:2px solid #E0C97A;border-radius:10px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;}
+  .dlg-prev{background:white;border:2px dashed var(--gold);border-radius:10px;padding:12px;margin-top:10px;font-size:1.05rem;font-weight:700;}
+  .q{color:var(--red);font-weight:900;} .who{color:var(--gold-dark);}
+  .step-lbl{font-size:.85rem;font-weight:800;color:#5D4037;margin-top:8px;}
+
+  /* finger point */
+  .proof{background:var(--purple-light);border:2px solid var(--purple);border-radius:12px;padding:14px 16px;margin-top:12px;}
+  .proof.done{background:var(--green-light);border-color:var(--green);}
+  .proof-title{font-weight:800;color:var(--purple);margin-bottom:8px;}
+  .proof.done .proof-title{color:var(--green);}
+  .pwords{display:flex;gap:8px;flex-wrap:wrap;}
+  .pword{padding:8px 12px;border-radius:10px;font-size:1.05rem;font-weight:700;border:2px solid #D1C4E9;background:white;color:#B0A8C0;font-family:'Nunito',sans-serif;}
+  .pword.next{color:var(--purple);border-color:var(--purple);cursor:pointer;animation:pp 1.3s infinite;}
+  @keyframes pp{0%,100%{box-shadow:0 0 0 0 rgba(156,39,176,.4);}50%{box-shadow:0 0 0 7px rgba(156,39,176,0);}}
+  .pword.read{color:#2E7D32;border-color:var(--green);background:var(--green-light);}
+  .pword.read::after{content:' ✓';font-size:.8rem;}
+
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#333;color:white;padding:12px 24px;border-radius:24px;font-weight:700;font-size:.9rem;z-index:1000;transition:transform .3s ease;pointer-events:none;max-width:90vw;text-align:center;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:999;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Marcello's Summer Adventure ☀️</h1>
+  <p>Keep reading and writing all summer — and have fun!</p>
+</header>
+
+<div class="tabs">
+  <button class="tab active" id="t-read" onclick="show('read')">📖 Reading Suns</button>
+  <button class="tab" id="t-story" onclick="show('story')">✍️ My Story</button>
+  <button class="tab" id="t-help" onclick="show('help')">🗣️ Helpers</button>
+</div>
+
+<div class="container">
+  <div class="panel active" id="p-read"></div>
+  <div class="panel" id="p-story"></div>
+  <div class="panel" id="p-help"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const LS = 'marcello_summer_v1';
+function fresh(){ return { suns:Array(56).fill(false), books:'', story:{text:'',panel:null,proofIdx:0,proofed:false,dlg:{who:'',tag:'said',words:''}}, lastPrompt:0 }; }
+let S = fresh();
+try { const r = localStorage.getItem(LS); if(r) S = Object.assign(fresh(), JSON.parse(r)); } catch(e){}
+function save(){ try{ localStorage.setItem(LS, JSON.stringify(S)); }catch(e){} }
+
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.className='toast show'; setTimeout(()=>t.className='toast',2500); }
+function esc(s){ const d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
+let spUnlocked=false;
+function unlock(){ if(spUnlocked||!('speechSynthesis'in window))return; const u=new SpeechSynthesisUtterance('');u.volume=0;speechSynthesis.speak(u);spUnlocked=true; }
+document.addEventListener('touchstart',unlock,{once:true}); document.addEventListener('click',unlock,{once:true});
+function speak(txt,rate){ if(!('speechSynthesis'in window))return; speechSynthesis.cancel(); setTimeout(()=>{const u=new SpeechSynthesisUtterance(txt);u.rate=rate||0.8;speechSynthesis.speak(u);},80); }
+function confetti(){ const c=document.createElement('div');c.className='confetti';const e=['🎉','⭐','☀️','🌟','🏖️','🍉'];for(let i=0;i<22;i++){const s=document.createElement('span');s.textContent=e[Math.floor(Math.random()*e.length)];s.style.cssText='position:absolute;font-size:'+(18+Math.random()*18)+'px;left:'+(Math.random()*100)+'%;top:-30px;animation:cf '+(1.5+Math.random()*2)+'s ease forwards;';c.appendChild(s);}document.body.appendChild(c);setTimeout(()=>c.remove(),4000); }
+const cs=document.createElement('style');cs.textContent='@keyframes cf{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}';document.head.appendChild(cs);
+
+function show(tab){
+  ['read','story','help'].forEach(k=>{ document.getElementById('p-'+k).classList.toggle('active',k===tab); document.getElementById('t-'+k).classList.toggle('active',k===tab); });
+  if(tab==='read')renderRead(); else if(tab==='story')renderStory(); else renderHelp();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ===== READING SUNS =====
+function renderRead(){
+  const filled = S.suns.filter(Boolean).length;
+  let html='<div class="card"><div class="streak"><div class="big">'+filled+'</div><div class="lbl">days read this summer ☀️</div></div>'+
+    '<p class="dir" style="text-align:center;">Tap a sun every day you read for 20 minutes. Fill them all!</p><div class="suns">';
+  for(let i=0;i<56;i++){ html+='<div class="sun '+(S.suns[i]?'filled':'')+'" onclick="tapSun('+i+')">'+(S.suns[i]?'☀️':'')+'</div>'; }
+  html+='</div></div>';
+  html+='<div class="card books"><h2>📚 Books I read this summer</h2><p class="dir">Write down every book you finish — be proud of your list!</p>'+
+    '<textarea id="booksTa" placeholder="1. ...\n2. ...\n3. ..." oninput="onBooks()">'+esc(S.books)+'</textarea></div>';
+  document.getElementById('p-read').innerHTML=html;
+}
+function tapSun(i){ S.suns[i]=!S.suns[i]; const n=S.suns.filter(Boolean).length; if(S.suns[i]){speak('Great reading!',1);} if(n>0&&n%7===0&&S.suns[i]){confetti();toast('A whole week of reading! 🎉');} renderRead(); save(); }
+function onBooks(){ const e=document.getElementById('booksTa'); if(e){S.books=e.value; save();} }
+
+// ===== MY STORY =====
+const PROMPTS=[
+  'The best thing I did today was…','My favorite summer food and why I love it.','A summer adventure I want to have.',
+  'A day in the life of my pet (or a pet I wish I had).','A letter to someone I love about my summer.','If I had a superpower for one summer day…',
+  'The most fun place I went this summer.','Something new I learned to do.','A time I felt brave, excited, or surprised.','My perfect summer day, morning to night.'];
+function renderStory(){
+  const st=S.story;
+  let html='<div class="card"><h2>✍️ Write a summer story</h2>'+
+    '<p class="dir">Remember the order: <strong>🎨 draw it → 🗣️ say it out loud → ✍️ write it → 👆 check it</strong>.</p>'+
+    '<div class="prompt-display" id="promptBox">'+esc(PROMPTS[S.lastPrompt||0])+'</div>'+
+    '<div class="btn-row" style="justify-content:center;"><button class="btn btn-orange btn-sm" onclick="spinPrompt()">🎲 Give me a new idea</button>'+
+    '<button class="btn btn-secondary btn-sm" onclick="speak(document.getElementById(\'promptBox\').textContent,0.85)">🔊 Read it</button></div>'+
+    '<div class="story-canvas-wrap" style="margin-top:14px;"><canvas class="story-canvas" id="sc" width="320" height="200"></canvas>'+
+    '<div style="margin-top:6px;"><button class="btn btn-secondary btn-sm" onclick="clearSC()">Clear drawing</button></div></div>'+
+    '<textarea class="story-text" id="storyTa" placeholder="Write your story here…" oninput="onStory()">'+esc(st.text)+'</textarea>'+
+    '<div class="btn-row"><button class="btn btn-gold btn-sm" onclick="toggleDlg()">🗣️ Add a talking sentence</button>'+
+    '<button class="btn btn-purple btn-sm" onclick="startProof()">👆 Check it word by word</button></div>';
+  if(showDlg) html+=buildDlg();
+  if(st.proofShow) html+=buildProof();
+  html+='</div>';
+  document.getElementById('p-story').innerHTML=html;
+  setupSC();
+}
+function spinPrompt(){ let n=S.lastPrompt; while(n===S.lastPrompt) n=Math.floor(Math.random()*PROMPTS.length); S.lastPrompt=n; document.getElementById('promptBox').textContent=PROMPTS[n]; save(); }
+function onStory(){ const e=document.getElementById('storyTa'); if(e){S.story.text=e.value; S.story.proofed=false; S.story.proofIdx=0; save();} }
+
+let showDlg=false;
+function toggleDlg(){ showDlg=!showDlg; renderStory(); }
+function buildDlg(){
+  const d=S.story.dlg;
+  let h='<div class="dlg"><div class="dlg-title">🗣️ Build a talking sentence</div>'+
+    '<div class="chant" onclick="speak(\'Who is talking? What did they say? Hug the words.\',0.9)"><span class="w">"Who\'s talking? · What did they say? · Hug the words."</span> 🔊</div>'+
+    '<div class="step-lbl">1 · Who is talking?</div><div class="chips">';
+  ['I','My friend','My mom','My dad'].forEach(w=>{ h+='<button class="chip '+(d.who===w?'active':'')+'" onclick="dWho('+JSON.stringify(w).replace(/"/g,'&quot;')+')">'+esc(w==='I'?'I (me)':w)+'</button>'; });
+  h+='</div><div class="step-lbl">2 · What did they say?</div><input id="dWords" placeholder="the exact words" oninput="dWordsIn()" value="'+esc(d.words)+'">'+
+    '<div class="step-lbl">3 · Tell-word</div><div class="chips">';
+  ['said','asked','answered'].forEach(tg=>{ h+='<button class="chip '+(d.tag===tg?'active':'')+'" onclick="dTag(\''+tg+'\')">'+tg+'</button>'; });
+  h+='</div><div class="dlg-prev" id="dPrev">'+dlgPrev(d)+'</div>'+
+    '<div class="btn-row"><button class="btn btn-gold btn-sm" onclick="useDlg()">⬇️ Add it to my story</button></div></div>';
+  return h;
+}
+function dlgPrev(d){ if(!d.who&&!d.words)return '<span style="color:var(--muted);">Build it above…</span>'; const who=d.who?'<span class="who">'+esc(d.who)+'</span>':'____'; let w=(d.words||'').trim().replace(/[.?!]+$/,''); if(w)w=w[0].toUpperCase()+w.slice(1); const end=d.tag==='asked'?'?':'.'; return who+' '+(d.tag||'said')+', <span class="q">"</span>'+esc(w||'…')+(w?end:'')+'<span class="q">"</span>'; }
+function dWho(w){ S.story.dlg.who=w; renderStory(); save(); }
+function dTag(t){ S.story.dlg.tag=t; renderStory(); save(); }
+function dWordsIn(){ const e=document.getElementById('dWords'); if(!e)return; S.story.dlg.words=e.value; const p=document.getElementById('dPrev'); if(p)p.innerHTML=dlgPrev(S.story.dlg); save(); }
+function useDlg(){ const d=S.story.dlg; if(!d.who||!d.words.trim()){toast('Pick who is talking and type their words');return;} let w=d.words.trim().replace(/[.?!]+$/,''); w=w[0].toUpperCase()+w.slice(1); const end=d.tag==='asked'?'?':'.'; const sent=d.who+' '+d.tag+', "'+w+end+'"'; S.story.text=(S.story.text?S.story.text.replace(/\s*$/,'')+' ':'')+sent; S.story.proofed=false; S.story.proofIdx=0; showDlg=false; renderStory(); save(); toast('Added! Now say it out loud and check it 🔍'); }
+
+function startProof(){ if(!S.story.text.trim()){toast('Write something first!');return;} S.story.proofShow=true; S.story.proofIdx=0; S.story.proofed=false; renderStory(); }
+function pwords(){ return S.story.text.trim().split(/\s+/).filter(w=>w.length); }
+function buildProof(){
+  const words=pwords(); const idx=S.story.proofIdx||0; const done=S.story.proofed;
+  let h='<div class="proof '+(done?'done':'')+'"><div class="proof-title">'+(done?'✓ You read every word!':'👆 Touch each glowing word and read ONLY that word — slowly')+'</div><div class="pwords">';
+  words.forEach((w,i)=>{ let c='pword'; if(i<idx)c+=' read'; else if(i===idx&&!done)c+=' next'; h+='<span class="'+c+'" '+(i===idx&&!done?'onclick="proofTap()"':'')+'>'+esc(w)+'</span>'; });
+  h+='</div>'+(done?'':'<div style="font-size:.8rem;color:var(--muted);font-weight:700;margin-top:8px;">'+idx+' of '+words.length+' words</div>')+'</div>';
+  return h;
+}
+function proofTap(){ const words=pwords(); const w=words[S.story.proofIdx]; if(w)speak(w.replace(/[.,!?"']/g,''),0.55); S.story.proofIdx++; if(S.story.proofIdx>=words.length){S.story.proofed=true; confetti(); toast('You read every word! 👀✓');} renderStory(); save(); }
+
+// story canvas
+function setupSC(){
+  const c=document.getElementById('sc'); if(!c)return; const ctx=c.getContext('2d');
+  ctx.lineWidth=3;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#1a1a1a';ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);
+  if(S.story.panel){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,c.width,c.height);img.src=S.story.panel;}
+  let dr=false,lx=0,ly=0,dirty=false;
+  function pos(e){const r=c.getBoundingClientRect();const p=e.touches&&e.touches[0]?e.touches[0]:e;return{x:(p.clientX-r.left)*(c.width/r.width),y:(p.clientY-r.top)*(c.height/r.height)};}
+  function st(e){e.preventDefault();dr=true;const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();dirty=true;}
+  function mv(e){if(!dr)return;e.preventDefault();const p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;dirty=true;}
+  function en(){if(dr&&dirty){dr=false;try{S.story.panel=c.toDataURL('image/jpeg',0.6);}catch(e){}dirty=false;save();}dr=false;}
+  c.addEventListener('mousedown',st);c.addEventListener('mousemove',mv);c.addEventListener('mouseup',en);c.addEventListener('mouseleave',en);
+  c.addEventListener('touchstart',st,{passive:false});c.addEventListener('touchmove',mv,{passive:false});c.addEventListener('touchend',en);
+}
+function clearSC(){ const c=document.getElementById('sc'); if(!c)return; const ctx=c.getContext('2d'); ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height); S.story.panel=null; save(); }
+
+// ===== HELPERS =====
+function renderHelp(){
+  document.getElementById('p-help').innerHTML=
+    '<div class="card"><h2>🗣️ The Dialogue Helper</h2>'+
+    '<div class="info">When someone TALKS, put their <strong>exact words</strong> inside quotation marks <span class="q">"&nbsp;"</span>. The marks always <strong>hug just the words they say</strong>.</div>'+
+    '<div class="chant" onclick="speak(\'Who is talking? What did they say? Hug the words.\',0.9)"><span class="w">"Who\'s talking? · What did they say? · Hug the words."</span> 🔊</div>'+
+    '<p class="dir" style="margin-top:10px;"><strong>The recipe:</strong> Who + <em>said / asked</em> + <span class="q">"</span>the exact words<span class="q">"</span></p>'+
+    '<div class="dlg-prev">My mom said, <span class="q">"</span>Let\'s go to the beach!<span class="q">"</span></div>'+
+    '<div class="dlg-prev" style="margin-top:8px;">I asked, <span class="q">"</span>Can we bring the dog?<span class="q">"</span></div>'+
+    '</div>'+
+    '<div class="card"><h2>👆 The Word-by-Word Check</h2>'+
+    '<div class="info" style="background:var(--purple-light);border-color:var(--purple);color:#6A1B9A;">When you read your own writing, it\'s easy to read what you MEANT instead of what\'s really on the page.</div>'+
+    '<p class="dir"><strong>So: point to each word with your finger and read ONLY the word you\'re touching — slowly, one at a time.</strong> That\'s how you catch mistakes. Try it on the “My Story” tab with the 👆 button!</p>'+
+    '</div>'+
+    '<div class="card"><h2>⭐ For grown-ups</h2>'+
+    '<p class="dir">This is Marcello\'s summer companion to his printed Summer Adventure pack. The single most important habit is <strong>20 minutes of reading a day</strong> (Reading Suns tab). The two helpers above are the exact strategies from tutoring. Keep it light and fun — 10–15 minutes a day is plenty.</p></div>';
+}
+
+renderRead();
+</script>
+</body>
+</html>

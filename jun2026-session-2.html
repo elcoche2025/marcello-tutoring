@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — June 8, 2026 (Summer Send-Off 🎉)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #00897B; --teal-light: #E0F2F1; --teal-dark: #00695C;
+    --blue: #4472C4; --blue-light: #D9E2F3;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --gold: #F5B700; --gold-light: #FFF8E1; --gold-dark: #B7791F;
+    --orange: #FB8C00; --orange-light: #FFF3E0;
+    --red: #E53935; --red-light: #FFEBEE;
+    --purple: #9C27B0; --purple-light: #F3E5F5;
+    --sun: #FF9800; --sky: #29B6F6; --sky-light: #E1F5FE;
+    --bg: #F4F9FB; --card: #FFFFFF;
+    --text: #2D3748; --muted: #718096;
+    --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header {
+    background: linear-gradient(135deg, #FF6F00 0%, #FF9800 45%, #FFC107 100%);
+    color: white; text-align: center; padding: 24px 20px 48px; position: relative;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; text-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+  header p { font-size: 0.95rem; opacity: 0.95; }
+  .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.8; transition: opacity 0.3s; }
+  .save-indicator.flash { opacity: 1; }
+  .tutor-reset { position: absolute; top: 10px; left: 16px; font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: white; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.6; transition: opacity 0.2s; }
+  .tutor-reset:hover { opacity: 1; background: rgba(255,255,255,0.3); }
+
+  .main-tabs { display: flex; justify-content: center; gap: 6px; padding: 10px 8px 0; max-width: 760px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
+  .main-tab {
+    padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 0.82rem;
+    cursor: pointer; transition: all 0.25s; border: 2px solid #D0D5DD;
+    background: white; color: var(--muted);
+    font-family: 'Nunito', sans-serif; white-space: nowrap;
+  }
+  .main-tab:hover { border-color: var(--orange); color: var(--orange); }
+  .main-tab.active { background: var(--orange); border-color: var(--orange); color: white; box-shadow: 0 3px 12px rgba(251,140,0,0.35); transform: translateY(-2px); }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container { max-width: 760px; margin: 16px auto; padding: 0 16px; }
+  .container.wide { max-width: 1000px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions { font-size: 0.92rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+
+  .review-banner { display: flex; align-items: center; gap: 8px; background: var(--green-light); border: 2px solid var(--green); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.88rem; color: #2E7D32; font-weight: 700; }
+  .info-box { background: var(--sky-light); border-left: 4px solid var(--sky); border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; font-size: 0.92rem; color: #01579B; }
+
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-purple { background: var(--purple); color: white; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-gold { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 14px; font-size: 0.85rem; border-radius: 10px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+
+  /* Tab 1: Year in Review milestones */
+  .milestone {
+    display: flex; align-items: center; gap: 14px; background: white;
+    border: 2px solid #E0E0E0; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+    cursor: pointer; transition: all 0.25s;
+  }
+  .milestone:hover { border-color: var(--orange); transform: translateX(2px); }
+  .milestone.done { border-color: var(--green); background: #FAFFFB; }
+  .milestone .ms-emoji { font-size: 1.7rem; flex-shrink: 0; width: 40px; text-align: center; }
+  .milestone .ms-body { flex: 1; }
+  .milestone .ms-title { font-weight: 800; font-size: 0.98rem; line-height: 1.35; }
+  .milestone .ms-when { font-size: 0.74rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .milestone .ms-cheer { font-size: 0.86rem; color: #2E7D32; font-weight: 700; margin-top: 6px; display: none; }
+  .milestone.done .ms-cheer { display: block; animation: fadeUp 0.3s ease; }
+  .milestone .ms-check { flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; border: 2px solid #D0D5DD; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; color: var(--muted); transition: all 0.2s; }
+  .milestone.done .ms-check { background: var(--green); border-color: var(--green); color: white; }
+  .progress-wrap { background: #ECEFF1; border-radius: 20px; height: 16px; overflow: hidden; margin: 10px 0 4px; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--gold)); border-radius: 20px; transition: width 0.4s ease; width: 0%; }
+
+  .proud-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .proud-chip { padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; background: var(--gold-light); border: 2px solid var(--gold); color: var(--gold-dark); cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .proud-chip:hover { transform: translateY(-1px); }
+  .proud-chip.active { background: var(--gold); color: #5D4037; }
+
+  /* Tab 2: Reading warm-up — word mapping */
+  .word-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; text-align: center; transition: all 0.25s; }
+  .word-card.done { border-color: var(--green); background: #FAFFFB; }
+  .word-big { font-size: 2.1rem; font-weight: 800; letter-spacing: 1px; color: var(--text); margin-bottom: 4px; }
+  .word-big .tricky { color: var(--red); background: var(--gold-light); border-radius: 6px; padding: 0 4px; }
+  .word-syll { font-size: 0.95rem; color: var(--muted); font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+  .word-tip { font-size: 0.84rem; color: var(--gold-dark); font-weight: 700; margin-bottom: 10px; min-height: 20px; }
+  .word-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+
+  .prosody-box { background: var(--sky-light); border: 2px solid var(--sky); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+  .prosody-text { font-size: 1.15rem; line-height: 1.9; font-weight: 600; color: var(--text); margin-bottom: 12px; }
+  .score-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+  .score-row label { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+  .score-input { width: 70px; padding: 8px 10px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.95rem; text-align: center; }
+  .score-input:focus { border-color: var(--teal); outline: none; }
+  .tutor-tag { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); background: #ECEFF1; border-radius: 8px; padding: 2px 8px; }
+
+  /* Tab 3: Summer Story */
+  .story-canvas-wrap { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 10px; text-align: center; max-width: 360px; margin: 0 auto 12px; }
+  .story-canvas { width: 320px; height: 220px; background: white; border-radius: 8px; cursor: crosshair; touch-action: none; border: 1px solid #D0D5DD; display: block; margin: 0 auto; max-width: 100%; }
+  .canvas-tools { display: flex; justify-content: space-between; gap: 6px; margin-top: 6px; align-items: center; }
+  .canvas-tools .tool-btn { font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; background: #F0F0F0; border: 1px solid #B0BEC5; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
+  .canvas-tools .tool-btn.danger { color: var(--red); border-color: #FFB3B3; }
+  .label-input { width: 100%; max-width: 360px; margin: 0 auto 12px; display: block; padding: 10px 12px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; }
+  .label-input:focus { border-color: var(--orange); outline: none; }
+
+  .write-card { background: white; border: 2px solid #E0E0E0; border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; transition: all 0.25s; }
+  .write-card.locked { background: var(--green-light); border-color: var(--green); }
+  .write-card.dialogue { border-color: var(--gold); }
+  .write-card.dialogue.locked { border-color: var(--green); }
+  .write-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .write-card-title { font-size: 1.05rem; font-weight: 800; color: var(--orange); }
+  .write-card-title.dialogue { color: var(--gold-dark); }
+  .write-card-title.locked { color: var(--green); }
+  .write-badge { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 12px; }
+  .write-badge.narr { background: var(--orange-light); color: var(--orange); }
+  .write-badge.dlg { background: var(--gold-light); color: var(--gold-dark); }
+  .prompt-line { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.5; }
+
+  /* Dialogue builder (W.3.3.b) */
+  .dlg-builder { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+  .dlg-builder-title { font-size: 0.95rem; font-weight: 800; color: var(--gold-dark); margin-bottom: 4px; }
+  .dlg-builder-sub { font-size: 0.82rem; color: #8D6E13; margin-bottom: 12px; line-height: 1.4; }
+  .dlg-chant { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: white; border: 2px dashed var(--orange); border-radius: 10px; padding: 9px 13px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s; }
+  .dlg-chant:hover { background: var(--orange-light); }
+  .dlg-chant-label { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--orange); }
+  .dlg-chant-words { font-size: 0.98rem; font-weight: 800; color: var(--text); }
+  .dlg-chant-spk { margin-left: auto; font-size: 1.15rem; }
+  .dlg-step-label { font-size: 0.85rem; font-weight: 800; color: #5D4037; margin: 10px 0 6px; }
+  .dlg-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dlg-chip { padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; font-weight: 700; border: 2px solid #E0C97A; background: white; color: #8D6E13; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .dlg-chip:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .dlg-chip.active { background: var(--gold); color: #5D4037; border-color: var(--gold); }
+  .dlg-words-input { width: 100%; padding: 11px 14px; border: 2px solid #E0C97A; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; background: white; }
+  .dlg-words-input:focus { border-color: var(--gold); outline: none; }
+  .dlg-preview { background: white; border: 2px dashed var(--gold); border-radius: 10px; padding: 12px 14px; margin-top: 12px; font-size: 1.05rem; font-weight: 700; line-height: 1.5; color: var(--text); }
+  .dlg-preview .q { color: var(--red); font-weight: 800; }
+  .dlg-preview .who { color: var(--gold-dark); }
+  .dlg-hint { font-size: 0.8rem; color: #8D6E13; margin-top: 8px; line-height: 1.4; }
+  .dlg-use-row { margin-top: 10px; }
+
+  .write-textarea-wrap { position: relative; }
+  .write-textarea { width: 100%; min-height: 80px; border: 2px solid #D0D5DD; border-radius: 12px; padding: 14px 50px 14px 14px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; resize: vertical; line-height: 1.6; background: #FAFBFC; }
+  .write-textarea:focus { border-color: var(--orange); outline: none; background: white; }
+  .write-textarea.locked { background: white; border-color: var(--green); }
+  .mic-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: var(--orange-light); border: 2px solid var(--orange); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; transition: all 0.2s; }
+  .mic-btn:hover { background: var(--orange); color: white; }
+  .mic-btn.recording { background: var(--red); border-color: var(--red); color: white; animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(229,57,53,0.5); } 50% { box-shadow: 0 0 0 8px rgba(229,57,53,0); } }
+
+  .source-check { background: #FFFDE7; border: 2px solid var(--gold); border-radius: 12px; padding: 12px 14px; margin-top: 12px; }
+  .source-check.matched { background: var(--green-light); border-color: var(--green); }
+  .source-check.unmatched { background: var(--red-light); border-color: var(--red); }
+  .source-check-prompt { font-size: 0.92rem; line-height: 1.5; font-weight: 600; margin-bottom: 10px; color: #5D4037; }
+  .source-check-row { display: flex; gap: 8px; }
+  .source-btn { flex: 1; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; border: 2px solid; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .source-btn.match { background: white; color: var(--green); border-color: var(--green); }
+  .source-btn.match.active { background: var(--green); color: white; }
+  .source-btn.unmatch { background: white; color: var(--red); border-color: var(--red); }
+  .source-btn.unmatch.active { background: var(--red); color: white; }
+
+  /* NEW — Finger-point word-by-word proofread (the Jun 1 candidate fix, first real test) */
+  .proof-box { background: var(--purple-light); border: 2px solid var(--purple); border-radius: 12px; padding: 14px 16px; margin-top: 12px; }
+  .proof-box.done { background: var(--green-light); border-color: var(--green); }
+  .proof-title { font-size: 0.92rem; font-weight: 800; color: var(--purple); margin-bottom: 4px; }
+  .proof-box.done .proof-title { color: var(--green); }
+  .proof-sub { font-size: 0.82rem; color: #6A1B9A; margin-bottom: 12px; line-height: 1.4; }
+  .proof-box.done .proof-sub { color: #2E7D32; }
+  .proof-words { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .proof-word {
+    padding: 8px 12px; border-radius: 10px; font-size: 1.05rem; font-weight: 700;
+    border: 2px solid #D1C4E9; background: white; color: #B0A8C0; cursor: default;
+    font-family: 'Nunito', sans-serif; transition: all 0.18s;
+  }
+  .proof-word.next { color: var(--purple); border-color: var(--purple); cursor: pointer; animation: pulseP 1.3s infinite; box-shadow: 0 0 0 0 rgba(156,39,176,0.5); }
+  @keyframes pulseP { 0%,100% { box-shadow: 0 0 0 0 rgba(156,39,176,0.4); } 50% { box-shadow: 0 0 0 7px rgba(156,39,176,0); } }
+  .proof-word.read { color: #2E7D32; border-color: var(--green); background: var(--green-light); cursor: default; }
+  .proof-word.read::after { content: ' ✓'; font-size: 0.8rem; }
+  .proof-progress { font-size: 0.8rem; color: var(--muted); font-weight: 700; margin-top: 10px; }
+
+  .lock-row { display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px; }
+  .lock-btn { background: var(--green); color: white; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .lock-btn:disabled { background: #E0E0E0; color: var(--muted); cursor: not-allowed; }
+  .unlock-btn { background: white; color: var(--green); border: 2px solid var(--green); border-radius: 10px; padding: 6px 12px; font-weight: 700; font-size: 0.82rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+
+  /* Tab 4: Summer plan */
+  .goal-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 6px; }
+  .goal-chip { padding: 9px 15px; border-radius: 20px; font-size: 0.88rem; font-weight: 700; border: 2px solid #B2DFDB; background: white; color: var(--teal-dark); cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .goal-chip:hover { border-color: var(--teal); transform: translateY(-1px); }
+  .goal-chip.active { background: var(--teal); color: white; border-color: var(--teal); }
+  .pack-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+  @media (max-width: 560px) { .pack-preview { grid-template-columns: 1fr; } }
+  .pack-item { background: var(--orange-light); border: 2px solid #FFCC80; border-radius: 12px; padding: 12px 14px; }
+  .pack-item .pi-emoji { font-size: 1.4rem; }
+  .pack-item .pi-title { font-weight: 800; font-size: 0.9rem; margin: 4px 0 2px; }
+  .pack-item .pi-desc { font-size: 0.8rem; color: var(--muted); font-weight: 600; line-height: 1.35; }
+
+  .stars-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .star-btn { padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 700; background: var(--gold-light); border: 2px solid var(--gold); color: #7B6400; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .star-btn:hover, .star-btn.active { background: var(--gold); color: white; }
+
+  .pep-banner { background: linear-gradient(135deg, #FF9800, #FB8C00, #F57C00); color: white; border-radius: 16px; padding: 24px 20px; text-align: center; margin: 16px 0; box-shadow: var(--shadow); }
+  .pep-banner h3 { font-size: 1.4rem; margin-bottom: 6px; }
+  .pep-banner p { font-size: 0.96rem; opacity: 0.97; line-height: 1.55; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+  .toast.error { background: var(--red); }
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="tutor-reset" onclick="tutorReset()" title="Tutor only: wipe all session progress for this date — local + cloud — and start fresh.">🔄 Reset</button>
+  <h1>Marcello's Big Finish 🎉</h1>
+  <p>Monday, June 8, 2026 — Last session before summer! ☀️</p>
+  <div class="save-indicator" id="saveIndicator">Saved ✓</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-review" onclick="switchTab('review')">🎉 Look How Far You Came</button>
+  <button class="main-tab" id="mtab-reading" onclick="switchTab('reading')">📖 Summer Reading Warm-Up</button>
+  <button class="main-tab" id="mtab-story" onclick="switchTab('story')">✍️ My Summer Story</button>
+  <button class="main-tab" id="mtab-plan" onclick="switchTab('plan')">☀️ My Summer Plan</button>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-review"><div id="card-review"></div></div>
+  <div class="tab-panel" id="panel-reading"><div id="card-reading"></div></div>
+  <div class="tab-panel" id="panel-story"><div id="card-story"></div></div>
+  <div class="tab-panel" id="panel-plan"><div id="card-plan"></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG & GLOBALS
+// ============================================================
+const STORAGE_KEY = 'marcello_jun8_session';
+const CLOUD_STATE_KEY = 'jun2026_session_12';
+const PREV_CLOUD_KEY = 'jun2026_session_11';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-06-08';
+
+let activeTab = 'review';
+
+function freshState() {
+  return {
+    review: {
+      done: [false, false, false, false, false, false, false],
+      proud: []
+    },
+    reading: {
+      words: [false, false, false],
+      prosodyRead: false,
+      wcpm: '',
+      prosody: '',
+      done: false
+    },
+    story: {
+      panel: null,         // base64 dataURL of the drawing
+      label: '',
+      sentences: [
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, locked: false, mode: 'narrative' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, locked: false, mode: 'dialogue', dlg: { who: '', tag: 'said', words: '' } }
+      ],
+      done: false
+    },
+    plan: {
+      readingGoals: [],
+      readingCustom: '',
+      writingGoals: [],
+      writingCustom: '',
+      stars: [],
+      done: false
+    },
+    timestamps: {},
+    points: 0
+  };
+}
+
+let S = freshState();
+
+// ============================================================
+//  CONTENT DATA
+// ============================================================
+
+// Tab 1 — Year-in-Review milestones (true to Marcello's arc this year)
+const MILESTONES = [
+  { emoji: '📝', when: 'Winter', title: 'You learned what makes a strong paragraph — and how to spot a sentence that doesn’t belong.', cheer: 'You got that one 5 out of 5!' },
+  { emoji: '🚀', when: 'Winter → Spring', title: 'You wrote whole essays with an opinion and real reasons.', cheer: 'Apollo 11, space, longer recess — you wrote them all.' },
+  { emoji: '🔗', when: 'Spring', title: 'You learned connecting words — because, so, when, although — and used them in your own writing.', cheer: 'Even "although" — that’s a tricky one!' },
+  { emoji: '🎨', when: 'Spring', title: 'You learned to plan a story by drawing it first.', cheer: 'Draw it → say it → write it. That’s your superpower.' },
+  { emoji: '📖', when: 'Spring', title: 'You wrote your very first narrative stories.', cheer: 'From "Coming to America" to "The Red Scarf."' },
+  { emoji: '🗣️', when: 'June', title: 'You learned dialogue — how to make a character TALK with quotation marks.', cheer: 'You can find who’s talking and hug the words!' },
+  { emoji: '📈', when: 'All year', title: 'Your reading got smoother — you read with more expression than you did in the winter.', cheer: 'You sound more like a storyteller now.' }
+];
+
+// Tab 2 — Summer reading warm-up (word mapping: tricky-part highlight)
+const WORDS = [
+  { word: 'vacation', syll: 'va · ca · tion', before: 'vaca', tricky: 'tion', after: '', tip: 'The tricky part is "tion" — it says /shun/. va-ca-SHUN.' },
+  { word: 'adventure', syll: 'ad · ven · ture', before: 'adven', tricky: 'ture', after: '', tip: 'The tricky part is "ture" — it says /cher/. ad-ven-CHER.' },
+  { word: 'beautiful', syll: 'beau · ti · ful', before: '', tricky: 'beau', after: 'tiful', tip: 'The tricky part is "beau" — it says /byoo/. BYOO-ti-ful.' }
+];
+
+const PROSODY_PASSAGE = 'Summer is finally here! The sun is warm, the days are long, and there is so much to do. Maybe you will swim in a cool pool, ride your bike down a big hill, or read a great book under a shady tree. What adventure will you have this summer?';
+
+// Tab 3 — dialogue builder choices (who's talking about your summer)
+const DLG_WHO = ['I', 'My friend', 'My mom', 'My dad'];
+const DLG_TAGS = ['said', 'asked', 'answered'];
+
+// Tab 4 — summer goal chip options
+const READING_GOALS = ['Read 20 minutes a day', 'Finish a chapter book', 'Read to someone in my family', 'Read outside in the sun'];
+const WRITING_GOALS = ['Write in a summer journal', 'Write a story with dialogue', 'Write a letter to someone I love', 'Draw and write about my day'];
+
+// ============================================================
+//  UTIL  (cloud-save infra copied verbatim from prior weeks)
+// ============================================================
+function toast(msg, kind) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (kind ? ' ' + kind : '');
+  setTimeout(function() { t.className = 'toast'; }, 3000);
+}
+function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
+
+function saveToLocalStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(S));
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Saved ✓';
+    ind.classList.add('flash');
+    setTimeout(function() { ind.classList.remove('flash'); }, 1000);
+  } catch(e) {
+    if (e.name === 'QuotaExceededError') toast('Local save full — drawing may be too large', 'warning');
+  }
+}
+function loadFromLocalStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const loaded = JSON.parse(raw);
+    S = Object.assign(freshState(), loaded);
+    return true;
+  } catch(e) { return false; }
+}
+
+let saveDebounce = null, cloudDebounce = null;
+let cloudFireDeadline = null;
+function debounceSave() {
+  clearTimeout(saveDebounce);
+  saveDebounce = setTimeout(saveToLocalStorage, 500);
+  const now = Date.now();
+  if (cloudFireDeadline === null) cloudFireDeadline = now + 8000;
+  const remaining = Math.max(cloudFireDeadline - now, 0);
+  const fireIn = Math.min(3500, remaining);
+  clearTimeout(cloudDebounce);
+  cloudDebounce = setTimeout(function() { cloudFireDeadline = null; saveStateToCloud(); }, fireIn);
+}
+function saveImmediate() {
+  clearTimeout(saveDebounce);
+  clearTimeout(cloudDebounce);
+  cloudFireDeadline = null;
+  saveToLocalStorage();
+  saveStateToCloud();
+}
+function postToSheets(sheet, row) {
+  try {
+    fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: sheet, row: row }) });
+  } catch(e) {}
+}
+function saveStateToCloud() {
+  try {
+    fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S }) });
+    const ind = document.getElementById('saveIndicator');
+    ind.textContent = 'Cloud saved ☁️';
+    ind.classList.add('flash');
+    setTimeout(function() { ind.classList.remove('flash'); }, 1000);
+  } catch(e) {}
+}
+function loadStateFromCloud(key) {
+  return new Promise(function(resolve) {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(function() { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) {
+      clearTimeout(timeout); delete window[cbName];
+      if (result && result.success && result.state) resolve(result.state); else resolve(null);
+    };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = function() { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+
+let speechUnlocked = false;
+function unlockSpeech() {
+  if (speechUnlocked || !('speechSynthesis' in window)) return;
+  const dummy = new SpeechSynthesisUtterance(''); dummy.volume = 0;
+  window.speechSynthesis.speak(dummy); speechUnlocked = true;
+}
+document.addEventListener('touchstart', unlockSpeech, { once: true });
+document.addEventListener('click', unlockSpeech, { once: true });
+function speakText(text, rate) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available', 'warning'); return; }
+  window.speechSynthesis.cancel();
+  setTimeout(function() {
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = rate || 0.85; u.pitch = 1;
+    u.onerror = function() { toast('Speech error — tap again', 'warning'); };
+    window.speechSynthesis.speak(u);
+  }, 100);
+}
+
+function fireCelebration() {
+  const c = document.createElement('div');
+  c.className = 'confetti-burst';
+  const emojis = ['🎉','🎊','⭐','☀️','🌟','🏆','🏖️','🍉','🎈'];
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('span');
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;';
+    c.appendChild(s);
+  }
+  document.body.appendChild(c);
+  setTimeout(function() { c.remove(); }, 4000);
+}
+const confettiStyle = document.createElement('style');
+confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }';
+document.head.appendChild(confettiStyle);
+
+function tutorReset() {
+  if (!confirm('Reset this session?\n\nThis wipes ALL progress for June 8 — locally and in the cloud — and starts fresh. Use before a real session if the app shows leftover test progress.')) return;
+  S = freshState();
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  saveStateToCloud();
+  ['review','reading','story','plan'].forEach(function(k) {
+    const tab = document.getElementById('mtab-' + k);
+    if (tab) tab.classList.remove('done');
+  });
+  switchTab('review');
+  toast('Session reset — fresh start ✨');
+}
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('mtab-' + tab).classList.add('active');
+
+  const mc = document.getElementById('mainContainer');
+  if (tab === 'story') mc.classList.add('wide'); else mc.classList.remove('wide');
+
+  if (tab === 'review') renderReview();
+  else if (tab === 'reading') renderReading();
+  else if (tab === 'story') renderStory();
+  else if (tab === 'plan') renderPlan();
+
+  updateTabBadges();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveImmediate();
+}
+function updateTabBadges() {
+  const map = { review: isReviewDone(), reading: S.reading.done, story: S.story.done, plan: S.plan.done };
+  Object.keys(map).forEach(function(k) {
+    const tab = document.getElementById('mtab-' + k);
+    if (map[k]) tab.classList.add('done'); else tab.classList.remove('done');
+  });
+}
+function isReviewDone() { return S.review.done.every(function(d) { return d; }); }
+
+// ============================================================
+//  TAB 1 — LOOK HOW FAR YOU CAME (Year in Review)
+// ============================================================
+function renderReview() {
+  const el = document.getElementById('card-review');
+  const r = S.review;
+  const count = r.done.filter(function(d) { return d; }).length;
+  const pct = Math.round((count / MILESTONES.length) * 100);
+
+  let html =
+    '<div class="card">' +
+    '<h2>🎉 Look how far you came this year, Marcello!</h2>' +
+    '<p class="directions">This is our last session before summer. Before we do anything else — let’s look back at everything you learned. Tap each one you remember doing. Every single one is something YOU can do now that was hard before.</p>' +
+    '<div class="progress-wrap"><div class="progress-fill" id="reviewProgress" style="width:' + pct + '%"></div></div>' +
+    '<div style="text-align:center;font-size:0.82rem;color:var(--muted);font-weight:700;">' + count + ' of ' + MILESTONES.length + ' remembered</div>' +
+    '</div>';
+
+  MILESTONES.forEach(function(m, i) {
+    const done = r.done[i];
+    html += '<div class="milestone ' + (done ? 'done' : '') + '" onclick="toggleMilestone(' + i + ')">' +
+      '<div class="ms-emoji">' + m.emoji + '</div>' +
+      '<div class="ms-body">' +
+      '<div class="ms-title">' + m.title + '</div>' +
+      '<div class="ms-when">' + esc(m.when) + '</div>' +
+      '<div class="ms-cheer">🌟 ' + m.cheer + '</div>' +
+      '</div>' +
+      '<div class="ms-check">' + (done ? '✓' : '') + '</div>' +
+      '</div>';
+  });
+
+  if (count >= 1) {
+    html += '<div class="card">' +
+      '<h2>⭐ Which one are you PROUDEST of?</h2>' +
+      '<p class="directions">Tap the one or two you feel best about. There’s no wrong answer — it’s YOUR year.</p>' +
+      '<div class="proud-row">';
+    MILESTONES.forEach(function(m, i) {
+      const on = r.proud.indexOf(i) !== -1;
+      html += '<button class="proud-chip ' + (on ? 'active' : '') + '" onclick="toggleProud(' + i + ')">' + m.emoji + ' ' + (on ? '★ ' : '') + esc(shortTitle(m.title)) + '</button>';
+    });
+    html += '</div></div>';
+  }
+
+  if (isReviewDone()) {
+    html += '<div class="btn-row"><button class="btn btn-orange" onclick="switchTab(\'reading\')">Now let’s warm up for summer reading →</button></div>';
+  } else {
+    html += '<div class="btn-row"><button class="btn btn-secondary" onclick="switchTab(\'reading\')">Skip ahead to reading →</button></div>';
+  }
+
+  el.innerHTML = html;
+}
+function shortTitle(t) {
+  // first ~4 words for the proud chip
+  const words = t.replace(/—.*/, '').trim().split(/\s+/);
+  return words.slice(0, 4).join(' ') + (words.length > 4 ? '…' : '');
+}
+function toggleMilestone(i) {
+  S.review.done[i] = !S.review.done[i];
+  if (S.review.done[i]) {
+    speakText(MILESTONES[i].cheer, 0.95);
+    if (isReviewDone()) { fireCelebration(); toast('You remembered them all! 🎉'); }
+  }
+  renderReview();
+  updateTabBadges();
+  debounceSave();
+}
+function toggleProud(i) {
+  const idx = S.review.proud.indexOf(i);
+  if (idx !== -1) S.review.proud.splice(idx, 1); else S.review.proud.push(i);
+  renderReview();
+  debounceSave();
+}
+
+// ============================================================
+//  TAB 2 — SUMMER READING WARM-UP (standing decoding/prosody rep)
+// ============================================================
+function renderReading() {
+  const el = document.getElementById('card-reading');
+  const rd = S.reading;
+  const allWords = rd.words.every(function(w) { return w; });
+  const ready = allWords && rd.prosodyRead;
+
+  const reviewBanner = rd.done ? '<div class="review-banner">✅ Reading warm-up complete. Tap back any time.</div>' : '';
+
+  let html =
+    '<div class="card">' +
+    reviewBanner +
+    '<h2>📖 Summer reading warm-up</h2>' +
+    '<p class="directions">First, three fun summer words. We’ll find the <strong>tricky part</strong> in each one — the part that doesn’t sound the way it looks — then read the whole word.</p>' +
+    '<div class="info-box">👆 Remember: read the WHOLE word, not just the first few letters. Find the tricky part first, then say it all.</div>' +
+    '</div>';
+
+  WORDS.forEach(function(w, i) {
+    const done = rd.words[i];
+    html += '<div class="word-card ' + (done ? 'done' : '') + '" id="wordcard-' + i + '">' +
+      '<div class="word-big" id="wordbig-' + i + '">' + esc(w.before) + (done ? '<span class="tricky">' + esc(w.tricky) + '</span>' : esc(w.tricky)) + esc(w.after) + '</div>' +
+      '<div class="word-syll">' + esc(w.syll) + '</div>' +
+      '<div class="word-tip" id="wordtip-' + i + '">' + (done ? '💡 ' + esc(w.tip) : '') + '</div>' +
+      '<div class="word-btns">' +
+      '<button class="btn btn-sm btn-purple" onclick="showTricky(' + i + ')">🔍 Find the tricky part</button>' +
+      '<button class="btn btn-sm btn-secondary" onclick="speakText(' + JSON.stringify(w.word).replace(/"/g, '&quot;') + ', 0.7)">🔊 Hear it</button>' +
+      '<button class="btn btn-sm ' + (done ? 'btn-success' : 'btn-orange') + '" onclick="markWord(' + i + ')">' + (done ? '✓ I read it' : '👀 I read it') + '</button>' +
+      '</div>' +
+      '</div>';
+  });
+
+  html += '<div class="prosody-box">' +
+    '<div style="font-weight:800;margin-bottom:8px;color:#01579B;">🗣️ Now read this out loud — like a storyteller!</div>' +
+    '<div class="prosody-text">' + esc(PROSODY_PASSAGE) + '</div>' +
+    '<div class="btn-row" style="justify-content:flex-start;margin-top:0;">' +
+    '<button class="btn btn-sm btn-blue" onclick="speakText(' + JSON.stringify(PROSODY_PASSAGE).replace(/"/g, '&quot;') + ', 0.85)">🔊 Hear it first</button>' +
+    '<button class="btn btn-sm ' + (rd.prosodyRead ? 'btn-success' : 'btn-orange') + '" onclick="markProsody()">' + (rd.prosodyRead ? '✓ I read it with expression' : '📣 I read it with expression') + '</button>' +
+    '</div>' +
+    '<div class="score-row">' +
+    '<span class="tutor-tag">Tutor</span>' +
+    '<label>WCPM <input class="score-input" id="wcpmInput" inputmode="numeric" value="' + esc(rd.wcpm) + '" oninput="onScore()" placeholder="—"></label>' +
+    '<label>Prosody /4 <input class="score-input" id="prosodyInput" inputmode="decimal" value="' + esc(rd.prosody) + '" oninput="onScore()" placeholder="—"></label>' +
+    '</div>' +
+    '</div>';
+
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishReading()" ' + (ready ? '' : 'disabled') + '>' +
+    (rd.done ? '✓ On to my summer story →' : 'Done warming up — write my summer story →') + '</button></div>';
+  if (!ready) html += '<p style="text-align:center;font-size:0.83rem;color:var(--muted);font-style:italic;margin-top:6px;">Read all 3 words and the passage to continue.</p>';
+
+  el.innerHTML = html;
+}
+function showTricky(i) {
+  const w = WORDS[i];
+  const big = document.getElementById('wordbig-' + i);
+  if (big) big.innerHTML = esc(w.before) + '<span class="tricky">' + esc(w.tricky) + '</span>' + esc(w.after);
+  const tip = document.getElementById('wordtip-' + i);
+  if (tip) tip.innerHTML = '💡 ' + esc(w.tip);
+  speakText(w.word, 0.65);
+}
+function markWord(i) { S.reading.words[i] = true; renderReading(); updateReadingReady(); debounceSave(); }
+function markProsody() {
+  S.reading.prosodyRead = true;
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Summer prosody read-aloud', 'Reading - Foundational', '', '', '', 'Read summer passage aloud with expression']);
+  renderReading(); updateReadingReady(); debounceSave();
+}
+function onScore() {
+  const w = document.getElementById('wcpmInput'); const p = document.getElementById('prosodyInput');
+  if (w) S.reading.wcpm = w.value;
+  if (p) S.reading.prosody = p.value;
+  debounceSave();
+}
+function updateReadingReady() {
+  const ready = S.reading.words.every(function(x) { return x; }) && S.reading.prosodyRead;
+  const btn = document.querySelector('#card-reading .btn-success');
+  if (btn) btn.disabled = !ready;
+}
+function finishReading() {
+  S.reading.done = true;
+  S.timestamps.readingEnd = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Reading Warm-up (word map + prosody)', 'Reading - Foundational',
+    (S.reading.prosody || ''), '4', '', 'Words mapped: vacation/adventure/beautiful | WCPM: ' + (S.reading.wcpm || '-') + ' | Prosody: ' + (S.reading.prosody || '-')]);
+  toast('Nice reading! 📖');
+  fireCelebration();
+  saveImmediate();
+  updateTabBadges();
+  switchTab('story');
+}
+
+// ============================================================
+//  TAB 3 — MY SUMMER STORY (draw → say → write; dialogue + finger-point proofread)
+// ============================================================
+function renderStory() {
+  const el = document.getElementById('card-story');
+  const st = S.story;
+
+  const reviewBanner = st.done ? '<div class="review-banner">✅ Summer story done! Tap any sentence to edit.</div>' : '';
+
+  let html =
+    '<div class="card">' +
+    reviewBanner +
+    '<h2>✍️ Write a story about YOUR summer</h2>' +
+    '<p class="directions">Think of one fun thing you want to do this summer. First <strong>draw it</strong>. Then <strong>say each sentence out loud</strong> before you write it. Sentence 1 tells what you’ll do. Sentence 2 makes someone <strong>TALK</strong> about it — that’s dialogue, like your class has been practicing!</p>' +
+    '<div class="info-box">🎨 Draw it → 🗣️ say it out loud → ✍️ write it. That order makes your best sentences.</div>' +
+    '<div class="story-canvas-wrap">' +
+    '<canvas class="story-canvas" id="storyCanvas" width="320" height="220"></canvas>' +
+    '<div class="canvas-tools"><span style="font-size:0.72rem;color:var(--muted);">Draw your summer plan</span>' +
+    '<button class="tool-btn danger" onclick="clearStoryCanvas()">Clear</button></div>' +
+    '</div>' +
+    '<input class="label-input" id="storyLabel" placeholder="What is it? (e.g., ‘going to the beach’)" oninput="onStoryLabel()" value="' + esc(st.label) + '">' +
+    '</div>';
+
+  st.sentences.forEach(function(sent, i) {
+    html += buildStorySentence(i, sent);
+  });
+
+  if (st.sentences.some(function(s) { return s.locked; })) {
+    html += '<div class="card">' +
+      '<div class="pep-banner">' +
+      '<div style="font-size:2.4rem;margin-bottom:4px;">🏖️</div>' +
+      '<h3>Look at that — a summer story with dialogue!</h3>' +
+      '<p>You drew it, said it out loud, wrote it, and checked it word by word. That’s exactly how strong writers work.</p>' +
+      '</div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="finishStory()">' + (st.done ? '✓ On to my summer plan →' : 'Done — make my summer plan →') + '</button></div>' +
+      '</div>';
+  }
+
+  el.innerHTML = html;
+  setupStoryCanvas();
+}
+
+function buildStorySentence(i, sent) {
+  const isLocked = sent.locked;
+  const isDialogue = sent.mode === 'dialogue';
+  const text = sent.text || '';
+  const prompt = isDialogue
+    ? 'Make someone TALK about your summer. What would you say? What might a friend or your mom or dad say?'
+    : 'Tell what you want to do this summer.';
+
+  let html = '<div class="write-card ' + (isDialogue ? 'dialogue ' : '') + (isLocked ? 'locked' : '') + '">' +
+    '<div class="write-card-header">' +
+    '<div class="write-card-title ' + (isDialogue ? 'dialogue ' : '') + (isLocked ? 'locked' : '') + '">' + (isLocked ? '✓ ' : '') + 'Sentence ' + (i+1) + '</div>' +
+    '<span class="write-badge ' + (isDialogue ? 'dlg' : 'narr') + '">' + (isDialogue ? '🗣️ Talking sentence' : '📝 Tell what happens') + '</span>' +
+    '</div>' +
+    '<div class="prompt-line">' + esc(prompt) + '</div>';
+
+  if (isDialogue && !isLocked) html += buildDialogueBuilder(i, sent);
+
+  const placeholder = isDialogue ? 'Build your talking sentence above, then fix it here if you need to…' : 'Write your sentence here… (or tap 🎤 and say it)';
+  html += '<div class="write-textarea-wrap">' +
+    '<textarea class="write-textarea ' + (isLocked ? 'locked' : '') + '" id="story-text-' + i + '" placeholder="' + placeholder + '" oninput="onStoryText(' + i + ')" ' + (isLocked ? 'readonly' : '') + '>' + esc(text) + '</textarea>' +
+    '<button class="mic-btn" id="mic-' + i + '" onclick="toggleMic(' + i + ')" title="Speak → text drops in">🎤</button>' +
+    '</div>';
+
+  // Source check (against the drawing)
+  if (text.trim() && !isLocked) {
+    const cls = sent.sourceCheck === 'match' ? 'matched' : (sent.sourceCheck === 'unmatch' ? 'unmatched' : '');
+    const sprompt = isDialogue
+      ? '🔍 <strong>Two checks.</strong> (1) Does your sentence go with your drawing? (2) Do the quotation marks " " hug the EXACT words someone says?'
+      : '🔍 <strong>Check.</strong> Look at your drawing. Look at your sentence. Do they tell the same thing?';
+    html += '<div class="source-check ' + cls + '">' +
+      '<div class="source-check-prompt">' + sprompt + '</div>' +
+      '<div class="source-check-row">' +
+      '<button class="source-btn match ' + (sent.sourceCheck === 'match' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'match\')">✓ Yes — they match</button>' +
+      '<button class="source-btn unmatch ' + (sent.sourceCheck === 'unmatch' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'unmatch\')">✗ Not yet — let me look again</button>' +
+      '</div></div>';
+  }
+
+  // NEW — finger-point word-by-word proofread (shows once source-check matches)
+  if (text.trim() && !isLocked && sent.sourceCheck === 'match') {
+    html += buildProofread(i, sent);
+  }
+
+  // Lock row
+  if (!isLocked) {
+    const canLock = text.trim() && sent.sourceCheck === 'match' && sent.proofed;
+    html += '<div class="lock-row"><button class="lock-btn" onclick="lockStorySentence(' + i + ')" ' + (canLock ? '' : 'disabled') + '>🔒 Lock sentence ' + (i+1) + '</button></div>';
+  } else {
+    html += '<div class="lock-row"><button class="unlock-btn" onclick="unlockStorySentence(' + i + ')">✏️ Edit again</button></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// === NEW finger-point proofread ===
+function proofWords(sent) { return (sent.text || '').trim().split(/\s+/).filter(function(w) { return w.length; }); }
+function buildProofread(i, sent) {
+  const words = proofWords(sent);
+  const idx = sent.proofIdx || 0;
+  const done = sent.proofed;
+  let html = '<div class="proof-box ' + (done ? 'done' : '') + '">' +
+    '<div class="proof-title">' + (done ? '✓ You read every word!' : '👆 Now check it word by word') + '</div>' +
+    '<div class="proof-sub">' + (done
+      ? 'You touched each word and read the REAL word on the page. That’s how you catch mistakes.'
+      : 'Touch the glowing word and read ONLY that word out loud — slowly. Read what is REALLY there, not what you meant to write.') + '</div>' +
+    '<div class="proof-words">';
+  words.forEach(function(w, wi) {
+    let cls = 'proof-word';
+    if (wi < idx) cls += ' read';
+    else if (wi === idx && !done) cls += ' next';
+    html += '<span class="' + cls + '" ' + (wi === idx && !done ? 'onclick="proofTap(' + i + ')"' : '') + '>' + esc(w) + '</span>';
+  });
+  html += '</div>';
+  if (!done) html += '<div class="proof-progress">' + idx + ' of ' + words.length + ' words read</div>' +
+    '<div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="btn btn-sm btn-secondary" onclick="proofReset(' + i + ')">↻ Start over</button></div>';
+  html += '</div>';
+  return html;
+}
+function proofTap(i) {
+  const sent = S.story.sentences[i];
+  const words = proofWords(sent);
+  const word = words[sent.proofIdx];
+  if (word) speakText(word.replace(/[.,!?"']/g, ''), 0.6);
+  sent.proofIdx = (sent.proofIdx || 0) + 1;
+  if (sent.proofIdx >= words.length) {
+    sent.proofed = true;
+    toast('You read every word! 👀✓');
+    postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Finger-point proofread (sentence ' + (i+1) + ')', 'Writing - Self-Monitoring', words.length, words.length, '100%', 'Read each word aloud one at a time: ' + sent.text.slice(0,120)]);
+  }
+  renderStory();
+  debounceSave();
+}
+function proofReset(i) {
+  S.story.sentences[i].proofIdx = 0;
+  S.story.sentences[i].proofed = false;
+  renderStory();
+  debounceSave();
+}
+
+// === Dialogue builder (W.3.3.b) — same engine as prior weeks ===
+function buildDialogueBuilder(i, sent) {
+  const d = sent.dlg || { who: '', tag: 'said', words: '' };
+  let html = '<div class="dlg-builder">' +
+    '<div class="dlg-builder-title">🗣️ Build a talking sentence (dialogue)</div>' +
+    '<div class="dlg-builder-sub">When someone TALKS, put their exact words inside quotation marks " ". Build it one piece at a time.</div>' +
+    '<div class="dlg-chant" onclick="speakText(\'Who is talking? What did they say? Hug the words.\', 0.9)" title="Say it out loud together — then tap to hear it.">' +
+      '<span class="dlg-chant-label">📣 Say it<br>with me</span>' +
+      '<span class="dlg-chant-words">"Who\'s talking? · What did they say? · Hug the words."</span>' +
+      '<span class="dlg-chant-spk">🔊</span>' +
+    '</div>';
+  html += '<div class="dlg-step-label">1 · Who is talking?</div><div class="dlg-chips">';
+  DLG_WHO.forEach(function(who) {
+    const label = who === 'I' ? 'I (me)' : who;
+    html += '<button class="dlg-chip ' + (d.who === who ? 'active' : '') + '" onclick="setDlgWho(' + i + ',' + JSON.stringify(who).replace(/"/g,'&quot;') + ')">' + esc(label) + '</button>';
+  });
+  html += '</div>';
+  html += '<div class="dlg-step-label">2 · What did they say? (the exact words)</div>' +
+    '<input class="dlg-words-input" id="dlg-words-' + i + '" placeholder="e.g., This is going to be the best summer" oninput="onDlgWords(' + i + ')" value="' + esc(d.words) + '">';
+  html += '<div class="dlg-step-label">3 · Tell-word</div><div class="dlg-chips">';
+  DLG_TAGS.forEach(function(tag) {
+    html += '<button class="dlg-chip ' + (d.tag === tag ? 'active' : '') + '" onclick="setDlgTag(' + i + ',\'' + tag + '\')">' + tag + '</button>';
+  });
+  html += '</div>';
+  html += '<div class="dlg-preview" id="dlg-preview-' + i + '">' + dlgPreviewHTML(d) + '</div>';
+  html += '<div class="dlg-hint">💡 The quotation marks " " always hug the EXACT words. The tell-word (said / asked) tells the reader WHO is talking.</div>';
+  html += '<div class="dlg-use-row"><button class="btn btn-gold btn-sm" id="dlg-use-' + i + '" onclick="useDialogue(' + i + ')" ' + (canAssemble(d) ? '' : 'disabled') + '>⬇️ Put it in the box</button></div>';
+  html += '</div>';
+  return html;
+}
+function canAssemble(d) { return d && d.who && d.tag && d.words && d.words.trim().length > 0; }
+function assembleDialogue(d) {
+  const who = d.who || '____';
+  const tag = d.tag || 'said';
+  let words = (d.words || '').trim().replace(/[.?!]+$/, '');
+  if (words.length) words = words.charAt(0).toUpperCase() + words.slice(1);
+  const end = tag === 'asked' ? '?' : '.';
+  return who + ' ' + tag + ', "' + words + end + '"';
+}
+function dlgPreviewHTML(d) {
+  if (!d || (!d.who && !d.words)) return '<span style="color:var(--muted);font-weight:600;">Your talking sentence will appear here as you build it…</span>';
+  const who = d.who ? '<span class="who">' + esc(d.who) + '</span>' : '<span style="color:var(--muted);">____</span>';
+  const tag = d.tag || 'said';
+  let words = (d.words || '').trim().replace(/[.?!]+$/, '');
+  if (words.length) words = words.charAt(0).toUpperCase() + words.slice(1);
+  const end = tag === 'asked' ? '?' : '.';
+  const quoted = words ? '<span class="q">"' + esc(words) + end + '"</span>' : '<span class="q">"…"</span>';
+  return who + ' ' + esc(tag) + ', ' + quoted;
+}
+function setDlgWho(i, who) { if (S.story.sentences[i].locked) return; S.story.sentences[i].dlg.who = who; renderStory(); debounceSave(); }
+function setDlgTag(i, tag) { if (S.story.sentences[i].locked) return; S.story.sentences[i].dlg.tag = tag; renderStory(); debounceSave(); }
+function onDlgWords(i) {
+  const input = document.getElementById('dlg-words-' + i);
+  if (!input) return;
+  const d = S.story.sentences[i].dlg;
+  d.words = input.value;
+  const prev = document.getElementById('dlg-preview-' + i);
+  if (prev) prev.innerHTML = dlgPreviewHTML(d);
+  const useBtn = document.getElementById('dlg-use-' + i);
+  if (useBtn) useBtn.disabled = !canAssemble(d);
+  debounceSave();
+}
+function useDialogue(i) {
+  const sent = S.story.sentences[i];
+  if (sent.locked) return;
+  if (!canAssemble(sent.dlg)) { toast('Pick who is talking and type their words first', 'warning'); return; }
+  sent.text = assembleDialogue(sent.dlg);
+  sent.sourceCheck = null; sent.proofed = false; sent.proofIdx = 0;
+  renderStory();
+  debounceSave();
+  toast('Dropped it in the box — now read it aloud and check it 🔍');
+}
+
+function onStoryText(i) {
+  const ta = document.getElementById('story-text-' + i);
+  if (!ta) return;
+  const sent = S.story.sentences[i];
+  const prevHadText = !!(sent.text && sent.text.trim());
+  const prevSourceCheck = sent.sourceCheck;
+  const prevProofed = sent.proofed;
+  sent.text = ta.value;
+  const nowHasText = !!ta.value.trim();
+  if (prevSourceCheck === 'match') sent.sourceCheck = null;
+  // editing invalidates a prior proofread
+  sent.proofed = false; sent.proofIdx = 0;
+  const visibilityChanged = (prevHadText !== nowHasText);
+  const matchInvalidated = (prevSourceCheck === 'match') || prevProofed;
+  if (visibilityChanged || matchInvalidated) {
+    const wasFocused = (document.activeElement === ta);
+    const selStart = wasFocused ? ta.selectionStart : null;
+    const selEnd = wasFocused ? ta.selectionEnd : null;
+    renderStory();
+    if (wasFocused) {
+      const ta2 = document.getElementById('story-text-' + i);
+      if (ta2) { ta2.focus(); try { ta2.setSelectionRange(selStart, selEnd); } catch(e) {} }
+    }
+  }
+  debounceSave();
+}
+function setSourceCheck(i, check) {
+  if (S.story.sentences[i].locked) return;
+  S.story.sentences[i].sourceCheck = check;
+  if (check === 'unmatch') toast('Look at your drawing again — what does it really show?', 'warning');
+  if (check === 'match') { S.story.sentences[i].proofIdx = 0; S.story.sentences[i].proofed = false; }
+  renderStory();
+  debounceSave();
+}
+function lockStorySentence(i) {
+  const sent = S.story.sentences[i];
+  if (!sent.text.trim() || sent.sourceCheck !== 'match' || !sent.proofed) return;
+  sent.locked = true;
+  S.timestamps['s' + (i+1) + 'Locked'] = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Summer story sentence ' + (i+1) + ' locked' + (sent.mode === 'dialogue' ? ' (dialogue)' : ''), 'Writing', 'Locked', '', '', 'Mode: ' + sent.mode + ' | ' + sent.text.slice(0, 140)]);
+  toast('Sentence ' + (i+1) + ' locked! 🎉');
+  fireCelebration();
+  renderStory();
+  debounceSave();
+}
+function unlockStorySentence(i) { S.story.sentences[i].locked = false; renderStory(); debounceSave(); }
+function finishStory() {
+  S.story.done = true;
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Summer story complete', 'Writing', 'Done', '', '', 'Locked: ' + S.story.sentences.filter(function(s){return s.locked;}).length + '/2 | Label: ' + (S.story.label || '-')]);
+  toast('Summer story done! 🏖️');
+  fireCelebration();
+  saveImmediate();
+  updateTabBadges();
+  switchTab('plan');
+}
+
+function onStoryLabel() { const el = document.getElementById('storyLabel'); if (el) { S.story.label = el.value; debounceSave(); } }
+
+// === Story canvas (single panel) ===
+function setupStoryCanvas() {
+  const canvas = document.getElementById('storyCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a1a1a';
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (S.story.panel) { const img = new Image(); img.onload = function() { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); }; img.src = S.story.panel; }
+  let drawing = false, lastX = 0, lastY = 0, dirty = false;
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const point = e.touches && e.touches[0] ? e.touches[0] : e;
+    return { x: (point.clientX - rect.left) * (canvas.width / rect.width), y: (point.clientY - rect.top) * (canvas.height / rect.height) };
+  }
+  function start(e) { e.preventDefault(); drawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); ctx.fill(); dirty = true; }
+  function move(e) { if (!drawing) return; e.preventDefault(); const p = getPos(e); ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke(); lastX = p.x; lastY = p.y; dirty = true; }
+  function end() { if (drawing && dirty) { drawing = false; try { S.story.panel = canvas.toDataURL('image/jpeg', 0.6); } catch(e) {} dirty = false; debounceSave(); } drawing = false; }
+  canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); canvas.addEventListener('mouseup', end); canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start, { passive: false }); canvas.addEventListener('touchmove', move, { passive: false }); canvas.addEventListener('touchend', end); canvas.addEventListener('touchcancel', end);
+}
+function clearStoryCanvas() {
+  const canvas = document.getElementById('storyCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  S.story.panel = null; debounceSave();
+}
+
+// === MIC / Speech-to-Text (same fix as prior weeks) ===
+let recog = null, activeMicIdx = null;
+function toggleMic(idx) {
+  if (S.story.sentences[idx].locked) { toast('Unlock the sentence to use the mic', 'warning'); return; }
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) { toast('Speech-to-text not available — type instead', 'warning'); return; }
+  if (recog && activeMicIdx === idx) { try { recog.stop(); } catch(e) {} return; }
+  if (recog) try { recog.stop(); } catch(e) {}
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recog = new SR();
+  recog.continuous = false; recog.interimResults = true; recog.lang = 'en-US';
+  activeMicIdx = idx;
+  const starting = S.story.sentences[idx].text || '';
+  const needsSpace = starting && !/\s$/.test(starting);
+  const prefix = starting + (needsSpace ? ' ' : '');
+  const btn = document.getElementById('mic-' + idx);
+  if (btn) { btn.classList.add('recording'); btn.textContent = '⏸'; }
+  recog.onresult = function(e) {
+    let interim = '', finalT = '';
+    for (let i = 0; i < e.results.length; i++) { const piece = e.results[i][0].transcript; if (e.results[i].isFinal) finalT += piece; else interim += piece; }
+    const transcript = (finalT + interim).trim();
+    if (!transcript) return;
+    const newText = prefix + transcript;
+    S.story.sentences[idx].text = newText;
+    if (S.story.sentences[idx].sourceCheck === 'match') S.story.sentences[idx].sourceCheck = null;
+    S.story.sentences[idx].proofed = false; S.story.sentences[idx].proofIdx = 0;
+    const ta = document.getElementById('story-text-' + idx);
+    if (ta) ta.value = newText;
+  };
+  recog.onerror = function(e) {
+    const err = (e && e.error) || 'unknown';
+    stopMic();
+    toast(err === 'not-allowed' ? 'Mic blocked — allow microphone in Safari settings, then try again' : 'Mic error: ' + err + ' — try typing', 'warning');
+  };
+  recog.onend = function() { stopMic(); renderStory(); debounceSave(); };
+  try { recog.start(); toast('🎤 Listening... tap mic again to stop'); }
+  catch(e) { stopMic(); toast('Mic could not start', 'warning'); }
+}
+function stopMic() {
+  if (activeMicIdx !== null) { const btn = document.getElementById('mic-' + activeMicIdx); if (btn) { btn.classList.remove('recording'); btn.textContent = '🎤'; } }
+  recog = null; activeMicIdx = null;
+}
+
+// ============================================================
+//  TAB 4 — MY SUMMER PLAN (goals + goodbye)
+// ============================================================
+function renderPlan() {
+  const el = document.getElementById('card-plan');
+  const pl = S.plan;
+  const hasReading = pl.readingGoals.length > 0 || pl.readingCustom.trim();
+  const hasWriting = pl.writingGoals.length > 0 || pl.writingCustom.trim();
+
+  const reviewBanner = pl.done ? '<div class="review-banner">✅ Summer plan set! Have an amazing summer, Marcello.</div>' : '';
+
+  let html =
+    '<div class="card">' +
+    reviewBanner +
+    '<h2>☀️ Your summer plan</h2>' +
+    '<p class="directions">You have a whole summer ahead! Pick a reading goal and a writing goal. Your parents have a special <strong>Summer Adventure pack</strong> to help you keep your skills strong — here’s what’s inside.</p>' +
+    '<div class="pack-preview">' +
+    '<div class="pack-item"><div class="pi-emoji">📚</div><div class="pi-title">Reading log</div><div class="pi-desc">Color in a sun for every day you read 20 minutes.</div></div>' +
+    '<div class="pack-item"><div class="pi-emoji">✍️</div><div class="pi-title">Story prompts</div><div class="pi-desc">Fun things to write about all summer long.</div></div>' +
+    '<div class="pack-item"><div class="pi-emoji">🗣️</div><div class="pi-title">Dialogue helper</div><div class="pi-desc">Who’s talking? What did they say? Hug the words!</div></div>' +
+    '<div class="pack-item"><div class="pi-emoji">👆</div><div class="pi-title">Word-by-word check</div><div class="pi-desc">Point to each word and read what’s really there.</div></div>' +
+    '</div>' +
+    '</div>';
+
+  // Reading goal
+  html += '<div class="card"><h2>📚 My summer reading goal</h2><div class="goal-chips">';
+  READING_GOALS.forEach(function(g) {
+    const on = pl.readingGoals.indexOf(g) !== -1;
+    html += '<button class="goal-chip ' + (on ? 'active' : '') + '" onclick="toggleGoal(\'reading\',' + JSON.stringify(g).replace(/"/g,'&quot;') + ')">' + (on ? '✓ ' : '') + esc(g) + '</button>';
+  });
+  html += '</div><input class="label-input" style="max-width:none;margin-top:8px;" id="readingCustom" placeholder="…or write your own reading goal" oninput="onGoalCustom(\'reading\')" value="' + esc(pl.readingCustom) + '"></div>';
+
+  // Writing goal
+  html += '<div class="card"><h2>✍️ My summer writing goal</h2><div class="goal-chips">';
+  WRITING_GOALS.forEach(function(g) {
+    const on = pl.writingGoals.indexOf(g) !== -1;
+    html += '<button class="goal-chip ' + (on ? 'active' : '') + '" onclick="toggleGoal(\'writing\',' + JSON.stringify(g).replace(/"/g,'&quot;') + ')">' + (on ? '✓ ' : '') + esc(g) + '</button>';
+  });
+  html += '</div><input class="label-input" style="max-width:none;margin-top:8px;" id="writingCustom" placeholder="…or write your own writing goal" oninput="onGoalCustom(\'writing\')" value="' + esc(pl.writingCustom) + '"></div>';
+
+  // Stars + goodbye
+  html += '<div class="card"><h2>⭐ One last thing</h2>' +
+    '<p class="directions">Tap a star for everything you’re proud of today.</p>' +
+    '<div class="stars-row">' +
+    ['I looked back at my whole year','I read my summer words','I wrote a summer story','I used dialogue','I checked my words one by one'].map(function(label, i) {
+      const on = pl.stars.indexOf(i) !== -1;
+      return '<button class="star-btn ' + (on ? 'active' : '') + '" onclick="togglePlanStar(' + i + ')">' + (on ? '⭐ ' : '☆ ') + esc(label) + '</button>';
+    }).join('') +
+    '</div>' +
+    '<div class="pep-banner">' +
+    '<div style="font-size:2.6rem;margin-bottom:6px;">🎒☀️</div>' +
+    '<h3>Have the BEST summer, Marcello!</h3>' +
+    '<p>You worked so hard this year. Keep drawing, keep reading, keep telling your stories — and I’ll see you next year. I’m proud of you. 🌟</p>' +
+    '</div>' +
+    '<div class="btn-row"><button class="btn btn-orange" onclick="finishPlan()" ' + (hasReading && hasWriting ? '' : 'disabled') + '>' + (pl.done ? '✓ All done!' : 'Finish — my summer starts now! 🎉') + '</button></div>' +
+    (hasReading && hasWriting ? '' : '<p style="text-align:center;font-size:0.83rem;color:var(--muted);font-style:italic;margin-top:6px;">Pick at least one reading goal and one writing goal.</p>') +
+    '</div>';
+
+  el.innerHTML = html;
+}
+function toggleGoal(kind, g) {
+  const arr = kind === 'reading' ? S.plan.readingGoals : S.plan.writingGoals;
+  const idx = arr.indexOf(g);
+  if (idx !== -1) arr.splice(idx, 1); else arr.push(g);
+  renderPlan(); debounceSave();
+}
+function onGoalCustom(kind) {
+  const el = document.getElementById(kind + 'Custom');
+  if (!el) return;
+  if (kind === 'reading') S.plan.readingCustom = el.value; else S.plan.writingCustom = el.value;
+  // re-evaluate finish button without full re-render (keep input focus)
+  const hasReading = S.plan.readingGoals.length > 0 || S.plan.readingCustom.trim();
+  const hasWriting = S.plan.writingGoals.length > 0 || S.plan.writingCustom.trim();
+  const btn = document.querySelector('#card-plan .btn-orange');
+  if (btn) btn.disabled = !(hasReading && hasWriting);
+  debounceSave();
+}
+function togglePlanStar(i) {
+  const idx = S.plan.stars.indexOf(i);
+  if (idx !== -1) S.plan.stars.splice(idx, 1); else S.plan.stars.push(i);
+  renderPlan(); debounceSave();
+}
+function finishPlan() {
+  S.plan.done = true;
+  S.timestamps.sessionEnd = new Date().toISOString();
+  const readingGoal = S.plan.readingGoals.concat(S.plan.readingCustom.trim() ? [S.plan.readingCustom.trim()] : []).join('; ');
+  const writingGoal = S.plan.writingGoals.concat(S.plan.writingCustom.trim() ? [S.plan.writingCustom.trim()] : []).join('; ');
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Session Complete — Summer Send-Off', 'Wrap-up', 'Done', '', '',
+    'Reading goal: ' + (readingGoal || '-') + ' | Writing goal: ' + (writingGoal || '-') + ' | Stars: ' + S.plan.stars.length]);
+  toast('Have an amazing summer! 🎉🏖️');
+  fireCelebration();
+  setTimeout(fireCelebration, 600);
+  saveImmediate();
+  updateTabBadges();
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+async function init() {
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState && cloudState.timestamps) {
+    S = Object.assign(freshState(), cloudState);
+    backfill();
+    toast('Loaded from cloud ☁️');
+  } else if (loadFromLocalStorage()) {
+    backfill();
+    toast('Loaded local save');
+  }
+  if (S.plan && S.plan.done) switchTab('plan');
+  else if (S.story && S.story.done) switchTab('plan');
+  else if (S.reading && S.reading.done) switchTab('story');
+  else if (isReviewDone()) switchTab('reading');
+  else { renderReview(); updateTabBadges(); }
+  setInterval(saveStateToCloud, 30000);
+}
+function backfill() {
+  // tolerate older/partial blob shapes
+  if (!S.story) S.story = freshState().story;
+  S.story.sentences.forEach(function(s, i) {
+    if (!s.mode) s.mode = (i === 1 ? 'dialogue' : 'narrative');
+    if (s.mode === 'dialogue' && !s.dlg) s.dlg = { who: '', tag: 'said', words: '' };
+    if (typeof s.proofIdx !== 'number') s.proofIdx = 0;
+    if (typeof s.proofed !== 'boolean') s.proofed = false;
+  });
+  if (!S.review) S.review = freshState().review;
+  if (!S.reading) S.reading = freshState().reading;
+  if (!S.plan) S.plan = freshState().plan;
+}
+init();
+</script>
+</body>
+</html>
