@@ -115,9 +115,13 @@
   /* Tab 3: Summer Story */
   .story-canvas-wrap { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 10px; text-align: center; max-width: 360px; margin: 0 auto 12px; }
   .story-canvas { width: 320px; height: 220px; background: white; border-radius: 8px; cursor: crosshair; touch-action: none; border: 1px solid #D0D5DD; display: block; margin: 0 auto; max-width: 100%; }
-  .canvas-tools { display: flex; justify-content: space-between; gap: 6px; margin-top: 6px; align-items: center; }
-  .canvas-tools .tool-btn { font-size: 0.75rem; padding: 4px 10px; border-radius: 8px; background: #F0F0F0; border: 1px solid #B0BEC5; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
+  .canvas-tools { display: flex; justify-content: center; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
+  .canvas-tools .tool-btn { font-size: 0.78rem; padding: 5px 11px; border-radius: 8px; background: #F0F0F0; border: 1px solid #B0BEC5; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; }
   .canvas-tools .tool-btn.danger { color: var(--red); border-color: #FFB3B3; }
+  .canvas-tools .tool-btn.mode-btn.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+  .swatches { display: inline-flex; gap: 5px; align-items: center; padding: 0 2px; }
+  .swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cfd8dc; cursor: pointer; padding: 0; }
+  .swatch.active { border-color: #263238; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #263238; }
   .label-input { width: 100%; max-width: 360px; margin: 0 auto 12px; display: block; padding: 10px 12px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; }
   .label-input:focus { border-color: var(--orange); outline: none; }
 
@@ -672,8 +676,18 @@ function renderStory() {
     '<div class="info-box">🎨 Draw it → 🗣️ say it out loud → ✍️ write it. That order makes your best sentences.</div>' +
     '<div class="story-canvas-wrap">' +
     '<canvas class="story-canvas" id="storyCanvas" width="320" height="220"></canvas>' +
-    '<div class="canvas-tools"><span style="font-size:0.72rem;color:var(--muted);">Draw your summer plan</span>' +
-    '<button class="tool-btn danger" onclick="clearStoryCanvas()">Clear</button></div>' +
+    '<div class="canvas-tools" id="storyTools">' +
+    '<button class="tool-btn mode-btn active" data-mode="draw" onclick="setTool(\'draw\')">✏️ Draw</button>' +
+    '<button class="tool-btn mode-btn" data-mode="erase" onclick="setTool(\'erase\')">🧽 Erase</button>' +
+    '<span class="swatches">' +
+    '<button class="swatch active" style="background:#1a1a1a" onclick="setColor(\'#1a1a1a\')" aria-label="Black"></button>' +
+    '<button class="swatch" style="background:#E53935" onclick="setColor(\'#E53935\')" aria-label="Red"></button>' +
+    '<button class="swatch" style="background:#1E88E5" onclick="setColor(\'#1E88E5\')" aria-label="Blue"></button>' +
+    '<button class="swatch" style="background:#43A047" onclick="setColor(\'#43A047\')" aria-label="Green"></button>' +
+    '<button class="swatch" style="background:#FB8C00" onclick="setColor(\'#FB8C00\')" aria-label="Orange"></button>' +
+    '</span>' +
+    '<button class="tool-btn danger" onclick="clearStoryCanvas()">Clear</button>' +
+    '</div>' +
     '</div>' +
     '<input class="label-input" id="storyLabel" placeholder="What is it? (e.g., ‘going to the beach’)" oninput="onStoryLabel()" value="' + esc(st.label) + '">' +
     '</div>';
@@ -927,21 +941,38 @@ function finishStory() {
 
 function onStoryLabel() { const el = document.getElementById('storyLabel'); if (el) { S.story.label = el.value; debounceSave(); } }
 
+// === Drawing toolbar (Draw/Erase + 5 colors) — zero-dependency white-brush eraser ===
+const PENCIL_W = 3, ERASER_W = 18;
+let storyTool = { mode: 'draw', color: '#1a1a1a' };
+function applyStroke(ctx) {
+  ctx.globalCompositeOperation = 'source-over';  // white-on-white erase keeps JPEG export clean
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (storyTool.mode === 'erase') { ctx.strokeStyle = ctx.fillStyle = '#ffffff'; ctx.lineWidth = ERASER_W; }
+  else { ctx.strokeStyle = ctx.fillStyle = storyTool.color; ctx.lineWidth = PENCIL_W; }
+}
+function setTool(mode) { storyTool.mode = mode; syncTools(); }
+function setColor(hex) { storyTool.color = hex; storyTool.mode = 'draw'; syncTools(); }
+function syncTools() {
+  const root = document.getElementById('storyTools'); if (!root) return;
+  root.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.mode === storyTool.mode); });
+  root.querySelectorAll('.swatch').forEach(function(b) { b.classList.toggle('active', storyTool.mode === 'draw' && b.getAttribute('style').indexOf(storyTool.color) !== -1); });
+}
+
 // === Story canvas (single panel) ===
 function setupStoryCanvas() {
   const canvas = document.getElementById('storyCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a1a1a';
   ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
   if (S.story.panel) { const img = new Image(); img.onload = function() { ctx.drawImage(img, 0, 0, canvas.width, canvas.height); }; img.src = S.story.panel; }
+  syncTools();
   let drawing = false, lastX = 0, lastY = 0, dirty = false;
   function getPos(e) {
     const rect = canvas.getBoundingClientRect();
     const point = e.touches && e.touches[0] ? e.touches[0] : e;
     return { x: (point.clientX - rect.left) * (canvas.width / rect.width), y: (point.clientY - rect.top) * (canvas.height / rect.height) };
   }
-  function start(e) { e.preventDefault(); drawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); ctx.fill(); dirty = true; }
+  function start(e) { e.preventDefault(); drawing = true; applyStroke(ctx); const p = getPos(e); lastX = p.x; lastY = p.y; ctx.beginPath(); ctx.arc(p.x, p.y, (storyTool.mode === 'erase' ? ERASER_W/2 : 1.5), 0, Math.PI*2); ctx.fill(); dirty = true; }
   function move(e) { if (!drawing) return; e.preventDefault(); const p = getPos(e); ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke(); lastX = p.x; lastY = p.y; dirty = true; }
   function end() { if (drawing && dirty) { drawing = false; try { S.story.panel = canvas.toDataURL('image/jpeg', 0.6); } catch(e) {} dirty = false; debounceSave(); } drawing = false; }
   canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); canvas.addEventListener('mouseup', end); canvas.addEventListener('mouseleave', end);

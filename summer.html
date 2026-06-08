@@ -50,6 +50,13 @@
   .prompt-display { background:var(--orange-light); border:2px solid #FFCC80; border-radius:14px; padding:18px; text-align:center; font-size:1.15rem; font-weight:800; color:var(--orange-dark); margin-bottom:12px; min-height:64px; display:flex; align-items:center; justify-content:center; }
   .story-canvas-wrap{background:#FAFBFC;border:2px dashed #B0BEC5;border-radius:12px;padding:10px;text-align:center;margin-bottom:12px;}
   .story-canvas{width:320px;height:200px;max-width:100%;background:white;border-radius:8px;cursor:crosshair;touch-action:none;border:1px solid #D0D5DD;display:block;margin:0 auto;}
+  .sc-tools{display:flex;justify-content:center;gap:6px;margin-top:8px;align-items:center;flex-wrap:wrap;}
+  .sc-tools .tb{font-size:.78rem;padding:5px 11px;border-radius:8px;background:#F0F0F0;border:1px solid #B0BEC5;cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;}
+  .sc-tools .tb.danger{color:var(--red);border-color:#FFB3B3;}
+  .sc-tools .tb.mode.active{background:var(--orange);color:#fff;border-color:var(--orange);}
+  .swatches{display:inline-flex;gap:5px;align-items:center;padding:0 2px;}
+  .swatch{width:24px;height:24px;border-radius:50%;border:2px solid #cfd8dc;cursor:pointer;padding:0;}
+  .swatch.active{border-color:#263238;box-shadow:0 0 0 2px #fff,0 0 0 4px #263238;}
   .story-text{width:100%;min-height:90px;border:2px solid #D0D5DD;border-radius:12px;padding:14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:600;resize:vertical;line-height:1.6;}
   .story-text:focus{border-color:var(--orange);outline:none;}
 
@@ -152,7 +159,18 @@ function renderStory(){
     '<div class="btn-row" style="justify-content:center;"><button class="btn btn-orange btn-sm" onclick="spinPrompt()">🎲 Give me a new idea</button>'+
     '<button class="btn btn-secondary btn-sm" onclick="speak(document.getElementById(\'promptBox\').textContent,0.85)">🔊 Read it</button></div>'+
     '<div class="story-canvas-wrap" style="margin-top:14px;"><canvas class="story-canvas" id="sc" width="320" height="200"></canvas>'+
-    '<div style="margin-top:6px;"><button class="btn btn-secondary btn-sm" onclick="clearSC()">Clear drawing</button></div></div>'+
+    '<div class="sc-tools" id="scTools">'+
+    '<button class="tb mode active" data-mode="draw" onclick="setTool(\'draw\')">✏️ Draw</button>'+
+    '<button class="tb mode" data-mode="erase" onclick="setTool(\'erase\')">🧽 Erase</button>'+
+    '<span class="swatches">'+
+    '<button class="swatch active" style="background:#1a1a1a" onclick="setColor(\'#1a1a1a\')" aria-label="Black"></button>'+
+    '<button class="swatch" style="background:#E53935" onclick="setColor(\'#E53935\')" aria-label="Red"></button>'+
+    '<button class="swatch" style="background:#1E88E5" onclick="setColor(\'#1E88E5\')" aria-label="Blue"></button>'+
+    '<button class="swatch" style="background:#43A047" onclick="setColor(\'#43A047\')" aria-label="Green"></button>'+
+    '<button class="swatch" style="background:#FB8C00" onclick="setColor(\'#FB8C00\')" aria-label="Orange"></button>'+
+    '</span>'+
+    '<button class="tb danger" onclick="clearSC()">Clear</button>'+
+    '</div></div>'+
     '<textarea class="story-text" id="storyTa" placeholder="Write your story here…" oninput="onStory()">'+esc(st.text)+'</textarea>'+
     '<div class="btn-row"><button class="btn btn-gold btn-sm" onclick="toggleDlg()">🗣️ Add a talking sentence</button>'+
     '<button class="btn btn-purple btn-sm" onclick="startProof()">👆 Check it word by word</button></div>';
@@ -197,14 +215,23 @@ function buildProof(){
 }
 function proofTap(){ const words=pwords(); const w=words[S.story.proofIdx]; if(w)speak(w.replace(/[.,!?"']/g,''),0.55); S.story.proofIdx++; if(S.story.proofIdx>=words.length){S.story.proofed=true; confetti(); toast('You read every word! 👀✓');} renderStory(); save(); }
 
+// drawing toolbar (Draw/Erase + 5 colors) — white-brush eraser, zero deps
+const PENCIL_W=3, ERASER_W=18;
+let sTool={mode:'draw',color:'#1a1a1a'};
+function applyStroke(ctx){ ctx.globalCompositeOperation='source-over'; ctx.lineCap='round'; ctx.lineJoin='round'; if(sTool.mode==='erase'){ctx.strokeStyle=ctx.fillStyle='#ffffff';ctx.lineWidth=ERASER_W;}else{ctx.strokeStyle=ctx.fillStyle=sTool.color;ctx.lineWidth=PENCIL_W;} }
+function setTool(m){ sTool.mode=m; syncTools(); }
+function setColor(h){ sTool.color=h; sTool.mode='draw'; syncTools(); }
+function syncTools(){ const r=document.getElementById('scTools'); if(!r)return; r.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===sTool.mode)); r.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',sTool.mode==='draw'&&b.getAttribute('style').indexOf(sTool.color)!==-1)); }
+
 // story canvas
 function setupSC(){
   const c=document.getElementById('sc'); if(!c)return; const ctx=c.getContext('2d');
-  ctx.lineWidth=3;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#1a1a1a';ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);
   if(S.story.panel){const img=new Image();img.onload=()=>ctx.drawImage(img,0,0,c.width,c.height);img.src=S.story.panel;}
+  syncTools();
   let dr=false,lx=0,ly=0,dirty=false;
   function pos(e){const r=c.getBoundingClientRect();const p=e.touches&&e.touches[0]?e.touches[0]:e;return{x:(p.clientX-r.left)*(c.width/r.width),y:(p.clientY-r.top)*(c.height/r.height)};}
-  function st(e){e.preventDefault();dr=true;const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();dirty=true;}
+  function st(e){e.preventDefault();dr=true;applyStroke(ctx);const p=pos(e);lx=p.x;ly=p.y;ctx.beginPath();ctx.arc(p.x,p.y,(sTool.mode==='erase'?ERASER_W/2:1.5),0,Math.PI*2);ctx.fill();dirty=true;}
   function mv(e){if(!dr)return;e.preventDefault();const p=pos(e);ctx.beginPath();ctx.moveTo(lx,ly);ctx.lineTo(p.x,p.y);ctx.stroke();lx=p.x;ly=p.y;dirty=true;}
   function en(){if(dr&&dirty){dr=false;try{S.story.panel=c.toDataURL('image/jpeg',0.6);}catch(e){}dirty=false;save();}dr=false;}
   c.addEventListener('mousedown',st);c.addEventListener('mousemove',mv);c.addEventListener('mouseup',en);c.addEventListener('mouseleave',en);
