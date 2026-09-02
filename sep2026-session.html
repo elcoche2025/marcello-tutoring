@@ -133,27 +133,7 @@
   .case-feedback.ok { background: var(--green-light); color: #2E7D32; }
   .case-feedback.hint { background: var(--gold-light); color: #7B6400; }
 
-  /* Tab 4: Times As Many (Eureka Math² M1 Topic A — quiz Thursday) */
-  .math-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; transition: all 0.25s; }
-  .math-card.correct { border-color: var(--green); background: #FAFFFB; }
-  .math-q { font-size: 1.08rem; font-weight: 700; line-height: 1.5; margin-bottom: 10px; }
-  .tape { margin: 6px 0 12px; }
-  .tape-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
-  .tape-label { font-size: 0.8rem; font-weight: 800; color: var(--muted); width: 58px; text-align: right; flex-shrink: 0; }
-  .tape-bar { display: flex; gap: 2px; }
-  .tape-unit { width: 34px; height: 30px; border-radius: 6px; background: var(--blue-light); border: 2px solid var(--blue); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: #1a237e; }
-  .tape-unit.hidden-val { color: transparent; background: #FFF8E1; border-color: var(--gold); }
-  .tape-unit.hidden-val::after { content: '?'; color: var(--gold-dark); position: absolute; }
-  .tape-unit { position: relative; }
-  .tape-total { font-size: 0.85rem; font-weight: 800; color: var(--orange); margin-left: 4px; }
-  .math-opts { display: flex; gap: 8px; flex-wrap: wrap; }
-  .math-opt { padding: 9px 18px; border-radius: 12px; font-size: 1.05rem; font-weight: 800; border: 2px solid #90CAF9; background: white; color: #1565C0; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
-  .math-opt:hover { border-color: var(--blue); transform: translateY(-1px); }
-  .math-opt.right { background: var(--green); border-color: var(--green); color: white; }
-  .math-opt.wrong { background: var(--red-light); border-color: var(--red); color: var(--red); text-decoration: line-through; }
-  .math-eq { margin-top: 10px; font-size: 1rem; font-weight: 800; color: #1a237e; background: var(--blue-light); border-radius: 10px; padding: 8px 12px; display: inline-block; }
-
-  /* Tab 5: Summer Story */
+  /* Tab 4: Summer Story */
   .story-canvas-wrap { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 10px; text-align: center; max-width: 360px; margin: 0 auto 12px; }
   .story-canvas { width: 320px; height: 220px; background: white; border-radius: 8px; cursor: crosshair; touch-action: none; border: 1px solid #D0D5DD; display: block; margin: 0 auto; max-width: 100%; }
   .canvas-tools { display: flex; justify-content: center; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
@@ -314,7 +294,6 @@
   <button class="main-tab active" id="mtab-welcome" onclick="switchTab('welcome')">👋 Welcome Back</button>
   <button class="main-tab" id="mtab-reading" onclick="switchTab('reading')">📖 Reading Warm-Up</button>
   <button class="main-tab" id="mtab-detective" onclick="switchTab('detective')">🔍 Word Detective</button>
-  <button class="main-tab" id="mtab-math" onclick="switchTab('math')">✖️ Times As Many</button>
   <button class="main-tab" id="mtab-story" onclick="switchTab('story')">✍️ My Summer Story</button>
   <button class="main-tab" id="mtab-wrap" onclick="switchTab('wrap')">⭐ Wrap-Up</button>
 </div>
@@ -323,7 +302,6 @@
   <div class="tab-panel active" id="panel-welcome"><div id="card-welcome"></div></div>
   <div class="tab-panel" id="panel-reading"><div id="card-reading"></div></div>
   <div class="tab-panel" id="panel-detective"><div id="card-detective"></div></div>
-  <div class="tab-panel" id="panel-math"><div id="card-math"></div></div>
   <div class="tab-panel" id="panel-story"><div id="card-story"></div></div>
   <div class="tab-panel" id="panel-wrap"><div id="card-wrap"></div></div>
 </div>
@@ -339,6 +317,9 @@ const CLOUD_STATE_KEY = 'sep2026_session_1';      // first session of 4th grade 
 const PREV_CLOUD_KEY = 'jun2026_session_12r';     // last session of 3rd grade (restored key)
 const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
 const SESSION_DATE = '2026-09-02';
+// ?view=1 → read-only mirror (for the tutor's computer): never writes to the cloud, polls it every 10 s.
+const VIEW_ONLY = /[?&]view=1/.test(location.search);
+let dirty = false;   // true only when THIS tab has changes the cloud hasn't seen — the 30 s interval saves only then
 
 let activeTab = 'welcome';
 
@@ -365,7 +346,6 @@ function freshState() {
       cases: [],            // per case: { picked: 'word', tries: n, correct: bool }
       done: false
     },
-    math: { items: [], done: false },
     story: {
       panel: null,
       label: '',
@@ -380,7 +360,7 @@ function freshState() {
       stars: [],
       wish: [],
       wishCustom: '',
-      tutor: { teacher: 'Ms. Shaw (ELA) · Mr. Cayer, long-term sub for Ms. Bielasiak (math)', reading: 'i-Ready BOY diagnostic Mon/Tue; Wit & Wisdom Module 1 “A Great Heart” L1–3 Wed–Fri (literal vs figurative heart; Painted Essay; punctuation with quotations L.4.2.b; Clara Barton / Helen Keller bios)', writing: '', math: 'Eureka Math² M1 Topic A — times as many (L1–4, quiz Thu); Topic B place value to 1,000,000 starts Fri', info: 'Smore weekly newsletter (parents forward) — app.smore.com/n/7dzfg-weekly-newsletter', notes: '' },
+      tutor: { teacher: '', reading: '', writing: '', math: '', info: '', notes: '' },
       done: false
     },
     timestamps: {},
@@ -424,16 +404,7 @@ const CASES = [
   { before: 'We ', after: ' in fourth grade now!', opts: ['are', 'our'], ans: 'are', why: 'we ARE — "are" goes with we / you / they.', hint: 'Which one goes with "we"? We ___ in fourth grade.' }
 ];
 
-// Tab 4 — Times As Many (Eureka Math² G4 M1 Topic A: multiplicative comparison; quiz Thursday)
-const MATH = [
-  { q: 'Ava has 3 stickers. Ben has 4 times as many. How many stickers does Ben have?', unit: 3, times: 4, ans: 12, opts: [7, 12, 16, 9], who: ['Ava', 'Ben'], hide: 'total' },
-  { q: '15 is how many TIMES as many as 5?', unit: 5, times: 3, ans: 3, opts: [3, 5, 10, 20], who: ['5', '15'], hide: 'times' },
-  { q: 'Marcello read 2 books in June. In July he read 10 times as many! How many books in July?', unit: 2, times: 10, ans: 20, opts: [12, 20, 8, 200], who: ['June', 'July'], hide: 'total' },
-  { q: '6 times as many as 7 is ___.', unit: 7, times: 6, ans: 42, opts: [13, 36, 42, 48], who: ['7', '?'], hide: 'total' },
-  { q: 'Which sentence matches  24 = 4 × 6 ?', opts: ['24 is 4 times as many as 6', '24 is 6 more than 4', '4 is 24 times as many as 6'], ans: '24 is 4 times as many as 6', unit: 6, times: 4, who: ['6', '24'], hide: 'none' }
-];
-
-// Tab 5 — story
+// Tab 4 — story
 const DLG_WHO = ['I', 'My mom', 'My dad', 'My friend', 'My cousin'];
 const DLG_TAGS = ['said', 'asked', 'answered', 'shouted'];
 const FEELINGS = ['excited', 'proud', 'nervous', 'tired', 'amazed', 'brave', 'calm', 'silly', 'surprised', 'happy'];
@@ -467,7 +438,7 @@ const MEANINGS = {
 };
 
 // Tab 5 — wrap-up
-const STARS = ['I told about my summer', 'I read like a storyteller', 'I read "through" the right way', 'I was a Word Detective', 'I solved times-as-many problems', 'I drew my story first', 'I said my sentences out loud', 'I wrote a talking sentence', 'I checked my words one by one', 'I caught a sound-alike word'];
+const STARS = ['I told about my summer', 'I read like a storyteller', 'I read "through" the right way', 'I was a Word Detective', 'I drew my story first', 'I said my sentences out loud', 'I wrote a talking sentence', 'I checked my words one by one', 'I caught a sound-alike word'];
 const WISHES = ['Spell sound-alike words right (are/our, where/we’re)', 'Read longer chapter books', 'Write longer stories', 'Check my own work', 'Use bigger words'];
 
 // ============================================================
@@ -506,6 +477,8 @@ function loadFromLocalStorage() {
 let saveDebounce = null, cloudDebounce = null;
 let cloudFireDeadline = null;
 function debounceSave() {
+  if (VIEW_ONLY) return;
+  dirty = true;
   clearTimeout(saveDebounce);
   saveDebounce = setTimeout(saveToLocalStorage, 500);
   const now = Date.now();
@@ -516,6 +489,8 @@ function debounceSave() {
   cloudDebounce = setTimeout(function() { cloudFireDeadline = null; saveStateToCloud(); }, fireIn);
 }
 function saveImmediate() {
+  if (VIEW_ONLY) return;
+  dirty = true;
   clearTimeout(saveDebounce);
   clearTimeout(cloudDebounce);
   cloudFireDeadline = null;
@@ -535,15 +510,16 @@ function stateHasWork() {
       || (S.welcome && (S.welcome.done || (S.welcome.where || []).length || (S.welcome.best || '').trim() || (S.welcome.newThing || '').trim() || (S.welcome.fourth || '').trim() || (S.welcome.topic || '').trim()))
       || (S.reading && (S.reading.done || S.reading.words.some(Boolean) || S.reading.prosodyRead || (S.reading.wcpm || '').trim()))
       || (S.detective && (S.detective.done || S.detective.rulesSeen.some(Boolean) || (S.detective.cases || []).some(function(c){ return c && c.picked; })))
-      || (S.math && (S.math.done || (S.math.items || []).some(function(c){ return c && c.picked !== undefined && c.picked !== ''; })))
       || (S.story && (S.story.done || (S.story.sentences || []).some(function(x){ return x.text && x.text.trim(); }) || !!S.story.panel || (S.story.label || '').trim()))
-      || (S.wrap && (S.wrap.done || (S.wrap.stars || []).length || (S.wrap.wish || []).length || (function(){ var d = freshState().wrap.tutor; return Object.keys(S.wrap.tutor || {}).some(function(k){ return (S.wrap.tutor[k] || '').trim() !== (d[k] || '').trim(); }); })()));  // tutor fields are PREFILLED from the newsletter — only count them as work if they differ from the defaults
+      || (S.wrap && (S.wrap.done || (S.wrap.stars || []).length || (S.wrap.wish || []).length || Object.keys(S.wrap.tutor || {}).some(function(k){ return (S.wrap.tutor[k] || '').trim(); })));
   } catch (e) { return true; }  // fail open — never block a save on a guard error
 }
 function saveStateToCloud() {
-  if (!stateHasWork()) return;
+  if (VIEW_ONLY) return;         // a mirror never writes
+  if (!stateHasWork()) return;  // don't clobber the cloud with an empty session
   try {
     fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S }) });
+    dirty = false;
     const ind = document.getElementById('saveIndicator');
     ind.textContent = 'Cloud saved ☁️';
     ind.classList.add('flash');
@@ -602,12 +578,13 @@ confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translate
 document.head.appendChild(confettiStyle);
 
 function tutorReset() {
+  if (VIEW_ONLY) { toast('View-only mirror — reset from the iPad', 'warning'); return; }
   if (!confirm('Reset this session?\n\nThis wipes ALL progress for September 2 — locally and in the cloud — and starts fresh. Use before a real session if the app shows leftover test progress.')) return;
   S = freshState();
   S.timestamps.reset = new Date().toISOString();   // marks the blob as "real" so the guard lets the wipe through
   try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
   saveStateToCloud();
-  ['welcome','reading','detective','math','story','wrap'].forEach(function(k) {
+  ['welcome','reading','detective','story','wrap'].forEach(function(k) {
     const tab = document.getElementById('mtab-' + k);
     if (tab) tab.classList.remove('done');
   });
@@ -631,7 +608,6 @@ function switchTab(tab) {
   if (tab === 'welcome') renderWelcome();
   else if (tab === 'reading') renderReading();
   else if (tab === 'detective') renderDetective();
-  else if (tab === 'math') renderMath();
   else if (tab === 'story') renderStory();
   else if (tab === 'wrap') renderWrap();
 
@@ -640,7 +616,7 @@ function switchTab(tab) {
   saveImmediate();
 }
 function updateTabBadges() {
-  const map = { welcome: S.welcome.done, reading: S.reading.done, detective: S.detective.done, math: S.math.done, story: S.story.done, wrap: S.wrap.done };
+  const map = { welcome: S.welcome.done, reading: S.reading.done, detective: S.detective.done, story: S.story.done, wrap: S.wrap.done };
   Object.keys(map).forEach(function(k) {
     const tab = document.getElementById('mtab-' + k);
     if (map[k]) tab.classList.add('done'); else tab.classList.remove('done');
@@ -699,7 +675,6 @@ function renderWelcome() {
     (w.done ? '<div class="review-banner">✅ Interview done. Your story topic: “' + esc(w.topic) + '”</div>' : '') +
     '<h2>👋 Welcome back — you’re a 4th grader now!</h2>' +
     '<p class="directions">Before we do anything else, I want to hear about your summer. Tell me out loud first — then we’ll tap or type the short version. At the end you’ll pick ONE thing to write a story about today.</p>' +
-    '<div class="info-box">🎂 And happy birthday — August 31! Did you do something fun for it?</div>' +
     '<div class="info-box">🗣️ Tell it like a story first. The best writers TALK before they write.</div>' +
     '</div>';
 
@@ -929,7 +904,7 @@ function renderDetective() {
   });
 
   html += '<div class="btn-row"><button class="btn btn-success" onclick="finishDetective()" ' + (detectiveReady() ? '' : 'disabled') + '>' +
-    (d.done ? '✓ On to Times As Many →' : 'Cases solved — on to math →') + '</button></div>';
+    (d.done ? '✓ On to my summer story →' : 'Cases solved — write my summer story →') + '</button></div>';
   if (!detectiveReady()) html += '<p style="text-align:center;font-size:0.83rem;color:var(--muted);font-style:italic;margin-top:6px;">Solve all ' + CASES.length + ' cases to continue.</p>';
 
   el.innerHTML = html;
@@ -960,81 +935,11 @@ function finishDetective() {
   fireCelebration();
   saveImmediate();
   updateTabBadges();
-  switchTab('math');
-}
-
-// ============================================================
-//  TAB 4 — TIMES AS MANY (Eureka Math² M1 Topic A · quiz Thursday)
-// ============================================================
-function mathItem(i) { if (!S.math.items[i]) S.math.items[i] = { picked: '', tries: 0, correct: false }; return S.math.items[i]; }
-function mathReady() { return MATH.every(function(m, i) { return mathItem(i).correct; }); }
-function tapeHTML(m, solved) {
-  var unitLabel = String(m.unit);
-  var row1 = '<div class="tape-row"><span class="tape-label">' + esc(m.who[0]) + '</span><span class="tape-bar"><span class="tape-unit">' + unitLabel + '</span></span></div>';
-  var blocks = '';
-  for (var k = 0; k < m.times; k++) blocks += '<span class="tape-unit">' + unitLabel + '</span>';
-  var total = m.unit * m.times;
-  var totalLbl = (m.hide === 'total' && !solved) ? '<span class="tape-total">= ?</span>' : '<span class="tape-total">= ' + total + '</span>';
-  var timesLbl = (m.hide === 'times' && !solved) ? '<span class="tape-total">? times as many</span>' : '<span class="tape-total">' + m.times + ' times as many</span>';
-  var row2 = '<div class="tape-row"><span class="tape-label">' + esc(m.who[1]) + '</span><span class="tape-bar">' + blocks + '</span>' + (m.hide === 'times' ? timesLbl : totalLbl) + '</div>';
-  return '<div class="tape">' + row1 + row2 + '</div>';
-}
-function renderMath() {
-  var el = document.getElementById('card-math');
-  var solved = MATH.filter(function(m, i) { return mathItem(i).correct; }).length;
-  var html = '<div class="card">' +
-    (S.math.done ? '<div class="review-banner">✅ Times As Many done. Tap back any time.</div>' : '') +
-    '<h2>✖️ Times As Many</h2>' +
-    '<p class="directions">Your class is starting <strong>“times as many as”</strong> this week (quiz Thursday!). The picture is the trick: draw ONE bar for the small number, then that bar <strong>again and again</strong>. “4 times as many as 3” = the 3-bar, 4 times.</p>' +
-    '<div class="info-box">🗣️ Say the sentence out loud every time: “<strong>___ is ___ times as many as ___.</strong>” Then the equation: ___ × ___ = ___.</div>' +
-    '<div style="font-size:0.85rem;color:var(--muted);font-weight:700;">' + solved + ' of ' + MATH.length + ' solved</div></div>';
-  MATH.forEach(function(m, i) {
-    var st = mathItem(i);
-    html += '<div class="math-card ' + (st.correct ? 'correct' : '') + '">' +
-      '<div class="math-q">' + (i+1) + '. ' + esc(m.q) + '</div>' +
-      tapeHTML(m, st.correct) +
-      '<div class="math-opts">';
-    m.opts.forEach(function(o) {
-      var cls = 'math-opt';
-      if (st.correct && o === m.ans) cls += ' right';
-      else if (!st.correct && st.picked === o && o !== m.ans) cls += ' wrong';
-      html += '<button class="' + cls + '" onclick="pickMath(' + i + ',' + attr(o) + ')" ' + (st.correct ? 'disabled' : '') + '>' + esc(String(o)) + '</button>';
-    });
-    html += '</div>';
-    var total = m.unit * m.times;
-    if (st.correct) html += '<div class="math-eq">✓ ' + total + ' is ' + m.times + ' times as many as ' + m.unit + '  ·  ' + m.times + ' × ' + m.unit + ' = ' + total + '</div>';
-    else if (st.picked !== '') html += '<div class="case-feedback hint">🤔 Not yet. Count the bars: how many ' + m.unit + '-bars are there? ' + (m.hide === 'times' ? 'That number IS the answer.' : 'Add them up (or multiply).') + '</div>';
-    html += '</div>';
-  });
-  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishMath()" ' + (mathReady() ? '' : 'disabled') + '>' +
-    (S.math.done ? '✓ On to my summer story →' : 'Math done — write my summer story →') + '</button></div>';
-  if (!mathReady()) html += '<p style="text-align:center;font-size:0.83rem;color:var(--muted);font-style:italic;margin-top:6px;">Solve all ' + MATH.length + ' to continue.</p>';
-  el.innerHTML = html;
-}
-function pickMath(i, o) {
-  var st = mathItem(i);
-  if (st.correct) return;
-  st.tries += 1; st.picked = o;
-  if (o === MATH[i].ans) { st.correct = true; toast('Yes! ✖️✓'); if (mathReady()) fireCelebration(); }
-  else toast('Count the bars 👀', 'warning');
-  renderMath(); debounceSave();
-}
-function finishMath() {
-  if (!mathReady()) return;
-  S.math.done = true;
-  S.timestamps.mathEnd = new Date().toISOString();
-  var firstTry = MATH.filter(function(m, i) { return mathItem(i).tries === 1; }).length;
-  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Times As Many (Eureka Math² M1 Topic A)', 'Math - Multiplicative Comparison', firstTry, MATH.length, Math.round(firstTry / MATH.length * 100) + '%',
-    'First-try correct: ' + firstTry + '/' + MATH.length + ' | tries: ' + MATH.map(function(m, i) { return mathItem(i).tries; }).join(',')]);
-  toast('Math done! ✖️');
-  fireCelebration();
-  saveImmediate();
-  updateTabBadges();
   switchTab('story');
 }
 
 // ============================================================
-//  TAB 5 — MY SUMMER STORY (draw → say → write; 3 sentences; proofread + sound-alike check)
+//  TAB 4 — MY SUMMER STORY (draw → say → write; 3 sentences; proofread + sound-alike check)
 // ============================================================
 function renderStory() {
   const el = document.getElementById('card-story');
@@ -1521,7 +1426,7 @@ function stopMic() {
 }
 
 // ============================================================
-//  TAB 6 — WRAP-UP (Stars & a Wish + 4th-grade info for the tutor)
+//  TAB 5 — WRAP-UP (Stars & a Wish + 4th-grade info for the tutor)
 // ============================================================
 function renderWrap() {
   const el = document.getElementById('card-wrap');
@@ -1615,20 +1520,44 @@ async function init() {
   const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
   if (cloudState && cloudState.timestamps) {
     S = Object.assign(freshState(), cloudState);
+    lastCloudJSON = JSON.stringify(cloudState);
     backfill();
     toast('Loaded from cloud ☁️');
-  } else if (loadFromLocalStorage()) {
+  } else if (!VIEW_ONLY && loadFromLocalStorage()) {
     backfill();
     toast('Loaded local save');
   }
   if (S.wrap && S.wrap.done) switchTab('wrap');
   else if (S.story && S.story.done) switchTab('wrap');
-  else if (S.math && S.math.done) switchTab('story');
-  else if (S.detective && S.detective.done) switchTab('math');
+  else if (S.detective && S.detective.done) switchTab('story');
   else if (S.reading && S.reading.done) switchTab('detective');
   else if (S.welcome && S.welcome.done) switchTab('reading');
   else { renderWelcome(); updateTabBadges(); }
-  setInterval(saveStateToCloud, 30000);
+  if (VIEW_ONLY) {
+    document.getElementById('saveIndicator').textContent = '👀 View-only mirror — syncing from cloud';
+    const rb = document.querySelector('.tutor-reset'); if (rb) rb.style.display = 'none';
+    setInterval(pollCloud, 10000);
+  } else {
+    setInterval(function() { if (dirty) saveStateToCloud(); }, 30000);   // only a tab with unsaved changes writes — a passive second tab never clobbers
+  }
+}
+let lastCloudJSON = null;
+async function pollCloud() {
+  const cs = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (!cs || !cs.timestamps) return;
+  const j = JSON.stringify(cs);
+  if (j === lastCloudJSON) return;
+  lastCloudJSON = j;
+  S = Object.assign(freshState(), cs);
+  backfill();
+  const ind = document.getElementById('saveIndicator');
+  ind.textContent = '👀 Mirror updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  if (activeTab === 'welcome') renderWelcome();
+  else if (activeTab === 'reading') renderReading();
+  else if (activeTab === 'detective') renderDetective();
+  else if (activeTab === 'story') renderStory();
+  else if (activeTab === 'wrap') renderWrap();
+  updateTabBadges();
 }
 function backfill() {
   const f = freshState();
@@ -1637,8 +1566,6 @@ function backfill() {
   if (!S.detective) S.detective = f.detective;
   if (!S.detective.cases) S.detective.cases = [];
   if (!S.detective.rulesSeen) S.detective.rulesSeen = f.detective.rulesSeen;
-  if (!S.math) S.math = f.math;
-  if (!S.math.items) S.math.items = [];
   if (!S.story) S.story = f.story;
   if (!S.story.sentences || S.story.sentences.length < 3) S.story.sentences = f.story.sentences;
   S.story.sentences.forEach(function(s, i) {
