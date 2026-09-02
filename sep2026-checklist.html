@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Checklist — September 2 (Welcome Back!)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #FB8C00; --orange-light: #FFF3E0; --orange-dark: #E65100;
+    --blue: #1976D2; --blue-light: #BBDEFB;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --gold: #F5B700; --gold-light: #FFF8E1;
+    --teal: #00897B; --teal-light: #E0F2F1;
+    --purple: #9C27B0; --purple-light: #F3E5F5;
+    --rose: #D81B60;
+    --bg: #F6F8F4; --text: #2D3748; --muted: #718096;
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header {
+    background: linear-gradient(135deg, #BF360C 0%, #E65100 40%, #FB8C00 100%);
+    color: white; text-align: center; padding: 28px 20px 56px; position: relative;
+  }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: 4px; text-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+  header p { font-size: 1rem; opacity: 0.95; }
+  .container { max-width: 600px; margin: -28px auto 0; padding: 0 16px; position: relative; z-index: 2; }
+  .progress-card { background: white; border-radius: 16px; padding: 18px 22px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 16px; }
+  .progress-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .progress-row h2 { font-size: 1rem; font-weight: 800; color: var(--text); }
+  .progress-count { font-size: 0.95rem; font-weight: 700; color: var(--green); }
+  .progress-bar { width: 100%; height: 14px; background: #E0E0E0; border-radius: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--orange)); border-radius: 8px; transition: width 0.5s ease; }
+  .phase { background: white; border-radius: 16px; padding: 18px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 14px; }
+  .phase-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #F0F0F0; }
+  .phase-icon { font-size: 1.6rem; }
+  .phase-title { font-size: 1.1rem; font-weight: 800; flex: 1; }
+  .phase-time { font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+  .phase-1 .phase-title { color: var(--orange-dark); }
+  .phase-2 .phase-title { color: var(--blue); }
+  .phase-3 .phase-title { color: var(--purple); }
+  .phase-4 .phase-title { color: var(--rose); }
+  .phase-5 .phase-title { color: var(--teal); }
+
+  .task { display: flex; align-items: flex-start; gap: 12px; padding: 12px 8px; border-radius: 10px; cursor: pointer; transition: all 0.2s; min-height: 50px; }
+  .task:hover { background: #FAFBFC; }
+  .task.checked { background: var(--green-light); }
+  .task .check-box { width: 28px; height: 28px; border-radius: 8px; border: 3px solid #B0BEC5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 800; color: white; transition: all 0.25s; }
+  .task.checked .check-box { background: var(--green); border-color: var(--green); }
+  .task.checked .check-box::before { content: '✓'; }
+  .task .task-text { flex: 1; font-size: 0.97rem; line-height: 1.45; font-weight: 600; }
+  .task.checked .task-text { color: var(--muted); text-decoration: line-through; }
+  .task.star .task-text { color: #B7791F; }
+
+  .celebration { background: linear-gradient(135deg, #FFD54F, #FFB300); border-radius: 16px; padding: 30px 20px; text-align: center; margin: 20px 0; display: none; }
+  .celebration.show { display: block; animation: popIn 0.5s ease; }
+  @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 50% { transform: scale(1.1); } 100% { transform: scale(1); opacity: 1; } }
+  .celebration h2 { color: #5D4037; font-size: 1.4rem; margin-bottom: 8px; }
+  .celebration p { color: #6D4C41; font-weight: 600; line-height: 1.5; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s ease; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .footer-note { text-align: center; padding: 20px; font-size: 0.82rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Welcome back, Marcello! 🍂</h1>
+  <p>September 2, 2026 · First session of 4th grade 🎒</p>
+</header>
+
+<div class="container">
+
+  <div class="progress-card">
+    <div class="progress-row">
+      <h2>Your Progress Today</h2>
+      <span class="progress-count" id="progressCount">0 / 18</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%;"></div></div>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="phase phase-1">
+    <div class="phase-header">
+      <span class="phase-icon">👋</span>
+      <span class="phase-title">Welcome Back</span>
+      <span class="phase-time">7 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I told Mr. Walker about my summer — out loud, like a story</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I told him what 4th grade is like so far</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">⭐ I picked ONE thing to write about today</div></div>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="phase phase-2">
+    <div class="phase-header">
+      <span class="phase-icon">📖</span>
+      <span class="phase-title">Reading Warm-Up</span>
+      <span class="phase-time">8 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I found the tricky part in <strong>through</strong>, <strong>excited</strong>, and <strong>journey</strong></div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I read each whole word — not just the first letters</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">📣 I read the 4th-grade passage out loud like a storyteller</div></div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="phase phase-3">
+    <div class="phase-header">
+      <span class="phase-icon">🔍</span>
+      <span class="phase-title">Word Detective</span>
+      <span class="phase-time">7 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I tapped the 4 rule cards: are/our · where/we're · there/their/they're · your/you're</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I said the swap-test out loud BEFORE tapping ("we are"? → we're)</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">🕵️ I solved all 6 cases</div></div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="phase phase-4">
+    <div class="phase-header">
+      <span class="phase-icon">✍️</span>
+      <span class="phase-title">My Summer Story</span>
+      <span class="phase-time">22 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I drew my story first</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I SAID each sentence out loud before writing it</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Sentence 1 — what happened (who + where + what)</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">🗣️ Sentence 2 — a TALKING sentence: who + said + "the exact words"</div></div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">Sentence 3 — how I felt + because / so / when</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">👆 I checked every sentence WORD BY WORD — read what's really there</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">🔍 I did the sound-alike check: "Which one did I MEAN?"</div></div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="phase phase-5">
+    <div class="phase-header">
+      <span class="phase-icon">⭐</span>
+      <span class="phase-title">Stars &amp; a Wish</span>
+      <span class="phase-time">6 min</span>
+    </div>
+    <div class="task" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">I tapped stars for what I did today</div></div>
+    <div class="task star" onclick="toggle(this)"><div class="check-box"></div><div class="task-text">🌠 I picked ONE wish for 4th grade</div></div>
+  </div>
+
+  <div class="celebration" id="celebration">
+    <h2>🏆 Welcome back, Marcello! 🎉</h2>
+    <p>You told your summer story.<br>You read like a storyteller.<br>You were a Word Detective.<br>You wrote three sentences and checked every word.<br><strong>4th grade, here you come!</strong> 🍂🌟</p>
+  </div>
+
+  <p class="footer-note">Tap a task to check it off. Saves automatically.</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'marcello_sep2_checklist';
+const tasks = document.querySelectorAll('.task');
+function toggle(el) { el.classList.toggle('checked'); saveState(); updateProgress(); }
+function updateProgress() {
+  const total = tasks.length;
+  const checked = document.querySelectorAll('.task.checked').length;
+  document.getElementById('progressCount').textContent = checked + ' / ' + total;
+  document.getElementById('progressFill').style.width = (checked / total * 100) + '%';
+  if (checked === total) { document.getElementById('celebration').classList.add('show'); showToast('🎉 You\'re done!'); }
+}
+function saveState() {
+  const state = Array.from(tasks).map(function(t) { return t.classList.contains('checked'); });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    tasks.forEach(function(t, i) { if (state[i]) t.classList.add('checked'); });
+    updateProgress();
+  } catch(e) {}
+}
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 2000); }
+loadState();
+</script>
+</body>
+</html>
