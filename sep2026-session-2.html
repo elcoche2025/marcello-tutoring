@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — September 9, 2026 (The Painted Essay 🎨)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #00897B; --teal-light: #E0F2F1; --teal-dark: #00695C;
+    --blue: #4472C4; --blue-light: #D9E2F3;
+    --green: #4CAF50; --green-light: #E8F5E9;
+    --gold: #F5B700; --gold-light: #FFF8E1; --gold-dark: #B7791F;
+    --orange: #FB8C00; --orange-light: #FFF3E0;
+    --red: #E53935; --red-light: #FFEBEE;
+    --purple: #9C27B0; --purple-light: #F3E5F5;
+    --sky: #29B6F6; --sky-light: #E1F5FE;
+    --p-red: #EF5350; --p-red-light: #FFCDD2; --p-yellow: #FDD835; --p-yellow-light: #FFF9C4; --p-blue: #42A5F5; --p-blue-light: #BBDEFB; --p-green: #66BB6A; --p-green-light: #C8E6C9;
+    --bg: #F7F6FA; --card: #FFFFFF;
+    --text: #2D3748; --muted: #718096;
+    --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header { background: linear-gradient(135deg, #6A1B9A 0%, #8E24AA 45%, #D81B60 100%); color: white; text-align: center; padding: 24px 20px 48px; position: relative; }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; text-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+  header p { font-size: 0.95rem; opacity: 0.95; }
+  .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.8; transition: opacity 0.3s; }
+  .save-indicator.flash { opacity: 1; }
+  .tutor-reset { position: absolute; top: 10px; left: 16px; font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: white; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.6; }
+  .tutor-reset:hover { opacity: 1; }
+
+  .main-tabs { display: flex; justify-content: center; gap: 6px; padding: 10px 8px 0; max-width: 860px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
+  .main-tab { padding: 10px 13px; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: all 0.25s; border: 2px solid #D0D5DD; background: white; color: var(--muted); font-family: 'Nunito', sans-serif; white-space: nowrap; }
+  .main-tab:hover { border-color: var(--purple); color: var(--purple); }
+  .main-tab.active { background: var(--purple); border-color: var(--purple); color: white; box-shadow: 0 3px 12px rgba(156,39,176,0.35); transform: translateY(-2px); }
+  .main-tab.done { border-color: var(--green); color: var(--green); }
+  .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+
+  .container { max-width: 760px; margin: 16px auto; padding: 0 16px; }
+  .container.wide { max-width: 1000px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+  .card .directions { font-size: 0.92rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .review-banner { display: flex; align-items: center; gap: 8px; background: var(--green-light); border: 2px solid var(--green); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.88rem; color: #2E7D32; font-weight: 700; }
+  .info-box { background: var(--sky-light); border-left: 4px solid var(--sky); border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; font-size: 0.92rem; color: #01579B; }
+
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+  .btn-primary { background: var(--teal); color: white; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-orange { background: var(--orange); color: white; }
+  .btn-purple { background: var(--purple); color: white; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-gold { background: var(--gold); color: #5D4037; }
+  .btn-secondary { background: #E0E0E0; color: var(--text); }
+  .btn-sm { padding: 8px 14px; font-size: 0.85rem; border-radius: 10px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .gate-note { text-align: center; font-size: 0.83rem; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+  /* Reading */
+  .word-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 16px 18px; margin-bottom: 12px; text-align: center; transition: all 0.25s; }
+  .word-card.done { border-color: var(--green); background: #FAFFFB; }
+  .word-big { font-size: 2.1rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 4px; }
+  .word-big .tricky { color: var(--red); background: var(--gold-light); border-radius: 6px; padding: 0 4px; }
+  .word-syll { font-size: 0.95rem; color: var(--muted); font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+  .word-tip { font-size: 0.84rem; color: var(--gold-dark); font-weight: 700; margin-bottom: 10px; min-height: 20px; }
+  .word-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .prosody-box { background: var(--sky-light); border: 2px solid var(--sky); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+  .prosody-text { font-size: 1.12rem; line-height: 1.9; font-weight: 600; margin-bottom: 12px; }
+  .score-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+  .score-row label { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+  .score-input { width: 70px; padding: 8px 10px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.95rem; text-align: center; }
+  .tutor-tag { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); background: #ECEFF1; border-radius: 8px; padding: 2px 8px; }
+  .timer-btn { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; padding: 7px 12px; border-radius: 10px; border: 2px solid var(--blue); background: white; color: var(--blue); cursor: pointer; min-width: 92px; }
+  .timer-btn.running { background: var(--blue); color: white; }
+  .timer-btn.finished { background: var(--green); border-color: var(--green); color: white; }
+
+  /* Fix-It */
+  .fix-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; transition: all 0.25s; }
+  .fix-card.correct { border-color: var(--green); background: #FAFFFB; }
+  .fix-sentence { font-size: 1.12rem; font-weight: 700; line-height: 1.6; margin-bottom: 10px; }
+  .fix-sentence .blank { display: inline-block; min-width: 90px; border-bottom: 3px solid var(--orange); text-align: center; color: var(--orange); font-weight: 800; padding: 0 6px; }
+  .fix-sentence .blank.filled { color: #2E7D32; border-color: var(--green); }
+  .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .opt { padding: 9px 18px; border-radius: 20px; font-size: 1rem; font-weight: 800; border: 2px solid #CE93D8; background: white; color: var(--purple); cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .opt:hover { border-color: var(--purple); transform: translateY(-1px); }
+  .opt.right { background: var(--green); border-color: var(--green); color: white; }
+  .opt.wrong { background: var(--red-light); border-color: var(--red); color: var(--red); text-decoration: line-through; }
+  .feedback { margin-top: 10px; font-size: 0.88rem; font-weight: 700; line-height: 1.45; border-radius: 10px; padding: 9px 12px; }
+  .feedback.ok { background: var(--green-light); color: #2E7D32; }
+  .feedback.hint { background: var(--gold-light); color: #7B6400; }
+  .squish { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 8px 0 10px; }
+  .sq-letter { width: 40px; height: 46px; border-radius: 10px; border: 2px solid #90CAF9; background: white; color: #1565C0; font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; justify-content: center; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.25s; }
+  .sq-letter.space { border: none; width: 18px; cursor: default; }
+  .sq-letter.gone { opacity: 0.25; transform: translateY(18px) rotate(15deg); text-decoration: line-through; cursor: default; }
+  .sq-letter.wrong { background: var(--red-light); border-color: var(--red); color: var(--red); }
+  .sq-letter.keep { border-color: var(--green); color: #2E7D32; cursor: default; }
+  .sq-apos { width: 22px; height: 46px; display: flex; align-items: flex-start; justify-content: center; font-size: 1.8rem; font-weight: 800; color: var(--red); animation: fadeUp 0.4s ease; }
+  .sq-result { font-size: 1.3rem; font-weight: 800; color: #2E7D32; margin-left: 10px; }
+
+  /* Painted Essay */
+  .legend { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .legend span { font-size: 0.8rem; font-weight: 800; padding: 5px 12px; border-radius: 14px; }
+  .lg-red { background: var(--p-red-light); color: #B71C1C; } .lg-yellow { background: var(--p-yellow-light); color: #7B6400; } .lg-blue { background: var(--p-blue-light); color: #0D47A1; } .lg-green { background: var(--p-green-light); color: #1B5E20; }
+  .para { border: 2px solid #E0E0E0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; line-height: 1.75; font-size: 1rem; font-weight: 600; transition: all 0.25s; background: white; }
+  .para.c-red { background: var(--p-red-light); border-color: var(--p-red); } .para.c-yellow { background: var(--p-yellow-light); border-color: var(--p-yellow); } .para.c-blue { background: var(--p-blue-light); border-color: var(--p-blue); } .para.c-green { background: var(--p-green-light); border-color: var(--p-green); }
+  .para .p-num { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); display: block; margin-bottom: 4px; }
+  .para .sent { cursor: pointer; border-radius: 6px; padding: 1px 3px; transition: all 0.2s; }
+  .para .sent:hover { background: rgba(0,0,0,0.06); }
+  .para .sent.focus-hit { background: #fff; outline: 3px solid var(--purple); font-weight: 800; }
+  .para .sent.focus-miss { outline: 2px dashed var(--red); }
+  .color-row { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
+  .color-row .lbl { font-size: 0.78rem; font-weight: 800; color: var(--muted); margin-right: 4px; }
+  .cbtn { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px #D0D5DD; cursor: pointer; }
+  .cbtn.red { background: var(--p-red); } .cbtn.yellow { background: var(--p-yellow); } .cbtn.blue { background: var(--p-blue); } .cbtn.green { background: var(--p-green); }
+  .cbtn.picked { box-shadow: 0 0 0 3px #263238; }
+  .job { font-size: 0.82rem; font-weight: 700; margin-top: 8px; padding: 6px 10px; border-radius: 8px; background: rgba(255,255,255,0.7); color: var(--text); }
+
+  /* Plan */
+  .q-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; transition: all 0.25s; }
+  .q-card.done { border-color: var(--green); background: #FAFFFB; }
+  .q-title { font-weight: 800; font-size: 1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .q-title .q-num { background: var(--purple); color: white; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .chip { padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; background: white; border: 2px solid #B2DFDB; color: var(--teal-dark); cursor: pointer; font-family: 'Nunito', sans-serif; transition: all 0.2s; }
+  .chip.active { background: var(--teal); color: white; border-color: var(--teal); }
+  .chip.used { opacity: 0.35; text-decoration: line-through; cursor: not-allowed; }
+  .text-input-wrap { position: relative; }
+  .text-input { width: 100%; padding: 10px 44px 10px 12px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; background: #FAFBFC; }
+  .text-input:focus { border-color: var(--purple); outline: none; background: white; }
+  .mini-mic { position: absolute; top: 6px; right: 6px; width: 32px; height: 32px; border-radius: 50%; background: var(--orange-light); border: 2px solid var(--orange); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; }
+  .mini-mic.recording { background: var(--red); border-color: var(--red); color: white; animation: pulse 1.2s infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(229,57,53,0.5); } 50% { box-shadow: 0 0 0 8px rgba(229,57,53,0); } }
+  .focus-preview { background: var(--p-red-light); border: 2px dashed var(--p-red); border-radius: 12px; padding: 12px 14px; font-size: 1.05rem; font-weight: 700; line-height: 1.5; margin-top: 8px; }
+  .focus-preview .slot { color: #B71C1C; }
+
+  /* Write */
+  .gist-anchor { background: var(--p-red-light); border: 2px solid var(--p-red); border-radius: 10px; padding: 8px 14px; margin: 0 auto 12px; text-align: center; font-weight: 800; font-size: 0.92rem; color: #B71C1C; }
+  .plan-side { background: #FAFBFC; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; font-size: 0.88rem; line-height: 1.5; }
+  .plan-side b { color: var(--purple); }
+  .write-card { background: white; border: 2px solid #E0E0E0; border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; transition: all 0.25s; }
+  .write-card.p-red { border-color: var(--p-red); } .write-card.p-yellow { border-color: var(--p-yellow); }
+  .write-card.locked { background: var(--green-light); border-color: var(--green); }
+  .write-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+  .write-card-title { font-size: 1.05rem; font-weight: 800; }
+  .write-badge { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 12px; }
+  .prompt-line { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
+  .territory { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .territory span { font-size: 0.76rem; font-weight: 700; padding: 4px 10px; border-radius: 10px; }
+  .territory .must { background: var(--green-light); color: #2E7D32; } .territory .not { background: var(--red-light); color: #B71C1C; }
+  .starter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .starter { padding: 6px 12px; border-radius: 16px; font-size: 0.84rem; font-weight: 700; border: 2px solid #CE93D8; background: white; color: var(--purple); cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .starter.glue { border-color: #90CAF9; color: #1565C0; }
+  .verb-bank { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
+  .verb-bank .vb-title { font-size: 0.8rem; font-weight: 800; color: var(--gold-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .verb-bank .vb-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .verb-bank .vb { font-size: 0.85rem; font-weight: 700; background: white; border: 1px solid #E0C97A; border-radius: 10px; padding: 4px 10px; color: #5D4037; }
+  .verb-bank .vb b { color: #2E7D32; }
+  .write-textarea-wrap { position: relative; }
+  .write-textarea { width: 100%; min-height: 80px; border: 2px solid #D0D5DD; border-radius: 12px; padding: 14px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; resize: vertical; line-height: 1.6; background: #FAFBFC; }
+  .write-textarea:focus { border-color: var(--purple); outline: none; background: white; }
+  .write-textarea.locked { background: white; border-color: var(--green); }
+  .type-tag { position: absolute; top: -10px; right: 12px; font-size: 0.68rem; font-weight: 800; background: var(--purple); color: white; border-radius: 10px; padding: 2px 9px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .check-box2 { border-radius: 12px; padding: 12px 14px; margin-top: 12px; border: 2px solid; }
+  .cb-sent { background: #FFFDE7; border-color: var(--gold); }
+  .cb-sent.matched { background: var(--green-light); border-color: var(--green); }
+  .cb-sent.unmatched { background: var(--red-light); border-color: var(--red); }
+  .source-check-prompt { font-size: 0.92rem; line-height: 1.5; font-weight: 600; margin-bottom: 10px; color: #5D4037; }
+  .source-check-row { display: flex; gap: 8px; }
+  .source-btn { flex: 1; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; border: 2px solid; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .source-btn.match { background: white; color: var(--green); border-color: var(--green); } .source-btn.match.active { background: var(--green); color: white; }
+  .source-btn.unmatch { background: white; color: var(--red); border-color: var(--red); } .source-btn.unmatch.active { background: var(--red); color: white; }
+
+  .proof-box { background: var(--purple-light); border: 2px solid var(--purple); border-radius: 12px; padding: 14px 16px; margin-top: 12px; }
+  .proof-box.done { background: var(--green-light); border-color: var(--green); }
+  .proof-title { font-size: 0.92rem; font-weight: 800; color: var(--purple); margin-bottom: 4px; } .proof-box.done .proof-title { color: var(--green); }
+  .proof-sub { font-size: 0.82rem; color: #6A1B9A; margin-bottom: 12px; line-height: 1.4; } .proof-box.done .proof-sub { color: #2E7D32; }
+  .proof-words { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .proof-word { padding: 8px 12px; border-radius: 10px; font-size: 1.05rem; font-weight: 700; border: 2px solid #D1C4E9; background: white; color: #B0A8C0; cursor: default; font-family: 'Nunito', sans-serif; transition: all 0.18s; }
+  .proof-word.next { color: var(--purple); border-color: var(--purple); cursor: pointer; animation: pulseP 1.3s infinite; }
+  @keyframes pulseP { 0%,100% { box-shadow: 0 0 0 0 rgba(156,39,176,0.4); } 50% { box-shadow: 0 0 0 7px rgba(156,39,176,0); } }
+  .proof-word.read { color: #2E7D32; border-color: var(--green); background: var(--green-light); }
+  .proof-word.read::after { content: ' ✓'; font-size: 0.8rem; }
+  .proof-progress { font-size: 0.8rem; color: var(--muted); font-weight: 700; margin-top: 10px; }
+
+  .homo-box { background: #E3F2FD; border: 2px solid #1E88E5; border-radius: 12px; padding: 14px 16px; margin-top: 12px; }
+  .homo-box.done { background: var(--green-light); border-color: var(--green); }
+  .homo-box.fix { background: var(--gold-light); border-color: var(--gold); }
+  .homo-title { font-size: 0.92rem; font-weight: 800; color: #1565C0; margin-bottom: 4px; } .homo-box.done .homo-title { color: var(--green); } .homo-box.fix .homo-title { color: var(--gold-dark); }
+  .homo-sub { font-size: 0.82rem; color: #0D47A1; margin-bottom: 10px; line-height: 1.4; } .homo-box.done .homo-sub { color: #2E7D32; }
+  .homo-item { background: white; border: 2px solid #BBDEFB; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+  .homo-item.ok { border-color: var(--green); } .homo-item.fix { border-color: var(--gold); }
+  .homo-q { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; }
+  .homo-q .hw { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 8px; padding: 1px 8px; font-weight: 800; }
+  .homo-opts { display: flex; gap: 6px; flex-wrap: wrap; }
+  .homo-opt { padding: 7px 12px; border-radius: 16px; font-size: 0.84rem; font-weight: 700; border: 2px solid #90CAF9; background: white; color: #1565C0; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .homo-opt.active.ok { background: var(--green); border-color: var(--green); color: white; }
+  .homo-opt.active.fix { background: var(--gold); border-color: var(--gold); color: #5D4037; }
+  .homo-verdict { margin-top: 8px; font-size: 0.84rem; font-weight: 700; line-height: 1.4; }
+  .homo-verdict.ok { color: #2E7D32; } .homo-verdict.fix { color: #7B6400; }
+
+  /* NEW — past-tense radar */
+  .verb-box { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 12px 14px; margin-top: 12px; }
+  .verb-box.done { background: var(--green-light); border-color: var(--green); }
+  .verb-title { font-size: 0.92rem; font-weight: 800; color: var(--gold-dark); margin-bottom: 4px; } .verb-box.done .verb-title { color: var(--green); }
+  .verb-sub { font-size: 0.82rem; color: #7B6400; line-height: 1.45; } .verb-box.done .verb-sub { color: #2E7D32; }
+  .verb-hit { display: inline-block; background: white; border: 2px solid var(--red); border-radius: 8px; padding: 2px 8px; font-weight: 800; color: var(--red); margin: 4px 6px 0 0; }
+
+  .lock-row { display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px; }
+  .lock-btn { background: var(--green); color: white; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .lock-btn:disabled { background: #E0E0E0; color: var(--muted); cursor: not-allowed; }
+  .unlock-btn { background: white; color: var(--green); border: 2px solid var(--green); border-radius: 10px; padding: 6px 12px; font-weight: 700; font-size: 0.82rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+
+  /* Wrap */
+  .stars-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .star-btn { padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 700; background: var(--gold-light); border: 2px solid var(--gold); color: #7B6400; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .star-btn.active { background: var(--gold); color: white; }
+  .wish-chip { padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 700; background: white; border: 2px solid #90CAF9; color: #1565C0; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .wish-chip.active { background: var(--blue); border-color: var(--blue); color: white; }
+  .tutor-notes { background: #F5F5F5; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 14px 16px; }
+  .tutor-notes label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--muted); margin: 8px 0 4px; }
+  .tutor-notes textarea { width: 100%; padding: 8px 10px; border: 2px solid #D0D5DD; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 600; min-height: 56px; resize: vertical; }
+  .pep-banner { background: linear-gradient(135deg, #8E24AA, #D81B60); color: white; border-radius: 16px; padding: 24px 20px; text-align: center; margin: 16px 0; box-shadow: var(--shadow); }
+  .pep-banner h3 { font-size: 1.4rem; margin-bottom: 6px; }
+  .pep-banner p { font-size: 0.96rem; opacity: 0.97; line-height: 1.55; }
+  .essay-so-far { background: white; border: 2px solid #E0E0E0; border-radius: 12px; padding: 14px 16px; line-height: 1.7; font-size: 1rem; font-weight: 600; }
+  .essay-so-far .es-red { background: var(--p-red-light); border-radius: 6px; padding: 1px 4px; } .essay-so-far .es-yellow { background: var(--p-yellow-light); border-radius: 6px; padding: 1px 4px; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s ease; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.warning { background: var(--orange); }
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="tutor-reset" onclick="tutorReset()" title="Tutor only: wipe all session progress for this date — local + cloud.">🔄 Reset</button>
+  <h1>The Painted Essay 🎨</h1>
+  <p>Wednesday, September 9, 2026 — Marcello's first 4th-grade essay</p>
+  <div class="save-indicator" id="saveIndicator">Saved ✓</div>
+</header>
+
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">📖 Reading</button>
+  <button class="main-tab" id="mtab-fixit" onclick="switchTab('fixit')">🔧 Fix-It</button>
+  <button class="main-tab" id="mtab-paint" onclick="switchTab('paint')">🎨 Paint the Essay</button>
+  <button class="main-tab" id="mtab-plan" onclick="switchTab('plan')">🗺️ Plan</button>
+  <button class="main-tab" id="mtab-write" onclick="switchTab('write')">✍️ Write</button>
+  <button class="main-tab" id="mtab-wrap" onclick="switchTab('wrap')">⭐ Wrap-Up</button>
+</div>
+
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-reading"><div id="card-reading"></div></div>
+  <div class="tab-panel" id="panel-fixit"><div id="card-fixit"></div></div>
+  <div class="tab-panel" id="panel-paint"><div id="card-paint"></div></div>
+  <div class="tab-panel" id="panel-plan"><div id="card-plan"></div></div>
+  <div class="tab-panel" id="panel-write"><div id="card-write"></div></div>
+  <div class="tab-panel" id="panel-wrap"><div id="card-wrap"></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG & GLOBALS
+// ============================================================
+const STORAGE_KEY = 'marcello_sep9_session';
+const CLOUD_STATE_KEY = 'sep2026_session_2';
+const PREV_CLOUD_KEY = 'sep2026_session_1';
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-09-09';
+// ?view=1 → read-only mirror (tutor's computer): never writes, polls every 10 s. iPad is the ONLY writer.
+const VIEW_ONLY = /[?&]view=1/.test(location.search);
+let dirty = false;
+let activeTab = 'reading';
+
+function freshState() {
+  return {
+    reading: { words: [false, false, false], prosodyRead: false, wcpm: '', errors: '', prosody: '', done: false },
+    fixit: { verbs: [], squish: [], done: false },
+    paint: { colors: ['', '', '', ''], focusHit: false, done: false },
+    plan: { who: '', whoCustom: '', ways: ['', ''], examples: ['', ''], done: false },
+    write: {
+      sentences: [
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, verbOK: false, locked: false, part: 'red', role: 'hook' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, verbOK: false, locked: false, part: 'red', role: 'focus' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, verbOK: false, locked: false, part: 'yellow', role: 'topic' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, verbOK: false, locked: false, part: 'yellow', role: 'example' }
+      ],
+      done: false
+    },
+    wrap: { stars: [], wish: [], wishCustom: '', tutor: { notes: '' }, done: false },   // NO prefilled defaults here — see build guide §15
+    timestamps: {},
+    points: 0
+  };
+}
+let S = freshState();
+
+// ============================================================
+//  CONTENT DATA
+// ============================================================
+// Reading — Wit & Wisdom M1 "A Great Heart" · Clara Barton (the class's Lesson 3 biography)
+const WORDS = [
+  { word: 'courage', syll: 'cour · age', before: '', tricky: 'cour', after: 'age', tip: 'The tricky part is "cour" — it says /ker/. KER-ij.' },
+  { word: 'soldiers', syll: 'sol · diers', before: 'sol', tricky: 'di', after: 'ers', tip: 'The tricky part is "di" — here it says /j/. SOL-jers.' },
+  { word: 'evidence', syll: 'ev · i · dence', before: 'evi', tricky: 'dence', after: '', tip: 'The tricky part is "dence" — it says /dens/. EV-i-dens.' }
+];
+const PROSODY_PASSAGE = 'Clara Barton had a great heart. When the Civil War began, she saw that wounded soldiers had no bandages, no food, and no one to care for them. So she loaded a wagon with supplies and drove it straight to the battlefield. Bullets flew past her, but she kept working. The soldiers called her the Angel of the Battlefield. Years later, she started the American Red Cross, which still helps people in danger today.';
+const PASSAGE_WORDS = PROSODY_PASSAGE.split(/\s+/).length;
+
+// Fix-It A — his own four sentences from the Sept 2 Dacia Duster story
+const VERB_FIXES = [
+  { before: 'My dad, my mom, and my sister ', after: ' about it first.', opts: ['thinked', 'thought', 'thinks'], ans: 'thought', base: 'think', say: 'Yesterday I… thought.' },
+  { before: 'We ', after: ' it home.', opts: ['drived', 'drove', 'drive'], ans: 'drove', base: 'drive', say: 'Yesterday I… drove.' },
+  { before: 'So then we ', after: ' about it for a little bit.', opts: ['fighted', 'fought', 'fight'], ans: 'fought', base: 'fight', say: 'Yesterday I… fought.' },
+  { before: 'When I ', after: ' up, I was surprised.', opts: ['woked', 'woke', 'wake'], ans: 'woke', base: 'wake', say: 'Yesterday I… woke.' }
+];
+// Fix-It B — contraction "squish": tap the letter that falls out; the apostrophe takes its place
+const SQUISH = [
+  { words: ['we', 'are'], drop: [1, 0], result: "we're", say: 'we are — squish — we’re' },
+  { words: ['it', 'is'], drop: [1, 0], result: "it's", say: 'it is — squish — it’s' },
+  { words: ['they', 'are'], drop: [1, 0], result: "they're", say: 'they are — squish — they’re' },
+  { words: ['do', 'not'], drop: [1, 1], result: "don't", say: 'do not — squish — don’t' }
+];
+
+// Painted Essay model (4 paragraphs) — about Clara Barton, matching the class unit
+const MODEL = [
+  { sents: ['Some people have a great heart, and you can see it in what they do.', 'Clara Barton was a nurse who lived more than one hundred years ago.', 'Clara Barton showed a great heart because she cared for wounded soldiers and because she started the American Red Cross.'], color: 'red', job: 'Introduction — hook + the FOCUS STATEMENT (the big idea + the two reasons)', focusIdx: 2 },
+  { sents: ['First, Clara Barton cared for wounded soldiers.', 'During the Civil War, soldiers were hurt and had no bandages or food.', 'Clara drove a wagon full of supplies right onto the battlefield, even when bullets flew past her.', 'The soldiers called her the Angel of the Battlefield.'], color: 'yellow', job: 'Proof paragraph 1 — reason 1 + evidence' },
+  { sents: ['Second, Clara Barton started the American Red Cross.', 'After the war, she saw that people still needed help when there were floods, fires, and storms.', 'She worked for years to start the Red Cross in America.', 'Today it still helps people in danger.'], color: 'blue', job: 'Proof paragraph 2 — reason 2 + evidence' },
+  { sents: ['Clara Barton had a great heart because she cared for soldiers and started the Red Cross.', 'She showed that one person who cares can help thousands of people.', 'That is what a great heart looks like.'], color: 'green', job: 'Conclusion — say the focus again in new words + why it matters' }
+];
+const COLOR_NAMES = { red: 'Red — introduction', yellow: 'Yellow — proof 1', blue: 'Blue — proof 2', green: 'Green — conclusion' };
+
+// Plan
+const WHO_CHIPS = ['Grandma', 'Grandpa', 'Mom', 'Dad', 'Zoe', 'a friend', 'a teacher'];
+const WAY_CHIPS = ['helps people who need it', 'is kind even when it is hard', 'takes care of someone', 'never gives up on people', 'shares what they have', 'listens when someone is sad', 'forgives people'];
+
+// Write
+const HOOKS = ['Some people have a great heart, and you can see it in what they do.', 'A great heart is not something you can see — it is something a person shows.', 'Everyone knows someone with a great heart.'];
+const TOPIC_STARTERS = ['First,', 'One way', 'To begin with,'];
+const EXAMPLE_STARTERS = ['For example,', 'One time,', 'Last summer,', 'Every day,'];
+const GLUE = ['because', 'so', 'when', 'even though'];
+const VERB_BANK = [['think', 'thought'], ['drive', 'drove'], ['fight', 'fought'], ['wake', 'woke'], ['take', 'took'], ['bring', 'brought'], ['buy', 'bought'], ['give', 'gave'], ['see', 'saw'], ['run', 'ran'], ['come', 'came'], ['make', 'made']];
+// past-tense radar: overregularized forms → correct
+const BAD_VERBS = { thinked: 'thought', drived: 'drove', fighted: 'fought', woked: 'woke', taked: 'took', bringed: 'brought', buyed: 'bought', gived: 'gave', seed: 'saw', runned: 'ran', comed: 'came', maked: 'made', goed: 'went', catched: 'caught', teached: 'taught', feeled: 'felt', falled: 'fell', telled: 'told', eated: 'ate', standed: 'stood', sitted: 'sat', writed: 'wrote', readed: 'read', getted: 'got', finded: 'found', keeped: 'kept', leaved: 'left', meeted: 'met', payed: 'paid', sleeped: 'slept', breaked: 'broke', choosed: 'chose', throwed: 'threw', growed: 'grew', knowed: 'knew', swimmed: 'swam', singed: 'sang', ringed: 'rang', drinked: 'drank', begined: 'began' };
+
+const HOMO_SETS = [['are', 'our'], ['where', "we're", 'were'], ['there', 'their', "they're"], ['your', "you're"], ['to', 'too', 'two'], ['its', "it's"]];
+const MEANINGS = { 'are': 'ARE — we are / you are / they are', 'our': 'OUR — belongs to us', 'where': 'WHERE — a place', "we're": "WE'RE — we are", 'were': 'WERE — in the past (we were, they were)', 'there': 'THERE — a place (over there)', 'their': 'THEIR — belongs to them', "they're": "THEY'RE — they are", 'your': 'YOUR — belongs to you', "you're": "YOU'RE — you are", 'to': 'TO — going TO a place / TO do something', 'too': 'TOO — also, or too much', 'two': 'TWO — the number 2', 'its': 'ITS — belongs to it', "it's": "IT'S — it is" };
+
+const STARS = ['I read about Clara Barton like a storyteller', 'I fixed my four verbs', 'I squished words into contractions', 'I painted the essay', 'I planned my own essay', 'I TYPED my sentences myself', 'I wrote a focus statement', 'I checked my words one by one', 'I caught a sound-alike or a verb'];
+const WISHES = ['Write all four paragraphs of my essay', 'Remember thought / drove / fought / woke', 'Type my own sentences', 'Use evidence in my writing'];
+
+// ============================================================
+//  UTIL (cloud infra — same as sep2026-session.html incl. dirty flag + view mode)
+// ============================================================
+function toast(msg, kind) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (kind ? ' ' + kind : ''); setTimeout(function() { t.className = 'toast'; }, 3000); }
+function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
+function attr(s) { return JSON.stringify(s).replace(/"/g, '&quot;'); }
+function saveToLocalStorage() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); const ind = document.getElementById('saveIndicator'); ind.textContent = 'Saved ✓'; ind.classList.add('flash'); setTimeout(function() { ind.classList.remove('flash'); }, 1000); }
+  catch(e) { if (e.name === 'QuotaExceededError') toast('Local save full', 'warning'); }
+}
+function loadFromLocalStorage() { try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return false; S = Object.assign(freshState(), JSON.parse(raw)); return true; } catch(e) { return false; } }
+let saveDebounce = null, cloudDebounce = null, cloudFireDeadline = null;
+function debounceSave() {
+  if (VIEW_ONLY) return;
+  dirty = true;
+  clearTimeout(saveDebounce); saveDebounce = setTimeout(saveToLocalStorage, 500);
+  const now = Date.now(); if (cloudFireDeadline === null) cloudFireDeadline = now + 8000;
+  const fireIn = Math.min(3500, Math.max(cloudFireDeadline - now, 0));
+  clearTimeout(cloudDebounce); cloudDebounce = setTimeout(function() { cloudFireDeadline = null; saveStateToCloud(); }, fireIn);
+}
+function saveImmediate() { if (VIEW_ONLY) return; dirty = true; clearTimeout(saveDebounce); clearTimeout(cloudDebounce); cloudFireDeadline = null; saveToLocalStorage(); saveStateToCloud(); }
+function postToSheets(sheet, row) { try { fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: sheet, row: row }) }); } catch(e) {} }
+function stateHasWork() {
+  try {
+    return (Object.keys(S.timestamps || {}).length > 0)
+      || (S.reading && (S.reading.done || S.reading.words.some(Boolean) || S.reading.prosodyRead || (S.reading.wcpm || '').trim()))
+      || (S.fixit && (S.fixit.done || (S.fixit.verbs || []).some(function(c){ return c && c.picked; }) || (S.fixit.squish || []).some(function(c){ return c && c.done; })))
+      || (S.paint && (S.paint.done || S.paint.colors.some(Boolean) || S.paint.focusHit))
+      || (S.plan && (S.plan.done || S.plan.who || (S.plan.whoCustom || '').trim() || S.plan.ways.some(Boolean) || S.plan.examples.some(function(x){ return (x || '').trim(); })))
+      || (S.write && (S.write.done || S.write.sentences.some(function(x){ return x.text && x.text.trim(); })))
+      || (S.wrap && (S.wrap.done || S.wrap.stars.length || S.wrap.wish.length || (S.wrap.wishCustom || '').trim() || (S.wrap.tutor.notes || '').trim()));
+  } catch(e) { return true; }
+}
+function saveStateToCloud() {
+  if (VIEW_ONLY) return;
+  if (!stateHasWork()) return;
+  try { fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S }) }); dirty = false;
+    const ind = document.getElementById('saveIndicator'); ind.textContent = 'Cloud saved ☁️'; ind.classList.add('flash'); setTimeout(function() { ind.classList.remove('flash'); }, 1000); } catch(e) {}
+}
+function loadStateFromCloud(key) {
+  return new Promise(function(resolve) {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(function() { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) { clearTimeout(timeout); delete window[cbName]; if (result && result.success && result.state) resolve(result.state); else resolve(null); };
+    const script = document.createElement('script');
+    script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = function() { clearTimeout(timeout); delete window[cbName]; resolve(null); };
+    document.head.appendChild(script);
+  });
+}
+let speechUnlocked = false;
+function unlockSpeech() { if (speechUnlocked || !('speechSynthesis' in window)) return; const d = new SpeechSynthesisUtterance(''); d.volume = 0; window.speechSynthesis.speak(d); speechUnlocked = true; }
+document.addEventListener('touchstart', unlockSpeech, { once: true }); document.addEventListener('click', unlockSpeech, { once: true });
+function speakText(text, rate) {
+  if (!('speechSynthesis' in window)) { toast('Speech not available', 'warning'); return; }
+  window.speechSynthesis.cancel();
+  setTimeout(function() { const u = new SpeechSynthesisUtterance(text); u.rate = rate || 0.85; u.onerror = function() { toast('Speech error — tap again', 'warning'); }; window.speechSynthesis.speak(u); }, 100);
+}
+function fireCelebration() {
+  const c = document.createElement('div'); c.className = 'confetti-burst';
+  const emojis = ['🎉','🎨','⭐','❤️','🌟','🏆','✏️','📚','🖌️'];
+  for (let i = 0; i < 28; i++) { const s = document.createElement('span'); s.textContent = emojis[Math.floor(Math.random()*emojis.length)]; s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;'; c.appendChild(s); }
+  document.body.appendChild(c); setTimeout(function() { c.remove(); }, 4000);
+}
+const confettiStyle = document.createElement('style'); confettiStyle.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }'; document.head.appendChild(confettiStyle);
+function tutorReset() {
+  if (VIEW_ONLY) { toast('View-only mirror — reset from the iPad', 'warning'); return; }
+  if (!confirm('Reset this session?\n\nThis wipes ALL progress for September 9 — locally and in the cloud — and starts fresh.')) return;
+  S = freshState(); S.timestamps.reset = new Date().toISOString();
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  dirty = true; saveStateToCloud();
+  ['reading','fixit','paint','plan','write','wrap'].forEach(function(k) { const t = document.getElementById('mtab-' + k); if (t) t.classList.remove('done'); });
+  switchTab('reading'); toast('Session reset — fresh start ✨');
+}
+
+// ============================================================
+//  TAB SWITCHING
+// ============================================================
+const RENDER = { reading: renderReading, fixit: renderFixit, paint: renderPaint, plan: renderPlan, write: renderWrite, wrap: renderWrap };
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('mtab-' + tab).classList.add('active');
+  const mc = document.getElementById('mainContainer'); if (tab === 'write') mc.classList.add('wide'); else mc.classList.remove('wide');
+  RENDER[tab](); updateTabBadges(); window.scrollTo({ top: 0, behavior: 'smooth' }); saveImmediate();
+}
+function updateTabBadges() {
+  const map = { reading: S.reading.done, fixit: S.fixit.done, paint: S.paint.done, plan: S.plan.done, write: S.write.done, wrap: S.wrap.done };
+  Object.keys(map).forEach(function(k) { const t = document.getElementById('mtab-' + k); if (map[k]) t.classList.add('done'); else t.classList.remove('done'); });
+}
+
+// Mini-mic for PLAN inputs only (the write tab is keyboard-only on purpose — see build guide §14 "Dictation bypasses the transcription checks")
+let miniRecog = null, miniActive = null;
+function toggleMiniMic(fieldId, setter) {
+  if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) { toast('Speech-to-text not available — type instead', 'warning'); return; }
+  if (miniRecog && miniActive === fieldId) { try { miniRecog.stop(); } catch(e) {} return; }
+  if (miniRecog) try { miniRecog.stop(); } catch(e) {}
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  miniRecog = new SR(); miniRecog.continuous = false; miniRecog.interimResults = true; miniRecog.lang = 'en-US'; miniActive = fieldId;
+  const input = document.getElementById(fieldId); const starting = input ? input.value : ''; const prefix = starting + (starting && !/\s$/.test(starting) ? ' ' : '');
+  const btn = document.getElementById('mm-' + fieldId); if (btn) { btn.classList.add('recording'); btn.textContent = '⏸'; }
+  miniRecog.onresult = function(e) { let interim = '', finalT = ''; for (let i = 0; i < e.results.length; i++) { const piece = e.results[i][0].transcript; if (e.results[i].isFinal) finalT += piece; else interim += piece; } const t = (finalT + interim).trim(); if (!t) return; const v = prefix + t; if (input) input.value = v; setter(v); };
+  miniRecog.onerror = function() { stopMiniMic(); toast('Mic error — try typing', 'warning'); };
+  miniRecog.onend = function() { stopMiniMic(); renderPlan(); debounceSave(); };
+  try { miniRecog.start(); toast('🎤 Listening... tap again to stop'); } catch(e) { stopMiniMic(); toast('Mic could not start', 'warning'); }
+}
+function stopMiniMic() { if (miniActive !== null) { const btn = document.getElementById('mm-' + miniActive); if (btn) { btn.classList.remove('recording'); btn.textContent = '🎤'; } } miniRecog = null; miniActive = null; }
+
+// ============================================================
+//  TAB 1 — READING (standing rep · Clara Barton)
+// ============================================================
+let timerHandle = null, timerLeft = 60;
+function renderReading() {
+  const el = document.getElementById('card-reading'); const rd = S.reading;
+  const ready = rd.words.every(Boolean) && rd.prosodyRead;
+  let html = '<div class="card">' + (rd.done ? '<div class="review-banner">✅ Reading done. Tap back any time.</div>' : '') +
+    '<h2>📖 Reading warm-up — Clara Barton</h2>' +
+    '<p class="directions">Your class is reading about people with a <strong>great heart</strong>. Here is one of them. Three tricky words first, then read the passage like a storyteller.</p>' +
+    '<div class="info-box">👆 Read the WHOLE word. Find the tricky part first, then say it all.</div></div>';
+  WORDS.forEach(function(w, i) {
+    const done = rd.words[i];
+    html += '<div class="word-card ' + (done ? 'done' : '') + '"><div class="word-big" id="wordbig-' + i + '">' + esc(w.before) + (done ? '<span class="tricky">' + esc(w.tricky) + '</span>' : esc(w.tricky)) + esc(w.after) + '</div>' +
+      '<div class="word-syll">' + esc(w.syll) + '</div><div class="word-tip" id="wordtip-' + i + '">' + (done ? '💡 ' + esc(w.tip) : '') + '</div>' +
+      '<div class="word-btns"><button class="btn btn-sm btn-purple" onclick="showTricky(' + i + ')">🔍 Find the tricky part</button>' +
+      '<button class="btn btn-sm btn-secondary" onclick="speakText(' + attr(w.word) + ', 0.7)">🔊 Hear it</button>' +
+      '<button class="btn btn-sm ' + (done ? 'btn-success' : 'btn-orange') + '" onclick="markWord(' + i + ')">' + (done ? '✓ I read it' : '👀 I read it') + '</button></div></div>';
+  });
+  html += '<div class="prosody-box"><div style="font-weight:800;margin-bottom:8px;color:#01579B;">🗣️ Read it out loud — like a storyteller. Where does it say "great heart" without meaning a real heart?</div>' +
+    '<div class="prosody-text">' + esc(PROSODY_PASSAGE) + '</div>' +
+    '<div class="btn-row" style="justify-content:flex-start;margin-top:0;"><button class="btn btn-sm btn-blue" onclick="speakText(' + attr(PROSODY_PASSAGE) + ', 0.85)">🔊 Hear it first</button>' +
+    '<button class="btn btn-sm ' + (rd.prosodyRead ? 'btn-success' : 'btn-orange') + '" onclick="markProsody()">' + (rd.prosodyRead ? '✓ I read it with expression' : '📣 I read it with expression') + '</button></div>' +
+    '<div class="score-row"><span class="tutor-tag">Tutor</span><button class="timer-btn" id="timerBtn" onclick="toggleTimer()">⏱ 1:00</button>' +
+    '<label>WCPM <input class="score-input" id="wcpmInput" inputmode="numeric" value="' + esc(rd.wcpm) + '" oninput="onScore()" placeholder="—"></label>' +
+    '<label>Errors <input class="score-input" id="errInput" inputmode="numeric" value="' + esc(rd.errors) + '" oninput="onScore()" placeholder="—"></label>' +
+    '<label>Prosody /4 <input class="score-input" id="prosodyInput" inputmode="decimal" value="' + esc(rd.prosody) + '" oninput="onScore()" placeholder="—"></label></div>' +
+    '<div style="font-size:0.74rem;color:var(--muted);font-weight:700;margin-top:6px;">Passage = ' + PASSAGE_WORDS + ' words · Sept 2: ~162 WCPM (65 words / 24 s), good intonation · watch for ADDED words ("a smile on your face")</div></div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishReading()" ' + (ready ? '' : 'disabled') + '>' + (rd.done ? '✓ On to Fix-It →' : 'Done reading — Fix-It →') + '</button></div>';
+  if (!ready) html += '<p class="gate-note">Read all 3 words and the passage to continue.</p>';
+  el.innerHTML = html;
+}
+function showTricky(i) { const w = WORDS[i]; const big = document.getElementById('wordbig-' + i); if (big) big.innerHTML = esc(w.before) + '<span class="tricky">' + esc(w.tricky) + '</span>' + esc(w.after); const tip = document.getElementById('wordtip-' + i); if (tip) tip.innerHTML = '💡 ' + esc(w.tip); speakText(w.word, 0.65); }
+function markWord(i) { S.reading.words[i] = true; renderReading(); debounceSave(); }
+function markProsody() { S.reading.prosodyRead = true; postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Clara Barton prosody read-aloud', 'Reading - Foundational', '', '', '', 'Read the Clara Barton passage aloud with expression']); renderReading(); debounceSave(); }
+function onScore() { const w = document.getElementById('wcpmInput'), p = document.getElementById('prosodyInput'), e = document.getElementById('errInput'); if (w) S.reading.wcpm = w.value; if (p) S.reading.prosody = p.value; if (e) S.reading.errors = e.value; debounceSave(); }
+function toggleTimer() {
+  const btn = document.getElementById('timerBtn');
+  if (timerHandle) { clearInterval(timerHandle); timerHandle = null; timerLeft = 60; if (btn) { btn.className = 'timer-btn'; btn.textContent = '⏱ 1:00'; } return; }
+  timerLeft = 60; if (btn) { btn.className = 'timer-btn running'; btn.textContent = '⏱ 1:00'; }
+  timerHandle = setInterval(function() { timerLeft--; const b = document.getElementById('timerBtn'); if (timerLeft <= 0) { clearInterval(timerHandle); timerHandle = null; if (b) { b.className = 'timer-btn finished'; b.textContent = '⏱ Time!'; } speakText('Time', 1); return; } if (b) b.textContent = '⏱ 0:' + (timerLeft < 10 ? '0' : '') + timerLeft; }, 1000);
+}
+function finishReading() {
+  S.reading.done = true; S.timestamps.readingEnd = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Reading rep (word map + Clara Barton prosody)', 'Reading - Foundational', (S.reading.wcpm || ''), '', '', 'Words: courage/soldiers/evidence | WCPM: ' + (S.reading.wcpm || '-') + ' | Errors: ' + (S.reading.errors || '-') + ' | Prosody: ' + (S.reading.prosody || '-') + '/4']);
+  toast('Nice reading! 📖'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('fixit');
+}
+
+// ============================================================
+//  TAB 2 — FIX-IT (his four verbs + the contraction squish)
+// ============================================================
+function verbItem(i) { if (!S.fixit.verbs[i]) S.fixit.verbs[i] = { picked: '', tries: 0, correct: false }; return S.fixit.verbs[i]; }
+function squishItem(i) { if (!S.fixit.squish[i]) S.fixit.squish[i] = { gone: [], wrong: 0, done: false }; return S.fixit.squish[i]; }
+function fixitReady() { return VERB_FIXES.every(function(v, i) { return verbItem(i).correct; }) && SQUISH.every(function(q, i) { return squishItem(i).done; }); }
+function renderFixit() {
+  const el = document.getElementById('card-fixit');
+  let html = '<div class="card">' + (S.fixit.done ? '<div class="review-banner">✅ Fix-It done. Tap back any time.</div>' : '') +
+    '<h2>🔧 Fix-It, part 1 — your four verbs</h2>' +
+    '<p class="directions">These are YOUR sentences from the Dacia Duster story last week. Four verbs got an <strong>-ed</strong> ending that they don’t take. These are “rule-breaker” verbs — they change their whole shape in the past. Say <strong>“Yesterday I ___”</strong> out loud, then tap the one that sounds right.</p>' +
+    '<div class="info-box">🗣️ The test: <strong>“Today I think. Yesterday I ___.”</strong> Your ear already knows these — you say “thought” all the time. Now your writing has to catch up.</div></div>';
+  VERB_FIXES.forEach(function(v, i) {
+    const st = verbItem(i);
+    html += '<div class="fix-card ' + (st.correct ? 'correct' : '') + '"><div class="fix-sentence">' + esc(v.before) + '<span class="blank ' + (st.correct ? 'filled' : '') + '">' + (st.correct ? esc(v.ans) : '______') + '</span>' + esc(v.after) + '</div><div class="opts">';
+    v.opts.forEach(function(o) { let cls = 'opt'; if (st.correct && o === v.ans) cls += ' right'; else if (!st.correct && st.picked === o && o !== v.ans) cls += ' wrong'; html += '<button class="' + cls + '" onclick="pickVerb(' + i + ',' + attr(o) + ')" ' + (st.correct ? 'disabled' : '') + '>' + esc(o) + '</button>'; });
+    html += '</div>';
+    if (st.correct) html += '<div class="feedback ok">✓ Today I ' + esc(v.base) + '. Yesterday I <strong>' + esc(v.ans) + '</strong>. No -ed on this one — ever.</div>';
+    else if (st.picked) html += '<div class="feedback hint">🤔 Say it out loud: “Yesterday I ______.” Does that sound like something people say?</div>';
+    html += '</div>';
+  });
+  html += '<div class="card"><h2>🔧 Fix-It, part 2 — the squish</h2>' +
+    '<p class="directions">A contraction is two words <strong>squished</strong> into one. When they squish, a letter gets pushed out — and the <strong>apostrophe ’</strong> takes its place, like a little flag that says “a letter used to be here.” Tap the letter that falls out.</p>' +
+    '<div class="info-box">’ = “a letter is missing here.” That’s the apostrophe’s whole job in <em>we’re, it’s, they’re, don’t</em>.</div>';
+  SQUISH.forEach(function(q, i) {
+    const st = squishItem(i);
+    html += '<div class="fix-card ' + (st.done ? 'correct' : '') + '"><div class="fix-sentence">' + esc(q.words.join(' ')) + ' → ?</div><div class="squish">';
+    q.words.forEach(function(w, wi) {
+      if (wi > 0) html += '<span class="sq-letter space"></span>';
+      w.split('').forEach(function(ch, ci) {
+        const isDrop = (q.drop[0] === wi && q.drop[1] === ci);
+        const gone = st.done && isDrop;
+        let cls = 'sq-letter' + (gone ? ' gone' : '') + (st.done && !isDrop ? ' keep' : '');
+        html += '<button class="' + cls + '" onclick="squishTap(' + i + ',' + wi + ',' + ci + ')" ' + (st.done ? 'disabled' : '') + '>' + esc(ch) + '</button>';
+        if (gone) html += '<span class="sq-apos">’</span>';
+      });
+    });
+    if (st.done) html += '<span class="sq-result">= ' + esc(q.result) + '</span>';
+    html += '</div>';
+    if (st.done) html += '<div class="feedback ok">✓ ' + esc(q.words.join(' ')) + ' → the <strong>' + esc(q.words[q.drop[0]][q.drop[1]]) + '</strong> fell out → <strong>' + esc(q.result) + '</strong>. Swap-test: say “' + esc(q.words.join(' ')) + '” — still makes sense? Then ' + esc(q.result) + ' is right.</div>';
+    else if (st.wrong) html += '<div class="feedback hint">🤔 Not that one. Say the two words, then say the squished word. Which letter did you NOT hear anymore?</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishFixit()" ' + (fixitReady() ? '' : 'disabled') + '>' + (S.fixit.done ? '✓ On to Paint the Essay →' : 'Fixed! — Paint the Essay →') + '</button></div>';
+  if (!fixitReady()) html += '<p class="gate-note">Fix all 4 verbs and squish all 4 pairs to continue.</p>';
+  el.innerHTML = html;
+}
+function pickVerb(i, o) { const st = verbItem(i); if (st.correct) return; st.tries++; st.picked = o; if (o === VERB_FIXES[i].ans) { st.correct = true; speakText(VERB_FIXES[i].say, 0.9); toast('Yes! ✓'); } else toast('Say it out loud first 🗣️', 'warning'); renderFixit(); debounceSave(); }
+function squishTap(i, wi, ci) {
+  const st = squishItem(i); if (st.done) return;
+  const q = SQUISH[i];
+  if (q.drop[0] === wi && q.drop[1] === ci) { st.done = true; speakText(q.say, 0.85); toast('Squish! ✓'); if (fixitReady()) fireCelebration(); }
+  else { st.wrong++; toast('Which letter disappears? 👂', 'warning'); }
+  renderFixit(); debounceSave();
+}
+function finishFixit() {
+  if (!fixitReady()) return;
+  S.fixit.done = true; S.timestamps.fixitEnd = new Date().toISOString();
+  const first = VERB_FIXES.filter(function(v, i) { return verbItem(i).tries === 1; }).length;
+  const sqWrong = SQUISH.reduce(function(a, q, i) { return a + squishItem(i).wrong; }, 0);
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Fix-It: irregular past tense + contraction squish', 'Language - Conventions', first, VERB_FIXES.length, Math.round(first / VERB_FIXES.length * 100) + '%', 'Verbs first-try ' + first + '/4 (tries: ' + VERB_FIXES.map(function(v, i) { return verbItem(i).tries; }).join(',') + ') | squish wrong taps: ' + sqWrong]);
+  toast('Fixed! 🔧'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('paint');
+}
+
+// ============================================================
+//  TAB 3 — PAINT THE ESSAY (Retell-First for the essay genre)
+// ============================================================
+let paintPick = null;
+function paintReady() { return MODEL.every(function(p, i) { return S.paint.colors[i] === p.color; }) && S.paint.focusHit; }
+function renderPaint() {
+  const el = document.getElementById('card-paint'); const pt = S.paint;
+  const allColored = MODEL.every(function(p, i) { return pt.colors[i] === p.color; });
+  let html = '<div class="card">' + (pt.done ? '<div class="review-banner">✅ Painted! Tap back any time.</div>' : '') +
+    '<h2>🎨 Paint the Essay</h2>' +
+    '<p class="directions">Your class writes essays with FOUR paragraphs, and each one has a color and a job. This essay is about Clara Barton. Read each paragraph, figure out its job, and paint it the right color.</p>' +
+    '<div class="legend"><span class="lg-red">🔴 Red = introduction (hook + focus statement)</span><span class="lg-yellow">🟡 Yellow = proof 1</span><span class="lg-blue">🔵 Blue = proof 2</span><span class="lg-green">🟢 Green = conclusion</span></div>' +
+    '<div class="info-box">🧠 The <strong>focus statement</strong> is the boss sentence of the whole essay: it says the big idea AND the two reasons. Everything else works for it.</div>';
+  MODEL.forEach(function(p, i) {
+    const c = pt.colors[i];
+    html += '<div class="para ' + (c ? 'c-' + c : '') + '"><span class="p-num">Paragraph ' + (i+1) + '</span>';
+    p.sents.forEach(function(s, si) {
+      let cls = 'sent';
+      if (i === 0 && allColored) { if (pt.focusHit && si === p.focusIdx) cls += ' focus-hit'; else if (pt.focusMiss === si && !pt.focusHit) cls += ' focus-miss'; }
+      html += '<span class="' + cls + '" ' + (i === 0 && allColored && !pt.focusHit ? 'onclick="tapFocus(' + si + ')"' : '') + '>' + esc(s) + '</span> ';
+    });
+    html += '<div class="color-row"><span class="lbl">Paint it:</span>';
+    ['red', 'yellow', 'blue', 'green'].forEach(function(col) { html += '<button class="cbtn ' + col + (c === col ? ' picked' : '') + '" onclick="paintPara(' + i + ',\'' + col + '\')" aria-label="' + col + '"></button>'; });
+    html += '</div>';
+    if (c === p.color) html += '<div class="job">✓ ' + esc(p.job) + '</div>';
+    else if (c) html += '<div class="job" style="color:#B71C1C;">🤔 Not that job. Read the first sentence again — what is this paragraph FOR?</div>';
+    html += '</div>';
+  });
+  if (allColored && !pt.focusHit) html += '<div class="info-box">🔍 All four painted! Now find the <strong>focus statement</strong> in the red paragraph: tap the sentence that says the big idea AND the two reasons.</div>';
+  if (pt.focusHit) html += '<div class="review-banner">🎯 That’s the focus statement — big idea + reason 1 + reason 2. Yours will look just like it.</div>';
+  html += '</div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishPaint()" ' + (paintReady() ? '' : 'disabled') + '>' + (pt.done ? '✓ On to my plan →' : 'Painted — plan MY essay →') + '</button></div>';
+  if (!paintReady()) html += '<p class="gate-note">Paint all four paragraphs and find the focus statement to continue.</p>';
+  el.innerHTML = html;
+}
+function paintPara(i, col) { S.paint.colors[i] = col; if (col === MODEL[i].color) { speakText(MODEL[i].job.split(' — ')[0], 0.95); toast('✓ ' + COLOR_NAMES[col]); } else toast('Hmm — read it again', 'warning'); renderPaint(); debounceSave(); }
+function tapFocus(si) { if (si === MODEL[0].focusIdx) { S.paint.focusHit = true; S.paint.focusMiss = null; toast('🎯 Focus statement found!'); fireCelebration(); } else { S.paint.focusMiss = si; toast('Does that one give the TWO reasons?', 'warning'); } renderPaint(); debounceSave(); }
+function finishPaint() {
+  if (!paintReady()) return;
+  S.paint.done = true; S.timestamps.paintEnd = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Painted Essay — color the model + find the focus statement', 'Writing - Structure', 4, 4, '100%', 'Model: Clara Barton (W.4.2)']);
+  toast('Painted! 🎨'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('plan');
+}
+
+// ============================================================
+//  TAB 4 — PLAN (interview → focus statement)
+// ============================================================
+function planWho() { return (S.plan.who || S.plan.whoCustom || '').trim(); }
+function planReady() { return planWho() && S.plan.ways[0] && S.plan.ways[1] && S.plan.ways[0] !== S.plan.ways[1]; }
+function focusStatement() { return planWho() + ' has a great heart because ' + (planWho() === 'Zoe' || planWho() === 'Grandma' || planWho() === 'Mom' ? 'she ' : (planWho() === 'Grandpa' || planWho() === 'Dad' ? 'he ' : '')) + (S.plan.ways[0] || '___') + ' and because ' + (planWho() === 'Zoe' || planWho() === 'Grandma' || planWho() === 'Mom' ? 'she ' : (planWho() === 'Grandpa' || planWho() === 'Dad' ? 'he ' : '')) + (S.plan.ways[1] || '___') + '.'; }
+function renderPlan() {
+  const el = document.getElementById('card-plan'); const pl = S.plan;
+  let html = '<div class="card">' + (pl.done ? '<div class="review-banner">✅ Plan done. Tap back any time.</div>' : '') +
+    '<h2>🗺️ Plan MY essay: someone with a great heart</h2>' +
+    '<p class="directions">Your class question is <strong>“How does someone show a great heart?”</strong> Think of a real person you know. Talk it through out loud first — then tap and type the short version. You can use the mic here.</p>' +
+    '<div class="info-box">🗣️ Say it before you plan it. Two reasons + one example each — that’s the whole plan.</div></div>';
+  html += '<div class="q-card ' + (planWho() ? 'done' : '') + '"><div class="q-title"><span class="q-num">1</span> WHO has a great heart?</div><div class="chips">';
+  WHO_CHIPS.forEach(function(c) { html += '<button class="chip ' + (pl.who === c ? 'active' : '') + '" onclick="setWho(' + attr(c) + ')">' + esc(c) + '</button>'; });
+  html += '</div><div class="text-input-wrap"><input class="text-input" id="whoCustom" placeholder="…or type someone else" value="' + esc(pl.whoCustom) + '" oninput="onWhoCustom()"></div></div>';
+  [0, 1].forEach(function(k) {
+    html += '<div class="q-card ' + (pl.ways[k] ? 'done' : '') + '"><div class="q-title"><span class="q-num">' + (k + 2) + '</span> Reason ' + (k + 1) + ' — ONE way ' + esc(planWho() || 'this person') + ' shows a great heart</div><div class="chips">';
+    WAY_CHIPS.forEach(function(w) { const used = pl.ways[1 - k] === w; html += '<button class="chip ' + (pl.ways[k] === w ? 'active' : '') + (used ? ' used' : '') + '" onclick="setWay(' + k + ',' + attr(w) + ')" ' + (used ? 'disabled' : '') + '>' + esc(w) + '</button>'; });
+    html += '</div><div class="text-input-wrap"><input class="text-input" id="way' + k + '" placeholder="…or type your own reason (starts with a verb: helps / takes care of / …)" value="' + esc(WAY_CHIPS.indexOf(pl.ways[k]) === -1 ? pl.ways[k] : '') + '" oninput="onWayCustom(' + k + ')"></div>' +
+      '<div class="q-title" style="margin-top:10px;font-size:0.9rem;">📌 One real example (a time it actually happened)</div>' +
+      '<div class="text-input-wrap"><input class="text-input" id="ex' + k + '" placeholder="e.g., When I was sick, she…" value="' + esc(pl.examples[k]) + '" oninput="onExample(' + k + ')"><button class="mini-mic" id="mm-ex' + k + '" onclick="toggleMiniMic(\'ex' + k + '\', function(v){ S.plan.examples[' + k + '] = v; })">🎤</button></div></div>';
+  });
+  html += '<div class="card"><h2>🎯 My focus statement (the boss sentence)</h2><p class="directions">The plan builds it for you. In the Write tab you will <strong>type it yourself</strong> — no mic — so we can check every word.</p>' +
+    '<div class="focus-preview"><span class="slot">' + esc(focusStatement()) + '</span></div></div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishPlan()" ' + (planReady() ? '' : 'disabled') + '>' + (pl.done ? '✓ On to writing →' : 'Plan done — write it →') + '</button></div>';
+  if (!planReady()) html += '<p class="gate-note">Pick a person and TWO different reasons to continue.</p>';
+  el.innerHTML = html;
+}
+function setWho(c) { S.plan.who = c; S.plan.whoCustom = ''; renderPlan(); debounceSave(); }
+function onWhoCustom() { const el = document.getElementById('whoCustom'); if (!el) return; S.plan.whoCustom = el.value; if (el.value.trim()) S.plan.who = ''; refreshPlanLite(); }
+function setWay(k, w) { S.plan.ways[k] = w; renderPlan(); debounceSave(); }
+function onWayCustom(k) { const el = document.getElementById('way' + k); if (!el) return; S.plan.ways[k] = el.value; refreshPlanLite(); }
+function onExample(k) { const el = document.getElementById('ex' + k); if (!el) return; S.plan.examples[k] = el.value; debounceSave(); }
+function refreshPlanLite() { const fp = document.querySelector('.focus-preview .slot'); if (fp) fp.textContent = focusStatement(); const btn = document.querySelector('#card-plan .btn-success'); if (btn) btn.disabled = !planReady(); debounceSave(); }
+function finishPlan() {
+  if (!planReady()) return;
+  S.plan.done = true; S.timestamps.planEnd = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay plan (great heart)', 'Writing - Planning', '', '', '', 'Who: ' + planWho() + ' | R1: ' + S.plan.ways[0] + ' | R2: ' + S.plan.ways[1] + ' | Ex1: ' + (S.plan.examples[0] || '-').slice(0, 80) + ' | Ex2: ' + (S.plan.examples[1] || '-').slice(0, 80)]);
+  toast('Plan done! 🗺️'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('write');
+}
+
+// ============================================================
+//  TAB 5 — WRITE (red paragraph + yellow paragraph · TYPED · finger-point + sound-alike + past-tense radar)
+// ============================================================
+function renderWrite() {
+  const el = document.getElementById('card-write'); const wr = S.write;
+  let html = '<div class="card">' + (wr.done ? '<div class="review-banner">✅ Two paragraphs done! Tap any sentence to edit.</div>' : '') +
+    '<h2>✍️ Write the red and yellow paragraphs</h2>' +
+    '<p class="directions">Today you write the <strong>🔴 introduction</strong> (a hook + your focus statement) and <strong>🟡 proof paragraph 1</strong> (reason 1 + your example). Next time: blue and green. <strong>Say each sentence out loud, then TYPE it</strong> — the mic is off on purpose, so we can check YOUR spelling.</p>' +
+    '<div class="gist-anchor">🎯 ' + esc(focusStatement()) + '</div>' +
+    '<div class="plan-side"><b>My plan:</b> WHO = ' + esc(planWho() || '?') + ' · <b>Reason 1</b> = ' + esc(S.plan.ways[0] || '?') + ' · <b>Example</b> = ' + esc(S.plan.examples[0] || '(say one out loud)') + ' · <b>Reason 2</b> (next time) = ' + esc(S.plan.ways[1] || '?') + '</div>' +
+    '<div class="verb-bank"><div class="vb-title">🔧 Rule-breaker verbs — no -ed on these</div><div class="vb-row">' + VERB_BANK.map(function(v) { return '<span class="vb">' + esc(v[0]) + ' → <b>' + esc(v[1]) + '</b></span>'; }).join('') + '</div></div>' +
+    '</div>';
+  wr.sentences.forEach(function(sent, i) { html += buildWriteSentence(i, sent); });
+  const locked = wr.sentences.filter(function(s) { return s.locked; }).length;
+  if (locked) {
+    html += '<div class="card"><h2>📄 My essay so far</h2><div class="essay-so-far">' + wr.sentences.map(function(s) { return s.locked ? '<span class="es-' + s.part + '">' + esc(s.text.trim()) + '</span>' : ''; }).filter(Boolean).join(' ') + '</div>' +
+      '<div class="pep-banner"><div style="font-size:2.2rem;margin-bottom:4px;">🎨</div><h3>' + locked + ' of 4 sentences locked</h3><p>Typed by you, checked word by word. That is how a real essay gets built — one true sentence at a time.</p></div>' +
+      '<div class="btn-row"><button class="btn btn-success" onclick="finishWrite()">' + (wr.done ? '✓ On to wrap-up →' : 'Done for today — wrap up →') + '</button></div></div>';
+  }
+  el.innerHTML = html;
+}
+function buildWriteSentence(i, sent) {
+  const L = sent.locked; const text = sent.text || '';
+  const meta = {
+    hook: { title: '🔴 Sentence 1 — the hook', badge: 'lg-red', prompt: 'Start the essay with a sentence that makes the reader lean in. Pick one, or write your own.', must: 'MUST: a general idea about great hearts', not: 'NOT YET: your person’s name' },
+    focus: { title: '🔴 Sentence 2 — the FOCUS STATEMENT', badge: 'lg-red', prompt: 'The boss sentence. Type it from your plan (it is pinned above): who + “has a great heart because” + reason 1 + “and because” + reason 2.', must: 'MUST: the person + BOTH reasons', not: 'NOT YET: examples' },
+    topic: { title: '🟡 Sentence 3 — proof 1 topic sentence', badge: 'lg-yellow', prompt: 'Start the yellow paragraph: say reason 1 again, on its own. “First, …” or “One way … shows a great heart is …”', must: 'MUST: reason 1 only', not: 'NOT: reason 2 (that’s the blue paragraph)' },
+    example: { title: '🟡 Sentence 4 — the evidence', badge: 'lg-yellow', prompt: 'Prove it with a REAL time it happened. Past tense — watch the rule-breaker verbs!', must: 'MUST: one real example (when / what happened)', not: 'NOT: how you felt about it (save it)' }
+  }[sent.role];
+  let html = '<div class="write-card p-' + sent.part + ' ' + (L ? 'locked' : '') + '"><div class="write-card-header"><div class="write-card-title">' + (L ? '✓ ' : '') + meta.title + '</div><span class="write-badge ' + meta.badge + '">' + (sent.part === 'red' ? 'Introduction' : 'Proof 1') + '</span></div>' +
+    '<div class="prompt-line">' + esc(meta.prompt) + '</div><div class="territory"><span class="must">' + esc(meta.must) + '</span><span class="not">' + esc(meta.not) + '</span></div>';
+  if (!L) {
+    if (sent.role === 'hook') { html += '<div class="starter-row">'; HOOKS.forEach(function(h) { html += '<button class="starter" onclick="setSentence(' + i + ',' + attr(h) + ')">' + esc(h) + '</button>'; }); html += '</div>'; }
+    if (sent.role === 'topic') { html += '<div class="starter-row">'; TOPIC_STARTERS.forEach(function(h) { html += '<button class="starter" onclick="insertWord(' + i + ',' + attr(h) + ')">' + esc(h) + '</button>'; }); html += '</div>'; }
+    if (sent.role === 'example') { html += '<div class="starter-row">'; EXAMPLE_STARTERS.forEach(function(h) { html += '<button class="starter" onclick="insertWord(' + i + ',' + attr(h) + ')">' + esc(h) + '</button>'; }); GLUE.forEach(function(g) { html += '<button class="starter glue" onclick="insertWord(' + i + ',' + attr(g) + ')">' + esc(g) + '</button>'; }); html += '</div>'; }
+  }
+  html += '<div class="write-textarea-wrap"><span class="type-tag">⌨️ Type it</span><textarea class="write-textarea ' + (L ? 'locked' : '') + '" id="w-text-' + i + '" placeholder="Say it out loud first — then type it here" oninput="onWriteText(' + i + ')" ' + (L ? 'readonly' : '') + '>' + esc(text) + '</textarea></div>';
+  if (text.trim() && !L) {
+    const cls = sent.sourceCheck === 'match' ? 'matched' : (sent.sourceCheck === 'unmatch' ? 'unmatched' : '');
+    const q = { hook: '🔍 <strong>Check.</strong> Is it a complete sentence (who + does what)? Does it make a reader curious?', focus: '🔍 <strong>Check.</strong> Does it name the person AND give BOTH reasons? Read it against the pinned focus statement.', topic: '🔍 <strong>Check.</strong> Is reason 1 in it — and ONLY reason 1?', example: '🔍 <strong>Check.</strong> Is it a real time it happened? Is it in the past? Is it a complete sentence?' }[sent.role];
+    html += '<div class="check-box2 cb-sent ' + cls + '"><div class="source-check-prompt">' + q + '</div><div class="source-check-row"><button class="source-btn match ' + (sent.sourceCheck === 'match' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'match\')">✓ Yes — it works</button><button class="source-btn unmatch ' + (sent.sourceCheck === 'unmatch' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'unmatch\')">✗ Not yet</button></div></div>';
+  }
+  if (text.trim() && !L && sent.sourceCheck === 'match') html += buildProofread(i, sent);
+  if (text.trim() && !L && sent.sourceCheck === 'match' && sent.proofed) { html += buildVerbRadar(i, sent); html += buildHomoCheck(i, sent); }
+  if (!L) { const can = text.trim() && sent.sourceCheck === 'match' && sent.proofed && verbPass(sent) && homoPass(sent); html += '<div class="lock-row"><button class="lock-btn" onclick="lockSentence(' + i + ')" ' + (can ? '' : 'disabled') + '>🔒 Lock sentence ' + (i+1) + '</button></div>'; }
+  else html += '<div class="lock-row"><button class="unlock-btn" onclick="unlockSentence(' + i + ')">✏️ Edit again</button></div>';
+  html += '</div>';
+  return html;
+}
+function resetChecks(sent) { if (sent.sourceCheck === 'match') sent.sourceCheck = null; sent.proofed = false; sent.proofIdx = 0; sent.homo = {}; sent.verbOK = false; }
+function setSentence(i, t) { const s = S.write.sentences[i]; if (s.locked) return; s.text = t; resetChecks(s); renderWrite(); debounceSave(); }
+function insertWord(i, word) { const s = S.write.sentences[i]; if (s.locked) return; const cur = s.text || ''; s.text = cur + (cur && !/\s$/.test(cur) ? ' ' : '') + word + ' '; resetChecks(s); renderWrite(); const ta = document.getElementById('w-text-' + i); if (ta) { ta.focus(); try { ta.setSelectionRange(ta.value.length, ta.value.length); } catch(e) {} } debounceSave(); }
+function onWriteText(i) {
+  const ta = document.getElementById('w-text-' + i); if (!ta) return; const s = S.write.sentences[i];
+  const prevHad = !!(s.text && s.text.trim()); const prevMatch = s.sourceCheck === 'match'; const prevProofed = s.proofed;
+  s.text = ta.value; const nowHas = !!ta.value.trim(); resetChecks(s);
+  if ((prevHad !== nowHas) || prevMatch || prevProofed) { const focused = document.activeElement === ta; const a = focused ? ta.selectionStart : null, b = focused ? ta.selectionEnd : null; renderWrite(); if (focused) { const t2 = document.getElementById('w-text-' + i); if (t2) { t2.focus(); try { t2.setSelectionRange(a, b); } catch(e) {} } } }
+  debounceSave();
+}
+function setSourceCheck(i, c) { const s = S.write.sentences[i]; if (s.locked) return; s.sourceCheck = c; if (c === 'unmatch') toast('Look at the MUST label — what is missing?', 'warning'); if (c === 'match') { s.proofIdx = 0; s.proofed = false; s.homo = {}; s.verbOK = false; } renderWrite(); debounceSave(); }
+// finger-point (standing)
+function proofWords(sent) { return (sent.text || '').trim().split(/\s+/).filter(Boolean); }
+function buildProofread(i, sent) {
+  const words = proofWords(sent), idx = sent.proofIdx || 0, done = sent.proofed;
+  let html = '<div class="proof-box ' + (done ? 'done' : '') + '"><div class="proof-title">' + (done ? '✓ You read every word!' : '👆 Check it word by word') + '</div><div class="proof-sub">' + (done ? 'You read the REAL word on the page each time.' : 'Touch the glowing word and read ONLY that word — what is REALLY there, not what you meant.') + '</div><div class="proof-words">';
+  words.forEach(function(w, wi) { let cls = 'proof-word'; if (wi < idx) cls += ' read'; else if (wi === idx && !done) cls += ' next'; html += '<span class="' + cls + '" ' + (wi === idx && !done ? 'onclick="proofTap(' + i + ')"' : '') + '>' + esc(w) + '</span>'; });
+  html += '</div>'; if (!done) html += '<div class="proof-progress">' + idx + ' of ' + words.length + ' words read</div><div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="btn btn-sm btn-secondary" onclick="proofReset(' + i + ')">↻ Start over</button></div>';
+  return html + '</div>';
+}
+function proofTap(i) { const s = S.write.sentences[i]; const words = proofWords(s); const w = words[s.proofIdx]; if (w) speakText(w.replace(/[.,!?"“”]/g, ''), 0.6); s.proofIdx = (s.proofIdx || 0) + 1; if (s.proofIdx >= words.length) { s.proofed = true; toast('You read every word! 👀✓'); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Finger-point proofread (typed sentence ' + (i+1) + ')', 'Writing - Self-Monitoring', words.length, words.length, '100%', s.text.slice(0, 120)]); } renderWrite(); debounceSave(); }
+function proofReset(i) { S.write.sentences[i].proofIdx = 0; S.write.sentences[i].proofed = false; renderWrite(); debounceSave(); }
+// NEW — past-tense radar
+function normWord(w) { return (w || '').toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z']/g, ''); }
+function verbHits(sent) { return proofWords(sent).map(normWord).filter(function(w) { return BAD_VERBS[w]; }); }
+function verbPass(sent) { return verbHits(sent).length === 0; }
+function buildVerbRadar(i, sent) {
+  const hits = verbHits(sent);
+  if (!hits.length) return '<div class="verb-box done"><div class="verb-title">✓ Rule-breaker verb check</div><div class="verb-sub">No -ed on a rule-breaker verb. Nice.</div></div>';
+  return '<div class="verb-box"><div class="verb-title">🔧 Rule-breaker verb alert</div><div class="verb-sub">Say it: “Yesterday I ___.” Then fix it in the box: ' + hits.map(function(h) { return '<span class="verb-hit">' + esc(h) + ' → ' + esc(BAD_VERBS[h]) + '</span>'; }).join('') + '</div></div>';
+}
+// sound-alike check (standing since Sep 2)
+function homoHits(sent) { const words = proofWords(sent), hits = []; words.forEach(function(w, wi) { const n = normWord(w); HOMO_SETS.forEach(function(set) { if (set.indexOf(n) !== -1) hits.push({ idx: wi, written: n, set: set }); }); }); return hits; }
+function homoPass(sent) { return homoHits(sent).every(function(h) { return (sent.homo || {})[h.idx] === h.written; }); }
+function buildHomoCheck(i, sent) {
+  const hits = homoHits(sent), homo = sent.homo || {};
+  if (!hits.length) return '<div class="homo-box done"><div class="homo-title">✓ Sound-alike check</div><div class="homo-sub">No sound-alike words in this sentence.</div></div>';
+  const allOk = homoPass(sent), anyFix = hits.some(function(h) { return homo[h.idx] && homo[h.idx] !== h.written; });
+  let html = '<div class="homo-box ' + (allOk ? 'done' : (anyFix ? 'fix' : '')) + '"><div class="homo-title">' + (allOk ? '✓ Sound-alike check passed' : '🔍 Sound-alike check') + '</div><div class="homo-sub">' + (allOk ? 'Every sound-alike word means what you wanted.' : 'Your ear can’t tell these apart — look at the word and ask: which one did I MEAN?') + '</div>';
+  hits.forEach(function(h) {
+    const picked = homo[h.idx], status = picked ? (picked === h.written ? 'ok' : 'fix') : '';
+    html += '<div class="homo-item ' + status + '"><div class="homo-q">You wrote <span class="hw">' + esc(h.written) + '</span>. Which one did you MEAN?</div><div class="homo-opts">';
+    h.set.forEach(function(w) { html += '<button class="homo-opt' + (picked === w ? ' active ' + (w === h.written ? 'ok' : 'fix') : '') + '" onclick="pickHomo(' + i + ',' + h.idx + ',' + attr(w) + ')">' + esc(MEANINGS[w] || w) + '</button>'; });
+    html += '</div>';
+    if (status === 'ok') html += '<div class="homo-verdict ok">✓ Match.</div>'; else if (status === 'fix') html += '<div class="homo-verdict fix">🔁 Then the word you need is <strong>' + esc(picked) + '</strong>. Fix it in the box.</div>';
+    html += '</div>';
+  });
+  return html + '</div>';
+}
+function pickHomo(i, wi, w) { const s = S.write.sentences[i]; if (s.locked) return; if (!s.homo) s.homo = {}; s.homo[wi] = w; const hit = homoHits(s).filter(function(h) { return h.idx === wi; })[0]; if (hit) { const ok = w === hit.written; postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Sound-alike check (typed sentence ' + (i+1) + ')', 'Language - Confused Words', ok ? 1 : 0, 1, ok ? '100%' : '0%', 'Wrote "' + hit.written + '", meant "' + w + '"']); toast(ok ? 'Match ✓' : 'Good catch — fix it 🔁', ok ? '' : 'warning'); } renderWrite(); debounceSave(); }
+function lockSentence(i) {
+  const s = S.write.sentences[i]; if (!s.text.trim() || s.sourceCheck !== 'match' || !s.proofed || !verbPass(s) || !homoPass(s)) return;
+  s.locked = true; S.timestamps['s' + (i+1) + 'Locked'] = new Date().toISOString();
+  postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay sentence ' + (i+1) + ' locked (' + s.role + ', TYPED)', 'Writing', 'Locked', '', '', s.text.slice(0, 160)]);
+  toast('Sentence ' + (i+1) + ' locked! 🎉'); fireCelebration(); renderWrite(); debounceSave();
+}
+function unlockSentence(i) { S.write.sentences[i].locked = false; renderWrite(); debounceSave(); }
+function finishWrite() { S.write.done = true; S.timestamps.writeEnd = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay day 1 complete (red + yellow)', 'Writing', 'Done', '', '', 'Locked: ' + S.write.sentences.filter(function(s) { return s.locked; }).length + '/4 | Who: ' + planWho()]); toast('Two paragraphs! 🎨'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('wrap'); }
+
+// ============================================================
+//  TAB 6 — WRAP-UP
+// ============================================================
+function renderWrap() {
+  const el = document.getElementById('card-wrap'); const w = S.wrap;
+  const hasWish = w.wish.length > 0 || (w.wishCustom || '').trim();
+  let html = '<div class="card">' + (w.done ? '<div class="review-banner">✅ Session complete!</div>' : '') + '<h2>⭐ Stars &amp; a Wish</h2><p class="directions">Tap a star for everything you did today. Then ONE wish for next time.</p><div class="stars-row">';
+  STARS.forEach(function(l, i) { const on = w.stars.indexOf(i) !== -1; html += '<button class="star-btn ' + (on ? 'active' : '') + '" onclick="toggleStar(' + i + ')">' + (on ? '⭐ ' : '☆ ') + esc(l) + '</button>'; });
+  html += '</div></div><div class="card"><h2>🌠 My wish</h2><div class="stars-row">';
+  WISHES.forEach(function(g) { const on = w.wish.indexOf(g) !== -1; html += '<button class="wish-chip ' + (on ? 'active' : '') + '" onclick="toggleWish(' + attr(g) + ')">' + (on ? '✓ ' : '') + esc(g) + '</button>'; });
+  html += '</div><input class="text-input" style="margin-top:10px;" id="wishCustom" placeholder="…or write your own" value="' + esc(w.wishCustom) + '" oninput="onWishCustom()"></div>';
+  html += '<div class="card"><h2><span class="tutor-tag">Tutor</span> Notes</h2><div class="tutor-notes"><label>Anything to capture (energy, what he said unprompted, what to change next week, newsletter news from the parents)</label><textarea id="tn-notes" oninput="onTutorNote()">' + esc(w.tutor.notes) + '</textarea></div></div>';
+  html += '<div class="card"><div class="pep-banner"><div style="font-size:2.4rem;margin-bottom:6px;">🎨❤️</div><h3>Two paragraphs down, two to go!</h3><p>You painted an essay, planned your own, and TYPED your own sentences. Next time: the blue paragraph and the green one — and then you will have written a whole 4th-grade essay.</p></div>' +
+    '<div class="btn-row"><button class="btn btn-purple" onclick="finishWrap()" ' + (hasWish && w.stars.length ? '' : 'disabled') + '>' + (w.done ? '✓ All done!' : 'Finish 🎉') + '</button></div>' + (hasWish && w.stars.length ? '' : '<p class="gate-note">Tap at least one star and pick a wish.</p>') + '</div>';
+  el.innerHTML = html;
+}
+function toggleStar(i) { const k = S.wrap.stars.indexOf(i); if (k !== -1) S.wrap.stars.splice(k, 1); else S.wrap.stars.push(i); renderWrap(); debounceSave(); }
+function toggleWish(g) { const k = S.wrap.wish.indexOf(g); if (k !== -1) S.wrap.wish.splice(k, 1); else S.wrap.wish.push(g); renderWrap(); debounceSave(); }
+function onWishCustom() { const el = document.getElementById('wishCustom'); if (!el) return; S.wrap.wishCustom = el.value; const btn = document.querySelector('#card-wrap .btn-purple'); if (btn) btn.disabled = !((S.wrap.wish.length || S.wrap.wishCustom.trim()) && S.wrap.stars.length); debounceSave(); }
+function onTutorNote() { const el = document.getElementById('tn-notes'); if (el) { S.wrap.tutor.notes = el.value; debounceSave(); } }
+function finishWrap() { S.wrap.done = true; S.timestamps.sessionEnd = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Session Complete — Painted Essay day 1', 'Wrap-up', 'Done', '', '', 'Stars: ' + S.wrap.stars.length + ' | Wish: ' + S.wrap.wish.concat(S.wrap.wishCustom.trim() ? [S.wrap.wishCustom.trim()] : []).join('; ')]); toast('Great work! 🎉'); fireCelebration(); setTimeout(fireCelebration, 600); saveImmediate(); updateTabBadges(); renderWrap(); }
+
+// ============================================================
+//  INIT
+// ============================================================
+let lastCloudJSON = null;
+async function init() {
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState && cloudState.timestamps) { S = Object.assign(freshState(), cloudState); lastCloudJSON = JSON.stringify(cloudState); backfill(); toast('Loaded from cloud ☁️'); }
+  else if (!VIEW_ONLY && loadFromLocalStorage()) { backfill(); toast('Loaded local save'); }
+  if (S.wrap.done || S.write.done) switchTab('wrap');
+  else if (S.plan.done) switchTab('write');
+  else if (S.paint.done) switchTab('plan');
+  else if (S.fixit.done) switchTab('paint');
+  else if (S.reading.done) switchTab('fixit');
+  else { renderReading(); updateTabBadges(); }
+  if (VIEW_ONLY) { document.getElementById('saveIndicator').textContent = '👀 View-only mirror — syncing from cloud'; const rb = document.querySelector('.tutor-reset'); if (rb) rb.style.display = 'none'; setInterval(pollCloud, 10000); }
+  else setInterval(function() { if (dirty) saveStateToCloud(); }, 30000);
+}
+async function pollCloud() {
+  const cs = await loadStateFromCloud(CLOUD_STATE_KEY); if (!cs || !cs.timestamps) return;
+  const j = JSON.stringify(cs); if (j === lastCloudJSON) return; lastCloudJSON = j;
+  S = Object.assign(freshState(), cs); backfill();
+  document.getElementById('saveIndicator').textContent = '👀 Mirror updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  RENDER[activeTab](); updateTabBadges();
+}
+function backfill() {
+  const f = freshState();
+  ['reading', 'fixit', 'paint', 'plan', 'write', 'wrap'].forEach(function(k) { if (!S[k]) S[k] = f[k]; });
+  if (!S.fixit.verbs) S.fixit.verbs = []; if (!S.fixit.squish) S.fixit.squish = [];
+  if (!S.paint.colors) S.paint.colors = ['', '', '', ''];
+  if (!S.plan.ways) S.plan.ways = ['', '']; if (!S.plan.examples) S.plan.examples = ['', ''];
+  if (!S.write.sentences || S.write.sentences.length < 4) S.write.sentences = f.write.sentences;
+  S.write.sentences.forEach(function(s, i) { const d = f.write.sentences[i]; if (!s.part) s.part = d.part; if (!s.role) s.role = d.role; if (typeof s.proofIdx !== 'number') s.proofIdx = 0; if (typeof s.proofed !== 'boolean') s.proofed = false; if (!s.homo) s.homo = {}; });
+  if (!S.wrap.tutor) S.wrap.tutor = { notes: '' }; if (!S.timestamps) S.timestamps = {};
+}
+init();
+</script>
+</body>
+</html>
