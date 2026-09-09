@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6353b7">
+<meta name="description" content="Build paragraphs and essays, one idea at a time. Short, supportive writing games with drag-and-drop, hints, and read aloud.">
+<title>Word Garden · Paragraph & Essay Practice</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23dcedde'/%3E%3Cpath d='M20 34V17M20 25C8 27 6 17 7 10c10 0 14 5 13 15ZM20 18C19 7 26 4 34 6c0 9-5 14-14 12Z' fill='none' stroke='%23246845' stroke-width='2.6' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#263344;--muted:#606b7c;--purple:#6353b7;--purple-dark:#4d3d99;--lavender:#f1edfc;--mint:#ebf6ef;--green:#246845;--line:#dfe4e9;--paper:#fff;--canvas:#fafbfd;--gold:#f2bd4c;--radius:18px;--shadow:0 4px 0 rgba(39,51,68,.055);font-family:"Avenir Next",Nunito,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas)}button,select,input{font:inherit}button,select{color:inherit}button{cursor:pointer}button:disabled{cursor:default}button,a,input,select,summary{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #b47800;outline-offset:4px}button{touch-action:manipulation}button svg{flex-shrink:0}svg{vertical-align:middle}h1,h2,h3,p{margin:0}button{border:0}a{color:var(--purple)}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip{position:absolute;top:-60px;left:16px;background:#fff;padding:12px;z-index:300}.skip:focus{top:12px}.shell{max-width:1260px;margin:auto;padding:0 34px 35px}.topbar{height:98px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:49px;height:49px;display:grid;place-items:center;background:#dcedde;border-radius:16px;transform:rotate(-5deg);color:var(--green)}.brand-name{font-size:24px;font-weight:850;letter-spacing:-.8px;line-height:1.15}.brand-caption{font-size:12px;letter-spacing:.2px;color:var(--muted);margin-top:4px}.header-actions{display:flex;align-items:center;gap:22px}.progress-mini{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:750;color:var(--green)}.icon-button{width:42px;height:42px;background:white;border:1px solid var(--line);border-radius:12px;display:inline-grid;place-items:center;color:var(--muted)}.text-button{background:transparent;color:var(--muted);font-weight:700;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 11px;border-radius:10px}.text-button:hover{background:#edf0f4}.nav-row{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:2px 0 27px}.mode-tabs{display:flex;gap:5px;background:#edf0f5;border-radius:16px;padding:5px}.mode-tab{padding:13px 28px;background:transparent;font-size:16px;font-weight:800;color:#5f6979;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:10px}.mode-tab.active{background:var(--purple);color:#fff;box-shadow:0 3px 0 #d8d0eb}.support-switch{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;cursor:pointer;user-select:none}.support-switch input{appearance:none;position:relative;width:39px;height:23px;background:#c3cbd5;border-radius:14px;margin:0;cursor:pointer;flex-shrink:0}.support-switch input:checked{background:var(--green)}.support-switch input:after{content:"";position:absolute;left:3px;top:3px;width:17px;height:17px;background:#fff;border-radius:50%;transition:transform .2s}.support-switch input:checked:after{transform:translateX(16px)}.sub-tabs{display:flex;gap:8px;margin:-6px 0 24px;flex-wrap:wrap}.sub-tab{background:white;border:1px solid var(--line);border-radius:11px;padding:10px 15px;font-size:14px;font-weight:750}.sub-tab.active{background:var(--lavender);border-color:#c5b8e9;color:var(--purple-dark)}.lesson-toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:19px}.lesson-picker{display:flex;align-items:center;gap:11px;min-width:0}.lesson-picker label{font-size:12px;font-weight:850;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted)}.lesson-picker select{max-width:420px;width:auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px 32px 9px 12px;font-size:14px;font-weight:700;min-width:0}.step-controls{display:flex;align-items:center;gap:9px}.step-count{font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap}.step-controls .icon-button{width:34px;height:34px;border-radius:9px}.step-controls .icon-button:disabled{opacity:.35}.intro{display:flex;justify-content:space-between;gap:24px;align-items:center;margin-bottom:21px}.intro h1{font-size:34px;letter-spacing:-1.1px;line-height:1.16;font-weight:850}.intro p{font-size:16px;color:var(--muted);line-height:1.6;margin-top:8px;max-width:820px}.read-button{display:inline-flex;gap:8px;align-items:center;justify-content:center;padding:11px 14px;border-radius:12px;background:white;border:1px solid var(--line);font-size:14px;font-weight:750;white-space:nowrap}.read-button:hover{border-color:#bcaddf;background:#faf8ff}.read-button.playing{color:var(--purple);background:var(--lavender)}.structure{display:flex;align-items:center;gap:12px;padding:13px 18px;background:var(--lavender);border-radius:13px;margin-bottom:24px;font-size:13px;line-height:1.5;color:#554577;flex-wrap:wrap}.structure b{font-weight:800}.structure-piece{display:flex;gap:7px;align-items:center}.structure .connector{color:#8f80af}.work-instruction{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-bottom:17px}.work-instruction strong{color:var(--ink);font-weight:750}.workspace{display:grid;grid-template-columns:1fr 1.08fr;gap:30px;align-items:start}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.panel-heading h2{font-size:18px;letter-spacing:-.2px;font-weight:850}.little-label{font-size:12px;color:var(--muted);font-weight:700}.bank{background:#f1f4f7;border:1px solid #e8ecf0;border-radius:var(--radius);padding:19px;min-height:250px;transition:background .15s}.bank-cards{display:grid;gap:11px}.sentence-card{position:relative;display:flex;align-items:stretch;background:#fff;border:1.5px solid #dce2e9;box-shadow:var(--shadow);border-radius:13px;min-width:0;transition:border-color .15s,box-shadow .15s,background .15s}.sentence-card:hover{border-color:#aea0d3}.sentence-card.selected{border-color:var(--purple);background:#f8f5ff;box-shadow:0 0 0 2px #ded5f5}.card-main{display:block;text-align:left;padding:16px 12px 16px 4px;width:100%;background:none;border-radius:10px;color:var(--ink);font-size:17px;font-weight:550;line-height:1.55}.card-main:disabled{color:var(--ink)}.drag-grip{width:32px;min-width:32px;color:#8793a3;background:none;padding:9px 3px;border-radius:10px;cursor:grab;touch-action:none;display:grid;place-items:center}.drag-grip:hover{color:var(--purple)}.drag-grip:disabled{cursor:default;opacity:.3}.card-tools{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:5px 5px 5px 0}.tiny-button{display:grid;place-items:center;width:30px;height:30px;min-width:30px;background:transparent;color:#748091;border-radius:8px}.tiny-button:hover{background:var(--lavender);color:var(--purple)}.tiny-button:disabled{opacity:.3}.slot-stack{display:grid;gap:11px}.slot{position:relative;border:1.5px dashed #d1cadd;border-radius:13px;min-height:85px;background:#fff;display:flex;align-items:stretch;gap:11px;padding:12px;transition:background .15s,border-color .15s}.slot.empty{background:#fdfbff}.slot-number{width:28px;height:28px;border-radius:9px;background:#eae4f6;color:var(--purple-dark);display:grid;place-items:center;font-size:13px;font-weight:850;flex-shrink:0;margin-top:1px}.slot-place{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;background:transparent;border:0;color:var(--muted);width:100%;font-size:14px;line-height:1.4}.slot-place strong{display:block;color:#605071;font-size:14px;font-weight:750}.slot-place span.subtext{display:block;font-size:12px;color:#75647e;margin-top:3px}.slot-place .plus{color:#ad9bbf}.slot.ready{border-color:#b6a6d5;background:#f8f3ff}.slot.filled{border-style:solid;border-color:#e0dbe8;align-items:flex-start;padding:10px}.slot.filled .sentence-card{width:100%;border:0;box-shadow:none;min-height:51px;background:none}.slot.filled .card-main{padding:0 4px;line-height:1.55}.slot.filled .drag-grip{width:24px;min-width:24px;padding:3px 0;align-self:center}.slot.filled .slot-number{margin-top:5px}.slot-content{min-width:0;flex:1}.part-label{font-size:11px;color:var(--purple-dark);font-weight:850;margin:0 0 6px 27px;letter-spacing:.2px}.slot.correct{border-color:#90bc9f;background:#f0f8f1}.slot.correct .slot-number{background:#d9eedd;color:var(--green)}.slot.correct .part-label{color:var(--green)}.slot.needs-work{border-color:#d0a566;background:#fffcf5}.slot.needs-work .slot-number{background:#f6e8cb;color:#856127}.drop-hover{background:#eee7ff!important;border-color:var(--purple)!important;outline:2px solid #c7b7ed}.return-zone{width:100%;background:white;border:1px dashed #ac9ac5;border-radius:10px;padding:11px;margin-top:12px;font-size:13px;font-weight:700;color:var(--purple-dark)}.bank-empty{padding:35px 15px 30px;text-align:center;line-height:1.7;color:var(--muted);font-size:15px}.bank-empty .big-icon{width:60px;height:60px;display:grid;place-items:center;border-radius:20px;background:#e4ece4;color:var(--green);margin:0 auto 15px}.bank-empty strong{display:block;color:var(--ink);margin-bottom:5px;font-size:17px}.small-note{font-size:12px;color:var(--muted);line-height:1.6;margin-top:13px}.action-area{margin-top:23px}.hint-box{padding:15px 18px;background:#fff6df;color:#76571f;border:1px solid #ecdbb0;border-radius:12px;font-size:15px;line-height:1.6;margin-bottom:15px;display:flex;align-items:flex-start;gap:10px}.hint-box svg{margin-top:2px;flex-shrink:0}.feedback{border-radius:14px;padding:18px 20px;margin:0 0 16px;display:flex;gap:13px;align-items:flex-start;background:#fff5df;border:1px solid #edd4a2;scroll-margin-top:20px}.feedback.success{background:var(--mint);border-color:#bbd7c0}.feedback.info{background:var(--lavender);border-color:#d9ceed}.feedback-icon{margin-top:2px;color:#86601d;flex-shrink:0}.feedback.success .feedback-icon{color:var(--green)}.feedback.info .feedback-icon{color:var(--purple)}.feedback h3{font-size:18px;margin-bottom:6px;line-height:1.4}.feedback p{font-size:15px;line-height:1.65}.actions{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--canvas);padding:4px 0 16px}.actions-left,.actions-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.secondary{background:white;border:1px solid var(--line);border-radius:12px;padding:12px 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:750}.secondary:hover{background:#f2eef9;border-color:#c8bddf}.primary{padding:14px 24px;min-height:50px;display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--purple);color:white;border:1px solid var(--purple-dark);box-shadow:0 4px 0 #453486;border-radius:12px;font-size:16px;font-weight:800;transition:transform .12s,box-shadow .12s}.primary:hover{background:var(--purple-dark);transform:translateY(-1px)}.primary:active{transform:translateY(3px);box-shadow:0 1px 0 #453486}.primary:disabled{background:#aa9fc8;border-color:#9487b5;box-shadow:0 3px 0 #8f81aa;opacity:.75;transform:none}.footer-note{text-align:center;color:#687382;font-size:12px;margin-top:28px;line-height:1.8}.completed-reading{margin-top:19px;background:white;border:1px solid #cce0d2;border-radius:13px;padding:15px 18px}.completed-reading summary{color:var(--green);font-size:15px;font-weight:800;cursor:pointer}.reading-copy{margin-top:14px;max-width:780px}.reading-copy p{font-size:18px;line-height:1.9;margin:0 0 15px}.reading-copy p:last-child{margin:0}.reading-copy .read-button{margin-top:15px}.detective-workspace{display:grid;grid-template-columns:.72fr 1fr;gap:32px;align-items:start}.reference{background:var(--mint);border:1px solid #d8e8dc;border-radius:16px;padding:23px}.reference h2{font-size:17px;font-weight:850;color:#305d45;line-height:1.5;margin-bottom:17px}.reference-item{font-size:17px;line-height:1.65;margin-top:14px;display:flex;gap:12px}.reference-item .number{width:25px;height:25px;flex-shrink:0;display:grid;place-items:center;background:#d8eadd;border-radius:8px;color:#3d6c4c;font-size:12px;font-weight:800;margin-top:4px}.detective-note{display:flex;gap:9px;font-size:13px;line-height:1.7;color:#55715d;border-top:1px solid #d1e2d5;margin-top:21px;padding-top:17px}.detective-note svg{flex-shrink:0;margin-top:4px}.question-heading{font-size:20px;line-height:1.5;letter-spacing:-.2px;margin-bottom:16px}.option-list{display:grid;gap:13px}.option{display:flex;align-items:flex-start;gap:12px;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:17px;text-align:left;font-size:17px;line-height:1.65;box-shadow:var(--shadow)}.option:hover{border-color:#ad9ccf}.option.selected{border-color:var(--purple);background:#f7f3ff;box-shadow:0 0 0 2px #e4daf5}.option-letter{display:grid;place-items:center;flex-shrink:0;background:#f0edf7;width:29px;height:29px;border-radius:9px;color:#746582;font-size:13px;font-weight:850;margin-top:1px}.option.selected .option-letter{background:var(--purple);color:white}.option.correct{border-color:#8cb89a;background:#f1f8f2}.option.correct .option-letter{color:var(--green);background:#d5e9da}.chosen-paragraph{border-left:4px solid #78aa88;background:#f2f8f3;padding:14px 18px;border-radius:0 12px 12px 0;margin-bottom:22px;font-size:16px;line-height:1.7}.chosen-paragraph strong{display:block;color:var(--green);font-size:12px;letter-spacing:.4px;margin-bottom:5px}.question-steps{display:flex;gap:17px;margin-bottom:13px;color:#737f8d;font-size:12px;font-weight:800}.question-steps .current{color:var(--purple-dark)}.question-steps .done{color:var(--green)}.drag-ghost{position:fixed;pointer-events:none;z-index:1000;max-height:190px;overflow:hidden;opacity:.96;transform:rotate(-2deg);box-shadow:0 12px 28px #27334436;border:2px solid var(--purple);background:#fff;width:380px;border-radius:14px;padding:17px;font-size:17px;line-height:1.55}.is-dragging,.is-dragging *{cursor:grabbing!important;user-select:none!important}.drag-origin{opacity:.3}.confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:200;overflow:hidden}.confetti-piece{position:absolute;left:var(--x);top:-20px;width:9px;height:15px;background:var(--c);border-radius:3px;animation:fall var(--duration) var(--delay) cubic-bezier(.2,.6,.6,1) forwards;opacity:0}@keyframes fall{0%{opacity:1;transform:translate3d(0,-30px,0) rotate(0)}100%{opacity:0;transform:translate3d(var(--drift),105vh,0) rotate(540deg)}}dialog{border:0;border-radius:22px;max-width:600px;width:calc(100% - 30px);padding:28px;color:var(--ink);box-shadow:0 18px 80px #16213933;max-height:85vh;overflow:auto}dialog::backdrop{background:#27334466;backdrop-filter:blur(3px)}.dialog-top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:18px}.dialog-top h2{font-size:26px;letter-spacing:-.6px}dialog p,dialog li{font-size:15px;line-height:1.8}dialog ol{padding-left:23px}dialog li{padding-left:4px;margin-bottom:10px}dialog h3{margin:20px 0 8px;font-size:17px}dialog .dialog-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:23px}.danger-confirm{color:#934023}.empty-complete{color:var(--green)}
+@media(min-width:1000px){.essay .bank{position:sticky;top:18px}.paragraph .bank{position:sticky;top:18px}.reference{position:sticky;top:18px}}
+@media(max-width:800px){.shell{padding:0 22px 30px}.topbar{height:87px}.header-actions{gap:10px}.brand-caption{font-size:11px}.brand-name{font-size:22px}.workspace{gap:19px;grid-template-columns:1fr 1fr}.bank{padding:13px}.card-main{font-size:16px}.intro h1{font-size:30px}.structure{gap:8px;padding:12px 15px;font-size:12px}.lesson-picker select{max-width:340px}.detective-workspace{grid-template-columns:.75fr 1fr;gap:20px}.reference{padding:18px}.option{padding:14px;font-size:16px}.reference-item{font-size:16px}.slot{padding:10px;gap:8px}.slot-number{width:25px;height:25px;border-radius:8px}.mode-tab{padding:12px 20px}}
+@media(max-width:620px){.shell{padding:0 16px 26px}.topbar{height:83px;gap:9px}.brand{gap:9px}.brand-mark{width:40px;height:40px;border-radius:12px}.brand-mark svg{width:28px;height:28px}.brand-name{font-size:21px}.brand-caption{display:none}.header-actions{gap:7px}.progress-mini{gap:5px;font-size:12px}.progress-mini svg{width:19px;height:19px}.header-actions .text-button{width:37px;height:37px;padding:0}.header-actions .text-button span{display:none}.nav-row{margin-bottom:20px;align-items:flex-start;gap:13px;flex-wrap:wrap}.mode-tabs{flex:1;min-width:100%;padding:4px}.mode-tab{flex:1;padding:13px 8px;font-size:14px;gap:7px;white-space:nowrap}.support-switch{margin-left:auto;font-size:13px;gap:8px}.lesson-toolbar{align-items:flex-start;margin-bottom:20px;gap:7px}.lesson-picker{display:flex;flex-direction:column;align-items:flex-start;gap:6px;flex:1;overflow:hidden}.lesson-picker label{font-size:10px}.lesson-picker select{max-width:100%;width:100%;font-size:13px;padding-left:9px}.step-controls{gap:5px;padding-top:22px}.step-count{font-size:11px;min-width:30px;text-align:center}.step-controls .icon-button{width:31px;height:34px}.intro{align-items:flex-start;gap:12px;margin-bottom:17px;flex-wrap:wrap}.intro h1{font-size:29px;letter-spacing:-.9px}.intro p{font-size:15px;line-height:1.6;margin-top:7px}.intro .read-button{padding:8px 11px;font-size:12px;min-height:38px}.structure{display:block;margin-bottom:20px;font-size:13px}.structure-piece{display:flex;gap:8px;margin:4px 0}.structure .connector{display:none}.work-instruction{font-size:13px;line-height:1.6;align-items:flex-start}.work-instruction svg{flex-shrink:0;margin-top:4px}.workspace,.detective-workspace{grid-template-columns:1fr;gap:22px}.bank{padding:15px;min-height:140px}.bank-cards{gap:9px}.panel-heading h2{font-size:17px}.panel-heading{margin-bottom:12px}.card-main{font-size:17px;padding:13px 7px 13px 2px}.drag-grip{width:35px;min-width:35px}.slot{min-height:79px}.slot.filled .card-main{font-size:17px}.slot.filled .slot-number{margin-top:3px}.actions{align-items:stretch;gap:15px;flex-direction:column}.actions-left{justify-content:space-between}.actions-right{justify-content:stretch}.actions-right .primary{width:100%}.actions .secondary{padding:10px 12px;font-size:13px}.actions .text-button{font-size:13px}.action-area{margin-top:20px}.feedback{padding:16px;gap:11px}.feedback h3{font-size:17px}.feedback p{font-size:15px}.hint-box{font-size:14px;padding:13px}.reference{padding:18px}.reference-item{font-size:17px}.option{font-size:17px;padding:16px 13px;gap:10px}.question-heading{font-size:19px}.sub-tabs{gap:6px;margin:-4px 0 22px}.sub-tab{font-size:12px;padding:10px 11px;flex:1}.footer-note{margin-top:21px}.brand-caption{display:none}.question-steps{font-size:11px}.reading-copy p{font-size:17px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media print{body{background:#fff}.topbar,.mode-tabs,.support-switch,.lesson-toolbar,.read-button,.actions,.card-tools,.drag-grip,.footer-note,.sub-tabs,.work-instruction,.bank,.confetti-layer{display:none!important}.shell{max-width:none;padding:0}.workspace{display:block}.slot{break-inside:avoid}.intro{margin-top:15px}.slot .card-main{color:#000}.completed-reading{display:block}details .reading-copy{display:block}.reference{position:static}.detective-workspace{display:block}.option{margin:12px 0}.nav-row{display:none}}
+
+@media(max-width:360px){.mode-tab{font-size:13px;gap:5px}.mode-tab svg{width:17px;height:17px}.step-controls{gap:3px}.step-count{font-size:10px}.step-controls .icon-button{width:28px}}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to activity</a>
+<div id="app"></div>
+<div id="live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="celebration" class="confetti-layer" aria-hidden="true"></div>
+<dialog id="guide-dialog" aria-label="Word Garden grown-up guide"><div id="guide-content"></div></dialog>
+<noscript><p style="padding:30px;font:20px system-ui">Word Garden needs JavaScript enabled in your browser. Open this file in a web browser to play.</p></noscript>
+<script>
+/* Original practice texts. Edit or add activities here; no service or account is required. */
+const PARAGRAPHS = [
+  {
+    id: 'p-snack', title: 'Make a fruit snack', genre: 'How-to',
+    prompt: 'Explain how to make a simple fruit snack.',
+    sentences: [
+      'It is easy to make a tasty fruit snack.',
+      'First, wash an apple and some grapes.',
+      'Next, ask an adult to cut the apple into small pieces.',
+      'Then, put the apple pieces and grapes in a bowl.',
+      'Now your fruit snack is ready to enjoy!'
+    ],
+    hint: 'The words First, Next, and Then help you follow the steps.',
+    lesson: 'The topic sentence tells what you will make. The details give the steps. The closing tells that the snack is ready.'
+  },
+  {
+    id: 'p-recess', title: 'A better recess', genre: 'Opinion', flexibleMiddle: true,
+    prompt: 'Give reasons why your class should have more games to choose from at recess.',
+    sentences: [
+      'Our class should have more games to choose from at recess.',
+      'Some kids like running games, while others like quieter games.',
+      'Different games give everyone a chance to find something fun.',
+      'Trying a new game can also help us make new friends.',
+      'More choices would make recess better for our whole class.'
+    ],
+    hint: 'Start with the opinion. Keep the reasons in the middle. End by returning to the opinion.',
+    lesson: 'The topic sentence states an opinion. The details support it. The closing brings the reader back to the main idea. These three reasons can work in any order.'
+  },
+  {
+    id: 'p-library', title: 'Find a library book', genre: 'How-to',
+    prompt: 'Explain the steps for borrowing a book from the library.',
+    sentences: [
+      'Borrowing a library book takes just a few steps.',
+      'First, look for a book you would like to read.',
+      'Next, take the book to the checkout desk.',
+      'Then, use your library card to borrow the book.',
+      'You can now take your book home and start reading.'
+    ],
+    hint: 'Find the sentence that introduces all the steps, not just one step.',
+    lesson: 'The first sentence introduces the whole process. The three middle sentences put the steps in order. The closing finishes the process.'
+  },
+  {
+    id: 'p-rain', title: 'A rainy-day surprise', genre: 'Story',
+    prompt: 'Tell a short story about finding something fun to do on a rainy day.',
+    sentences: [
+      'A rainy afternoon turned into a fun game day.',
+      'At first, I felt sad because the rain kept me inside.',
+      'Then my brother asked me to play a board game.',
+      'Soon we were laughing as we moved our pieces around the board.',
+      'By the end of the game, I was glad we had stayed inside.'
+    ],
+    hint: 'How does the feeling change? Follow the story from feeling sad to having fun.',
+    lesson: 'The topic sentence introduces the rainy afternoon. The details tell what happened in time order. The closing tells how the story ended.'
+  },
+  {
+    id: 'p-dog', title: 'Care for a dog', genre: 'Information', flexibleMiddle: true,
+    prompt: 'Explain some ways a person can care for a dog.',
+    sentences: [
+      'A dog needs daily care to stay healthy and happy.',
+      'Fresh water and the right food help a dog stay healthy.',
+      'Walks and playtime give a dog exercise.',
+      'Gentle attention helps a dog feel safe and loved.',
+      'Meeting these needs is part of being a caring dog owner.'
+    ],
+    hint: 'Which sentence is about all of a dog’s needs? The middle sentences each explain one need.',
+    lesson: 'The topic sentence gives the big idea: daily care. Each detail explains one need. The closing connects all those needs. The details can work in any order.'
+  },
+  {
+    id: 'p-seed', title: 'Plant a seed', genre: 'How-to',
+    prompt: 'Explain how to plant a seed in a small pot.',
+    sentences: [
+      'You can plant a seed in a small pot by following a few steps.',
+      'First, put soil into the pot.',
+      'Next, make a small hole in the soil and place the seed inside.',
+      'Then, cover the seed with soil and water it gently.',
+      'Your planted seed is now ready to begin growing.'
+    ],
+    hint: 'You need soil before you can make a hole in it. Which step must come first?',
+    lesson: 'The topic sentence introduces planting. The details explain steps that must happen in order. The closing tells that the planting is finished.'
+  },
+  {
+    id: 'p-team', title: 'Be a good teammate', genre: 'Information', flexibleMiddle: true,
+    prompt: 'Explain how to be a good teammate.',
+    sentences: [
+      'Being a good teammate means helping everyone feel included.',
+      'You can invite someone to join the game.',
+      'You can listen when another player shares an idea.',
+      'You can encourage a player who makes a mistake.',
+      'These kind actions help the whole team work together.'
+    ],
+    hint: 'Look for one big idea, three examples of that idea, and a sentence that ties them together.',
+    lesson: 'The topic sentence introduces being a good teammate. The details give examples. The closing connects the examples. These examples can work in any order.'
+  },
+  {
+    id: 'p-kite', title: 'Get the kite flying', genre: 'Story',
+    prompt: 'Tell what happened when two friends tried to fly a kite.',
+    sentences: [
+      'Maya and Ben worked together to get their kite into the air.',
+      'At first, the kite fell to the ground each time Maya let go.',
+      'Then Ben had an idea: he could hold the kite while Maya ran.',
+      'When they tried his plan, the wind lifted the kite high above them.',
+      'The two friends cheered because their teamwork had helped.'
+    ],
+    hint: 'The friends have a problem, try a plan, and get a result. What has to happen before the kite can fly?',
+    lesson: 'The topic sentence introduces the friends and their goal. The details tell the problem, plan, and result. The closing finishes the story.'
+  }
+];
+
+const ESSAYS = [
+  {
+    id: 'e-corner', title: 'A classroom reading corner', genre: 'Opinion',
+    prompt: 'Explain why your classroom should have a cozy reading corner.',
+    paragraphs: [
+      'Our classroom should have a cozy reading corner. A special place for books could help us focus and enjoy reading.',
+      'One reason is that a quiet spot makes it easier to focus. A student could sit away from busy classroom areas and pay attention to a book.',
+      'Another reason is that a cozy spot can make reading more inviting. A soft seat and a basket of books could make us excited to read.',
+      'A reading corner would help our class focus and enjoy books. It would be a useful addition to our classroom.'
+    ],
+    hint: 'The introduction names both ideas: focus and enjoying books. The body explains them. The conclusion brings them together.',
+    lesson: 'The introduction states the opinion. Each body paragraph develops a reason. The conclusion returns to the opinion without starting a new topic.'
+  },
+  {
+    id: 'e-park', title: 'A park cleanup', genre: 'Recount',
+    prompt: 'Describe how a class planned and carried out a park cleanup.',
+    paragraphs: [
+      'Our class worked together to clean up a local park. We made a plan and then put it into action.',
+      'Before cleanup day, we got ready at school. We gathered gloves and bags, and our teacher gave each group a job.',
+      'On cleanup day, we followed our plan at the park. Some groups picked up litter while others sorted bottles for recycling.',
+      'By the end of the day, the park looked much cleaner. Planning and working together helped our class make a difference.'
+    ],
+    hint: 'The class needs a plan and supplies before the cleanup can begin.',
+    lesson: 'The introduction tells what the whole essay is about. The body moves from planning to doing. The conclusion explains the result.'
+  },
+  {
+    id: 'e-garden', title: 'A school garden', genre: 'Opinion', flexibleMiddle: true,
+    prompt: 'Explain why a school garden would be useful.',
+    paragraphs: [
+      'Our school should start a small garden. It could give us new ways to learn and work together.',
+      'A garden could help us learn about plants. We could watch seeds sprout and measure how much the plants grow.',
+      'A garden could also help us practice teamwork. Students could share jobs such as watering plants and pulling weeds.',
+      'A school garden would be a place to learn and help one another. These benefits make it a good idea for our school.'
+    ],
+    hint: 'Find the paragraph that introduces the garden. The two middle paragraphs explain its benefits.',
+    lesson: 'The introduction gives the opinion. The body paragraphs develop two benefits. Either body paragraph may come first here. The conclusion connects both benefits.'
+  },
+  {
+    id: 'e-morning', title: 'An easier school morning', genre: 'How-to',
+    prompt: 'Explain how to get ready for school without rushing.',
+    paragraphs: [
+      'A little planning can make school mornings easier. Getting ready the night before and following a morning routine can help.',
+      'The night before school, do a few jobs ahead of time. Pack your backpack and choose your clothes so they are ready to use.',
+      'The next morning, follow a simple routine. Get dressed, eat breakfast, and brush your teeth before picking up your packed bag.',
+      'Planning ahead and using a routine can keep mornings calm. These small habits help you arrive at school ready for the day.'
+    ],
+    hint: 'Look for time clues. Which preparation happens the night before, and which happens the next morning?',
+    lesson: 'The introduction previews the plan. The body explains it in time order. The conclusion reminds the reader why the plan helps.'
+  }
+];
+
+const DETECTIVES = [
+  {
+    id: 'd-intro-garden', title: 'Find the best introduction', skill: 'Introduction',
+    prompt: 'An essay explains why a school garden would be a good idea.',
+    contextLabel: 'The body paragraphs will explain:',
+    context: ['A garden helps students learn about plants.', 'Sharing garden jobs helps students practice teamwork.'],
+    question: 'Which paragraph best introduces this essay?',
+    options: [
+      { text: 'Our school should have a garden. It would help us learn about plants and practice working together.', correct: true },
+      { text: 'We could take turns watering the plants. Each team could have a different garden job.', feedback: 'This gives details about one garden job. An introduction should set up the whole essay, not just one detail.' },
+      { text: 'Our school should have more time for recess. Students could play games and get exercise.', feedback: 'This introduces recess, but this essay is about a school garden. Look for the paragraph that matches the topic.' }
+    ],
+    whyQuestion: 'Why is this the strongest introduction?',
+    reasons: [
+      { text: 'It introduces the main idea and previews both reasons.', correct: true },
+      { text: 'It explains every step for watering a garden.', feedback: 'This introduction does not teach the steps for watering. Think about how it prepares the reader for the whole essay.' },
+      { text: 'It ends the essay by saying what was learned.', feedback: 'An introduction begins the essay. What does this paragraph tell the reader to expect?' }
+    ],
+    hint: 'A strong introduction tells what the whole essay will be about.',
+    lesson: 'A strong introduction names the topic and gets the reader ready for the ideas in the body.'
+  },
+  {
+    id: 'd-offtopic-reading', title: 'Spot the paragraph that does not belong', skill: 'Stay on topic',
+    prompt: 'An essay explains how our classroom could encourage more reading.',
+    contextLabel: 'The essay’s main idea:',
+    context: ['Our classroom can make reading easier and more inviting for everyone.'],
+    question: 'Which body paragraph does NOT belong in this essay?',
+    options: [
+      { text: 'We could keep books in labeled baskets. Then students could find a book they want to read.', feedback: 'This belongs: finding books more easily could help students read. Look for a paragraph about a different topic.' },
+      { text: 'We could create a quiet reading area. Students could sit there and focus on their books.', feedback: 'This belongs: a quiet area supports reading. Which paragraph does not help explain the main idea?' },
+      { text: 'We could buy new soccer goals for the playground. Teams would have more space to practice scoring.', correct: true }
+    ],
+    whyQuestion: 'Why does this paragraph not belong?',
+    reasons: [
+      { text: 'It is about soccer equipment, not encouraging reading.', correct: true },
+      { text: 'Body paragraphs are not allowed to give examples.', feedback: 'Body paragraphs can give examples. The important question is whether those examples support the main idea.' },
+      { text: 'Every paragraph must use the exact same words.', feedback: 'Paragraphs can use different words. They need to connect to the same main idea.' }
+    ],
+    hint: 'Ask about each paragraph: does this help explain how to encourage reading?',
+    lesson: 'A body paragraph belongs when it supports the essay’s main idea. A well-written paragraph can still be off topic.'
+  },
+  {
+    id: 'd-conclusion-team', title: 'Choose a strong ending', skill: 'Conclusion',
+    prompt: 'An essay explains how to be a good teammate.',
+    contextLabel: 'The body paragraphs explain:',
+    context: ['Good teammates listen to each other’s ideas.', 'Good teammates encourage each other after mistakes.'],
+    question: 'Which paragraph is the best conclusion?',
+    options: [
+      { text: 'Listening and giving encouragement help a team work together. These simple actions make you a teammate others can count on.', correct: true },
+      { text: 'Another sport I like is swimming. I go to the pool with my cousin on Saturdays.', feedback: 'This starts a new topic about swimming. A conclusion should return to the main idea about being a good teammate.' },
+      { text: 'One time, a player on our team missed a goal. I told her that she could try again.', feedback: 'This is a useful example for a body paragraph. The conclusion should bring together the essay’s main ideas.' }
+    ],
+    whyQuestion: 'What makes this a strong conclusion?',
+    reasons: [
+      { text: 'It brings the main ideas together and gives the essay a clear ending.', correct: true },
+      { text: 'It begins a new story that the reader has not heard.', feedback: 'A new story usually needs more explanation. This ending instead connects ideas the essay has already explained.' },
+      { text: 'It copies the whole essay word for word.', feedback: 'A conclusion does not need to repeat everything. Think about how it connects just the main ideas.' }
+    ],
+    hint: 'An ending should wrap up listening and encouragement, not begin a new topic.',
+    lesson: 'A conclusion returns to the main idea and helps the writing feel finished. It does not need to repeat every detail.'
+  },
+  {
+    id: 'd-body-art', title: 'Pick the best support', skill: 'Body paragraph',
+    prompt: 'An essay argues that students should have time to make art at school.',
+    contextLabel: 'The reason this body paragraph needs to explain:',
+    context: ['Making art gives students a way to share their ideas and feelings.'],
+    question: 'Which body paragraph best supports this reason?',
+    options: [
+      { text: 'A drawing can show an idea that is hard to put into words. For example, a student might use colors and shapes to show a happy memory.', correct: true },
+      { text: 'Paintbrushes come in different sizes. Some brushes have thick handles, and some have thin handles.', feedback: 'This is about art supplies, but it does not explain how art helps students share ideas or feelings.' },
+      { text: 'Our school has a large playground. Students can run, climb, and play games there.', feedback: 'This is about the playground, not expressing ideas through art. Choose a paragraph that supports the given reason.' }
+    ],
+    whyQuestion: 'Why does this paragraph give the best support?',
+    reasons: [
+      { text: 'It explains the reason and gives an example that fits.', correct: true },
+      { text: 'It lists every art supply students might use.', feedback: 'It does not list supplies. What does the example about a happy memory help explain?' },
+      { text: 'It changes the topic to something more exciting.', feedback: 'Strong support stays connected to the reason. Changing topics would not support this idea.' }
+    ],
+    hint: 'The paragraph needs to explain sharing ideas and feelings, not just mention art.',
+    lesson: 'A strong body paragraph develops one idea with a matching explanation or example. Sharing a topic word is not enough.'
+  },
+  {
+    id: 'd-intro-lunch', title: 'Start a lunch-waste essay', skill: 'Introduction',
+    prompt: 'An essay explains two ways to create less trash at lunch.',
+    contextLabel: 'The body paragraphs will explain:',
+    context: ['Use a lunch box that can be washed and used again.', 'Use a refillable water bottle instead of a throwaway bottle.'],
+    question: 'Which paragraph best introduces this essay?',
+    options: [
+      { text: 'Small lunch choices can help us make less trash. Reusing a lunch box and a water bottle are two easy ways to start.', correct: true },
+      { text: 'My favorite lunch is noodles with carrots. Sometimes I also bring an apple or a banana.', feedback: 'This introduces favorite foods, not ways to reduce lunch trash. An introduction needs to match the body paragraphs.' },
+      { text: 'Wash the bottle with soap and water. Then let it dry before using it again.', feedback: 'This explains one small task. The introduction needs to introduce both ways to make less trash.' }
+    ],
+    whyQuestion: 'Why does this introduction fit the essay?',
+    reasons: [
+      { text: 'It names the topic and sets up the two ideas in the body.', correct: true },
+      { text: 'It tells a story about someone’s favorite food.', feedback: 'It does not tell a food story. Look at how it connects to the two body paragraphs.' },
+      { text: 'It gives only the steps for washing a bottle.', feedback: 'The introduction covers more than washing. Which two ideas does it get the reader ready for?' }
+    ],
+    hint: 'Read the two body ideas. The introduction should prepare the reader for both.',
+    lesson: 'The introduction and the body should match. Here, the introduction previews reusing a lunch box and a bottle.'
+  },
+  {
+    id: 'd-offtopic-bike', title: 'Keep a bike essay on track', skill: 'Stay on topic',
+    prompt: 'An essay explains how to prepare for a safe bike ride.',
+    contextLabel: 'The essay’s main idea:',
+    context: ['Before a bike ride, get yourself and your bike ready.'],
+    question: 'Which body paragraph does NOT belong?',
+    options: [
+      { text: 'Check that your helmet fits before you ride. Ask an adult to help you fasten the straps correctly.', feedback: 'This belongs because it explains getting ready for a safe ride. Find the paragraph that does not support preparation.' },
+      { text: 'Ask an adult to help you check your bike. Make sure the tires and brakes are ready for the ride.', feedback: 'This belongs because it explains preparing the bike. Which paragraph is about an unrelated activity?' },
+      { text: 'My favorite indoor game is a card game. My cousins and I play it at the kitchen table.', correct: true }
+    ],
+    whyQuestion: 'Why should this paragraph be left out?',
+    reasons: [
+      { text: 'It explains a card game instead of preparing for a bike ride.', correct: true },
+      { text: 'It has two sentences, and body paragraphs need only one.', feedback: 'A body paragraph can have several sentences. Length is not the problem here; the topic is.' },
+      { text: 'It mentions other people instead of only one person.', feedback: 'A paragraph may mention several people. What matters is whether it supports the essay’s main idea.' }
+    ],
+    hint: 'A paragraph can make sense on its own but still not fit this essay.',
+    lesson: 'Keep body paragraphs connected to the main idea. This paragraph is clear, but it is about the wrong topic.'
+  },
+  {
+    id: 'd-conclusion-morning', title: 'Finish a morning-routine essay', skill: 'Conclusion',
+    prompt: 'An essay explains how to have a calmer school morning.',
+    contextLabel: 'The body paragraphs explain:',
+    context: ['Pack your school bag the night before.', 'Follow the same simple routine in the morning.'],
+    question: 'Which paragraph best finishes the essay?',
+    options: [
+      { text: 'Packing ahead and following a routine can make mornings less rushed. These habits help you begin the school day feeling ready.', correct: true },
+      { text: 'This essay will explain two ways to get ready for school. You will learn about packing and using a routine.', feedback: 'This sounds like the start of the essay: it tells what will be explained. Look for a paragraph that brings the ideas to a close.' },
+      { text: 'School buses can be yellow, white, or other colors. Some buses have many rows of seats.', feedback: 'This starts a new topic about buses. A conclusion should wrap up the ideas about calmer mornings.' }
+    ],
+    whyQuestion: 'Why is this the best ending?',
+    reasons: [
+      { text: 'It connects both habits to the goal of a calmer morning.', correct: true },
+      { text: 'It introduces a new topic about school buses.', feedback: 'Starting a new topic would not wrap up the essay. Think about the two habits it mentions.' },
+      { text: 'It asks the reader to wait for the essay to begin.', feedback: 'That would sound like an introduction. This paragraph finishes the essay’s main point.' }
+    ],
+    hint: 'Look for an ending that connects both habits and reminds the reader why they help.',
+    lesson: 'An effective conclusion ties the body ideas back to the essay’s purpose.'
+  },
+  {
+    id: 'd-body-recess', title: 'Choose a useful example', skill: 'Body paragraph',
+    prompt: 'An essay explains why classes should offer different recess games.',
+    contextLabel: 'The reason this body paragraph needs to explain:',
+    context: ['Offering different games helps more students join in.'],
+    question: 'Which paragraph best develops this reason?',
+    options: [
+      { text: 'Not everyone enjoys the same kind of game. Offering both a running game and a quiet game gives more students a way to take part.', correct: true },
+      { text: 'Our playground has a fence around it. The fence has a gate near the school building.', feedback: 'This describes the playground, but it does not explain how game choices help students join in.' },
+      { text: 'The class should offer different games. Having different games would give the class different games.', feedback: 'This repeats the idea without explaining it. Look for a paragraph with a useful explanation or example.' }
+    ],
+    whyQuestion: 'Why does this paragraph support the reason?',
+    reasons: [
+      { text: 'It explains different interests and gives an example of choices.', correct: true },
+      { text: 'It repeats the same idea without adding information.', feedback: 'That would be weak support. This paragraph adds an explanation and an example.' },
+      { text: 'It describes exactly where the playground gate is.', feedback: 'The gate does not explain participation. Focus on how the example supports the reason.' }
+    ],
+    hint: 'A useful detail explains the idea. Repeating the idea in new words is not enough.',
+    lesson: 'A body paragraph should add something: an explanation, an example, or a relevant detail. Repetition alone does not develop an idea.'
+  }
+];
+
+</script>
+<script>
+/* Word Garden — dependency-free, offline-first writing practice. */
+'use strict';
+const $ = (selector) => document.querySelector(selector);
+const escapeHTML = (value) => String(value).replace(/[&<>"']/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const iconPaths = {
+  leaf:'<path d="M12 21v-9M12 16C4 17 3 12 3 7c6-1 10 2 9 9ZM12 12C11 5 15 2 21 3c1 6-2 10-9 9Z"/>',
+  paragraph:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+  book:'<path d="M12 6c-3-2-6-2-10-1v15c4-1 7-1 10 1 3-2 6-2 10-1V5c-4-1-7-1-10 1Zm0 0v15"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 8.5a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16.5h.01"/>',
+  speaker:'<path d="m11 4-6 5H2v6h3l6 5V4ZM15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/>',
+  stop:'<rect x="5" y="5" width="14" height="14" rx="2"/>',
+  arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+  left:'<path d="m15 5-7 7 7 7"/>',
+  right:'<path d="m9 5 7 7-7 7"/>',
+  check:'<path d="m5 12 4 4L19 6"/>',
+  star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/>',
+  bulb:'<path d="M9 18h6M9 21h6M8 14a7 7 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z"/>',
+  reset:'<path d="M3 10a9 9 0 1 1 2 8M3 4v6h6"/>',
+  grip:'<circle cx="9" cy="5" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="19" r="1"/>',
+  up:'<path d="m6 15 6-6 6 6"/>',
+  down:'<path d="m6 9 6 6 6-6"/>',
+  close:'<path d="m6 6 12 12M6 18 18 6"/>',
+  hand:'<path d="M8 13V5a2 2 0 0 1 4 0v6-2a2 2 0 0 1 4 0v2a2 2 0 0 1 4 0v5c0 4-3 6-6 6-2 0-4-1-5-3l-5-5c-1-2 1-4 3-2l1 1Z"/>',
+  search:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  flag:'<path d="M5 21V3c5-3 9 4 14 0v10c-5 4-9-3-14 0"/>'
+};
+const icon = (name, size=20) => `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconPaths[name] || iconPaths.leaf}</svg>`;
+const GROUPS = {paragraph: PARAGRAPHS, essay: ESSAYS, detective: DETECTIVES};
+const TOTAL = Object.values(GROUPS).reduce((sum, items) => sum + items.length, 0);
+const ALL_IDS = new Set(Object.values(GROUPS).flat().map(a=>a.id));
+const STORAGE_KEY = 'word-garden-progress-v1';
+let storageAvailable = true;
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; localStorage.setItem('word-garden-storage-test','1'); localStorage.removeItem('word-garden-storage-test'); }
+catch (_) { storageAvailable = false; }
+const state = {
+  mode: saved.mode === 'essay' ? 'essay' : 'paragraph',
+  essayPart: saved.essayPart === 'detective' ? 'detective' : 'essay',
+  support: saved.support !== false,
+  positions: { paragraph: 0, essay: 0, detective: 0 },
+  completed: new Set(Array.isArray(saved.completed) ? saved.completed.filter(id=>ALL_IDS.has(id)) : []),
+  sessions: new Map()
+};
+for (const key of Object.keys(GROUPS)) {
+  const val = saved.positions?.[key];
+  if (Number.isInteger(val) && val >= 0 && val < GROUPS[key].length) state.positions[key] = val;
+}
+function persist() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({mode:state.mode, essayPart:state.essayPart, support:state.support, positions:state.positions, completed:[...state.completed]})); }
+  catch (_) { storageAvailable = false; }
+}
+function groupKey() { return state.mode === 'paragraph' ? 'paragraph' : state.essayPart; }
+function activity() { return GROUPS[groupKey()][state.positions[groupKey()]]; }
+function texts(a=activity()) { return a.sentences || a.paragraphs; }
+function shuffle(items) {
+  const result=[...items];
+  for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]];}
+  return result;
+}
+function session() {
+  const a=activity();
+  if (!state.sessions.has(a.id)) {
+    const common={success:false,feedback:null,hint:false,attempts:0,selected:null,marks:null};
+    if (groupKey()==='detective') state.sessions.set(a.id,{...common,optionOrder:shuffle(a.options.map((_,i)=>i)),reasonOrder:shuffle(a.reasons.map((_,i)=>i)),choice:null,why:null,stage:'pick'});
+    else {
+      let bank=shuffle(texts().map((_,i)=>i));
+      if(bank.every((id,i)=>id===i)) bank.push(bank.shift());
+      state.sessions.set(a.id,{...common,bank,slots:Array(bank.length).fill(null)});
+    }
+  }
+  return state.sessions.get(a.id);
+}
+let announceTimer;
+function announce(message) { const live=$('#live'); clearTimeout(announceTimer); live.textContent=''; announceTimer=setTimeout(()=>{live.textContent=message;},40); }
+function focusKey(key) { if(!key) return; const el=document.querySelector(`[data-focus="${CSS.escape(key)}"]`); if(el) el.focus({preventScroll:true}); }
+function scrollToTask() { $('#main').scrollIntoView({behavior: reducedMotion() ? 'instant':'smooth',block:'start'}); }
+function reducedMotion() { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+let speaking=false;
+let speechToken=0;
+function stopSpeech() { speechToken++; if('speechSynthesis' in window) window.speechSynthesis.cancel(); speaking=false; updateSpeechButtons(); }
+function updateSpeechButtons(){document.querySelectorAll('[data-action="read-all"]').forEach(b=>{b.classList.toggle('playing',speaking);b.innerHTML=icon(speaking?'stop':'speaker',17)+`<span>${speaking?'Stop reading':'Read aloud'}</span>`;b.setAttribute('aria-label',speaking?'Stop reading aloud':'Read prompt and activity aloud');});}
+function speak(text) {
+  if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) { announce('Read aloud is not available in this browser. You can read with a partner.'); session().feedback={type:'info',title:'Read with a partner',text:'This browser does not have read aloud available. A grown-up can read the cards while you choose their order.'};render();return; }
+  stopSpeech(); const token=++speechToken; speaking=true;updateSpeechButtons();
+  const chunks=text.match(/[^.!?]+[.!?]+(?:["”’']|$)?|[^.!?]+$/g) || [text];
+  let index=0;
+  function next(){if(token!==speechToken) return;if(index>=chunks.length){speaking=false;updateSpeechButtons();return;}
+    const utterance=new SpeechSynthesisUtterance(chunks[index++].trim());utterance.lang='en-US';utterance.rate=.86;
+    utterance.onend=next;utterance.onerror=(event)=>{if(token!==speechToken)return;speaking=false;updateSpeechButtons();if(event.error!=='interrupted'&&event.error!=='canceled')announce('Read aloud could not start. Try another browser or read with a partner.');};
+    window.speechSynthesis.speak(utterance);
+  }
+  next();
+}
+function readAll(){
+  if(speaking){stopSpeech();return;}
+  const a=activity(),s=session();
+  if(groupKey()==='detective') {
+    const list=s.stage==='pick'?s.optionOrder.map((id,i)=>`Choice ${String.fromCharCode(65+i)}. ${a.options[id].text}`):s.reasonOrder.map((id,i)=>`Reason ${i+1}. ${a.reasons[id].text}`);
+    speak(`${a.prompt} ${a.contextLabel} ${a.context.join(' ')} ${s.stage==='pick'?a.question:a.whyQuestion} ${list.join(' ')}`);
+  } else {
+    const list=s.success?s.slots:s.bank.concat(s.slots.filter(id=>id!==null));
+    speak(`${a.title}. ${a.prompt} ${list.map((id,i)=>`${s.success?'':`Card ${i+1}. `}${texts()[id]}`).join(' ')}`);
+  }
+}
+function roleAt(index,total) {
+  if(index===0) return state.mode==='paragraph'?'Topic sentence':'Introduction';
+  if(index===total-1) return state.mode==='paragraph'?'Closing sentence':'Conclusion';
+  return state.mode==='paragraph'?`Detail ${index}`:`Body paragraph ${index}`;
+}
+function roleDescription(index,total){
+  if(index===0) return state.mode==='paragraph'?'Introduce the big idea.':'Introduce the whole essay.';
+  if(index===total-1)return 'Bring the ideas to a close.';
+  return state.mode==='paragraph'?'Explain, support, or tell the next part.':'Develop one important idea.';
+}
+function header(){
+  return `<header class="topbar"><div class="brand"><div class="brand-mark">${icon('leaf',33)}</div><div><div class="brand-name">Word Garden</div><div class="brand-caption">A little practice. A clearer story.</div></div></div><div class="header-actions"><div class="progress-mini" aria-label="${state.completed.size} of ${TOTAL} activities completed">${icon('leaf',23)}<span>${state.completed.size}<span aria-hidden="true"> / ${TOTAL}</span><span class="sr-only"> completed</span></span></div><button class="text-button" data-action="guide" aria-label="Open the grown-up guide">${icon('help',20)}<span>Grown-up guide</span></button></div></header>`;
+}
+function navigation(){
+  return `<div class="nav-row"><nav class="mode-tabs" aria-label="Writing mode"><button class="mode-tab ${state.mode==='paragraph'?'active':''}" data-action="mode" data-value="paragraph" aria-pressed="${state.mode==='paragraph'}" data-focus="mode-paragraph">${icon('paragraph',21)}Paragraph mode</button><button class="mode-tab ${state.mode==='essay'?'active':''}" data-action="mode" data-value="essay" aria-pressed="${state.mode==='essay'}" data-focus="mode-essay">${icon('book',21)}Essay mode</button></nav><label class="support-switch"><input type="checkbox" id="support-toggle" ${state.support?'checked':''} data-focus="support"><span>Show part clues</span></label></div>${state.mode==='essay'?`<nav class="sub-tabs" aria-label="Essay activity type"><button class="sub-tab ${state.essayPart==='essay'?'active':''}" data-action="essay-part" data-value="essay" data-focus="sub-essay" aria-pressed="${state.essayPart==='essay'}">${icon('paragraph',17)} Put paragraphs in order</button><button class="sub-tab ${state.essayPart==='detective'?'active':''}" data-action="essay-part" data-value="detective" data-focus="sub-detective" aria-pressed="${state.essayPart==='detective'}">${icon('search',17)} Paragraph detective</button></nav>`:''}`;
+}
+function toolbar(){
+  const key=groupKey(),items=GROUPS[key],index=state.positions[key];
+  return `<div class="lesson-toolbar"><div class="lesson-picker"><label for="activity-select">Choose an activity</label><select id="activity-select" data-focus="activity-select">${items.map((a,i)=>`<option value="${i}" ${index===i?'selected':''}>${String(i+1).padStart(2,'0')} · ${escapeHTML(a.title)}${state.completed.has(a.id)?' ✓':''}</option>`).join('')}</select></div><div class="step-controls"><button class="icon-button" data-action="previous" aria-label="Previous activity" ${index===0?'disabled':''}>${icon('left',16)}</button><span class="step-count">${index+1} of ${items.length}</span><button class="icon-button" data-action="next" aria-label="Next activity" ${index===items.length-1?'disabled':''}>${icon('right',16)}</button></div></div>`;
+}
+function intro(){const a=activity();return `<div class="intro"><div><h1 id="task-title">${escapeHTML(a.title)}</h1><p>${escapeHTML(a.prompt)}</p></div><button class="read-button" data-action="read-all" data-focus="read-all" aria-label="Read prompt and activity aloud">${icon('speaker',17)}<span>Read aloud</span></button></div>`;}
+function structure(){
+  if(!state.support)return '';
+  if(groupKey()==='detective'){
+    const skill=activity().skill;
+    const rules={'Introduction':'Introduce the topic and prepare the reader for the body.','Stay on topic':'Every body paragraph should support the main idea.','Conclusion':'Bring the main ideas together. Do not start a new topic.','Body paragraph':'Develop one idea with an explanation or a useful example.'};
+    return `<aside class="structure" aria-label="Writing reminder">${icon('bulb',18)} <span><b>${escapeHTML(skill)}:</b> ${escapeHTML(rules[skill])}</span></aside>`;
+  }
+  const paragraph=state.mode==='paragraph';
+  return `<aside class="structure" aria-label="Remember the parts"><span class="structure-piece">${icon('flag',17)}<span><b>${paragraph?'Topic sentence':'Introduction'}</b> · Big idea</span></span><span class="connector">${icon('arrow',17)}</span><span class="structure-piece">${icon('paragraph',17)}<span><b>${paragraph?'Details':'Body paragraphs'}</b> · Explain it</span></span><span class="connector">${icon('arrow',17)}</span><span class="structure-piece">${icon('check',17)}<span><b>${paragraph?'Closing sentence':'Conclusion'}</b> · Wrap it up</span></span></aside>`;
+}
+function card(id,position=null){
+  const s=session(),content=texts()[id],placed=position!==null;
+  return `<div class="sentence-card ${s.selected===id?'selected':''}" data-item="${id}"><button class="drag-grip" data-drag="${id}" data-action="select-card" data-id="${id}" aria-label="Pick up or drag: ${escapeHTML(content)}" ${s.success?'disabled':''}>${icon('grip',17)}</button><button class="card-main" data-action="select-card" data-id="${id}" data-focus="card-${id}" aria-pressed="${s.selected===id}" ${s.success?'disabled':''} aria-label="${placed&&s.selected!==null&&s.selected!==id?'Place selected card in position '+(position+1)+', swapping with: ':''}${escapeHTML(content)}">${escapeHTML(content)}</button><div class="card-tools"><button class="tiny-button" data-action="read-card" data-id="${id}" aria-label="Read this ${state.mode==='paragraph'?'sentence':'paragraph'} aloud">${icon('speaker',15)}</button>${placed&&!s.success?`<button class="tiny-button" data-action="return-card" data-id="${id}" aria-label="Return ${state.mode==='paragraph'?'sentence':'paragraph'} ${position+1} to the card bank">${icon('close',14)}</button>`:''}</div></div>`;
+}
+function sortingWorkspace(){
+  const s=session(),a=activity(),total=texts().length,noun=state.mode==='paragraph'?'sentence':'paragraph';
+  return `<p class="work-instruction">${icon('hand',18)}<span><strong>Drag a card into a spot.</strong> Or tap a card, then tap a spot. On a touchscreen, drag the dotted handle.</span></p><div class="workspace"><section class="bank" data-drop="bank" aria-label="${noun} card bank"><div class="panel-heading"><h2>${state.mode==='paragraph'?'Sentence':'Paragraph'} cards</h2><span class="little-label">${s.bank.length} left</span></div><div class="bank-cards">${s.bank.map(id=>card(id)).join('')}</div>${s.bank.length===0?`<div class="bank-empty"><div class="big-icon">${icon(s.success?'leaf':'check',32)}</div><strong>${s.success?'Your ideas fit together.':'Every card has a spot.'}</strong>${s.success?'Read your finished writing, then try another.':'Read it from top to bottom. Does it make sense?'}</div>`:''}${s.selected!==null?'<button class="return-zone" data-action="return-selected" data-focus="return-selected">Return the selected card here</button>':''}<p class="small-note">${s.success?'You can listen to your finished writing below.':s.selected!==null?'Card selected. Choose a numbered spot, or select a placed card to swap.':'You can move a card again after placing it.'}</p></section><section aria-label="Your ${state.mode==='paragraph'?'paragraph':'essay'}"><div class="panel-heading"><h2>Your ${state.mode==='paragraph'?'paragraph':'essay'}</h2><span class="little-label">${s.slots.filter(id=>id!==null).length} of ${total} placed</span></div><div class="slot-stack">${s.slots.map((id,i)=>{
+    const filled=id!==null,mark=s.marks?.[i];
+    return `<div class="slot ${filled?'filled':'empty'} ${s.selected!==null?'ready':''} ${s.success?'correct':mark===false?'needs-work':''}" data-drop="${i}"><div class="slot-number" aria-label="Position ${i+1}">${s.success?icon('check',16):i+1}</div>${filled?`<div class="slot-content">${state.support||s.success?`<div class="part-label">${roleAt(i,total)}</div>`:''}${card(id,i)}</div>`:`<button class="slot-place" data-action="place" data-index="${i}" data-focus="slot-${i}" aria-label="Place selected ${noun} in position ${i+1}${state.support?', '+roleAt(i,total):''}"><span><strong>${state.support?roleAt(i,total):`Place ${noun} ${i+1} here`}</strong><span class="subtext">${state.support?roleDescription(i,total):'Choose a card for this spot.'}</span></span><span class="plus">${icon('plus',18)}</span></button>`}</div>`;
+  }).join('')}</div></section></div>${s.success?completedReading():''}`;
+}
+function completedReading(){const s=session();return `<details class="completed-reading" ${state.mode==='paragraph'?'open':''}><summary>Read it as a complete ${state.mode==='paragraph'?'paragraph':'essay'}</summary><div class="reading-copy">${state.mode==='paragraph'?`<p>${s.slots.map(id=>escapeHTML(texts()[id])).join(' ')}</p>`:s.slots.map(id=>`<p>${escapeHTML(texts()[id])}</p>`).join('')}<button class="read-button" data-action="read-finished">${icon('speaker',17)}Listen to my writing</button></div></details>`;}
+function detectiveWorkspace(){
+  const a=activity(),s=session(),why=s.stage==='why';
+  const options=why?a.reasons:a.options,order=why?s.reasonOrder:s.optionOrder,selected=why?s.why:s.choice;
+  return `<div class="detective-workspace"><aside class="reference"><h2>${escapeHTML(a.contextLabel)}</h2>${a.context.map((text,i)=>`<div class="reference-item"><span class="number">${i+1}</span><span>${escapeHTML(text)}</span></div>`).join('')}<div class="detective-note">${icon('search',18)}<span>Keep the essay’s main idea in mind as you compare the choices.</span></div></aside><section aria-labelledby="question-title"><div class="question-steps"><span class="${why?'done':'current'}">${why?'✓ ':''}1. Choose a paragraph</span><span class="${why?'current':''}">2. Explain why</span></div>${why?`<div class="chosen-paragraph"><strong>${a.skill==='Stay on topic'?'THE PARAGRAPH THAT DOES NOT BELONG':'YOUR PARAGRAPH CHOICE'}</strong>${escapeHTML(a.options[s.choice].text)}</div>`:''}<h2 class="question-heading" id="question-title">${escapeHTML(why?a.whyQuestion:a.question)}</h2><div class="option-list">${order.map((id,index)=>`<button class="option ${id===selected?'selected':''} ${s.success&&options[id].correct?'correct':''}" data-action="${why?'why':'choose'}" data-id="${id}" data-focus="option-${id}" aria-pressed="${id===selected}" ${s.success?'disabled':''}><span class="option-letter">${s.success&&options[id].correct?icon('check',16):String.fromCharCode(65+index)}</span><span>${escapeHTML(options[id].text)}</span></button>`).join('')}</div></section></div>`;
+}
+function feedbackMarkup(){
+  const f=session().feedback;if(!f)return '';
+  return `<div class="feedback ${escapeHTML(f.type)}" id="feedback" tabindex="-1"><span class="feedback-icon">${icon(f.type==='success'?'leaf':f.type==='info'?'bulb':'reset',26)}</span><div><h3>${escapeHTML(f.title)}</h3><p>${escapeHTML(f.text)}</p></div></div>`;
+}
+function nextLabel(){const key=groupKey(),last=state.positions[key]>=GROUPS[key].length-1;return !last?'Next activity':key==='paragraph'?'Try essay mode':key==='essay'?'Try paragraph detective':'Back to paragraph mode';}
+function controls(){
+  const s=session(),detective=groupKey()==='detective';
+  return `<section class="action-area" aria-label="Check your work">${s.hint?`<aside class="hint-box" id="hint-box">${icon('bulb',21)}<span>${escapeHTML(hintText())}</span></aside>`:''}${feedbackMarkup()}<div class="actions"><div class="actions-left"><button class="secondary" data-action="hint" data-focus="hint" aria-expanded="${s.hint}">${icon('bulb',18)}${s.hint?'Hide hint':'Give me a hint'}</button><button class="text-button" data-action="reset" data-focus="reset">${icon('reset',16)}Start over</button></div><div class="actions-right">${s.success?`<button class="primary" data-action="continue">${nextLabel()}${icon('arrow',20)}</button>`:`<button class="primary" data-action="check" data-focus="check">${icon('check',20)}${detective?(s.stage==='why'?'Check my reason':'Check my choice'):'Check my order'}</button>`}</div></div></section>`;
+}
+function hintText(){
+  const a=activity(),s=session();
+  if(groupKey()==='detective') return s.stage==='why'?a.lesson:a.hint;
+  if(s.attempts>1 && s.slots[0]!==0)return `Try beginning with: “${texts()[0]}” It introduces the whole ${state.mode==='paragraph'?'paragraph':'essay'}.`;
+  if(s.attempts>1 && s.slots[texts().length-1]!==texts().length-1)return `Look for the ending that brings the ideas together. It begins: “${texts().at(-1).split(' ').slice(0,7).join(' ')}…”`;
+  return a.hint;
+}
+function render(focus=null){
+  const type=groupKey();session();
+  $('#app').innerHTML=`<div class="shell">${header()}${navigation()}<main id="main" class="${state.mode}" tabindex="-1" aria-labelledby="task-title">${toolbar()}${intro()}${structure()}${type==='detective'?detectiveWorkspace():sortingWorkspace()}${controls()}</main><footer class="footer-note">Take your time. You can try again as often as you need.<br>${storageAvailable?'Progress stays in this browser. No sign-in.':'Progress lasts for this visit. Browser storage is unavailable.'}</footer></div>`;
+  updateSpeechButtons();focusKey(focus);
+}
+function afterMove(focus,message){const s=session();s.feedback=null;s.marks=null;s.selected=null;render(focus);announce(message);}
+function selectCard(id){
+  const s=session();if(s.success||!Number.isInteger(id)||!texts()[id])return;
+  const slotIndex=s.slots.indexOf(id);
+  if(s.selected!==null&&s.selected!==id&&slotIndex!==-1){placeCard(s.selected,slotIndex);return;}
+  s.selected=s.selected===id?null:id;render(`card-${id}`);
+  announce(s.selected===null?'Card selection cleared.':`Selected: ${texts()[id]} Choose a numbered spot. You can also use the arrow keys to choose a position, then press Enter.`);
+}
+function placeCard(id,target){
+  const s=session();if(s.success||!Number.isInteger(id)||!Number.isInteger(target)||target<0||target>=s.slots.length||!texts()[id])return;
+  const source=s.slots.indexOf(id),bankIndex=s.bank.indexOf(id);if(source===-1&&bankIndex===-1)return;
+  const displaced=s.slots[target];
+  if(source===target){s.selected=null;render(`card-${id}`);return;}
+  if(source!==-1)s.slots[source]=displaced;
+  else {s.bank.splice(bankIndex,1);if(displaced!==null)s.bank.splice(bankIndex,0,displaced);}
+  s.slots[target]=id;
+  afterMove(`card-${id}`,`Placed in position ${target+1}. ${displaced!==null?'The other card moved '+(source!==-1?'to position '+(source+1):'back to the bank')+'.':''}`);
+}
+function returnCard(id){
+  const s=session();if(s.success)return;
+  const index=s.slots.indexOf(id);
+  if(index!==-1){s.slots[index]=null;s.bank.push(id);}
+  afterMove(`card-${id}`,'Card returned to the bank.');
+}
+function correctPositions(){const a=activity(),s=session(),n=s.slots.length;return s.slots.map((id,i)=>a.flexibleMiddle&&i>0&&i<n-1?id!==null&&id>0&&id<n-1:id===i);}
+function celebrate(){
+  if(reducedMotion())return;
+  $('#celebration').innerHTML=Array.from({length:34},()=>`<i class="confetti-piece" style="--x:${Math.round(Math.random()*100)}%;--c:${['#8270c1','#84b995','#f0bd55','#ed9c83'][Math.floor(Math.random()*4)]};--duration:${1.8+Math.random()*1.2}s;--delay:${Math.random()*.4}s;--drift:${Math.random()*160-80}px"></i>`).join('');
+  setTimeout(()=>{$('#celebration').innerHTML='';},3700);
+}
+function finish(){
+  const s=session(),a=activity();s.success=true;s.selected=null;s.hint=false;
+  const already=state.completed.has(a.id);state.completed.add(a.id);persist();
+  s.feedback={type:'success',title:groupKey()==='detective'?'You found it — and explained why!':'You made the ideas fit!',text:a.lesson+(already?'':' You grew another leaf in your progress garden.')};
+  render();celebrate();announce(`${s.feedback.title} ${s.feedback.text}`);$('#feedback')?.focus({preventScroll:true});$('#feedback')?.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'nearest'});
+}
+function check(){
+  const s=session(),a=activity();if(s.success)return;
+  if(groupKey()==='detective'){
+    const why=s.stage==='why',selected=why?s.why:s.choice,options=why?a.reasons:a.options;
+    if(selected===null){s.feedback={type:'info',title:why?'Choose a reason first':'Choose a paragraph first',text:why?'Tap the reason that best explains your choice.':'Read the choices. Tap the paragraph you want to check.'};}
+    else if(!options[selected].correct){s.attempts++;s.feedback={type:'retry',title:why?'Think about the paragraph’s job':'Let’s take another look',text:options[selected].feedback+' Try again.'};}
+    else if(!why){s.stage='why';s.hint=false;s.feedback={type:'info',title:'That’s the right paragraph!',text:'Now choose the reason that explains why. This is the second part of the challenge.'};render();announce('That is the right paragraph. Now explain why. '+a.whyQuestion);$('#question-title')?.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'center'});document.querySelector('.option')?.focus({preventScroll:true});return;}
+    else {finish();return;}
+  } else {
+    const left=s.bank.length;
+    if(left){s.feedback={type:'info',title:`${left===1?'One card still needs a spot':`${left} cards still need a spot`}`,text:'Place every card before checking. You can drag a card or tap it and then tap an empty spot.'};}
+    else {
+      const marks=correctPositions();s.marks=marks;
+      if(marks.every(Boolean)){finish();return;}
+      s.attempts++;
+      let tip;
+      if(!marks[0]) tip=`Look at the first ${state.mode==='paragraph'?'sentence':'paragraph'}. Does it introduce the whole topic, rather than just one detail?`;
+      else if(!marks.at(-1)) tip=`Your opening works. Check the ending: does it bring the main idea to a close?`;
+      else tip=`Your beginning and ending work. Read the middle in order. Look for time words and ideas that need to stay together. ${a.hint}`;
+      s.feedback={type:'retry',title:'Not quite yet — keep building',text:tip+' The outlined spots are the ones to rethink. You can swap two cards by tapping one and then the other.'};
+    }
+  }
+  render('check');announce(s.feedback.title+'. '+s.feedback.text);$('#feedback')?.scrollIntoView({behavior:reducedMotion()?'instant':'smooth',block:'nearest'});
+}
+function changeActivity(index){stopSpeech();state.positions[groupKey()]=index;persist();render();scrollToTask();announce('Activity: '+activity().title);}
+function changeMode(mode){stopSpeech();state.mode=mode;persist();render(`mode-${mode}`);announce(`${mode==='essay'?'Essay':'Paragraph'} mode. ${activity().title}`);}
+function continueActivity(){
+  const key=groupKey(),last=state.positions[key]===GROUPS[key].length-1;
+  if(!last){changeActivity(state.positions[key]+1);return;}
+  if(key==='paragraph'){state.mode='essay';state.essayPart='essay';}
+  else if(key==='essay'){state.essayPart='detective';}
+  else {state.mode='paragraph';}
+  stopSpeech();persist();render();scrollToTask();announce(activity().title);
+}
+let suppressClickUntil=0;
+document.addEventListener('click',event=>{
+  if(Date.now()<suppressClickUntil){event.preventDefault();event.stopPropagation();return;}
+  const button=event.target.closest('[data-action]');if(!button||button.disabled)return;
+  const action=button.dataset.action,id=Number(button.dataset.id),s=session();
+  switch(action){
+    case 'mode':changeMode(button.dataset.value);break;
+    case 'essay-part':stopSpeech();state.essayPart=button.dataset.value;persist();render(`sub-${state.essayPart}`);announce(activity().title);break;
+    case 'previous':if(state.positions[groupKey()]>0)changeActivity(state.positions[groupKey()]-1);break;
+    case 'next':if(state.positions[groupKey()]<GROUPS[groupKey()].length-1)changeActivity(state.positions[groupKey()]+1);break;
+    case 'select-card':selectCard(id);break;
+    case 'place':if(s.selected===null)announce('First select a card, then choose this spot.');else placeCard(s.selected,Number(button.dataset.index));break;
+    case 'return-card':returnCard(id);break;
+    case 'return-selected':if(s.selected!==null)returnCard(s.selected);break;
+    case 'read-card':speak(texts()[id]);break;
+    case 'read-all':readAll();break;
+    case 'read-finished':speak(s.slots.map(i=>texts()[i]).join(' '));break;
+    case 'choose':if(!s.success){s.choice=id;s.feedback=null;render(`option-${id}`);announce('Paragraph selected. Check your choice when ready.');}break;
+    case 'why':if(!s.success){s.why=id;s.feedback=null;render(`option-${id}`);announce('Reason selected. Check your reason when ready.');}break;
+    case 'hint':s.hint=!s.hint;render('hint');if(s.hint)announce(hintText());break;
+    case 'reset':stopSpeech();state.sessions.delete(activity().id);render('reset');announce('Cards reshuffled. Your earned progress is unchanged.');break;
+    case 'check':check();break;
+    case 'continue':continueActivity();break;
+    case 'guide':openGuide();break;
+    case 'close-dialog':$('#guide-dialog').close();break;
+    case 'clear-progress':showClearConfirmation();break;
+    case 'confirm-clear':state.completed.clear();state.sessions.clear();persist();$('#guide-dialog').close();render();announce('Saved progress cleared. You can start fresh.');break;
+  }
+});
+document.addEventListener('change',event=>{
+  if(event.target.id==='activity-select')changeActivity(Number(event.target.value));
+  if(event.target.id==='support-toggle'){state.support=event.target.checked;persist();render('support');announce(state.support?'Part clues are shown.':'Part clues are hidden.');}
+});
+document.addEventListener('keydown',event=>{
+  if(groupKey()==='detective')return;
+  const s=session();if(s.success)return;
+  if(event.key==='Escape'&&s.selected!==null){s.selected=null;render();announce('Selection cleared.');return;}
+  const trigger=event.target.closest('[data-action="select-card"]');
+  if(trigger && ['ArrowDown','ArrowUp'].includes(event.key)){
+    event.preventDefault();const focusedId=Number(trigger.dataset.id),id=s.selected!==null?s.selected:focusedId,current=s.slots.indexOf(focusedId);s.selected=id;
+    const next=current<0?0:Math.max(0,Math.min(s.slots.length-1,current+(event.key==='ArrowDown'?1:-1)));
+    render();const slot=document.querySelector(`[data-drop="${next}"]`);const target=slot?.querySelector('[data-action="place"],.card-main');target?.focus();announce(`Position ${next+1}. Press Enter to place the selected card.`);
+  }
+  if(s.selected!==null && event.target.matches('[data-action="place"]') && ['ArrowUp','ArrowDown'].includes(event.key)){
+    event.preventDefault();const current=Number(event.target.dataset.index),next=Math.max(0,Math.min(s.slots.length-1,current+(event.key==='ArrowDown'?1:-1)));document.querySelector(`[data-drop="${next}"] [data-action="place"], [data-drop="${next}"] .card-main`)?.focus();
+  }
+});
+/* Pointer-based drag/drop works with mouse, pen and touchscreen. Native tap controls remain available. */
+let drag=null;
+function dropElement(x,y){return document.elementFromPoint(x,y)?.closest('[data-drop]');}
+function clearDrag(){
+  if(drag?.raf)cancelAnimationFrame(drag.raf);
+  document.querySelector('.drag-ghost')?.remove();document.querySelectorAll('.drop-hover,.drag-origin').forEach(el=>el.classList.remove('drop-hover','drag-origin'));document.body.classList.remove('is-dragging');drag=null;
+}
+function autoScroll(){
+  if(!drag?.active)return;
+  const margin=76;
+  let delta=0;
+  if(drag.y<margin)delta=-Math.max(4,(margin-drag.y)/4);
+  else if(drag.y>innerHeight-margin)delta=Math.max(4,(drag.y-innerHeight+margin)/4);
+  if(delta)window.scrollBy(0,delta);
+  drag.raf=requestAnimationFrame(autoScroll);
+}
+document.addEventListener('pointerdown',event=>{
+  if(groupKey()==='detective'||session().success||event.button!==0)return;
+  const item=event.target.closest('[data-item]');if(!item||event.target.closest('.card-tools'))return;
+  if(event.pointerType==='touch'&&!event.target.closest('[data-drag]'))return;
+  if(event.target.closest('[data-action="read-card"],[data-action="return-card"]'))return;
+  drag={id:Number(item.dataset.item),startX:event.clientX,startY:event.clientY,x:event.clientX,y:event.clientY,active:false,origin:item,pointerId:event.pointerId};
+});
+document.addEventListener('pointermove',event=>{
+  if(!drag||event.pointerId!==drag.pointerId)return;
+  drag.x=event.clientX;drag.y=event.clientY;
+  if(!drag.active&&Math.hypot(event.clientX-drag.startX,event.clientY-drag.startY)<7)return;
+  if(event.cancelable)event.preventDefault();
+  if(!drag.active){drag.active=true;document.body.classList.add('is-dragging');drag.origin.classList.add('drag-origin');const ghost=document.createElement('div');ghost.className='drag-ghost';ghost.textContent=texts()[drag.id];ghost.style.width=Math.min(380,innerWidth-32)+'px';ghost.setAttribute('aria-hidden','true');document.body.append(ghost);drag.raf=requestAnimationFrame(autoScroll);announce('Dragging card. Drop it on a numbered spot.');}
+  const ghost=document.querySelector('.drag-ghost');if(ghost){ghost.style.left=Math.min(Math.max(8,event.clientX-70),innerWidth-ghost.offsetWidth-8)+'px';ghost.style.top=(event.clientY+17)+'px';}
+  document.querySelectorAll('.drop-hover').forEach(el=>el.classList.remove('drop-hover'));dropElement(event.clientX,event.clientY)?.classList.add('drop-hover');
+},{passive:false});
+document.addEventListener('pointerup',event=>{
+  if(!drag||event.pointerId!==drag.pointerId)return;
+  if(!drag.active){drag=null;return;}
+  const id=drag.id,target=dropElement(event.clientX,event.clientY)?.dataset.drop;
+  suppressClickUntil=Date.now()+350;clearDrag();
+  if(target==='bank')returnCard(id);
+  else if(target!==undefined)placeCard(id,Number(target));
+  else announce('Card returned to where it was. Drop onto a numbered spot to move it.');
+});
+document.addEventListener('pointercancel',clearDrag);
+window.addEventListener('blur',clearDrag);
+document.addEventListener('dragstart',event=>{if(event.target.closest('[data-item]'))event.preventDefault();});
+function openGuide(){
+  stopSpeech();$('#guide-content').innerHTML=`<div class="dialog-top"><h2>A small guide to Word Garden</h2><button class="icon-button" data-action="close-dialog" aria-label="Close guide">${icon('close',20)}</button></div><p>Short, familiar writing tasks for a learner beginning fourth grade who benefits from clear language and extra support.</p><h3>Three ways to practice</h3><ol><li><b>Paragraph mode:</b> Put five sentences in order. Find the topic sentence, supporting details, and closing.</li><li><b>Essay mode → Put paragraphs in order:</b> Build a short four-paragraph essay with an introduction, two body paragraphs, and a conclusion.</li><li><b>Essay mode → Paragraph detective:</b> Choose an introduction, conclusion, relevant body paragraph, or paragraph that does not belong. Then explain why by choosing a reason.</li></ol><h3>Make the task fit the learner</h3><p>Start with <b>Show part clues</b> on. Read the prompt together. Ask, “What job does this part do?” Later, turn the clues off. Use <b>Read aloud</b>, a card’s speaker button, or <b>Give me a hint</b> as needed. There are no timers, lost points, or limits on retries.</p><h3>Move cards your way</h3><p>Drag with a mouse, or drag the dotted handle on a touchscreen. You can always tap a card and then a numbered spot. Tap one placed card and then another to swap them. The small × returns a card to the bank. With a keyboard, Tab to a card, press Enter to select it, then Tab to a spot and press Enter. Arrow keys are also available to navigate positions.</p><h3>About the answer checking</h3><p>Some independent details can go in more than one sensible order; those alternatives are accepted. Steps and stories with time clues need a connected sequence. In longer writing, structure can vary: these four-paragraph essays are practice models, not rules for every essay.</p><h3>Progress and privacy</h3><p>Includes <b>${PARAGRAPHS.length} paragraph sorts, ${ESSAYS.length} essay sorts, and ${DETECTIVES.length} two-part detective challenges</b>. Earn one leaf for completing an activity, no matter how many tries it takes. Repeating an activity does not add extra leaves. Progress is stored only in this browser when browser storage is available. No names, accounts, ads, analytics, or app-initiated network requests. Device read-aloud services may use a network voice. Read-aloud availability depends on the browser and installed voices.</p><p style="margin-top:12px">The supplied practice texts are original. These are practice activities, not a standardized reading-level assessment.</p><div class="dialog-actions"><button class="primary" data-action="close-dialog">Let’s build${icon('arrow',18)}</button><button class="text-button" data-action="clear-progress">Clear saved progress</button></div>`;
+  $('#guide-dialog').showModal();
+}
+function showClearConfirmation(){
+  $('#guide-content').innerHTML=`<div class="dialog-top"><h2>Clear this browser’s progress?</h2><button class="icon-button" data-action="close-dialog" aria-label="Close guide">${icon('close',20)}</button></div><p>This removes the ${state.completed.size} saved completion${state.completed.size===1?'':'s'} and resets the current practice. This cannot be undone.</p><div class="dialog-actions"><button class="secondary" data-action="close-dialog">Keep my progress</button><button class="primary" data-action="confirm-clear">Clear progress</button></div>`;
+}
+$('#guide-dialog').addEventListener('click',event=>{if(event.target===$('#guide-dialog')){const rect=event.target.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)event.target.close();}});
+window.addEventListener('pagehide',()=>{stopSpeech();persist();});
+render();
+
+</script>
+</body>
+</html>
