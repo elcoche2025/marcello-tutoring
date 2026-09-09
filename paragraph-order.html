@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paragraph Strips — put the sentences in order</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --green: #4CAF50; --green-light: #E8F5E9; --red: #E53935; --red-light: #FFEBEE; --gold: #F5B700; --gold-light: #FFF8E1; --teal: #00897B; --teal-light: #E0F2F1; --muted: #718096; --text: #2D3748; --bg: #EEF3F1; }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header { background: linear-gradient(135deg, #004D40 0%, #00897B 55%, #26A69A 100%); color: white; text-align: center; padding: 22px 20px 46px; position: relative; }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 34px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.7rem; font-weight: 800; }
+  header p { font-size: 0.92rem; opacity: 0.95; }
+  .container { max-width: 720px; margin: 0 auto; padding: 0 14px; position: relative; z-index: 2; }
+  .picker { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: -6px 0 14px; }
+  .pick { padding: 9px 14px; border-radius: 14px; border: 2px solid #C5D3CE; background: white; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
+  .pick.active { background: var(--teal); border-color: var(--teal); color: white; }
+  .pick.solved { border-color: var(--green); color: var(--green); } .pick.solved.active { background: var(--green); color: white; }
+  .card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.07); padding: 18px 20px; margin-bottom: 14px; }
+  .card h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+  .directions { font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+  .kind { display: inline-block; font-size: 0.74rem; font-weight: 800; padding: 3px 10px; border-radius: 10px; background: var(--teal-light); color: #00695C; margin-left: 6px; vertical-align: middle; }
+
+  .strips { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
+  .strip {
+    position: relative; background: #FFFDF7; border: 2px dashed #C8BFAE; border-radius: 4px; padding: 12px 52px 12px 52px;
+    font-size: 1.05rem; line-height: 1.6; font-weight: 600; touch-action: none; user-select: none; -webkit-user-select: none;
+    box-shadow: 2px 3px 0 rgba(0,0,0,0.06); transition: background 0.25s, border-color 0.25s;
+  }
+  .strip:nth-child(odd) { transform: rotate(-0.5deg); } .strip:nth-child(even) { transform: rotate(0.45deg); }
+  .strip .slot { position: absolute; left: 12px; top: 10px; width: 28px; height: 28px; border-radius: 50%; background: #ECE6DA; color: var(--muted); font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+  .strip .grip { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 2px; }
+  .strip .grip button { width: 30px; height: 24px; border-radius: 6px; border: 1px solid #D0C9BD; background: white; font-size: 0.75rem; cursor: pointer; color: var(--muted); font-family: 'Nunito', sans-serif; font-weight: 800; }
+  .strip .grip button:disabled { opacity: 0.3; }
+  .strip.placeholder { opacity: 0.25; background: #EEE; border-style: solid; }
+  .strip.ghost { position: fixed; z-index: 1000; pointer-events: none; box-shadow: 0 14px 30px rgba(0,0,0,0.22); transform: rotate(1.2deg) scale(1.02); border-color: var(--teal); background: white; margin: 0; }
+  .strip.right { background: var(--green-light); border: 2px solid var(--green); } .strip.right .slot { background: var(--green); color: white; }
+  .strip.wrong { background: var(--red-light); border: 2px solid var(--red); animation: shake 0.4s; } .strip.wrong .slot { background: var(--red); color: white; }
+  @keyframes shake { 0%,100% { translate: 0; } 25% { translate: -6px; } 75% { translate: 6px; } }
+  .strip.solved { background: white; border: 2px solid var(--green); border-radius: 0; box-shadow: none; transform: none; }
+  .strip .role { display: block; margin-top: 4px; font-size: 0.74rem; font-weight: 800; color: #00695C; }
+
+  .paragraph { background: white; border-radius: 12px; padding: 16px 18px; line-height: 1.8; font-size: 1.02rem; font-weight: 600; margin-top: 12px; border: 2px solid var(--green); }
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; }
+  .btn-check { background: var(--teal); color: white; } .btn-check:disabled { opacity: 0.5; }
+  .btn-secondary { background: #DCE6E2; color: var(--text); }
+  .btn-next { background: var(--green); color: white; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+  .feedback { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-weight: 700; font-size: 0.92rem; line-height: 1.5; }
+  .feedback.ok { background: var(--green-light); color: #2E7D32; } .feedback.hint { background: var(--gold-light); color: #7B6400; }
+  .stats { text-align: center; font-size: 0.8rem; color: var(--muted); font-weight: 700; margin-top: 8px; }
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .reset { position: absolute; top: 10px; left: 14px; font-size: 0.68rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: white; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.6; }
+</style>
+</head>
+<body>
+<header>
+  <button class="reset" onclick="resetAll()">🔄 Reset</button>
+  <h1>Paragraph Strips ✂️</h1>
+  <p>Somebody cut a paragraph into strips. Read them, then drag them into the right order.</p>
+</header>
+<div class="container">
+  <div class="picker" id="picker"></div>
+  <div class="card">
+    <h2 id="title"></h2>
+    <p class="directions">Read every strip first. Which sentence tells what the whole paragraph is about? That is the <strong>topic sentence</strong> — it goes first. Then look for clue words like <em>First, Then, Next, After that, Finally</em>. The last strip usually wraps it up. Press and hold to drag, or use ▲▼.</p>
+  </div>
+  <div class="strips" id="strips"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="shuffleAgain()">🔀 Mix again</button>
+    <button class="btn btn-check" id="checkBtn" onclick="check()">✓ Check my order</button>
+    <button class="btn btn-next" id="nextBtn" onclick="nextPuzzle()" style="display:none;">Next paragraph →</button>
+  </div>
+  <div id="feedback"></div>
+  <div id="result"></div>
+  <div class="stats" id="stats"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const STORAGE_KEY = 'marcello_paragraph_order_v1';
+
+// Each paragraph: sentences in the CORRECT order, with a role label for each.
+const PARAGRAPHS = [
+  { title: 'The Test Drive', kind: 'story', sents: [
+    ['My grandma did not want our new car, so we asked her to take a test drive.', 'topic sentence'],
+    ['First, she climbed into the front seat and looked at everything.', 'first'],
+    ['Then my dad drove her around the block while she watched out the window.', 'then'],
+    ['After that, she got out and was quiet for a minute.', 'after that'],
+    ['Finally, she smiled and said, "It is a good car."', 'finally / wrap-up']
+  ]},
+  { title: 'Clara Barton’s Wagon', kind: 'proof paragraph', sents: [
+    ['First, Clara Barton cared for wounded soldiers.', 'topic sentence — reason 1'],
+    ['During the Civil War, soldiers were hurt and had no bandages or food.', 'evidence'],
+    ['Clara loaded a wagon with supplies and drove it straight to the battlefield.', 'evidence'],
+    ['Even when bullets flew past her, she kept working.', 'evidence'],
+    ['That is why the soldiers called her the Angel of the Battlefield.', 'wrap-up']
+  ]},
+  { title: 'How to Make a Sandwich', kind: 'how-to', sents: [
+    ['Making a peanut butter and jelly sandwich is easy if you go step by step.', 'topic sentence'],
+    ['First, get two slices of bread, a jar of peanut butter, and a jar of jelly.', 'first'],
+    ['Next, spread peanut butter on one slice and jelly on the other.', 'next'],
+    ['Then press the two slices together with the sticky sides facing in.', 'then'],
+    ['Finally, cut it in half and enjoy your sandwich.', 'finally']
+  ]},
+  { title: 'Helen Learns a Word', kind: 'story', sents: [
+    ['One day, Helen Keller finally understood what words were.', 'topic sentence'],
+    ['Her teacher took her outside to the water pump.', 'setting'],
+    ['She pumped cold water over one of Helen’s hands.', 'action'],
+    ['At the same time, she spelled w-a-t-e-r into Helen’s other hand.', 'action'],
+    ['Suddenly Helen understood that the letters meant the cool water, and she wanted to learn every word in the world.', 'wrap-up']
+  ]},
+  { title: 'Dogs Need Walks', kind: 'proof paragraph', sents: [
+    ['Second, dogs keep you active because they need a walk every day.', 'topic sentence — reason'],
+    ['A dog does not care if it is raining or cold.', 'evidence'],
+    ['It stands by the door with the leash in its mouth until you get up.', 'evidence'],
+    ['When you throw a ball, the dog runs after it again and again, and you end up running too.', 'evidence'],
+    ['With a dog in the house, nobody sits still for long.', 'wrap-up']
+  ]},
+  { title: 'A Butterfly’s Life', kind: 'informational', sents: [
+    ['A butterfly changes its shape four times during its life.', 'topic sentence'],
+    ['It begins as a tiny egg on a leaf.', 'stage 1'],
+    ['Next, a caterpillar hatches from the egg and eats leaves all day.', 'stage 2'],
+    ['Then the caterpillar makes a hard shell called a chrysalis and rests inside it.', 'stage 3'],
+    ['Finally, a butterfly breaks out of the chrysalis and flies away.', 'stage 4 / wrap-up']
+  ]},
+  { title: 'Recess Wakes Up Your Brain', kind: 'proof paragraph', sents: [
+    ['First, recess helps kids learn better.', 'topic sentence — reason'],
+    ['After sitting still for a long time, a brain gets tired.', 'evidence'],
+    ['Running and playing outside wakes the brain up.', 'evidence'],
+    ['When kids come back inside, they can pay attention again.', 'evidence'],
+    ['That is why the best teachers never skip recess.', 'wrap-up']
+  ]},
+  { title: 'The Birthday Surprise', kind: 'story', sents: [
+    ['On my birthday, I got a surprise I will never forget.', 'topic sentence'],
+    ['When I woke up, there was a present sitting on my chair.', 'first'],
+    ['I tore off the paper as fast as I could.', 'then'],
+    ['Inside was a small toy car that looked exactly like our new one.', 'then'],
+    ['I laughed, because now the family had two Dacia Dusters.', 'wrap-up']
+  ]}
+];
+
+let state = { current: 0, solved: {}, attempts: {} };
+let order = []; let locked = false;
+function load() { try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) state = Object.assign(state, JSON.parse(raw)); } catch(e) {} }
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {} }
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function() { t.classList.remove('show'); }, 2200); }
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function postToSheets(row) { try { fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: 'Activity Log', row: row }) }); } catch(e) {} }
+function fireCelebration() {
+  const c = document.createElement('div'); c.className = 'confetti-burst';
+  const emojis = ['🎉','✂️','⭐','📝','🌟','🏆'];
+  for (let i = 0; i < 26; i++) { const s = document.createElement('span'); s.textContent = emojis[Math.floor(Math.random()*emojis.length)]; s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;'; c.appendChild(s); }
+  document.body.appendChild(c); setTimeout(function() { c.remove(); }, 4000);
+}
+const st = document.createElement('style'); st.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }'; document.head.appendChild(st);
+
+function shuffled(n) { let a; do { a = Array.from({ length: n }, function(_, i) { return i; }); for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } } while (a.every(function(v, i) { return v === i; })); return a; }
+function startPuzzle(idx) {
+  state.current = idx; locked = false;
+  const p = PARAGRAPHS[idx]; order = shuffled(p.sents.length);
+  document.getElementById('title').innerHTML = '✂️ ' + esc(p.title) + '<span class="kind">' + esc(p.kind) + '</span>';
+  document.getElementById('nextBtn').style.display = 'none'; document.getElementById('checkBtn').disabled = false;
+  document.getElementById('feedback').innerHTML = ''; document.getElementById('result').innerHTML = '';
+  renderPicker(); renderStrips(); renderStats(); save();
+}
+function renderPicker() { document.getElementById('picker').innerHTML = PARAGRAPHS.map(function(p, i) { return '<button class="pick ' + (i === state.current ? 'active ' : '') + (state.solved[i] ? 'solved' : '') + '" onclick="startPuzzle(' + i + ')">' + (state.solved[i] ? '✓ ' : '') + esc(p.title) + '</button>'; }).join(''); }
+function renderStrips() {
+  const p = PARAGRAPHS[state.current]; const el = document.getElementById('strips');
+  el.innerHTML = order.map(function(orig, pos) { return '<div class="strip" data-orig="' + orig + '"><span class="slot">' + (pos + 1) + '</span>' + esc(p.sents[orig][0]) + '<span class="grip"><button onclick="move(' + pos + ',-1)" ' + (pos === 0 ? 'disabled' : '') + ' aria-label="move up">▲</button><button onclick="move(' + pos + ',1)" ' + (pos === order.length - 1 ? 'disabled' : '') + ' aria-label="move down">▼</button></span></div>'; }).join('');
+  attachDrag();
+}
+function renderStats() { const n = Object.keys(state.solved).length; document.getElementById('stats').textContent = n + ' of ' + PARAGRAPHS.length + ' paragraphs solved' + (state.attempts[state.current] ? ' · tries on this one: ' + state.attempts[state.current] : ''); }
+function move(pos, dir) { if (locked) return; const to = pos + dir; if (to < 0 || to >= order.length) return; const t = order[pos]; order[pos] = order[to]; order[to] = t; renderStrips(); }
+function shuffleAgain() { if (locked) return; order = shuffled(order.length); renderStrips(); document.getElementById('feedback').innerHTML = ''; }
+function check() {
+  if (locked) return;
+  const p = PARAGRAPHS[state.current];
+  state.attempts[state.current] = (state.attempts[state.current] || 0) + 1;
+  const strips = document.querySelectorAll('#strips .strip'); let wrong = 0;
+  order.forEach(function(orig, pos) { const s = strips[pos]; s.classList.remove('right', 'wrong'); if (orig === pos) s.classList.add('right'); else { s.classList.add('wrong'); wrong++; } });
+  const fb = document.getElementById('feedback');
+  if (wrong === 0) {
+    locked = true; state.solved[state.current] = true;
+    order.forEach(function(orig, pos) { const s = strips[pos]; s.classList.remove('right'); s.classList.add('solved'); s.insertAdjacentHTML('beforeend', '<span class="role">' + esc(p.sents[pos][1]) + '</span>'); });
+    document.getElementById('result').innerHTML = '<div class="paragraph">' + p.sents.map(function(x) { return esc(x[0]); }).join(' ') + '</div>';
+    fb.innerHTML = '<div class="feedback ok">🎉 That’s the paragraph! Read it out loud — hear how it flows now? ' + (state.attempts[state.current] === 1 ? 'First try!' : 'You got it in ' + state.attempts[state.current] + ' tries.') + '</div>';
+    document.getElementById('checkBtn').disabled = true;
+    document.getElementById('nextBtn').style.display = Object.keys(state.solved).length < PARAGRAPHS.length ? '' : 'none';
+    fireCelebration();
+    postToSheets([new Date().toISOString().slice(0, 10), 'Marcello', 'Paragraph Strips — ' + p.title, 'Writing - Structure', p.sents.length, p.sents.length, '100%', 'Solved in ' + state.attempts[state.current] + ' tries']);
+  } else {
+    let hint;
+    if (order[0] !== 0) hint = 'Which sentence tells what the WHOLE paragraph is about? That is the topic sentence — it goes first.';
+    else if (order[order.length - 1] !== order.length - 1) hint = 'Which sentence wraps it up or comes last in time? Look for “Finally” or “That is why.”';
+    else hint = 'Look for the clue words in the middle: First… Then… Next… After that…';
+    fb.innerHTML = '<div class="feedback hint">🤔 ' + wrong + ' strip' + (wrong > 1 ? 's are' : ' is') + ' in the wrong spot. ' + hint + '</div>';
+  }
+  renderStats(); save();
+}
+function nextPuzzle() { for (let i = 1; i <= PARAGRAPHS.length; i++) { const k = (state.current + i) % PARAGRAPHS.length; if (!state.solved[k]) { startPuzzle(k); return; } } }
+function resetAll() { if (!confirm('Reset all paragraphs?')) return; state = { current: 0, solved: {}, attempts: {} }; save(); startPuzzle(0); toast('Reset ✨'); }
+
+// ---- pointer-based drag reorder (works on iPad Safari; native DnD does not) ----
+function attachDrag() {
+  const list = document.getElementById('strips');
+  list.querySelectorAll('.strip').forEach(function(strip) {
+    strip.addEventListener('pointerdown', function(e) {
+      if (locked || e.target.closest('button')) return;
+      e.preventDefault();
+      const startX = e.clientX, startY = e.clientY; let ghost = null, active = false;
+      const rect = strip.getBoundingClientRect(); const offY = startY - rect.top, offX = startX - rect.left;
+      // Listen on the document, NOT the strip: moving the strip in the DOM would release pointer capture and drop the drag.
+      function onMove(ev) {
+        if (!active) { if (Math.abs(ev.clientY - startY) < 6 && Math.abs(ev.clientX - startX) < 6) return; active = true; ghost = strip.cloneNode(true); ghost.classList.add('ghost'); ghost.style.width = rect.width + 'px'; document.body.appendChild(ghost); strip.classList.add('placeholder'); }
+        ev.preventDefault();
+        ghost.style.top = (ev.clientY - offY) + 'px'; ghost.style.left = (ev.clientX - offX) + 'px';
+        const others = Array.from(list.querySelectorAll('.strip')).filter(function(s) { return s !== strip; });
+        let target = null; for (const o of others) { const r = o.getBoundingClientRect(); if (ev.clientY < r.top + r.height / 2) { target = o; break; } }
+        if (target) { if (target !== strip.nextSibling) list.insertBefore(strip, target); } else if (list.lastElementChild !== strip) list.appendChild(strip);
+        if (ev.clientY < 70) window.scrollBy(0, -12); else if (ev.clientY > window.innerHeight - 70) window.scrollBy(0, 12);
+      }
+      function onUp() {
+        document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onUp);
+        if (ghost) ghost.remove(); strip.classList.remove('placeholder');
+        if (active) { order = Array.from(list.querySelectorAll('.strip')).map(function(s) { return +s.dataset.orig; }); renderStrips(); document.getElementById('feedback').innerHTML = ''; }
+      }
+      document.addEventListener('pointermove', onMove, { passive: false }); document.addEventListener('pointerup', onUp); document.addEventListener('pointercancel', onUp);
+    });
+  });
+}
+load(); (function(){ let c = state.current || 0; if (state.solved[c]) { const N = document.querySelectorAll('.pick').length || 99; for (let i = 0; i < 99; i++) { if (!state.solved[i] && i < (typeof ESSAYS !== 'undefined' ? ESSAYS.length : PARAGRAPHS.length)) { c = i; break; } } } startPuzzle(c); })();
+</script>
+</body>
+</html>
