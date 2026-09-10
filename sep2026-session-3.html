@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcello's Session — September 16, 2026 (Finish the Essay 🎨)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --teal: #00897B; --teal-light: #E0F2F1; --teal-dark: #00695C; --blue: #4472C4; --green: #4CAF50; --green-light: #E8F5E9;
+    --gold: #F5B700; --gold-light: #FFF8E1; --gold-dark: #B7791F; --orange: #FB8C00; --orange-light: #FFF3E0;
+    --red: #E53935; --red-light: #FFEBEE; --purple: #9C27B0; --purple-light: #F3E5F5; --sky: #29B6F6; --sky-light: #E1F5FE;
+    --p-red: #EF5350; --p-red-light: #FFCDD2; --p-yellow: #FDD835; --p-yellow-light: #FFF9C4; --p-blue: #42A5F5; --p-blue-light: #BBDEFB; --p-green: #66BB6A; --p-green-light: #C8E6C9;
+    --bg: #F7F6FA; --text: #2D3748; --muted: #718096; --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+  header { background: linear-gradient(135deg, #1A237E 0%, #3949AB 45%, #8E24AA 100%); color: white; text-align: center; padding: 24px 20px 48px; position: relative; }
+  header::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 36px; background: var(--bg); border-radius: 50% 50% 0 0; }
+  header h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 2px; }
+  header p { font-size: 0.95rem; opacity: 0.95; }
+  .save-indicator { position: absolute; top: 10px; right: 16px; font-size: 0.75rem; opacity: 0.8; }
+  .tutor-reset { position: absolute; top: 10px; left: 16px; font-size: 0.7rem; padding: 4px 10px; border-radius: 12px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35); color: white; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: 700; opacity: 0.6; }
+  .main-tabs { display: flex; justify-content: center; gap: 6px; padding: 10px 8px 0; max-width: 880px; margin: 0 auto; flex-wrap: wrap; position: relative; z-index: 2; }
+  .main-tab { padding: 10px 13px; border-radius: 12px; font-weight: 700; font-size: 0.8rem; cursor: pointer; border: 2px solid #D0D5DD; background: white; color: var(--muted); font-family: 'Nunito', sans-serif; white-space: nowrap; transition: all 0.25s; }
+  .main-tab.active { background: #3949AB; border-color: #3949AB; color: white; transform: translateY(-2px); }
+  .main-tab.done { border-color: var(--green); color: var(--green); } .main-tab.active.done { background: var(--green); border-color: var(--green); color: white; }
+  .container { max-width: 760px; margin: 16px auto; padding: 0 16px; } .container.wide { max-width: 1000px; }
+  .tab-panel { display: none; } .tab-panel.active { display: block; }
+  .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; margin-bottom: 16px; animation: fadeUp 0.35s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+  .directions { font-size: 0.92rem; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+  .review-banner { background: var(--green-light); border: 2px solid var(--green); border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; font-size: 0.88rem; color: #2E7D32; font-weight: 700; }
+  .info-box { background: var(--sky-light); border-left: 4px solid var(--sky); border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 14px; font-weight: 600; line-height: 1.5; font-size: 0.92rem; color: #01579B; }
+  .btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: 'Nunito', sans-serif; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-success { background: var(--green); color: white; } .btn-orange { background: var(--orange); color: white; } .btn-purple { background: var(--purple); color: white; } .btn-blue { background: var(--blue); color: white; } .btn-secondary { background: #E0E0E0; color: var(--text); } .btn-indigo { background: #3949AB; color: white; }
+  .btn-sm { padding: 8px 14px; font-size: 0.85rem; border-radius: 10px; }
+  .btn-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .gate-note { text-align: center; font-size: 0.83rem; color: var(--muted); font-style: italic; margin-top: 6px; }
+  .tutor-tag { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); background: #ECEFF1; border-radius: 8px; padding: 2px 8px; }
+
+  /* Reading */
+  .word-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; text-align: center; }
+  .word-card.done { border-color: var(--green); background: #FAFFFB; }
+  .word-big { font-size: 2rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 2px; } .word-big .tricky { color: var(--red); background: var(--gold-light); border-radius: 6px; padding: 0 4px; }
+  .word-syll { font-size: 0.9rem; color: var(--muted); font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+  .word-tip { font-size: 0.84rem; color: var(--gold-dark); font-weight: 700; margin-bottom: 8px; min-height: 18px; }
+  .word-twin { font-size: 0.8rem; color: #B71C1C; font-weight: 700; margin-bottom: 8px; }
+  .word-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .prosody-box { background: var(--sky-light); border: 2px solid var(--sky); border-radius: 14px; padding: 18px; margin-bottom: 12px; }
+  .prosody-text { font-size: 1.1rem; line-height: 1.9; font-weight: 600; margin-bottom: 12px; }
+  .score-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; } .score-row label { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+  .score-input { width: 70px; padding: 8px 10px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-weight: 700; text-align: center; }
+  .timer-btn { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; padding: 7px 12px; border-radius: 10px; border: 2px solid var(--blue); background: white; color: var(--blue); cursor: pointer; min-width: 92px; }
+  .timer-btn.running { background: var(--blue); color: white; } .timer-btn.finished { background: var(--green); border-color: var(--green); color: white; }
+
+  /* Scramble (shared strip engine) */
+  .strips { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
+  .strip { position: relative; background: #FFFDF7; border: 2px dashed #C8BFAE; border-radius: 5px; padding: 12px 52px 12px 52px; font-size: 1rem; line-height: 1.6; font-weight: 600; touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 2px 3px 0 rgba(0,0,0,0.06); }
+  .strip:nth-child(odd) { transform: rotate(-0.4deg); } .strip:nth-child(even) { transform: rotate(0.35deg); }
+  .strip .slot { position: absolute; left: 12px; top: 10px; width: 28px; height: 28px; border-radius: 50%; background: #ECE6DA; color: var(--muted); font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+  .strip .grip { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 2px; }
+  .strip .grip button { width: 30px; height: 24px; border-radius: 6px; border: 1px solid #D0C9BD; background: white; font-size: 0.75rem; cursor: pointer; color: var(--muted); font-family: 'Nunito', sans-serif; font-weight: 800; } .strip .grip button:disabled { opacity: 0.3; }
+  .strip.placeholder { opacity: 0.25; background: #EEE; border-style: solid; }
+  .strip.ghost { position: fixed; z-index: 1000; pointer-events: none; box-shadow: 0 14px 30px rgba(0,0,0,0.22); transform: rotate(1.2deg) scale(1.02); border-color: #3949AB; background: white; margin: 0; }
+  .strip.right { background: var(--green-light); border: 2px solid var(--green); } .strip.right .slot { background: var(--green); color: white; }
+  .strip.wrong { background: var(--red-light); border: 2px solid var(--red); animation: shake 0.4s; } .strip.wrong .slot { background: var(--red); color: white; }
+  @keyframes shake { 0%,100% { translate: 0; } 25% { translate: -6px; } 75% { translate: 6px; } }
+  .strip.c-red { background: var(--p-red-light); border: 2px solid var(--p-red); } .strip.c-yellow { background: var(--p-yellow-light); border: 2px solid var(--p-yellow); } .strip.c-blue { background: var(--p-blue-light); border: 2px solid var(--p-blue); } .strip.c-green { background: var(--p-green-light); border: 2px solid var(--p-green); }
+  .strip .job { display: block; margin-top: 6px; font-size: 0.76rem; font-weight: 800; color: rgba(0,0,0,0.55); }
+  .feedback { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-weight: 700; font-size: 0.92rem; line-height: 1.5; }
+  .feedback.ok { background: var(--green-light); color: #2E7D32; } .feedback.hint { background: var(--gold-light); color: #7B6400; }
+  .puzzle-tabs { display: flex; gap: 8px; margin-bottom: 12px; } .puzzle-tab { padding: 8px 14px; border-radius: 12px; border: 2px solid #D0D5DD; background: white; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.85rem; color: var(--muted); cursor: pointer; }
+  .puzzle-tab.active { background: #3949AB; border-color: #3949AB; color: white; } .puzzle-tab.solved { border-color: var(--green); color: var(--green); } .puzzle-tab.solved.active { background: var(--green); color: white; }
+
+  /* Fix-It */
+  .fix-card { background: white; border: 2px solid #E0E0E0; border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .fix-card.correct { border-color: var(--green); background: #FAFFFB; }
+  .fix-sentence { font-size: 1.1rem; font-weight: 700; line-height: 1.6; margin-bottom: 10px; }
+  .fix-sentence .blank { display: inline-block; min-width: 90px; border-bottom: 3px solid var(--orange); text-align: center; color: var(--orange); font-weight: 800; padding: 0 6px; } .fix-sentence .blank.filled { color: #2E7D32; border-color: var(--green); }
+  .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+  .opt { padding: 9px 18px; border-radius: 20px; font-size: 1rem; font-weight: 800; border: 2px solid #CE93D8; background: white; color: var(--purple); cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .opt.right { background: var(--green); border-color: var(--green); color: white; } .opt.wrong { background: var(--red-light); border-color: var(--red); color: var(--red); text-decoration: line-through; }
+  .ed-rule { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-weight: 700; line-height: 1.6; }
+  .ed-rule .snd { display: inline-block; background: white; border-radius: 8px; padding: 2px 8px; margin: 0 2px; border: 1px solid #E0C97A; }
+
+  /* Zoom lens */
+  .zoom-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; } @media (max-width: 640px) { .zoom-wrap { grid-template-columns: 1fr; } }
+  .zoom-col h3 { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; text-align: center; }
+  .zpart { border: 2px solid #D0D5DD; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; font-size: 0.92rem; font-weight: 600; line-height: 1.5; cursor: pointer; background: white; transition: all 0.2s; }
+  .zpart .zl { display: block; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 2px; }
+  .zpart.sel { outline: 3px solid #3949AB; }
+  .zpart.m-red { background: var(--p-red-light); border-color: var(--p-red); } .zpart.m-yellow { background: var(--p-yellow-light); border-color: var(--p-yellow); } .zpart.m-blue { background: var(--p-blue-light); border-color: var(--p-blue); } .zpart.m-green { background: var(--p-green-light); border-color: var(--p-green); }
+  .zpart.big { min-height: 64px; }
+  .breath { background: var(--purple-light); border: 2px dashed var(--purple); border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+  .breath .bl { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--purple); margin-bottom: 6px; }
+  .breath p { font-size: 1.02rem; font-weight: 700; line-height: 1.6; }
+  .chant { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: white; border: 2px dashed var(--orange); border-radius: 10px; padding: 9px 13px; margin-bottom: 12px; cursor: pointer; }
+  .chant-label { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--orange); }
+  .chant-words { font-size: 0.98rem; font-weight: 800; } .chant-spk { margin-left: auto; font-size: 1.15rem; }
+  .chant-beat { display: inline-block; padding: 2px 8px; border-radius: 8px; margin-right: 4px; }
+  .b-red { background: var(--p-red-light); } .b-yellow { background: var(--p-yellow-light); } .b-blue { background: var(--p-blue-light); } .b-green { background: var(--p-green-light); }
+
+  /* Write — skeleton + one paragraph open */
+  .skeleton { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; } @media (max-width: 640px) { .skeleton { grid-template-columns: repeat(2, 1fr); } }
+  .sk { border-radius: 12px; padding: 10px; font-size: 0.8rem; font-weight: 800; line-height: 1.35; cursor: pointer; border: 2px solid transparent; }
+  .sk.red { background: var(--p-red-light); color: #B71C1C; } .sk.yellow { background: var(--p-yellow-light); color: #7B6400; } .sk.blue { background: var(--p-blue-light); color: #0D47A1; } .sk.green { background: var(--p-green-light); color: #1B5E20; }
+  .sk.open { border-color: #263238; box-shadow: 0 4px 12px rgba(0,0,0,0.12); } .sk .skd { display: block; font-size: 0.72rem; font-weight: 700; opacity: 0.85; margin-top: 3px; } .sk .skc { float: right; }
+  .gist-anchor { background: var(--p-red-light); border: 2px solid var(--p-red); border-radius: 10px; padding: 8px 14px; margin-bottom: 12px; text-align: center; font-weight: 800; font-size: 0.92rem; color: #B71C1C; }
+  .done-para { background: white; border: 2px solid #E0E0E0; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 0.95rem; line-height: 1.7; font-weight: 600; }
+  .done-para .dp-label { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; }
+  .done-para.red { border-color: var(--p-red); } .done-para.red .dp-label { color: #B71C1C; } .done-para.yellow { border-color: var(--p-yellow); } .done-para.yellow .dp-label { color: #7B6400; } .done-para.blue { border-color: var(--p-blue); } .done-para.blue .dp-label { color: #0D47A1; } .done-para.green { border-color: var(--p-green); } .done-para.green .dp-label { color: #1B5E20; }
+  .prior-input { width: 100%; padding: 8px 10px; border: 2px solid #D0D5DD; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 600; margin-top: 6px; }
+  .write-card { background: white; border: 2px solid #E0E0E0; border-radius: 16px; padding: 18px 20px; margin-bottom: 16px; }
+  .write-card.p-blue { border-color: var(--p-blue); } .write-card.p-green { border-color: var(--p-green); } .write-card.locked { background: var(--green-light); border-color: var(--green); }
+  .write-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+  .write-card-title { font-size: 1.05rem; font-weight: 800; }
+  .write-badge { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 12px; }
+  .lg-blue { background: var(--p-blue-light); color: #0D47A1; } .lg-green { background: var(--p-green-light); color: #1B5E20; }
+  .prompt-line { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; line-height: 1.5; }
+  .territory { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; } .territory span { font-size: 0.76rem; font-weight: 700; padding: 4px 10px; border-radius: 10px; }
+  .territory .must { background: var(--green-light); color: #2E7D32; } .territory .not { background: var(--red-light); color: #B71C1C; }
+  .starter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .starter { padding: 6px 12px; border-radius: 16px; font-size: 0.84rem; font-weight: 700; border: 2px solid #CE93D8; background: white; color: var(--purple); cursor: pointer; font-family: 'Nunito', sans-serif; } .starter.glue { border-color: #90CAF9; color: #1565C0; }
+  .verb-bank { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 10px 14px; margin-bottom: 12px; }
+  .verb-bank .vb-title { font-size: 0.78rem; font-weight: 800; color: var(--gold-dark); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .verb-bank .vb-row { display: flex; gap: 6px; flex-wrap: wrap; } .verb-bank .vb { font-size: 0.84rem; font-weight: 700; background: white; border: 1px solid #E0C97A; border-radius: 10px; padding: 3px 9px; color: #5D4037; } .verb-bank .vb b { color: #2E7D32; }
+  .write-textarea-wrap { position: relative; }
+  .write-textarea { width: 100%; min-height: 80px; border: 2px solid #D0D5DD; border-radius: 12px; padding: 14px; font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 600; resize: vertical; line-height: 1.6; background: #FAFBFC; }
+  .write-textarea:focus { border-color: #3949AB; outline: none; background: white; } .write-textarea.locked { background: white; border-color: var(--green); }
+  .type-tag { position: absolute; top: -10px; right: 12px; font-size: 0.68rem; font-weight: 800; background: #3949AB; color: white; border-radius: 10px; padding: 2px 9px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .check-box2 { border-radius: 12px; padding: 12px 14px; margin-top: 12px; border: 2px solid; } .cb-sent { background: #FFFDE7; border-color: var(--gold); } .cb-sent.matched { background: var(--green-light); border-color: var(--green); } .cb-sent.unmatched { background: var(--red-light); border-color: var(--red); }
+  .source-check-prompt { font-size: 0.92rem; line-height: 1.5; font-weight: 600; margin-bottom: 10px; color: #5D4037; }
+  .source-check-row { display: flex; gap: 8px; } .source-btn { flex: 1; padding: 10px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; border: 2px solid; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .source-btn.match { background: white; color: var(--green); border-color: var(--green); } .source-btn.match.active { background: var(--green); color: white; } .source-btn.unmatch { background: white; color: var(--red); border-color: var(--red); } .source-btn.unmatch.active { background: var(--red); color: white; }
+  .proof-box { background: var(--purple-light); border: 2px solid var(--purple); border-radius: 12px; padding: 14px 16px; margin-top: 12px; } .proof-box.done { background: var(--green-light); border-color: var(--green); }
+  .proof-title { font-size: 0.92rem; font-weight: 800; color: var(--purple); margin-bottom: 4px; } .proof-box.done .proof-title { color: var(--green); }
+  .proof-sub { font-size: 0.82rem; color: #6A1B9A; margin-bottom: 12px; line-height: 1.4; } .proof-box.done .proof-sub { color: #2E7D32; }
+  .proof-words { display: flex; gap: 8px; flex-wrap: wrap; } .proof-word { padding: 8px 12px; border-radius: 10px; font-size: 1.05rem; font-weight: 700; border: 2px solid #D1C4E9; background: white; color: #B0A8C0; font-family: 'Nunito', sans-serif; }
+  .proof-word.next { color: var(--purple); border-color: var(--purple); cursor: pointer; animation: pulseP 1.3s infinite; } @keyframes pulseP { 0%,100% { box-shadow: 0 0 0 0 rgba(156,39,176,0.4); } 50% { box-shadow: 0 0 0 7px rgba(156,39,176,0); } }
+  .proof-word.read { color: #2E7D32; border-color: var(--green); background: var(--green-light); } .proof-word.read::after { content: ' ✓'; font-size: 0.8rem; }
+  .proof-progress { font-size: 0.8rem; color: var(--muted); font-weight: 700; margin-top: 10px; }
+  .homo-box { background: #E3F2FD; border: 2px solid #1E88E5; border-radius: 12px; padding: 14px 16px; margin-top: 12px; } .homo-box.done { background: var(--green-light); border-color: var(--green); } .homo-box.fix { background: var(--gold-light); border-color: var(--gold); }
+  .homo-title { font-size: 0.92rem; font-weight: 800; color: #1565C0; margin-bottom: 4px; } .homo-box.done .homo-title { color: var(--green); } .homo-box.fix .homo-title { color: var(--gold-dark); }
+  .homo-sub { font-size: 0.82rem; color: #0D47A1; margin-bottom: 10px; line-height: 1.4; } .homo-box.done .homo-sub { color: #2E7D32; }
+  .homo-item { background: white; border: 2px solid #BBDEFB; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; } .homo-item.ok { border-color: var(--green); } .homo-item.fix { border-color: var(--gold); }
+  .homo-q { font-size: 0.92rem; font-weight: 700; margin-bottom: 8px; } .homo-q .hw { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 8px; padding: 1px 8px; font-weight: 800; }
+  .homo-opts { display: flex; gap: 6px; flex-wrap: wrap; } .homo-opt { padding: 7px 12px; border-radius: 16px; font-size: 0.84rem; font-weight: 700; border: 2px solid #90CAF9; background: white; color: #1565C0; cursor: pointer; font-family: 'Nunito', sans-serif; }
+  .homo-opt.active.ok { background: var(--green); border-color: var(--green); color: white; } .homo-opt.active.fix { background: var(--gold); border-color: var(--gold); color: #5D4037; }
+  .homo-verdict { margin-top: 8px; font-size: 0.84rem; font-weight: 700; } .homo-verdict.ok { color: #2E7D32; } .homo-verdict.fix { color: #7B6400; }
+  .verb-box { background: var(--gold-light); border: 2px solid var(--gold); border-radius: 12px; padding: 12px 14px; margin-top: 12px; } .verb-box.done { background: var(--green-light); border-color: var(--green); }
+  .verb-title { font-size: 0.92rem; font-weight: 800; color: var(--gold-dark); margin-bottom: 4px; } .verb-box.done .verb-title { color: var(--green); }
+  .verb-sub { font-size: 0.82rem; color: #7B6400; line-height: 1.45; } .verb-box.done .verb-sub { color: #2E7D32; }
+  .verb-hit { display: inline-block; background: white; border: 2px solid var(--red); border-radius: 8px; padding: 2px 8px; font-weight: 800; color: var(--red); margin: 4px 6px 0 0; }
+  .lock-row { display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px; }
+  .lock-btn { background: var(--green); color: white; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem; cursor: pointer; font-family: 'Nunito', sans-serif; } .lock-btn:disabled { background: #E0E0E0; color: var(--muted); cursor: not-allowed; }
+  .unlock-btn { background: white; color: var(--green); border: 2px solid var(--green); border-radius: 10px; padding: 6px 12px; font-weight: 700; font-size: 0.82rem; cursor: pointer; font-family: 'Nunito', sans-serif; }
+
+  /* Wrap */
+  .essay-final { background: white; border: 2px solid #E0E0E0; border-radius: 12px; padding: 18px 20px; line-height: 1.85; font-size: 1.02rem; font-weight: 600; }
+  .essay-final p { margin-bottom: 12px; padding: 8px 10px; border-radius: 8px; } .essay-final .ef-red { background: var(--p-red-light); } .essay-final .ef-yellow { background: var(--p-yellow-light); } .essay-final .ef-blue { background: var(--p-blue-light); } .essay-final .ef-green { background: var(--p-green-light); }
+  .stars-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .star-btn { padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 700; background: var(--gold-light); border: 2px solid var(--gold); color: #7B6400; cursor: pointer; font-family: 'Nunito', sans-serif; } .star-btn.active { background: var(--gold); color: white; }
+  .wish-chip { padding: 8px 16px; border-radius: 20px; font-size: 0.88rem; font-weight: 700; background: white; border: 2px solid #90CAF9; color: #1565C0; cursor: pointer; font-family: 'Nunito', sans-serif; } .wish-chip.active { background: var(--blue); border-color: var(--blue); color: white; }
+  .text-input { width: 100%; padding: 10px 12px; border: 2px solid #D0D5DD; border-radius: 10px; font-family: 'Nunito', sans-serif; font-size: 0.95rem; font-weight: 600; }
+  .tutor-notes { background: #F5F5F5; border: 2px dashed #B0BEC5; border-radius: 12px; padding: 14px 16px; } .tutor-notes label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--muted); margin: 8px 0 4px; }
+  .tutor-notes textarea { width: 100%; padding: 8px 10px; border: 2px solid #D0D5DD; border-radius: 8px; font-family: 'Nunito', sans-serif; font-size: 0.9rem; font-weight: 600; min-height: 56px; resize: vertical; }
+  .pep-banner { background: linear-gradient(135deg, #3949AB, #8E24AA); color: white; border-radius: 16px; padding: 24px 20px; text-align: center; margin: 16px 0; }
+  .pep-banner h3 { font-size: 1.4rem; margin-bottom: 6px; } .pep-banner p { font-size: 0.96rem; line-height: 1.55; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: #333; color: white; padding: 12px 24px; border-radius: 24px; font-weight: 700; font-size: 0.9rem; z-index: 1000; transition: transform 0.3s; pointer-events: none; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); } .toast.warning { background: var(--orange); }
+  .confetti-burst { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 999; }
+</style>
+</head>
+<body>
+<header>
+  <button class="tutor-reset" onclick="tutorReset()">🔄 Reset</button>
+  <h1>Finish the Essay 🎨</h1>
+  <p>Wednesday, September 16, 2026 — blue and green today</p>
+  <div class="save-indicator" id="saveIndicator">Saved ✓</div>
+</header>
+<div class="main-tabs">
+  <button class="main-tab active" id="mtab-reading" onclick="switchTab('reading')">📖 Tricky Words</button>
+  <button class="main-tab" id="mtab-scramble" onclick="switchTab('scramble')">🧩 Scramble</button>
+  <button class="main-tab" id="mtab-fixit" onclick="switchTab('fixit')">🔧 Fix-It</button>
+  <button class="main-tab" id="mtab-zoom" onclick="switchTab('zoom')">🔍 Zoom Lens</button>
+  <button class="main-tab" id="mtab-write" onclick="switchTab('write')">✍️ Write</button>
+  <button class="main-tab" id="mtab-wrap" onclick="switchTab('wrap')">⭐ My Essay</button>
+</div>
+<div class="container" id="mainContainer">
+  <div class="tab-panel active" id="panel-reading"><div id="card-reading"></div></div>
+  <div class="tab-panel" id="panel-scramble"><div id="card-scramble"></div></div>
+  <div class="tab-panel" id="panel-fixit"><div id="card-fixit"></div></div>
+  <div class="tab-panel" id="panel-zoom"><div id="card-zoom"></div></div>
+  <div class="tab-panel" id="panel-write"><div id="card-write"></div></div>
+  <div class="tab-panel" id="panel-wrap"><div id="card-wrap"></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  CONFIG
+// ============================================================
+const STORAGE_KEY = 'marcello_sep16_session';
+const CLOUD_STATE_KEY = 'sep2026_session_3';
+const PREV_CLOUD_KEY = 'sep2026_session_2';     // last week's essay (red + yellow) is loaded from here
+const TRACKER_URL = 'https://script.google.com/macros/s/AKfycbzU55zBpmIVjSaRmphwiFrtfhzt7dpgvoVlt3xet_c1-gjuJnQ6heNFkQoY1OE014J3kA/exec';
+const SESSION_DATE = '2026-09-16';
+const VIEW_ONLY = /[?&]view=1/.test(location.search);
+let dirty = false; let activeTab = 'reading';
+
+function freshState() {
+  return {
+    reading: { words: [false, false, false, false], prosodyRead: false, wcpm: '', errors: '', prosody: '', done: false },
+    scramble: { para: { order: [], attempts: 0, solved: false }, essay: { order: [], attempts: 0, solved: false }, done: false },
+    fixit: { verbs: [], ed: [], twins: [], done: false },
+    zoom: { breath: false, matches: {}, chant: false, done: false },
+    write: {
+      prior: { who: '', r1: '', r2: '', hook: '', focus: '', topic1: '', example1: '', topic2: '' },   // from sep2026_session_2 (editable by the tutor)
+      priorLoaded: false,
+      open: 'blue',
+      sentences: [
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, locked: false, part: 'blue', role: 'topic2' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, locked: false, part: 'blue', role: 'example2' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, locked: false, part: 'green', role: 'restate' },
+        { text: '', sourceCheck: null, proofIdx: 0, proofed: false, homo: {}, locked: false, part: 'green', role: 'matters' }
+      ],
+      done: false
+    },
+    wrap: { readAloud: false, stars: [], wish: [], wishCustom: '', tutor: { notes: '' }, done: false },
+    timestamps: {}, points: 0
+  };
+}
+let S = freshState();
+
+// ============================================================
+//  CONTENT
+// ============================================================
+// Tricky words = the four he substituted on Sept 9 (cared→carried, wounded→wooden, evidence→events, floods→fludes)
+const WORDS = [
+  { word: 'cared', syll: 'cared', before: 'c', tricky: 'are', after: 'd', twin: 'carried', tip: '"are" says /air/ — care, then add -d. ONE syllable: cared. (Not carried — that has two: car-ried.)' },
+  { word: 'wounded', syll: 'wound · ed', before: 'w', tricky: 'ou', after: 'nded', twin: 'wooden', tip: 'Here "ou" says /oo/ — WOON-ded. A wound is a hurt. (Not wooden — made of wood.)' },
+  { word: 'evidence', syll: 'ev · i · dence', before: 'evi', tricky: 'dence', after: '', twin: 'events', tip: '"dence" says /dens/ — EV-i-dens. Proof that something is true. (Not events — things that happen.)' },
+  { word: 'floods', syll: 'floods', before: 'fl', tricky: 'oo', after: 'ds', twin: 'fludes', tip: 'The "oo" here says /u/ like in blood. FLUDS. Two o’s, no e.' }
+];
+const PROSODY_PASSAGE = 'After the war, Clara Barton did not stop. She had cared for wounded soldiers on the battlefield, and now she saw that people needed help after floods, fires, and storms. There was plenty of evidence that a group like the Red Cross could save lives. So she worked for years until the American Red Cross was born, and it is still helping people today.';
+const PASSAGE_WORDS = PROSODY_PASSAGE.split(/\s+/).length;
+
+// Scramble — fresh puzzles, both about a great heart so they model proof 2 + conclusion
+const SCRAMBLE_PARA = { title: 'Grandpa listens', sents: [
+  'Second, my grandpa has a great heart because he listens when I am sad.',
+  'One day I lost my soccer game and did not want to talk to anyone.',
+  'Grandpa sat next to me on the porch and did not say a word.',
+  'After a while, I started telling him what happened, and he just nodded.',
+  'By the end, I felt better, and he never told me what to do.'
+], roles: ['topic sentence — reason 2', 'evidence: the time', 'evidence: what he did', 'evidence: what happened', 'wrap-up'] };
+const SCRAMBLE_ESSAY = { title: 'My Uncle Has a Great Heart', paras: [
+  'You do not have to be a hero in a book to have a great heart. My uncle Tomás drives a bus, and he has one of the greatest hearts I know. My uncle has a great heart because he helps people who are lost and because he never forgets a birthday.',
+  'First, my uncle helps people who are lost. Last winter, a grandmother got on his bus and did not know which stop was hers. He called her family, waited with her, and made sure she got home.',
+  'Second, my uncle never forgets a birthday. He keeps a list in his phone of every cousin, neighbor, and friend. On your birthday, he calls you and sings, even if his singing is terrible.',
+  'My uncle has a great heart because he helps lost people and remembers everyone’s birthday. He does not do it for a prize. He does it because he cares, and that is what a great heart is.'
+] };
+const COLORS = ['red', 'yellow', 'blue', 'green'];
+const JOBS = ['🔴 Introduction — hook + focus statement', '🟡 Proof 1 — reason 1 + evidence', '🔵 Proof 2 — reason 2 + evidence', '🟢 Conclusion — the focus again + why it matters'];
+
+// Fix-It
+const VERB_FIXES = [
+  { before: 'So then we ', after: ' about it for a little bit.', opts: ['fighted', 'fought', 'fight'], ans: 'fought', base: 'fight', say: 'Yesterday I… fought.' },
+  { before: 'My dad, my mom, and my sister ', after: ' about it first.', opts: ['thought', 'thinked', 'thinks'], ans: 'thought', base: 'think', say: 'Yesterday I… thought.' }
+];
+// -ed as a UNIT: three sounds, one spelling
+const ED_ITEMS = [
+  { base: 'help', sound: '/t/', opts: ['helpt', 'helped', 'helpd'], ans: 'helped', sentence: 'My mom ___ my neighbor carry her groceries.' },
+  { base: 'jump', sound: '/t/', opts: ['jumped', 'jumpt', 'jumpd'], ans: 'jumped', sentence: 'The dog ___ over the fence.' },
+  { base: 'play', sound: '/d/', opts: ['playd', 'plaid', 'played'], ans: 'played', sentence: 'We ___ soccer after school.' },
+  { base: 'want', sound: '/id/', opts: ['wanted', 'wantid', 'wantd'], ans: 'wanted', sentence: 'Grandma ___ to keep the old car.' }
+];
+// near-word twins: which word did you MEAN?
+const TWINS = [
+  { sentence: 'Clara Barton ___ for wounded soldiers.', opts: ['carried', 'cared'], ans: 'cared', why: 'cared = took care of. carried = picked up and moved.' },
+  { sentence: 'The ___ soldiers had no bandages.', opts: ['wooden', 'wounded'], ans: 'wounded', why: 'wounded = hurt. wooden = made of wood.' },
+  { sentence: 'There was ___ that the Red Cross could help.', opts: ['events', 'evidence'], ans: 'evidence', why: 'evidence = proof. events = things that happen.' }
+];
+
+// Zoom Lens — the same shape at two sizes
+const ZOOM_SMALL = [
+  { key: 'red', label: 'Topic sentence', text: 'Grandpa has a great heart because he helps and he listens.' },
+  { key: 'yellow', label: 'Detail 1', text: 'He helps me with my homework every night.' },
+  { key: 'blue', label: 'Detail 2', text: 'He listens when I am sad.' },
+  { key: 'green', label: 'Closing sentence', text: 'That is why Grandpa has a great heart.' }
+];
+const ZOOM_BIG = [
+  { key: 'red', label: '🔴 Introduction', text: 'Hook + FOCUS STATEMENT: who + reason 1 + reason 2' },
+  { key: 'yellow', label: '🟡 Proof 1', text: 'Reason 1 again + a real example' },
+  { key: 'blue', label: '🔵 Proof 2', text: 'Reason 2 again + a real example' },
+  { key: 'green', label: '🟢 Conclusion', text: 'The focus statement in new words + why it matters' }
+];
+const CHANT = 'Big idea. Prove one. Prove two. Say it again.';
+
+// Write
+const TOPIC2_STARTERS = ['Second,', 'Another way', 'My mom also'];
+const EXAMPLE_STARTERS = ['For example,', 'One time,', 'Last year,', 'When I'];
+const RESTATE_STARTERS = ['My mom has a great heart because', 'That is why', 'In the end,'];
+const MATTERS_STARTERS = ['That is what a great heart', 'She does not do it for', 'I am lucky because'];
+const GLUE = ['because', 'so', 'when', 'even though'];
+const VERB_BANK = [['fight', 'fought'], ['think', 'thought'], ['help', 'helped'], ['listen', 'listened'], ['take', 'took'], ['give', 'gave'], ['see', 'saw'], ['come', 'came'], ['make', 'made'], ['feel', 'felt'], ['tell', 'told'], ['say', 'said']];
+const BAD_VERBS = { thinked: 'thought', drived: 'drove', fighted: 'fought', woked: 'woke', taked: 'took', bringed: 'brought', buyed: 'bought', gived: 'gave', seed: 'saw', runned: 'ran', comed: 'came', maked: 'made', goed: 'went', catched: 'caught', teached: 'taught', feeled: 'felt', falled: 'fell', telled: 'told', eated: 'ate', standed: 'stood', sitted: 'sat', writed: 'wrote', getted: 'got', finded: 'found', keeped: 'kept', leaved: 'left', meeted: 'met', payed: 'paid', sleeped: 'slept', breaked: 'broke', choosed: 'chose', throwed: 'threw', growed: 'grew', knowed: 'knew', sayed: 'said', hearded: 'heard', heared: 'heard',
+  // -ed spelled by sound (Sept 9: "helpt")
+  helpt: 'helped', jumpt: 'jumped', walkt: 'walked', lookt: 'looked', talkt: 'talked', askt: 'asked', workt: 'worked', stopt: 'stopped', likt: 'liked', playd: 'played', stayd: 'stayed', wantid: 'wanted', needid: 'needed', listend: 'listened', helpd: 'helped', carryed: 'carried' };
+const HOMO_SETS = [['are', 'our'], ['where', "we're", 'were'], ['there', 'their', "they're"], ['your', "you're"], ['to', 'too', 'two'], ['its', "it's"], ['cared', 'carried'], ['wounded', 'wooden'], ['evidence', 'events']];
+const MEANINGS = { 'are': 'ARE — we are / you are / they are', 'our': 'OUR — belongs to us', 'where': 'WHERE — a place', "we're": "WE'RE — we are", 'were': 'WERE — in the past', 'there': 'THERE — a place', 'their': 'THEIR — belongs to them', "they're": "THEY'RE — they are", 'your': 'YOUR — belongs to you', "you're": "YOU'RE — you are", 'to': 'TO — going TO / TO do', 'too': 'TOO — also / too much', 'two': 'TWO — the number 2', 'its': 'ITS — belongs to it', "it's": "IT'S — it is", 'cared': 'CARED — took care of', 'carried': 'CARRIED — picked up and moved', 'wounded': 'WOUNDED — hurt', 'wooden': 'WOODEN — made of wood', 'evidence': 'EVIDENCE — proof', 'events': 'EVENTS — things that happen' };
+const STARS = ['I read my tricky words the right way', 'I unscrambled a paragraph AND an essay', 'I spelled -ed as a unit', 'I said my essay in one breath', 'I matched the small shape to the big shape', 'I said the chant', 'I TYPED my blue paragraph', 'I TYPED my green paragraph', 'I finished a whole essay', 'I read my essay out loud'];
+const WISHES = ['Write my next essay with less help', 'Remember: -ed even when it sounds like /t/', 'Say the chant by myself', 'Read my essay to my family'];
+
+// ============================================================
+//  UTIL (cloud infra with dirty flag + view mode)
+// ============================================================
+function toast(msg, kind) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (kind ? ' ' + kind : ''); setTimeout(function() { t.className = 'toast'; }, 3000); }
+function esc(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
+function attr(s) { return JSON.stringify(s).replace(/"/g, '&quot;'); }
+function saveToLocalStorage() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(S)); const ind = document.getElementById('saveIndicator'); ind.textContent = 'Saved ✓'; } catch(e) {} }
+function loadFromLocalStorage() { try { const raw = localStorage.getItem(STORAGE_KEY); if (!raw) return false; S = Object.assign(freshState(), JSON.parse(raw)); return true; } catch(e) { return false; } }
+let saveDebounce = null, cloudDebounce = null, cloudFireDeadline = null;
+function debounceSave() { if (VIEW_ONLY) return; dirty = true; clearTimeout(saveDebounce); saveDebounce = setTimeout(saveToLocalStorage, 500); const now = Date.now(); if (cloudFireDeadline === null) cloudFireDeadline = now + 8000; const fireIn = Math.min(3500, Math.max(cloudFireDeadline - now, 0)); clearTimeout(cloudDebounce); cloudDebounce = setTimeout(function() { cloudFireDeadline = null; saveStateToCloud(); }, fireIn); }
+function saveImmediate() { if (VIEW_ONLY) return; dirty = true; clearTimeout(saveDebounce); clearTimeout(cloudDebounce); cloudFireDeadline = null; saveToLocalStorage(); saveStateToCloud(); }
+function postToSheets(sheet, row) { try { fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: sheet, row: row }) }); } catch(e) {} }
+function stateHasWork() {
+  try {
+    const f = freshState();
+    return (Object.keys(S.timestamps || {}).length > 0)
+      || (S.reading.done || S.reading.words.some(Boolean) || S.reading.prosodyRead || (S.reading.wcpm || '').trim())
+      || (S.scramble.done || S.scramble.para.attempts || S.scramble.essay.attempts || S.scramble.para.solved || S.scramble.essay.solved)
+      || (S.fixit.done || S.fixit.verbs.some(function(c) { return c && c.picked; }) || S.fixit.ed.some(function(c) { return c && c.picked; }) || S.fixit.twins.some(function(c) { return c && c.picked; }))
+      || (S.zoom.done || S.zoom.breath || S.zoom.chant || Object.keys(S.zoom.matches).length)
+      || (S.write.done || S.write.sentences.some(function(x) { return x.text && x.text.trim(); }))   // prior-essay fields are DERIVED from last week's cloud blob — never count them as work (a fresh tab must not clobber the cloud)
+      || (S.wrap.done || S.wrap.readAloud || S.wrap.stars.length || S.wrap.wish.length || (S.wrap.wishCustom || '').trim() || (S.wrap.tutor.notes || '').trim());
+  } catch(e) { return true; }
+}
+function saveStateToCloud() { if (VIEW_ONLY) return; if (!stateHasWork()) return; try { fetch(TRACKER_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ sheet: 'Session State', key: CLOUD_STATE_KEY, state: S }) }); dirty = false; const ind = document.getElementById('saveIndicator'); ind.textContent = 'Cloud saved ☁️'; } catch(e) {} }
+function loadStateFromCloud(key) {
+  return new Promise(function(resolve) {
+    const cbName = 'cloudCB_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const timeout = setTimeout(function() { delete window[cbName]; resolve(null); }, 8000);
+    window[cbName] = function(result) { clearTimeout(timeout); delete window[cbName]; if (result && result.success && result.state) resolve(result.state); else resolve(null); };
+    const script = document.createElement('script'); script.src = TRACKER_URL + '?action=loadState&key=' + encodeURIComponent(key) + '&callback=' + cbName;
+    script.onerror = function() { clearTimeout(timeout); delete window[cbName]; resolve(null); }; document.head.appendChild(script);
+  });
+}
+let speechUnlocked = false;
+function unlockSpeech() { if (speechUnlocked || !('speechSynthesis' in window)) return; const d = new SpeechSynthesisUtterance(''); d.volume = 0; window.speechSynthesis.speak(d); speechUnlocked = true; }
+document.addEventListener('touchstart', unlockSpeech, { once: true }); document.addEventListener('click', unlockSpeech, { once: true });
+function speakText(text, rate) { if (!('speechSynthesis' in window)) { toast('Speech not available', 'warning'); return; } window.speechSynthesis.cancel(); setTimeout(function() { const u = new SpeechSynthesisUtterance(text); u.rate = rate || 0.85; window.speechSynthesis.speak(u); }, 100); }
+function fireCelebration() { const c = document.createElement('div'); c.className = 'confetti-burst'; const em = ['🎉','🎨','⭐','❤️','🌟','🏆','✏️','📚']; for (let i = 0; i < 28; i++) { const s = document.createElement('span'); s.textContent = em[Math.floor(Math.random()*em.length)]; s.style.cssText = 'position:absolute;font-size:' + (18 + Math.random()*20) + 'px;left:' + (Math.random()*100) + '%;top:-30px;animation:confettiFall ' + (1.5 + Math.random()*2) + 's ease forwards;'; c.appendChild(s); } document.body.appendChild(c); setTimeout(function() { c.remove(); }, 4000); }
+const cs = document.createElement('style'); cs.textContent = '@keyframes confettiFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }'; document.head.appendChild(cs);
+function tutorReset() {
+  if (VIEW_ONLY) { toast('View-only mirror — reset from the iPad', 'warning'); return; }
+  if (!confirm('Reset this session?\n\nThis wipes ALL progress for September 16 (local + cloud). Last week\'s essay will be re-loaded from the cloud.')) return;
+  S = freshState(); S.timestamps.reset = new Date().toISOString(); try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  dirty = true; saveStateToCloud(); loadPrior().then(function() { switchTab('reading'); }); toast('Session reset — fresh start ✨');
+}
+
+// ============================================================
+//  TABS
+// ============================================================
+const RENDER = { reading: renderReading, scramble: renderScramble, fixit: renderFixit, zoom: renderZoom, write: renderWrite, wrap: renderWrap };
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); }); document.getElementById('panel-' + tab).classList.add('active');
+  document.querySelectorAll('.main-tab').forEach(function(t) { t.classList.remove('active'); }); document.getElementById('mtab-' + tab).classList.add('active');
+  const mc = document.getElementById('mainContainer'); if (tab === 'write') mc.classList.add('wide'); else mc.classList.remove('wide');
+  RENDER[tab](); updateTabBadges(); window.scrollTo({ top: 0, behavior: 'smooth' }); saveImmediate();
+}
+function updateTabBadges() { const map = { reading: S.reading.done, scramble: S.scramble.done, fixit: S.fixit.done, zoom: S.zoom.done, write: S.write.done, wrap: S.wrap.done }; Object.keys(map).forEach(function(k) { const t = document.getElementById('mtab-' + k); if (map[k]) t.classList.add('done'); else t.classList.remove('done'); }); }
+
+// ============================================================
+//  TAB 1 — TRICKY WORDS (the four Sept 9 substitutions) + prosody
+// ============================================================
+let timerHandle = null, timerLeft = 60;
+function renderReading() {
+  const el = document.getElementById('card-reading'); const rd = S.reading; const ready = rd.words.every(Boolean) && rd.prosodyRead;
+  let html = '<div class="card">' + (rd.done ? '<div class="review-banner">✅ Tricky words done.</div>' : '') + '<h2>📖 Your four tricky words</h2>' +
+    '<p class="directions">Last week these four words came out as a <strong>different word that looks like them</strong>. Today we look at the tricky part, say the word slowly, and say what it MEANS — so the right word wins.</p>' +
+    '<div class="info-box">🧠 The trick: say it slowly → find the tricky part → ask “what does this word mean?” The look-alike word means something else.</div></div>';
+  WORDS.forEach(function(w, i) {
+    const done = rd.words[i];
+    html += '<div class="word-card ' + (done ? 'done' : '') + '"><div class="word-big" id="wordbig-' + i + '">' + esc(w.before) + (done ? '<span class="tricky">' + esc(w.tricky) + '</span>' : esc(w.tricky)) + esc(w.after) + '</div><div class="word-syll">' + esc(w.syll) + '</div>' +
+      '<div class="word-tip" id="wordtip-' + i + '">' + (done ? '💡 ' + esc(w.tip) : '') + '</div><div class="word-twin">look-alike to beat: ' + esc(w.twin) + '</div>' +
+      '<div class="word-btns"><button class="btn btn-sm btn-purple" onclick="showTricky(' + i + ')">🔍 Find the tricky part</button><button class="btn btn-sm btn-secondary" onclick="speakText(' + attr(w.word) + ', 0.7)">🔊 Hear it</button><button class="btn btn-sm ' + (done ? 'btn-success' : 'btn-orange') + '" onclick="markWord(' + i + ')">' + (done ? '✓ I read it' : '👀 I read it') + '</button></div></div>';
+  });
+  html += '<div class="prosody-box"><div style="font-weight:800;margin-bottom:8px;color:#01579B;">🗣️ All four words are hiding in here. Read it like a storyteller.</div><div class="prosody-text">' + esc(PROSODY_PASSAGE) + '</div>' +
+    '<div class="btn-row" style="justify-content:flex-start;margin-top:0;"><button class="btn btn-sm btn-blue" onclick="speakText(' + attr(PROSODY_PASSAGE) + ', 0.85)">🔊 Hear it first</button><button class="btn btn-sm ' + (rd.prosodyRead ? 'btn-success' : 'btn-orange') + '" onclick="markProsody()">' + (rd.prosodyRead ? '✓ I read it with expression' : '📣 I read it with expression') + '</button></div>' +
+    '<div class="score-row"><span class="tutor-tag">Tutor</span><button class="timer-btn" id="timerBtn" onclick="toggleTimer()">⏱ 1:00</button><label>WCPM <input class="score-input" id="wcpmInput" inputmode="numeric" value="' + esc(rd.wcpm) + '" oninput="onScore()" placeholder="—"></label><label>Errors <input class="score-input" id="errInput" inputmode="numeric" value="' + esc(rd.errors) + '" oninput="onScore()" placeholder="—"></label><label>Prosody /4 <input class="score-input" id="prosodyInput" inputmode="decimal" value="' + esc(rd.prosody) + '" oninput="onScore()" placeholder="—"></label></div>' +
+    '<div style="font-size:0.74rem;color:var(--muted);font-weight:700;margin-top:6px;">' + PASSAGE_WORDS + ' words · Sept 2: ~162 WCPM · watch for added words and for the four twins</div></div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishReading()" ' + (ready ? '' : 'disabled') + '>' + (rd.done ? '✓ On to Scramble →' : 'Done — Scramble →') + '</button></div>';
+  if (!ready) html += '<p class="gate-note">Read all 4 words and the passage to continue.</p>';
+  el.innerHTML = html;
+}
+function showTricky(i) { const w = WORDS[i]; const big = document.getElementById('wordbig-' + i); if (big) big.innerHTML = esc(w.before) + '<span class="tricky">' + esc(w.tricky) + '</span>' + esc(w.after); const tip = document.getElementById('wordtip-' + i); if (tip) tip.innerHTML = '💡 ' + esc(w.tip); speakText(w.word, 0.65); }
+function markWord(i) { S.reading.words[i] = true; renderReading(); debounceSave(); }
+function markProsody() { S.reading.prosodyRead = true; renderReading(); debounceSave(); }
+function onScore() { const w = document.getElementById('wcpmInput'), p = document.getElementById('prosodyInput'), e = document.getElementById('errInput'); if (w) S.reading.wcpm = w.value; if (p) S.reading.prosody = p.value; if (e) S.reading.errors = e.value; debounceSave(); }
+function toggleTimer() { const btn = document.getElementById('timerBtn'); if (timerHandle) { clearInterval(timerHandle); timerHandle = null; timerLeft = 60; if (btn) { btn.className = 'timer-btn'; btn.textContent = '⏱ 1:00'; } return; } timerLeft = 60; if (btn) { btn.className = 'timer-btn running'; } timerHandle = setInterval(function() { timerLeft--; const b = document.getElementById('timerBtn'); if (timerLeft <= 0) { clearInterval(timerHandle); timerHandle = null; if (b) { b.className = 'timer-btn finished'; b.textContent = '⏱ Time!'; } speakText('Time', 1); return; } if (b) b.textContent = '⏱ 0:' + (timerLeft < 10 ? '0' : '') + timerLeft; }, 1000); }
+function finishReading() { S.reading.done = true; S.timestamps.readingEnd = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Tricky words (cared/wounded/evidence/floods) + prosody', 'Reading - Foundational', (S.reading.wcpm || ''), '', '', 'WCPM ' + (S.reading.wcpm || '-') + ' | errors ' + (S.reading.errors || '-') + ' | prosody ' + (S.reading.prosody || '-')]); toast('Nice reading! 📖'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('scramble'); }
+
+// ============================================================
+//  TAB 2 — SCRAMBLE (paragraph strips + essay scramble, in-session)
+// ============================================================
+let scrambleView = 'para';
+function shuffled(n) { let a; do { a = Array.from({ length: n }, function(_, i) { return i; }); for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } } while (a.every(function(v, i) { return v === i; })); return a; }
+function scrambleItems(kind) { return kind === 'para' ? SCRAMBLE_PARA.sents : SCRAMBLE_ESSAY.paras; }
+function renderScramble() {
+  const el = document.getElementById('card-scramble'); const sc = S.scramble;
+  ['para', 'essay'].forEach(function(k) { if (!sc[k].order.length) sc[k].order = shuffled(scrambleItems(k).length); });
+  const cur = sc[scrambleView]; const items = scrambleItems(scrambleView);
+  let html = '<div class="card">' + (sc.done ? '<div class="review-banner">✅ Both scrambles solved.</div>' : '') + '<h2>🧩 Scramble warm-up</h2>' +
+    '<p class="directions">Same games as last week, new puzzles. First a <strong>paragraph</strong> cut into strips, then an <strong>essay</strong> with its paragraphs mixed up. Both are about someone with a great heart — notice how the proof 2 paragraph and the conclusion work, because you write yours today.</p>' +
+    '<div class="puzzle-tabs"><button class="puzzle-tab ' + (scrambleView === 'para' ? 'active ' : '') + (sc.para.solved ? 'solved' : '') + '" onclick="setScrambleView(\'para\')">' + (sc.para.solved ? '✓ ' : '') + '✂️ Paragraph: ' + esc(SCRAMBLE_PARA.title) + '</button><button class="puzzle-tab ' + (scrambleView === 'essay' ? 'active ' : '') + (sc.essay.solved ? 'solved' : '') + '" onclick="setScrambleView(\'essay\')">' + (sc.essay.solved ? '✓ ' : '') + '📄 Essay: ' + esc(SCRAMBLE_ESSAY.title) + '</button></div>' +
+    '<div class="info-box">' + (scrambleView === 'para' ? '👆 Which sentence tells what the whole paragraph is about? That goes first. Then follow the story.' : '👆 Which paragraph has the focus statement (who + two reasons)? Red goes first. Which says First? Second? Which wraps it up?') + '</div>' +
+    '<div class="strips" id="strips">';
+  cur.order.forEach(function(orig, pos) {
+    html += '<div class="strip" data-orig="' + orig + '"><span class="slot">' + (pos + 1) + '</span>' + esc(items[orig]) + '<span class="grip"><button onclick="scrMove(' + pos + ',-1)" ' + (pos === 0 || cur.solved ? 'disabled' : '') + '>▲</button><button onclick="scrMove(' + pos + ',1)" ' + (pos === cur.order.length - 1 || cur.solved ? 'disabled' : '') + '>▼</button></span></div>';
+  });
+  html += '</div><div class="btn-row"><button class="btn btn-secondary btn-sm" onclick="scrShuffle()" ' + (cur.solved ? 'disabled' : '') + '>🔀 Mix again</button><button class="btn btn-indigo" id="scrCheck" onclick="scrCheck()" ' + (cur.solved ? 'disabled' : '') + '>✓ Check my order</button></div><div id="scrFeedback"></div></div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishScramble()" ' + (sc.para.solved && sc.essay.solved ? '' : 'disabled') + '>' + (sc.done ? '✓ On to Fix-It →' : 'Both solved — Fix-It →') + '</button></div>';
+  if (!(sc.para.solved && sc.essay.solved)) html += '<p class="gate-note">Solve the paragraph and the essay to continue.</p>';
+  el.innerHTML = html;
+  if (cur.solved) paintSolved();
+  attachDrag();
+}
+function setScrambleView(v) { scrambleView = v; renderScramble(); }
+function scrMove(pos, dir) { const cur = S.scramble[scrambleView]; if (cur.solved) return; const to = pos + dir; if (to < 0 || to >= cur.order.length) return; const t = cur.order[pos]; cur.order[pos] = cur.order[to]; cur.order[to] = t; renderScramble(); debounceSave(); }
+function scrShuffle() { const cur = S.scramble[scrambleView]; if (cur.solved) return; cur.order = shuffled(cur.order.length); renderScramble(); debounceSave(); }
+function paintSolved() {
+  const strips = document.querySelectorAll('#strips .strip');
+  strips.forEach(function(s, pos) { s.classList.remove('right', 'wrong'); if (scrambleView === 'essay') { s.classList.add('c-' + COLORS[pos]); s.insertAdjacentHTML('beforeend', '<span class="job">' + JOBS[pos] + '</span>'); } else { s.classList.add('right'); s.insertAdjacentHTML('beforeend', '<span class="job">' + esc(SCRAMBLE_PARA.roles[pos]) + '</span>'); } });
+}
+function scrCheck() {
+  const cur = S.scramble[scrambleView]; if (cur.solved) return; cur.attempts++;
+  const strips = document.querySelectorAll('#strips .strip'); let wrong = 0;
+  cur.order.forEach(function(orig, pos) { const s = strips[pos]; s.classList.remove('right', 'wrong'); if (orig === pos) s.classList.add('right'); else { s.classList.add('wrong'); wrong++; } });
+  const fb = document.getElementById('scrFeedback');
+  if (wrong === 0) { cur.solved = true; fb.innerHTML = '<div class="feedback ok">🎉 ' + (scrambleView === 'para' ? 'That’s the paragraph — and it is exactly the shape of YOUR blue paragraph today: reason 2, then a real time it happened.' : 'That’s the essay! Red → yellow → blue → green. Look at the green one: it says the focus statement again in new words, then why it matters.') + (cur.attempts === 1 ? ' First try!' : ' Got it in ' + cur.attempts + ' tries.') + '</div>'; postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Scramble — ' + (scrambleView === 'para' ? 'paragraph strips' : 'essay'), 'Writing - Structure', '', '', '', 'Solved in ' + cur.attempts + ' tries']); fireCelebration(); renderScramble(); }
+  else { let hint; if (scrambleView === 'para') hint = cur.order[0] !== 0 ? 'Which sentence tells what the WHOLE paragraph is about? That is the topic sentence.' : 'Follow the time words: One day → sat next to me → after a while → by the end.'; else hint = cur.order[0] !== 0 ? 'Which paragraph has the FOCUS STATEMENT — who + two reasons? That is red, and it goes first.' : (cur.order[3] !== 3 ? 'Which paragraph says the focus statement again in new words? That is green — it goes last.' : 'Which paragraph says First? Which says Second?'); fb.innerHTML = '<div class="feedback hint">🤔 ' + wrong + ' in the wrong spot. ' + hint + '</div>'; }
+  debounceSave();
+}
+function finishScramble() { if (!(S.scramble.para.solved && S.scramble.essay.solved)) return; S.scramble.done = true; S.timestamps.scrambleEnd = new Date().toISOString(); toast('Structure: warmed up 🧩'); saveImmediate(); updateTabBadges(); switchTab('fixit'); }
+// pointer-event drag with DOCUMENT listeners (moving the strip in the DOM releases pointer capture — see build guide §3)
+function attachDrag() {
+  const list = document.getElementById('strips'); if (!list) return;
+  list.querySelectorAll('.strip').forEach(function(strip) {
+    strip.addEventListener('pointerdown', function(e) {
+      if (S.scramble[scrambleView].solved || e.target.closest('button')) return; e.preventDefault();
+      const startX = e.clientX, startY = e.clientY; let ghost = null, active = false; const rect = strip.getBoundingClientRect(); const offY = startY - rect.top, offX = startX - rect.left;
+      function onMove(ev) {
+        if (!active) { if (Math.abs(ev.clientY - startY) < 6 && Math.abs(ev.clientX - startX) < 6) return; active = true; ghost = strip.cloneNode(true); ghost.classList.add('ghost'); ghost.style.width = rect.width + 'px'; document.body.appendChild(ghost); strip.classList.add('placeholder'); }
+        ev.preventDefault(); ghost.style.top = (ev.clientY - offY) + 'px'; ghost.style.left = (ev.clientX - offX) + 'px';
+        const others = Array.from(list.querySelectorAll('.strip')).filter(function(s) { return s !== strip; }); let target = null;
+        for (const o of others) { const r = o.getBoundingClientRect(); if (ev.clientY < r.top + r.height / 2) { target = o; break; } }
+        if (target) { if (target !== strip.nextSibling) list.insertBefore(strip, target); } else if (list.lastElementChild !== strip) list.appendChild(strip);
+        if (ev.clientY < 70) window.scrollBy(0, -12); else if (ev.clientY > window.innerHeight - 70) window.scrollBy(0, 12);
+      }
+      function onUp() { document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onUp); if (ghost) ghost.remove(); strip.classList.remove('placeholder'); if (active) { S.scramble[scrambleView].order = Array.from(list.querySelectorAll('.strip')).map(function(s) { return +s.dataset.orig; }); renderScramble(); debounceSave(); } }
+      document.addEventListener('pointermove', onMove, { passive: false }); document.addEventListener('pointerup', onUp); document.addEventListener('pointercancel', onUp);
+    });
+  });
+}
+
+// ============================================================
+//  TAB 3 — FIX-IT (fought · -ed as a unit · which word did you mean)
+// ============================================================
+function fxItem(arr, i) { if (!arr[i]) arr[i] = { picked: '', tries: 0, correct: false }; return arr[i]; }
+function fixitReady() { return VERB_FIXES.every(function(v, i) { return fxItem(S.fixit.verbs, i).correct; }) && ED_ITEMS.every(function(v, i) { return fxItem(S.fixit.ed, i).correct; }) && TWINS.every(function(v, i) { return fxItem(S.fixit.twins, i).correct; }); }
+function optCard(sentenceHtml, opts, st, ans, onclick, okMsg, hintMsg) {
+  let html = '<div class="fix-card ' + (st.correct ? 'correct' : '') + '"><div class="fix-sentence">' + sentenceHtml + '</div><div class="opts">';
+  opts.forEach(function(o) { let cls = 'opt'; if (st.correct && o === ans) cls += ' right'; else if (!st.correct && st.picked === o && o !== ans) cls += ' wrong'; html += '<button class="' + cls + '" onclick="' + onclick.replace('%o', attr(o)) + '" ' + (st.correct ? 'disabled' : '') + '>' + esc(o) + '</button>'; });
+  html += '</div>'; if (st.correct) html += '<div class="feedback ok">✓ ' + okMsg + '</div>'; else if (st.picked) html += '<div class="feedback hint">🤔 ' + hintMsg + '</div>'; return html + '</div>';
+}
+function blankSentence(before, after, filled) { return esc(before) + '<span class="blank ' + (filled ? 'filled' : '') + '">' + (filled ? esc(filled) : '______') + '</span>' + esc(after); }
+function renderFixit() {
+  const el = document.getElementById('card-fixit');
+  let html = '<div class="card">' + (S.fixit.done ? '<div class="review-banner">✅ Fix-It done.</div>' : '') + '<h2>🔧 Fix-It, part 1 — the one that got away</h2><p class="directions">Last week you got thought, drove, and woke. One rule-breaker is still fighting back. Say <strong>“Yesterday I ___”</strong> out loud, then tap.</p></div>';
+  VERB_FIXES.forEach(function(v, i) { const st = fxItem(S.fixit.verbs, i); html += optCard(blankSentence(v.before, v.after, st.correct ? v.ans : ''), v.opts, st, v.ans, 'pickVerb(' + i + ',%o)', 'Today I ' + esc(v.base) + '. Yesterday I <strong>' + esc(v.ans) + '</strong>. No -ed on this one — ever.', 'Say it: “Yesterday I ______.” Does that sound like something people say?'); });
+  html += '<div class="card"><h2>🔧 Part 2 — the -ed rule</h2><p class="directions">Last week you wrote “help<b>t</b>.” That is exactly how it SOUNDS — but the past-tense ending is always spelled the same way. Listen to the three sounds, then spell them all the same.</p>' +
+    '<div class="ed-rule">The ending <b>-ed</b> can sound three ways: <span class="snd">/t/ — jump<b>ed</b></span> <span class="snd">/d/ — play<b>ed</b></span> <span class="snd">/id/ — want<b>ed</b></span> …but it is ALWAYS spelled <b>-ed</b>. Your ear hears three; your pencil writes one.</div></div>';
+  ED_ITEMS.forEach(function(v, i) { const st = fxItem(S.fixit.ed, i); const sent = v.sentence.replace('___', '§'); const parts = sent.split('§'); html += optCard(blankSentence(parts[0], parts[1], st.correct ? v.ans : '') + ' <span style="font-size:0.8rem;color:var(--muted);">(' + esc(v.base) + ', sounds like ' + esc(v.sound) + ')</span>', v.opts, st, v.ans, 'pickEd(' + i + ',%o)', esc(v.base) + ' + -ed = <strong>' + esc(v.ans) + '</strong>. It sounds like ' + esc(v.sound) + ', but it is spelled -ed.', 'What is the ending ALWAYS spelled, no matter how it sounds?'); });
+  html += '<div class="card"><h2>🔧 Part 3 — which word did you MEAN?</h2><p class="directions">Last week a few words came out as their look-alike. Read the sentence, think about the MEANING, then tap the word that means the right thing.</p></div>';
+  TWINS.forEach(function(v, i) { const st = fxItem(S.fixit.twins, i); const parts = v.sentence.split('___'); html += optCard(blankSentence(parts[0], parts[1], st.correct ? v.ans : ''), v.opts, st, v.ans, 'pickTwin(' + i + ',%o)', esc(v.why), 'Read the sentence with your word in it. Does it MEAN the right thing? ' + esc(v.why)); });
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishFixit()" ' + (fixitReady() ? '' : 'disabled') + '>' + (S.fixit.done ? '✓ On to the Zoom Lens →' : 'Fixed! — Zoom Lens →') + '</button></div>';
+  if (!fixitReady()) html += '<p class="gate-note">Finish all three parts to continue.</p>';
+  el.innerHTML = html;
+}
+function pickGeneric(arr, i, o, ans, say) { const st = fxItem(arr, i); if (st.correct) return; st.tries++; st.picked = o; if (o === ans) { st.correct = true; if (say) speakText(say, 0.9); toast('Yes! ✓'); if (fixitReady()) fireCelebration(); } else toast('Try again 🗣️', 'warning'); renderFixit(); debounceSave(); }
+function pickVerb(i, o) { pickGeneric(S.fixit.verbs, i, o, VERB_FIXES[i].ans, VERB_FIXES[i].say); }
+function pickEd(i, o) { pickGeneric(S.fixit.ed, i, o, ED_ITEMS[i].ans, ED_ITEMS[i].ans); }
+function pickTwin(i, o) { pickGeneric(S.fixit.twins, i, o, TWINS[i].ans, TWINS[i].ans); }
+function finishFixit() { if (!fixitReady()) return; S.fixit.done = true; S.timestamps.fixitEnd = new Date().toISOString(); const ft = function(arr, n) { return arr.filter(function(c, i) { return c && c.tries === 1; }).length + '/' + n; }; postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Fix-It: fought + -ed unit + look-alike words', 'Language - Conventions', '', '', '', 'first-try verbs ' + ft(S.fixit.verbs, 2) + ' | -ed ' + ft(S.fixit.ed, 4) + ' | twins ' + ft(S.fixit.twins, 3)]); toast('Fixed! 🔧'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('zoom'); }
+
+// ============================================================
+//  TAB 4 — ZOOM LENS (an essay is a paragraph that grew)
+// ============================================================
+let zoomSel = null;
+function breathText() { const p = S.write.prior; const who = p.who || 'My mom'; const r1 = p.r1 || 'helps people when they need it'; const r2 = p.r2 || 'listens when I am sad'; return who + ' has a great heart because she ' + r1 + ' and she ' + r2 + '. First, she ' + r1 + '. Second, she ' + r2 + '. That is why ' + who.toLowerCase().replace(/^my /, 'my ') + ' has a great heart.'; }
+function zoomReady() { return S.zoom.breath && S.zoom.chant && ZOOM_SMALL.every(function(z) { return S.zoom.matches[z.key] === z.key; }); }
+function renderZoom() {
+  const el = document.getElementById('card-zoom'); const z = S.zoom;
+  let html = '<div class="card">' + (z.done ? '<div class="review-banner">✅ Zoom Lens done.</div>' : '') + '<h2>🔍 What IS an essay?</h2>' +
+    '<p class="directions">Here is the secret: <strong>an essay is a paragraph that grew.</strong> A paragraph has a topic sentence, details, and a closing. An essay has the SAME shape — but each sentence grew into a whole paragraph. Same shape, two sizes.</p>' +
+    '<div class="breath"><div class="bl">1 · Say your whole essay in ONE BREATH (four sentences)</div><p>' + esc(breathText()) + '</p>' +
+    '<div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="btn btn-sm btn-blue" onclick="speakText(' + attr(breathText()) + ', 0.9)">🔊 Hear it</button><button class="btn btn-sm ' + (z.breath ? 'btn-success' : 'btn-orange') + '" onclick="markBreath()">' + (z.breath ? '✓ I said it in one breath' : '🗣️ I said it in one breath') + '</button></div>' +
+    '<div style="font-size:0.8rem;color:#6A1B9A;font-weight:700;margin-top:8px;">If you can SAY those four sentences, you already have the whole essay. Today you just let sentences 3 and 4 grow.</div></div>' +
+    '<div class="bl" style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--purple);margin:14px 0 6px;">2 · Match the small shape to the big shape</div>' +
+    '<p class="directions">Tap a sentence in the small paragraph, then tap the essay part that does the SAME JOB.</p>' +
+    '<div class="zoom-wrap"><div class="zoom-col"><h3>✂️ A paragraph (small)</h3>';
+  ZOOM_SMALL.forEach(function(s) { const m = z.matches[s.key]; html += '<div class="zpart ' + (zoomSel === s.key ? 'sel ' : '') + (m === s.key ? 'm-' + s.key : '') + '" onclick="zoomPick(\'small\',\'' + s.key + '\')"><span class="zl">' + esc(s.label) + '</span>' + esc(s.text) + '</div>'; });
+  html += '</div><div class="zoom-col"><h3>📄 An essay (big)</h3>';
+  ZOOM_BIG.forEach(function(b) { const matched = z.matches[b.key] === b.key; html += '<div class="zpart big ' + (matched ? 'm-' + b.key : '') + '" onclick="zoomPick(\'big\',\'' + b.key + '\')"><span class="zl">' + esc(b.label) + '</span>' + esc(b.text) + '</div>'; });
+  html += '</div></div>';
+  html += '<div class="bl" style="font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--purple);margin:16px 0 6px;">3 · The essay chant (say it with me)</div>' +
+    '<div class="chant" onclick="markChant()"><span class="chant-label">📣 Say it<br>with me</span><span class="chant-words"><span class="chant-beat b-red">Big idea.</span><span class="chant-beat b-yellow">Prove one.</span><span class="chant-beat b-blue">Prove two.</span><span class="chant-beat b-green">Say it again.</span></span><span class="chant-spk">' + (z.chant ? '✓' : '🔊') + '</span></div>' +
+    '<div style="font-size:0.82rem;color:var(--muted);font-weight:600;">Four beats, four colors. Red is the big idea. Yellow proves one. Blue proves two. Green says it again.</div></div>';
+  html += '<div class="btn-row"><button class="btn btn-success" onclick="finishZoom()" ' + (zoomReady() ? '' : 'disabled') + '>' + (z.done ? '✓ On to writing →' : 'I get it — write my blue and green →') + '</button></div>';
+  if (!zoomReady()) html += '<p class="gate-note">Say the essay in one breath, match all four parts, and say the chant to continue.</p>';
+  el.innerHTML = html;
+}
+function markBreath() { S.zoom.breath = true; renderZoom(); debounceSave(); }
+function markChant() { S.zoom.chant = true; speakText(CHANT, 0.9); renderZoom(); debounceSave(); }
+function zoomPick(side, key) {
+  if (side === 'small') { zoomSel = (zoomSel === key ? null : key); renderZoom(); return; }
+  if (!zoomSel) { toast('Tap a sentence on the left first 👈', 'warning'); return; }
+  if (zoomSel === key) { S.zoom.matches[key] = key; toast('✓ Same job, bigger size'); speakText(ZOOM_BIG.filter(function(b) { return b.key === key; })[0].label.replace(/^\S+\s/, '') , 0.95); if (zoomReady()) fireCelebration(); }
+  else { toast('Not the same job — what is that sentence FOR?', 'warning'); }
+  zoomSel = null; renderZoom(); debounceSave();
+}
+function finishZoom() { if (!zoomReady()) return; S.zoom.done = true; S.timestamps.zoomEnd = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Zoom Lens — essay in one breath + shape match + chant', 'Writing - Structure', 4, 4, '100%', '']); toast('An essay is a paragraph that grew 🔍'); fireCelebration(); saveImmediate(); updateTabBadges(); switchTab('write'); }
+
+// ============================================================
+//  TAB 5 — WRITE (blue + green; skeleton pinned; one paragraph open)
+// ============================================================
+function priorText(k) { return (S.write.prior[k] || '').trim(); }
+function focusLine() { return priorText('focus') || breathText().split('. ')[0] + '.'; }
+function renderWrite() {
+  const el = document.getElementById('card-write'); const wr = S.write; const p = wr.prior;
+  const blueDone = wr.sentences[0].locked && wr.sentences[1].locked; const greenDone = wr.sentences[2].locked && wr.sentences[3].locked;
+  let html = '<div class="card">' + (wr.done ? '<div class="review-banner">✅ Essay finished! Tap any sentence to edit.</div>' : '') + '<h2>✍️ Let the blue and green grow</h2>' +
+    '<p class="directions">Red and yellow are done from last week. Today: <strong>🔵 proof 2</strong> (reason 2 + a real time it happened) and <strong>🟢 the conclusion</strong> (say the focus statement in new words + why it matters). Tap a color to open it. Say each sentence, then TYPE it.</p>' +
+    '<div class="gist-anchor">🎯 ' + esc(focusLine()) + '</div>' +
+    '<div class="skeleton">' +
+    '<div class="sk red ' + (wr.open === 'red' ? 'open' : '') + '" onclick="openPart(\'red\')">🔴 Introduction <span class="skc">✓</span><span class="skd">' + (priorText('hook') || priorText('focus') ? 'done last week' : 'from last week') + '</span></div>' +
+    '<div class="sk yellow ' + (wr.open === 'yellow' ? 'open' : '') + '" onclick="openPart(\'yellow\')">🟡 Proof 1 <span class="skc">✓</span><span class="skd">' + (priorText('topic1') ? 'done last week' : 'from last week') + '</span></div>' +
+    '<div class="sk blue ' + (wr.open === 'blue' ? 'open' : '') + '" onclick="openPart(\'blue\')">🔵 Proof 2 <span class="skc">' + (blueDone ? '✓' : '✏️') + '</span><span class="skd">' + (blueDone ? 'done!' : 'TODAY — reason 2 + example') + '</span></div>' +
+    '<div class="sk green ' + (wr.open === 'green' ? 'open' : '') + '" onclick="openPart(\'green\')">🟢 Conclusion <span class="skc">' + (greenDone ? '✓' : '✏️') + '</span><span class="skd">' + (greenDone ? 'done!' : 'TODAY — say it again + why') + '</span></div>' +
+    '</div>' +
+    '<div class="verb-bank"><div class="vb-title">🔧 Rule-breaker verbs + the -ed rule (helped, listened — always -ed)</div><div class="vb-row">' + VERB_BANK.map(function(v) { return '<span class="vb">' + esc(v[0]) + ' → <b>' + esc(v[1]) + '</b></span>'; }).join('') + '</div></div>' +
+    '</div>';
+  if (wr.open === 'red' || wr.open === 'yellow') {
+    const isRed = wr.open === 'red';
+    html += '<div class="card"><div class="done-para ' + wr.open + '"><span class="dp-label">' + (isRed ? '🔴 Introduction — from last week' : '🟡 Proof 1 — from last week') + '</span>' +
+      (isRed ? (esc(priorText('hook')) + ' ' + esc(priorText('focus'))) : (esc(priorText('topic1')) + ' ' + esc(priorText('example1')))) + '</div>' +
+      '<p class="directions"><span class="tutor-tag">Tutor</span> ' + (wr.priorLoaded ? 'Loaded from last week’s session. Edit here if anything is off.' : 'Last week’s essay did not load from the cloud — type it in from your notes.') + '</p>' +
+      (isRed ? '<input class="prior-input" placeholder="Hook sentence" value="' + esc(p.hook) + '" oninput="onPrior(\'hook\',this.value)"><input class="prior-input" placeholder="Focus statement" value="' + esc(p.focus) + '" oninput="onPrior(\'focus\',this.value)">'
+             : '<input class="prior-input" placeholder="Proof 1 topic sentence" value="' + esc(p.topic1) + '" oninput="onPrior(\'topic1\',this.value)"><input class="prior-input" placeholder="Proof 1 example" value="' + esc(p.example1) + '" oninput="onPrior(\'example1\',this.value)">') +
+      '<div class="btn-row"><button class="btn btn-sm btn-indigo" onclick="openPart(\'blue\')">Back to today’s work →</button></div></div>';
+  } else {
+    const idxs = wr.open === 'blue' ? [0, 1] : [2, 3];
+    if (wr.open === 'blue' && priorText('topic2') && !wr.sentences[0].text) { wr.sentences[0].text = priorText('topic2'); }
+    idxs.forEach(function(i) { html += buildWriteSentence(i, wr.sentences[i]); });
+    if (wr.open === 'blue' && blueDone) html += '<div class="btn-row"><button class="btn btn-indigo" onclick="openPart(\'green\')">Blue is done — open green →</button></div>';
+  }
+  const locked = wr.sentences.filter(function(s) { return s.locked; }).length;
+  if (locked) html += '<div class="card"><div class="pep-banner"><h3>' + locked + ' of 4 new sentences locked</h3><p>' + (locked === 4 ? 'That is a WHOLE essay. Four paragraphs, typed by you.' : 'Keep going — the skeleton up top shows where you are.') + '</p></div>' + (locked === 4 ? '<div class="btn-row"><button class="btn btn-success" onclick="finishWrite()">' + (wr.done ? '✓ Read my whole essay →' : 'Finished — read my whole essay →') + '</button></div>' : '') + '</div>';
+  el.innerHTML = html;
+}
+function openPart(part) { S.write.open = part; renderWrite(); debounceSave(); }
+function onPrior(k, v) { S.write.prior[k] = v; debounceSave(); }
+function buildWriteSentence(i, sent) {
+  const L = sent.locked; const text = sent.text || ''; const p = S.write.prior;
+  const meta = {
+    topic2: { title: '🔵 Sentence 5 — proof 2 topic sentence', badge: 'lg-blue', label: 'Proof 2', prompt: 'Start the blue paragraph: say reason 2 again, on its own. Reason 2 = ' + (p.r2 || 'listens when I am sad') + '.', must: 'MUST: reason 2 only', not: 'NOT: reason 1 (that was yellow)', starters: TOPIC2_STARTERS },
+    example2: { title: '🔵 Sentence 6 — the evidence', badge: 'lg-blue', label: 'Proof 2', prompt: 'Prove it with a REAL time it happened. Past tense — watch the rule-breakers and the -ed.', must: 'MUST: one real time (when / what happened)', not: 'NOT: a new reason', starters: EXAMPLE_STARTERS.concat(GLUE) },
+    restate: { title: '🟢 Sentence 7 — say the focus again, in NEW words', badge: 'lg-green', label: 'Conclusion', prompt: 'Look at the pinned focus statement. Say the same idea with different words: who + both reasons.', must: 'MUST: who + both reasons, new words', not: 'NOT: a new example', starters: RESTATE_STARTERS },
+    matters: { title: '🟢 Sentence 8 — why it matters', badge: 'lg-green', label: 'Conclusion', prompt: 'Last sentence of the whole essay. Why does it matter that she has a great heart? What does it mean to you?', must: 'MUST: why it matters / what it means', not: 'NOT: a new reason or example', starters: MATTERS_STARTERS }
+  }[sent.role];
+  let html = '<div class="write-card p-' + sent.part + ' ' + (L ? 'locked' : '') + '"><div class="write-card-header"><div class="write-card-title">' + (L ? '✓ ' : '') + meta.title + '</div><span class="write-badge ' + meta.badge + '">' + meta.label + '</span></div><div class="prompt-line">' + esc(meta.prompt) + '</div><div class="territory"><span class="must">' + esc(meta.must) + '</span><span class="not">' + esc(meta.not) + '</span></div>';
+  if (!L) { html += '<div class="starter-row">'; meta.starters.forEach(function(h) { html += '<button class="starter ' + (GLUE.indexOf(h) !== -1 ? 'glue' : '') + '" onclick="insertWord(' + i + ',' + attr(h) + ')">' + esc(h) + '</button>'; }); html += '</div>'; }
+  html += '<div class="write-textarea-wrap"><span class="type-tag">⌨️ Type it</span><textarea class="write-textarea ' + (L ? 'locked' : '') + '" id="w-text-' + i + '" placeholder="Say it out loud first — then type it here" oninput="onWriteText(' + i + ')" ' + (L ? 'readonly' : '') + '>' + esc(text) + '</textarea></div>';
+  if (text.trim() && !L) {
+    const cls = sent.sourceCheck === 'match' ? 'matched' : (sent.sourceCheck === 'unmatch' ? 'unmatched' : '');
+    const q = { topic2: '🔍 <strong>Check.</strong> Is reason 2 in it — and ONLY reason 2? Is it a complete sentence?', example2: '🔍 <strong>Check.</strong> Is it a real time it happened? In the past? Complete sentence?', restate: '🔍 <strong>Check.</strong> Compare it to the pinned focus statement: same idea, different words, BOTH reasons?', matters: '🔍 <strong>Check.</strong> Does it say why it matters — not a new reason? Does the essay feel finished?' }[sent.role];
+    html += '<div class="check-box2 cb-sent ' + cls + '"><div class="source-check-prompt">' + q + '</div><div class="source-check-row"><button class="source-btn match ' + (sent.sourceCheck === 'match' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'match\')">✓ Yes — it works</button><button class="source-btn unmatch ' + (sent.sourceCheck === 'unmatch' ? 'active' : '') + '" onclick="setSourceCheck(' + i + ',\'unmatch\')">✗ Not yet</button></div></div>';
+  }
+  if (text.trim() && !L && sent.sourceCheck === 'match') html += buildProofread(i, sent);
+  if (text.trim() && !L && sent.sourceCheck === 'match' && sent.proofed) { html += buildVerbRadar(i, sent); html += buildHomoCheck(i, sent); }
+  if (!L) { const can = text.trim() && sent.sourceCheck === 'match' && sent.proofed && verbPass(sent) && homoPass(sent); html += '<div class="lock-row"><button class="lock-btn" onclick="lockSentence(' + i + ')" ' + (can ? '' : 'disabled') + '>🔒 Lock sentence ' + (i + 5) + '</button></div>'; }
+  else html += '<div class="lock-row"><button class="unlock-btn" onclick="unlockSentence(' + i + ')">✏️ Edit again</button></div>';
+  return html + '</div>';
+}
+function resetChecks(s) { if (s.sourceCheck === 'match') s.sourceCheck = null; s.proofed = false; s.proofIdx = 0; s.homo = {}; }
+function insertWord(i, word) { const s = S.write.sentences[i]; if (s.locked) return; const cur = s.text || ''; s.text = cur + (cur && !/\s$/.test(cur) ? ' ' : '') + word + ' '; resetChecks(s); renderWrite(); const ta = document.getElementById('w-text-' + i); if (ta) { ta.focus(); try { ta.setSelectionRange(ta.value.length, ta.value.length); } catch(e) {} } debounceSave(); }
+function onWriteText(i) { const ta = document.getElementById('w-text-' + i); if (!ta) return; const s = S.write.sentences[i]; const prevHad = !!(s.text && s.text.trim()); const prevMatch = s.sourceCheck === 'match'; const prevProofed = s.proofed; s.text = ta.value; const nowHas = !!ta.value.trim(); resetChecks(s); if ((prevHad !== nowHas) || prevMatch || prevProofed) { const focused = document.activeElement === ta; const a = focused ? ta.selectionStart : null, b = focused ? ta.selectionEnd : null; renderWrite(); if (focused) { const t2 = document.getElementById('w-text-' + i); if (t2) { t2.focus(); try { t2.setSelectionRange(a, b); } catch(e) {} } } } debounceSave(); }
+function setSourceCheck(i, c) { const s = S.write.sentences[i]; if (s.locked) return; s.sourceCheck = c; if (c === 'unmatch') toast('Look at the MUST label — what is missing?', 'warning'); if (c === 'match') { s.proofIdx = 0; s.proofed = false; s.homo = {}; } renderWrite(); debounceSave(); }
+function proofWords(sent) { return (sent.text || '').trim().split(/\s+/).filter(Boolean); }
+function buildProofread(i, sent) { const words = proofWords(sent), idx = sent.proofIdx || 0, done = sent.proofed; let html = '<div class="proof-box ' + (done ? 'done' : '') + '"><div class="proof-title">' + (done ? '✓ You read every word!' : '👆 Check it word by word') + '</div><div class="proof-sub">' + (done ? 'You read the REAL word on the page each time.' : 'Touch the glowing word and read ONLY that word — what is REALLY there.') + '</div><div class="proof-words">'; words.forEach(function(w, wi) { let cls = 'proof-word'; if (wi < idx) cls += ' read'; else if (wi === idx && !done) cls += ' next'; html += '<span class="' + cls + '" ' + (wi === idx && !done ? 'onclick="proofTap(' + i + ')"' : '') + '>' + esc(w) + '</span>'; }); html += '</div>'; if (!done) html += '<div class="proof-progress">' + idx + ' of ' + words.length + ' words read</div><div class="btn-row" style="justify-content:flex-start;margin-top:10px;"><button class="btn btn-sm btn-secondary" onclick="proofReset(' + i + ')">↻ Start over</button></div>'; return html + '</div>'; }
+function proofTap(i) { const s = S.write.sentences[i]; const words = proofWords(s); const w = words[s.proofIdx]; if (w) speakText(w.replace(/[.,!?"“”]/g, ''), 0.6); s.proofIdx = (s.proofIdx || 0) + 1; if (s.proofIdx >= words.length) { s.proofed = true; toast('You read every word! 👀✓'); } renderWrite(); debounceSave(); }
+function proofReset(i) { S.write.sentences[i].proofIdx = 0; S.write.sentences[i].proofed = false; renderWrite(); debounceSave(); }
+function normWord(w) { return (w || '').toLowerCase().replace(/[’‘]/g, "'").replace(/[^a-z']/g, ''); }
+function verbHits(sent) { return proofWords(sent).map(normWord).filter(function(w) { return BAD_VERBS[w]; }); }
+function verbPass(sent) { return verbHits(sent).length === 0; }
+function buildVerbRadar(i, sent) { const hits = verbHits(sent); if (!hits.length) return '<div class="verb-box done"><div class="verb-title">✓ Verb check</div><div class="verb-sub">No rule-breaker slips, and every -ed is spelled -ed.</div></div>'; return '<div class="verb-box"><div class="verb-title">🔧 Verb alert</div><div class="verb-sub">Say it: “Yesterday I ___.” Remember: -ed is ALWAYS spelled -ed. Fix it in the box: ' + hits.map(function(h) { return '<span class="verb-hit">' + esc(h) + ' → ' + esc(BAD_VERBS[h]) + '</span>'; }).join('') + '</div></div>'; }
+function homoHits(sent) { const words = proofWords(sent), hits = []; words.forEach(function(w, wi) { const n = normWord(w); HOMO_SETS.forEach(function(set) { if (set.indexOf(n) !== -1) hits.push({ idx: wi, written: n, set: set }); }); }); return hits; }
+function homoPass(sent) { return homoHits(sent).every(function(h) { return (sent.homo || {})[h.idx] === h.written; }); }
+function buildHomoCheck(i, sent) {
+  const hits = homoHits(sent), homo = sent.homo || {};
+  if (!hits.length) return '<div class="homo-box done"><div class="homo-title">✓ Look-alike / sound-alike check</div><div class="homo-sub">No tricky twins in this sentence.</div></div>';
+  const allOk = homoPass(sent), anyFix = hits.some(function(h) { return homo[h.idx] && homo[h.idx] !== h.written; });
+  let html = '<div class="homo-box ' + (allOk ? 'done' : (anyFix ? 'fix' : '')) + '"><div class="homo-title">' + (allOk ? '✓ Twin check passed' : '🔍 Twin check — which one did you MEAN?') + '</div><div class="homo-sub">' + (allOk ? 'Every twin word means what you wanted.' : 'This word has a twin. Look at the word you wrote and ask: which one did I MEAN?') + '</div>';
+  hits.forEach(function(h) { const picked = homo[h.idx], status = picked ? (picked === h.written ? 'ok' : 'fix') : ''; html += '<div class="homo-item ' + status + '"><div class="homo-q">You wrote <span class="hw">' + esc(h.written) + '</span>. Which one did you MEAN?</div><div class="homo-opts">'; h.set.forEach(function(w) { html += '<button class="homo-opt' + (picked === w ? ' active ' + (w === h.written ? 'ok' : 'fix') : '') + '" onclick="pickHomo(' + i + ',' + h.idx + ',' + attr(w) + ')">' + esc(MEANINGS[w] || w) + '</button>'; }); html += '</div>'; if (status === 'ok') html += '<div class="homo-verdict ok">✓ Match.</div>'; else if (status === 'fix') html += '<div class="homo-verdict fix">🔁 Then the word you need is <strong>' + esc(picked) + '</strong>. Fix it in the box.</div>'; html += '</div>'; });
+  return html + '</div>';
+}
+function pickHomo(i, wi, w) { const s = S.write.sentences[i]; if (s.locked) return; if (!s.homo) s.homo = {}; s.homo[wi] = w; const hit = homoHits(s).filter(function(h) { return h.idx === wi; })[0]; if (hit) { const ok = w === hit.written; postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Twin check (typed sentence ' + (i + 5) + ')', 'Language - Confused Words', ok ? 1 : 0, 1, ok ? '100%' : '0%', 'Wrote "' + hit.written + '", meant "' + w + '"']); toast(ok ? 'Match ✓' : 'Good catch — fix it 🔁', ok ? '' : 'warning'); } renderWrite(); debounceSave(); }
+function lockSentence(i) { const s = S.write.sentences[i]; if (!s.text.trim() || s.sourceCheck !== 'match' || !s.proofed || !verbPass(s) || !homoPass(s)) return; s.locked = true; S.timestamps['s' + (i + 5) + 'Locked'] = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Essay sentence ' + (i + 5) + ' locked (' + s.role + ', TYPED)', 'Writing', 'Locked', '', '', s.text.slice(0, 160)]); toast('Sentence ' + (i + 5) + ' locked! 🎉'); fireCelebration(); renderWrite(); debounceSave(); }
+function unlockSentence(i) { S.write.sentences[i].locked = false; renderWrite(); debounceSave(); }
+function finishWrite() { S.write.done = true; S.timestamps.writeEnd = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'ESSAY COMPLETE — all four paragraphs', 'Writing', 'Done', '', '', 'Who: ' + (S.write.prior.who || '-')]); toast('A whole essay! 🎨'); fireCelebration(); setTimeout(fireCelebration, 600); saveImmediate(); updateTabBadges(); switchTab('wrap'); }
+
+// ============================================================
+//  TAB 6 — MY ESSAY (read it aloud) + Stars & a Wish
+// ============================================================
+function essayParas() { const p = S.write.prior; const s = S.write.sentences; return [ { c: 'red', t: [p.hook, p.focus] }, { c: 'yellow', t: [p.topic1, p.example1] }, { c: 'blue', t: [s[0].text, s[1].text] }, { c: 'green', t: [s[2].text, s[3].text] } ].map(function(x) { return { c: x.c, text: x.t.map(function(v) { return (v || '').trim(); }).filter(Boolean).join(' ') }; }); }
+function renderWrap() {
+  const el = document.getElementById('card-wrap'); const w = S.wrap; const paras = essayParas(); const full = paras.map(function(x) { return x.text; }).filter(Boolean).join('\n\n');
+  let html = '<div class="card">' + (w.done ? '<div class="review-banner">✅ Session complete!</div>' : '') + '<h2>📄 My essay: ' + esc(S.write.prior.who || 'My mom') + ' has a great heart</h2><p class="directions">Read the WHOLE thing out loud, like a storyteller. Then tap “I read my essay.”</p><div class="essay-final">' + paras.map(function(x) { return x.text ? '<p class="ef-' + x.c + '">' + esc(x.text) + '</p>' : ''; }).join('') + '</div>' +
+    '<div class="btn-row"><button class="btn btn-sm btn-blue" onclick="speakText(' + attr(full) + ', 0.9)">🔊 Hear it</button><button class="btn btn-sm ' + (w.readAloud ? 'btn-success' : 'btn-orange') + '" onclick="markReadAloud()">' + (w.readAloud ? '✓ I read my essay' : '📣 I read my essay') + '</button></div></div>';
+  html += '<div class="card"><h2>⭐ Stars &amp; a Wish</h2><div class="stars-row">' + STARS.map(function(l, i) { const on = w.stars.indexOf(i) !== -1; return '<button class="star-btn ' + (on ? 'active' : '') + '" onclick="toggleStar(' + i + ')">' + (on ? '⭐ ' : '☆ ') + esc(l) + '</button>'; }).join('') + '</div>' +
+    '<h2 style="margin-top:16px;">🌠 My wish</h2><div class="stars-row">' + WISHES.map(function(g) { const on = w.wish.indexOf(g) !== -1; return '<button class="wish-chip ' + (on ? 'active' : '') + '" onclick="toggleWish(' + attr(g) + ')">' + (on ? '✓ ' : '') + esc(g) + '</button>'; }).join('') + '</div><input class="text-input" style="margin-top:10px;" id="wishCustom" placeholder="…or write your own" value="' + esc(w.wishCustom) + '" oninput="onWishCustom()"></div>';
+  html += '<div class="card"><h2><span class="tutor-tag">Tutor</span> Notes</h2><div class="tutor-notes"><label>Capture: chant unprompted? one-breath essay fluent? typing pace? spelling patterns? newsletter?</label><textarea id="tn-notes" oninput="onTutorNote()">' + esc(w.tutor.notes) + '</textarea></div></div>';
+  const hasWish = w.wish.length > 0 || (w.wishCustom || '').trim();
+  html += '<div class="card"><div class="pep-banner"><div style="font-size:2.4rem;margin-bottom:6px;">🎨🏆</div><h3>You wrote a whole essay!</h3><p>Four paragraphs. Big idea, prove one, prove two, say it again. That is a real 4th-grade essay, and you typed every word of the second half yourself.</p></div><div class="btn-row"><button class="btn btn-indigo" onclick="finishWrap()" ' + (hasWish && w.stars.length && w.readAloud ? '' : 'disabled') + '>' + (w.done ? '✓ All done!' : 'Finish 🎉') + '</button></div>' + (hasWish && w.stars.length && w.readAloud ? '' : '<p class="gate-note">Read your essay, tap at least one star, and pick a wish.</p>') + '</div>';
+  el.innerHTML = html;
+}
+function markReadAloud() { S.wrap.readAloud = true; renderWrap(); debounceSave(); }
+function toggleStar(i) { const k = S.wrap.stars.indexOf(i); if (k !== -1) S.wrap.stars.splice(k, 1); else S.wrap.stars.push(i); renderWrap(); debounceSave(); }
+function toggleWish(g) { const k = S.wrap.wish.indexOf(g); if (k !== -1) S.wrap.wish.splice(k, 1); else S.wrap.wish.push(g); renderWrap(); debounceSave(); }
+function onWishCustom() { const el = document.getElementById('wishCustom'); if (!el) return; S.wrap.wishCustom = el.value; const btn = document.querySelector('#card-wrap .btn-indigo'); if (btn) btn.disabled = !((S.wrap.wish.length || S.wrap.wishCustom.trim()) && S.wrap.stars.length && S.wrap.readAloud); debounceSave(); }
+function onTutorNote() { const el = document.getElementById('tn-notes'); if (el) { S.wrap.tutor.notes = el.value; debounceSave(); } }
+function finishWrap() { S.wrap.done = true; S.timestamps.sessionEnd = new Date().toISOString(); postToSheets('Activity Log', [SESSION_DATE, 'Marcello', 'Session Complete — Essay finished', 'Wrap-up', 'Done', '', '', 'Stars: ' + S.wrap.stars.length + ' | Wish: ' + S.wrap.wish.concat(S.wrap.wishCustom.trim() ? [S.wrap.wishCustom.trim()] : []).join('; ')]); toast('A whole essay! 🎉'); fireCelebration(); setTimeout(fireCelebration, 600); saveImmediate(); updateTabBadges(); renderWrap(); }
+
+// ============================================================
+//  PRIOR ESSAY (from sep2026_session_2) + INIT
+// ============================================================
+async function loadPrior() {
+  if (S.write.priorLoaded) return;
+  const prev = await loadStateFromCloud(PREV_CLOUD_KEY);
+  if (!prev || !prev.write) return;
+  const p = S.write.prior; const ps = prev.write.sentences || []; const plan = prev.plan || {};
+  const who = (plan.who || plan.whoCustom || '').trim(); if (who) p.who = who === 'Mom' ? 'My mom' : (/^my /i.test(who) ? who : 'My ' + who.toLowerCase());
+  if (plan.ways) { p.r1 = plan.ways[0] || p.r1; p.r2 = plan.ways[1] || p.r2; }
+  const byRole = {}; ps.forEach(function(s) { byRole[s.role] = (s.text || '').trim(); });
+  p.hook = byRole.hook || p.hook; p.focus = byRole.focus || p.focus; p.topic1 = byRole.topic || p.topic1; p.example1 = byRole.example || p.example1;
+  if (prev.wrap && prev.wrap.tutor && prev.wrap.tutor.notes && !p.topic2) { /* the proof-2 topic sentence from Sept 9 lived outside the 4 slots — tutor can paste it into sentence 5 */ }
+  S.write.priorLoaded = true; toast('Last week’s essay loaded ☁️');
+}
+let lastCloudJSON = null;
+async function init() {
+  const cloudState = await loadStateFromCloud(CLOUD_STATE_KEY);
+  if (cloudState && cloudState.timestamps) { S = Object.assign(freshState(), cloudState); lastCloudJSON = JSON.stringify(cloudState); backfill(); toast('Loaded from cloud ☁️'); }
+  else if (!VIEW_ONLY && loadFromLocalStorage()) { backfill(); toast('Loaded local save'); }
+  if (!VIEW_ONLY) await loadPrior();
+  if (S.wrap.done || S.write.done) switchTab('wrap'); else if (S.zoom.done) switchTab('write'); else if (S.fixit.done) switchTab('zoom'); else if (S.scramble.done) switchTab('fixit'); else if (S.reading.done) switchTab('scramble'); else { renderReading(); updateTabBadges(); }
+  if (VIEW_ONLY) { document.getElementById('saveIndicator').textContent = '👀 View-only mirror — syncing from cloud'; const rb = document.querySelector('.tutor-reset'); if (rb) rb.style.display = 'none'; setInterval(pollCloud, 10000); }
+  else setInterval(function() { if (dirty) saveStateToCloud(); }, 30000);
+}
+async function pollCloud() { const c = await loadStateFromCloud(CLOUD_STATE_KEY); if (!c || !c.timestamps) return; const j = JSON.stringify(c); if (j === lastCloudJSON) return; lastCloudJSON = j; S = Object.assign(freshState(), c); backfill(); document.getElementById('saveIndicator').textContent = '👀 Mirror updated ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); RENDER[activeTab](); updateTabBadges(); }
+function backfill() { const f = freshState(); ['reading', 'scramble', 'fixit', 'zoom', 'write', 'wrap'].forEach(function(k) { if (!S[k]) S[k] = f[k]; }); if (!S.write.prior) S.write.prior = f.write.prior; if (!S.write.sentences || S.write.sentences.length < 4) S.write.sentences = f.write.sentences; S.write.sentences.forEach(function(s, i) { const d = f.write.sentences[i]; if (!s.part) s.part = d.part; if (!s.role) s.role = d.role; if (!s.homo) s.homo = {}; if (typeof s.proofIdx !== 'number') s.proofIdx = 0; }); ['verbs', 'ed', 'twins'].forEach(function(k) { if (!S.fixit[k]) S.fixit[k] = []; }); if (!S.zoom.matches) S.zoom.matches = {}; if (!S.wrap.tutor) S.wrap.tutor = { notes: '' }; if (!S.timestamps) S.timestamps = {}; }
+init();
+</script>
+</body>
+</html>
